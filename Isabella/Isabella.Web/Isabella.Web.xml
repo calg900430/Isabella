@@ -1,0 +1,1899 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Isabella.Web</name>
+    </assembly>
+    <members>
+        <member name="T:Isabella.Web.Controllers.API.ProductsSpecialController">
+            <summary>
+            Controlador para Productos Especiales
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductsSpecialController.#ctor(Isabella.Web.Repositorys.API.IProductSpecialRepositoryAPI)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="productSpecialService"></param>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductsSpecialController.GetAllProductAsync">
+            <summary>
+            Accede a todos los productos de este tipo que esten disponibles en el restaurante.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductsSpecialController.GetProductByIdAsync(System.Int32)">
+            <summary>
+            Accede a un producto del restaurante que este disponible dado su Id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductsSpecialController.UpdateProductByIdAsync(Isabella.Common.Dtos.ProductSpecial.UpdateProductSpecialDto)">
+            <summary>
+            Actualiza el producto.
+            </summary>
+            <param name="updateProductSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductsSpecialController.PostAddClasificationProductAsync(Isabella.Common.Dtos.ProductSpecial.AddCalificationProductSpecialDto)">
+            <summary>
+            Agrega una calificación a un producto del restaurante.
+            </summary>
+            <param name="addCalification"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductsSpecialController.PostAddProductAsync(Isabella.Common.Dtos.ProductSpecial.AddProductSpecialDto)">
+            <summary>
+            Agrega el producto.
+            </summary>
+            <param name="addProductSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductsSpecialController.PostEnableOrDisableProductAsync(Isabella.Common.Dtos.ProductSpecial.EnableOrDisableProductSpecialDto)">
+            <summary>
+            Habilita o deshabilita un producto.
+            </summary>
+            <param name="enableOrDisableProductSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Controllers.API.ProductsStandardController">
+            <summary>
+            Controlador para Productos Standard.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductsStandardController.#ctor(Isabella.Web.Repositorys.API.IProductStandardRepositoryAPI)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="productService"></param>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductsStandardController.GetAllProductAsync">
+            <summary>
+            Accede a todos los productos de este tipo que esten disponibles en el restaurante.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductsStandardController.GetProductByIdAsync(System.Int32)">
+            <summary>
+            Accede a un producto del restaurante que este disponible dado su Id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductsStandardController.UpdateProductByIdAsync(Isabella.Common.Dtos.ProductStandard.UpdateProductStandardDto)">
+            <summary>
+            Actualiza el producto.
+            </summary>
+            <param name="updateProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductsStandardController.PostAddProductAsync(Isabella.Common.Dtos.ProductStandard.AddProductStandardDto)">
+            <summary>
+            Agrega el producto.
+            </summary>
+            <param name="addProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductsStandardController.PostAddClasificationProductAsync(Isabella.Common.Dtos.ProductStandard.AddCalificationProductStandardDto)">
+            <summary>
+            Agrega una calificación a un producto del restaurante.
+            </summary>
+            <param name="addCalification"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductsStandardController.PostEnableOrDisableProductAsync(Isabella.Common.Dtos.ProductStandard.EnableOrDisableProductStandardDto)">
+            <summary>
+            Habilita o deshabilita un producto.
+            </summary>
+            <param name="enableOrDisableProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Controllers.API.ProductsTypeCheeseController">
+            <summary>
+            Controlador para los Productos tipos de queso.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductsTypeCheeseController.#ctor(Isabella.Web.Repositorys.API.IProductTypeCheeseRepositoryAPI)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="productService"></param>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductsTypeCheeseController.GetAllProductAsync">
+            <summary>
+            Accede a todos los productos de este tipo que esten disponibles en el restaurante.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductsTypeCheeseController.GetProductByIdAsync(System.Int32)">
+            <summary>
+            Accede a un producto del restaurante que este disponible dado su Id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductsTypeCheeseController.UpdateProductByIdAsync(Isabella.Common.Dtos.ProductTypeCheese.UpdateProductTypeCheeseDto)">
+            <summary>
+            Actualiza el producto.
+            </summary>
+            <param name="updateProductTypeCheese"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductsTypeCheeseController.PostAddProductAsync(Isabella.Common.Dtos.ProductTypeCheese.AddProductTypeCheeseDto)">
+            <summary>
+            Agrega el producto.
+            </summary>
+            <param name="addProductTypeCheese"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductsTypeCheeseController.PostEnableOrDisableProductAsync(Isabella.Common.Dtos.ProductTypeCheese.EnableOrDisableProductTypeCheeseDto)">
+            <summary>
+            Habilita o deshabilita un producto.
+            </summary>
+            <param name="enableOrDisableProductTypeCheese"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Controllers.API_RESTful.UsersController">
+            <summary>
+            Controlador para el servicio de usuarios.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API_RESTful.UsersController.#ctor(Isabella.Web.Repositorys.API.IUserRepositoryAPI)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="userService"></param>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API_RESTful.UsersController.GetAllUserAsync">
+            <summary>
+            Obtiene todos los usuarios del sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API_RESTful.UsersController.GetUserForUserNameAsync(System.String)">
+            <summary>
+            Obtiene un usuario dado su cuenta de usuario.
+            </summary>
+            <param name="UserName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API_RESTful.UsersController.GetUserForUserIdAsync(System.Int32)">
+            <summary>
+            Obtiene un usuario dado su Id.
+            </summary>
+            <param name="UserId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API_RESTful.UsersController.GetUserForUserEmailAsync(System.String)">
+            <summary>
+            Obtiene un usuario dado su email.
+            </summary>
+            <param name="Email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API_RESTful.UsersController.PostRegisterUserTatooAsync(Isabella.Common.Dtos.Users.RegisterUserDto)">
+            <summary>
+            Registra un usuario de owner(dueño) y le envia un correo con el código de confirmación.
+            </summary>
+            <param name="newuser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API_RESTful.UsersController.PostRegisterUserClientAsync(Isabella.Common.Dtos.Users.RegisterUserDto)">
+            <summary>
+            Registra un usuario de rol client y le envia un correo con el código de confirmación.
+            </summary>
+            <param name="newuser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API_RESTful.UsersController.PostConfirmRegisterUserAsync(Isabella.Common.Dtos.Users.ConfirmEmailDto)">
+            <summary>
+            Confirma el registro de un usuario en el sistema.
+            </summary>
+            <param name="confirmEmail"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API_RESTful.UsersController.PostConfirmRecoverPasswordUserAsync(Isabella.Common.Dtos.Users.RecoverPasswordDto)">
+            <summary>
+            Recupera la contraseña del usuario con el código de recuperación.
+            </summary>
+            <param name="recoverPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API_RESTful.UsersController.PostGetEmailForRecoverPasswordUserAsync(Isabella.Common.Dtos.Users.ResetPasswordDto)">
+            <summary>
+            Envia un correo al usuario con el código de recuperación de la contraseña.
+            </summary>
+            <param name="resetPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API_RESTful.UsersController.PostApiLoginUserAsync(Isabella.Common.Dtos.Users.LoginUserWithUserNameDto)">
+            <summary>
+            Loguea a un usuario y obtiene los del usuario, el Token de acceso,el tiempo de expiración y el código de usuario.
+            </summary>
+            <param name="loginuser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API_RESTful.UsersController.PostChangePasswordUserAsync(Isabella.Common.Dtos.Users.ChangePasswordUserDto)">
+            <summary>
+            Cambia la contraseña de un usuario.
+            </summary>
+            <param name="changePassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API_RESTful.UsersController.PutUpdateUserAsync(Isabella.Common.Dtos.Users.UpdateUserDto)">
+            <summary>
+            Actualiza un usuario.
+            </summary>
+            <param name="updateuser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API_RESTful.UsersController.BannerUserAsync(System.Int32)">
+            <summary>
+            Banea un usuario del sistema.
+            </summary>
+            <param name="UserId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Data.DataContext">
+            <summary>
+            DataContext
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Data.DataContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{Isabella.Web.Data.DataContext})">
+            <summary>
+            Constructor del Context
+            </summary>
+            <param name="dbContextOptions"></param>
+        </member>
+        <member name="M:Isabella.Web.Data.DataContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Crea el modelo para la base de datos
+            </summary>
+            <param name="builder"></param>
+        </member>
+        <member name="T:Isabella.Web.Extras.AutoMapperProfile">
+            <summary>
+            Crea mapas para las asignaciones entre los Dtos y las entidades.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Extras.AutoMapperProfile.#ctor">
+            <summary>
+            Implementa los mapas de un entidad a otra.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Extras.Constants">
+            <summary>
+            Esta clase tiene todas las constantes del proyecto y recibe los parametros para la conexión
+            con nuestra cuenta de Cosmos Azure DB.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Extras.Constants.GetStringConnectionCosmos(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Método que obtiene el accountkey, el accountEndpoint 
+            y el nombre de la base de datos del archivo de configuración appsetting.json para
+            darle los datos de la cuenta de Azure Cosmos
+            </summary>
+            <param name="configurationSection"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Extras.Constants.GetStringConnectionSQLServer(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Obtiene la cadena de conexión de la base de datos SQL Server
+            desde el archivo de configuración appsetting.json
+            </summary>
+            <param name="configurationSection"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Extras.GetRole">
+            <summary>
+            Obtiene el tipo de role, según su nombre.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Extras.GetRole.GetRoles(System.Collections.Generic.IList{System.String})">
+            <summary>
+            Devuelve una lista Enum que identifica los roles del usuario
+            </summary>
+            <param name="names_roles"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Extras.IModel">
+            <summary>
+            Interfaz para implementar Id.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Extras.IModel.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Extras.Token_DateTimeExpired_Roles">
+            <summary>
+            Representa el Token y la fecha de expiración del mismo
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Extras.Token_DateTimeExpired_Roles.Token">
+            <summary>
+            Token
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Extras.Token_DateTimeExpired_Roles.DateTime">
+            <summary>
+            DateTime Expired
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Extras.Token_DateTimeExpired_Roles.UserRoles">
+            <summary>
+            Roles
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Hubs.NotificationsHub">
+            <summary>
+            Hub para las notificaciones que usa Isabellsa 
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Hubs.NotificationsHub.#ctor(Isabella.Web.Hubs.Services.DicctionaryConnectedHubService,Isabella.Web.Data.DataContext)">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Hubs.NotificationsHub.OnConnectedAsync">
+            <summary>
+            Evento OnConnected, se ejecuta cada vez que un usuario se conecta.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Hubs.NotificationsHub.OnDisconnectedAsync(System.Exception)">
+            <summary>
+            Evento OnDisconnectedAsync, se ejecuta cada vez que 
+            un usuario se desconecta.
+            </summary>
+            <param name="exception"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Hubs.Services.DicctionaryConnectedHubService">
+            <summary>
+            Servicio Externo al Hub para el manejo de las conexiones.
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Hubs.Services.DicctionaryConnectedHubService._devicesconnecteds">
+            <summary>
+            Representa un diccionario con las conexiones a un Hub especifico.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Hubs.Services.DicctionaryConnectedHubService.CantConnected">
+            <summary>
+            Devuelve la cantidad de usuarios que están conectados al servidor Hub.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Hubs.Services.DicctionaryConnectedHubService.GetAllDeviceConnected(System.Collections.Generic.List{System.String})">
+            <summary>
+            Devuelve los Id de la conexión de los dispositivos de un usuario que están conectados 
+            actualmente, dada una lista de Keys.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Hubs.Services.DicctionaryConnectedHubService.AddNewDevice(System.String,System.String)">
+            <summary>
+            Agrega un nuevo dispositivo que se conectó al Hub al diccionario.
+            </summary>
+            <param name="key"></param>
+            <param name="connectionID"></param>
+        </member>
+        <member name="M:Isabella.Web.Hubs.Services.DicctionaryConnectedHubService.RemoveDevice(System.String,System.String)">
+            <summary>
+            Elimina un dispositivo del diccionario(Cuando se desconecta del Hub)
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Hubs.Services.DicctionaryConnectedHubService.GetAllDeviceConnectedOfUser(System.String)">
+            <summary>
+            Devuelve todos los dispositivos que están conectados actualmente de un usuario.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.CalificationProductSpecial">
+            <summary>
+            Entidad que representa la calificación del Cliente acerca de un Producto
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationProductSpecial.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationProductSpecial.Product">
+            <summary>
+            Producto 
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationProductSpecial.User">
+            <summary>
+            Usuario
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationProductSpecial.DateCreated">
+            <summary>
+            Fecha en la que el usuario dió la calificación del producto
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationProductSpecial.Calification">
+            <summary>
+            Calificación del cliente acerca del Producto(1-5 Estrellas)
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationProductSpecial.Opinion">
+            <summary>
+            Opinión del cliente acerca del Producto
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.CalificationProductStandard">
+            <summary>
+            Calificación de los productos Standard
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationProductStandard.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationProductStandard.Product">
+            <summary>
+            Producto 
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationProductStandard.User">
+            <summary>
+            Usuario
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationProductStandard.DateCreated">
+            <summary>
+            Fecha en la que el usuario dió la calificación del producto
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationProductStandard.Calification">
+            <summary>
+            Calificación del cliente acerca del Producto(1-5 Estrellas)
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationProductStandard.Opinion">
+            <summary>
+            Opinión del cliente acerca del Producto
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.CalificationRestaurant">
+            <summary>
+            Entidad que representa la calificación del Cliente acerca del restaurante
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationRestaurant.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationRestaurant.User">
+            <summary>
+            Usuario
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationRestaurant.DateCreated">
+            <summary>
+            Fecha en la que el usuario dió la calificación del producto
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationRestaurant.Calification">
+            <summary>
+            Calificación del cliente acerca del Producto(1-5 Estrellas)
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationRestaurant.Opinion">
+            <summary>
+            Opinión del cliente acerca del Producto
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.CarShop">
+            <summary>
+            Entidad que representa el carrito de compras del usuario
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CarShop.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CarShop.User">
+            <summary>
+            Usuario
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CarShop.RequestedProductStandard">
+            <summary>
+            Producto Standard
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CarShop.RequestedForUser_ProductSpecial">
+            <summary>
+            Producto Special
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CarShop.DateCreated">
+            <summary>
+            Fecha en que se agregó el producto al carrito de compras
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CarShop.DateUpdate">
+            <summary>
+            Fecha en que se actualizo el producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.CategoryProductSpecial">
+            <summary>
+            Entidad que representa la categoria de un producto especial
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CategoryProductSpecial.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CategoryProductSpecial.Name">
+            <summary>
+            Nombre de la categoría del producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.CategoryProductStandard">
+            <summary>
+            Entidad que representa la categoria de un producto standard
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CategoryProductStandard.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CategoryProductStandard.Name">
+            <summary>
+            Nombre de la categoría del producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.CategoryProductTypeAggregate">
+            <summary>
+            Entidad que representa la categoria de un producto del tipo agregado.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CategoryProductTypeAggregate.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CategoryProductTypeAggregate.Name">
+            <summary>
+            Nombre de la categoría del producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.CategoryProductTypeCheese">
+            <summary>
+            Entidad que representa la categoria de los tipos de queso para los productos especiales
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CategoryProductTypeCheese.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CategoryProductTypeCheese.Name">
+            <summary>
+            Nombre de la categoría del producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.ConfirmationEmail">
+            <summary>
+            Representa la entidad para la confirmación de registro.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ConfirmationEmail.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ConfirmationEmail.User">
+            <summary>
+            User
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ConfirmationEmail.Token">
+            <summary>
+            Token
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.Gps">
+            <summary>
+            GPS
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Gps.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Gps.Latitude_Gps">
+            <summary>
+            Latitud(Coordenada GPS)
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Gps.Longitude_Gps">
+            <summary>
+            Longitude(Coordenada GPS)
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Gps.Favorite_Gps">
+            <summary>
+            GPS Favorito
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Gps.Name_Gps">
+            <summary>
+            Nombre del GPS
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.ImageProductSpecial">
+            <summary>
+            Entidad que representa las imagenes de los Productos
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageProductSpecial.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageProductSpecial.ProductSpecial">
+            <summary>
+            Producto
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageProductSpecial.ImageProductPath">
+            <summary>
+            Guarda la URL donde se encuentran la imagen del usuario
+            pero partir del caracter virgulilla.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageProductSpecial.ImageFullPath">
+            <summary>
+            Devuelve la URL completa donde se encuentran la imagen del usuario(Para apk)
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.ImageProductStandard">
+            <summary>
+            Entidad que representa las imagenes de los Productos
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageProductStandard.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageProductStandard.ProductStandard">
+            <summary>
+            Producto
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageProductStandard.ImageProductPath">
+            <summary>
+            Guarda la URL donde se encuentran la imagen del usuario
+            pero partir del caracter virgulilla.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageProductStandard.ImageFullPath">
+            <summary>
+            Devuelve la URL completa donde se encuentran la imagen del usuario(Para apk)
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.ImageProductTypeAggregate">
+            <summary>
+            Entidad que representa las imagenes de los Productos
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageProductTypeAggregate.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageProductTypeAggregate.ProductTypeAggregate">
+            <summary>
+            Producto
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageProductTypeAggregate.ImageProductPath">
+            <summary>
+            Guarda la URL donde se encuentran la imagen del usuario
+            pero partir del caracter virgulilla.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageProductTypeAggregate.ImageFullPath">
+            <summary>
+            Devuelve la URL completa donde se encuentran la imagen del usuario(Para apk)
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.ImageProductTypeCheese">
+            <summary>
+            Entidad que representa las imagenes de los Productos
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageProductTypeCheese.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageProductTypeCheese.ProductTypeCheese">
+            <summary>
+            Producto
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageProductTypeCheese.ImageProductPath">
+            <summary>
+            Guarda la URL donde se encuentran la imagen del usuario
+            pero partir del caracter virgulilla.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageProductTypeCheese.ImageFullPath">
+            <summary>
+            Devuelve la URL completa donde se encuentran la imagen del usuario(Para apk)
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.Order">
+            <summary>
+            Entidad que representa la orden del usuario.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.User">
+            <summary>
+            Usuario
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.Gps">
+            <summary>
+            Gps
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.Address">
+            <summary>
+            Dirección donde entregar la orden
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.Items">
+            <summary>
+            Detalles de cada producto que tiene la orden.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.Lines">
+            <summary>
+            Cantidad de productos sin repetir(o sea productos diferentes) que tiene nuestro pedido
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.OrderDate">
+            <summary>
+            Fecha en que se realizó el pedido.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.DeliveryDate">
+            <summary>
+            Tiempo en el que se debe entregar el pedido.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.OrderDetail">
+            <summary>
+            Entidad que representa los detalles de la orden del usuario.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.OrderDetail.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.OrderDetail.Order">
+            <summary>
+            Order
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.OrderDetail.RequestedProductStandard">
+            <summary>
+            Producto Standard solicitado por el usuario
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.OrderDetail.RequestedForUser_ProductSpecial">
+            <summary>
+            Producto Special solicitado por el usuario
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.OrderDetail.DateCreated">
+            <summary>
+            Fecha en que se agregó el producto al carrito de compras
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.OrderDetail.DateUpdate">
+            <summary>
+            Fecha en que se actualizo el producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.Product">
+            <summary>
+            Entidad producto: Son los platos que oferta el Restaurante.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.Name">
+            <summary>
+            Nombre del Producto ofertado por el Restaurante.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.Price">
+            <summary>
+            Precio del Produto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.LastBuy">
+            <summary>
+            Ultima Compra vez que algún usuario compro el producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.DateCreated">
+            <summary>
+            Fecha en que se creo el producto
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.DateUpdate">
+            <summary>
+            Fecha en que se actualizo el producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.IsAvailabe">
+            <summary>
+            Indica si el producto está disponible.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.Stock">
+            <summary>
+            Cantidad disponible en el Stock
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.Description">
+            <summary>
+            Descripción del Producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.Average">
+            <summary>
+            Promedio de calificaciones del usuario acerca del producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.ProductSpecial">
+            <summary>
+            Productos Especiales(Pizza y Pastas)
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ProductSpecial.CategoryProductSpecial">
+            <summary>
+            Categoria de productos especiales.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ProductSpecial.ImageProductSpecials">
+            <summary>
+            Tipos de agregados.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.ProductStandard">
+            <summary>
+            Producto Standard
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ProductStandard.CategoryProductStandard">
+            <summary>
+            Categoria de los productos estandar.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ProductStandard.ImageProductStandards">
+            <summary>
+            Imagenes para los productos standars. 
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.ProductTypeAggregate">
+            <summary>
+            Agregados para productos especiales
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ProductTypeAggregate.CategoryProductTypeAggregate">
+            <summary>
+            Categoria de los productos de agregados
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ProductTypeAggregate.ImageProductTypeAggregates">
+            <summary>
+            Imagenes para los productos especiales. 
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.ProductTypeCheese">
+            <summary>
+            Entidad que representa los tipos de quesos que pueden utilizar los productos.
+            cuando son Pizzas y Pastas.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ProductTypeCheese.CategoryProductTypeCheese">
+            <summary>
+            Categorias para los tipos de queso
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ProductTypeCheese.ImageProductTypeCheeses">
+            <summary>
+            Imagenes para los tipos de queso. 
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.RecoverPassword">
+            <summary>
+            Representa la entidad para la recuperación de la contraseña. 
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RecoverPassword.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RecoverPassword.User">
+            <summary>
+            User
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RecoverPassword.Token">
+            <summary>
+            Token
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.RequestedForUser_ProductSpecial">
+            <summary>
+            Cantidad de productos especiales que solicita el cliente
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductSpecial.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductSpecial.User">
+            <summary>
+            Usuario
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductSpecial.ProductSpecial">
+            <summary>
+            Producto Especial
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductSpecial.RequestedForUser_ProductTypeCheese">
+            <summary>
+            Tipo de queso
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductSpecial.RequestedForUser_ProductTypeAggregates">
+            <summary>
+            Agregados para el producto 
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductSpecial.Price">
+            <summary>
+            Precio actual del Producto Standard
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductSpecial.Quantity">
+            <summary>
+            Cantidad de Productos Standards
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductSpecial.ProductSpecial_Value">
+            <summary>
+            Precio total del Producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.RequestedForUser_ProductStandard">
+            <summary>
+            Cantidad de productos standard que solicita el usuario
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductStandard.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductStandard.User">
+            <summary>
+            Usuario
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductStandard.ProductStandard">
+            <summary>
+            Producto Standard
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductStandard.Price">
+            <summary>
+            Precio actual del Producto Standard
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductStandard.Quantity">
+            <summary>
+            Cantidad de Productos Standards
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductStandard.ProductSpecial_Value">
+            <summary>
+            Precio total del Producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.RequestedForUser_ProductTypeAggregate">
+            <summary>
+            Agregados
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductTypeAggregate.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductTypeAggregate.User">
+            <summary>
+            Usuario
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductTypeAggregate.ProductTypeAggregate">
+            <summary>
+            Producto de agrego
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductTypeAggregate.Price">
+            <summary>
+            Precio actual del Producto Standard
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductTypeAggregate.Quantity">
+            <summary>
+            Cantidad de Productos Standards
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductTypeAggregate.ProductSpecial_Value">
+            <summary>
+            Precio total del Producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.RequestedForUser_ProductTypeCheese">
+            <summary>
+            Tipo de queso
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductTypeCheese.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductTypeCheese.User">
+            <summary>
+            Usuario
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductTypeCheese.Price">
+            <summary>
+            Precio actual del Producto Standard
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductTypeCheese.Quantity">
+            <summary>
+            Cantidad de Productos Standards
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.RequestedForUser_ProductTypeCheese.ProductSpecial_Value">
+            <summary>
+            Precio total del Producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.User">
+            <summary>
+            Representa la entidad de los Usuarios en general.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.CodeUser">
+            <summary>
+            Codigo de usuario.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.DateCreated">
+            <summary>
+            Fecha en la que se actualizó campos del usuario en el sistema.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.DateUpdated">
+            <summary>
+            Fecha en el que se registró el usuario en el sistema.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.LastDateConnected">
+            <summary>
+            Ultima vez que el usuario se conecto a la API InkNation.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.FirstName">
+            <summary>
+            Nombre
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.LastName">
+            <summary>
+            Apellidos
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.FullName">
+            <summary>
+            Nombre completo del usuario.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.ImageUserPath">
+            <summary>
+            Guarda la URL donde se encuentran la imagen del usuario
+            pero partir del caracter virgulilla.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.Address">
+            <summary>
+            Dirección.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.ImageFullPath">
+            <summary>
+            Devuelve la URL completa donde se encuentran la imagen del usuario(Para apk)
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.Role">
+            <summary>
+            Rol del usuario.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.RecoverPassword">
+            <summary>
+            Indica que el usuario solicito recuperación de contraseña.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.ViewModel.RegisterUserViewModel">
+            <summary>
+            ViewModel para el registro de usuarios.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Program">
+            <summary>
+            Program
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Program.Main(System.String[])">
+            <summary>
+            Main
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:Isabella.Web.Program.RunSeeding(Microsoft.Extensions.Hosting.IHost)">
+             <summary>
+            Ejecuta el Seeder.
+             </summary>
+             <param name="host"></param>
+        </member>
+        <member name="M:Isabella.Web.Program.CreateHostBuilder(System.String[])">
+            <summary>
+            CreateHostBuilder
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Repositorys.API.IProductSpecialRepositoryAPI">
+            <summary>
+            Repositorio de Productos Especiales.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IProductSpecialRepositoryAPI.AddProductSpecialAsync(Isabella.Common.Dtos.ProductSpecial.AddProductSpecialDto)">
+            <summary>
+            Agrega el producto.
+            </summary>
+            <param name="addProductSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IProductSpecialRepositoryAPI.EnableProductSpecialAsync(Isabella.Common.Dtos.ProductSpecial.EnableOrDisableProductSpecialDto)">
+            <summary>
+            Establece el producto en no disponible o disponible.
+            </summary>
+            <param name="enableOrDisableProductSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IProductSpecialRepositoryAPI.UpdateProductSpecialAsync(Isabella.Common.Dtos.ProductSpecial.UpdateProductSpecialDto)">
+            <summary>
+            Actualiza el producto.
+            </summary>
+            <param name="updateProductSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IProductSpecialRepositoryAPI.GetAllProductSpecialAsync">
+            <summary>
+            Accede a todos los productos de este tipo que esten disponibles en el restaurante.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IProductSpecialRepositoryAPI.GetProductSpecialByIdAsync(System.Int32)">
+            <summary>
+             Accede a un producto del restaurante que este disponible dado su Id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IProductSpecialRepositoryAPI.AddCalificationForProductSpecialAsync(Isabella.Common.Dtos.ProductSpecial.AddCalificationProductSpecialDto)">
+            <summary>
+            Agrega una calificación a un producto del restaurante.
+            </summary>
+            <param name="addCalificationProductSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Repositorys.API.IProductStandardRepositoryAPI">
+            <summary>
+            Repositorio de Productos Standard.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IProductStandardRepositoryAPI.AddProductStandardAsync(Isabella.Common.Dtos.ProductStandard.AddProductStandardDto)">
+            <summary>
+            Agrega el producto.
+            </summary>
+            <param name="addProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IProductStandardRepositoryAPI.EnableProductStandardAsync(Isabella.Common.Dtos.ProductStandard.EnableOrDisableProductStandardDto)">
+            <summary>
+            Establece el producto en no disponible o disponible.
+            </summary>
+            <param name="enableOrDisableProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IProductStandardRepositoryAPI.UpdateProductStandardAsync(Isabella.Common.Dtos.ProductStandard.UpdateProductStandardDto)">
+            <summary>
+            Actualiza el producto.
+            </summary>
+            <param name="updateProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IProductStandardRepositoryAPI.GetAllProductStandardAsync">
+            <summary>
+            Accede a todos los productos de este tipo que esten disponibles en el restaurante.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IProductStandardRepositoryAPI.GetProductStandardByIdAsync(System.Int32)">
+            <summary>
+            Accede a un producto del restaurante que este disponible dado su Id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IProductStandardRepositoryAPI.AddCalificationForProductStandardAsync(Isabella.Common.Dtos.ProductStandard.AddCalificationProductStandardDto)">
+            <summary>
+            Agrega una calificación a un producto del restaurante.
+            </summary>
+            <param name="addCalificationProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IProductTypeCheeseRepositoryAPI.AddProductTypeCheeseAsync(Isabella.Common.Dtos.ProductTypeCheese.AddProductTypeCheeseDto)">
+            <summary>
+            Agrega el producto.
+            </summary>
+            <param name="addProductTypeCheese"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IProductTypeCheeseRepositoryAPI.EnableProductTypeCheeseAsync(Isabella.Common.Dtos.ProductTypeCheese.EnableOrDisableProductTypeCheeseDto)">
+            <summary>
+            Establece el producto en no disponible o disponible.
+            </summary>
+            <param name="enableOrDisableProductTypeCheese"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IProductTypeCheeseRepositoryAPI.UpdateProductTypeCheeseAsync(Isabella.Common.Dtos.ProductTypeCheese.UpdateProductTypeCheeseDto)">
+            <summary>
+            Actualiza el producto.
+            </summary>
+            <param name="updateProductTypeCheese"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IProductTypeCheeseRepositoryAPI.GetAllProductTypeCheeseAsync">
+            <summary>
+            Accede a todos los productos de este tipo que esten disponibles en el restaurante.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IProductTypeCheeseRepositoryAPI.GetProductTypeCheeseByIdAsync(System.Int32)">
+            <summary>
+            Accede a un producto del restaurante que este disponible dado su Id.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Repositorys.API.IUserRepositoryAPI">
+            <summary>
+            Repositorio para el manejo de los usuarios.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IUserRepositoryAPI.AddUserAsync(Isabella.Common.Dtos.Users.RegisterUserDto,System.String)">
+            <summary>
+            Agrega un usuario en la Base de Datos.
+            </summary>
+            <param name="newuser"></param>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IUserRepositoryAPI.GetUserByUserNameAsync(System.String)">
+            <summary>
+            Obtiene un Usuario según su cuenta de usuario.
+            </summary>
+            <param name="UserName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IUserRepositoryAPI.GetUserByIdAsync(System.Int32)">
+            <summary>
+            Obtiene un Usuario según su Id Int.
+            </summary>
+            <param name="UserId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IUserRepositoryAPI.GetUserByEmailAsync(System.String)">
+            <summary>
+            Obtiene un usuario según su correo.
+            </summary>
+            <param name="Email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IUserRepositoryAPI.GetAllUserAsync">
+            <summary>
+            Obtiene todos los usuarios del sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IUserRepositoryAPI.GetCantUserAsync(System.Int32,System.Int32)">
+            <summary>
+            Devuelve una lista de usuarios a partir de uno de referencia.
+            </summary>
+            <param name="UserId"></param>
+            <param name="CantUsers"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IUserRepositoryAPI.UpdatePasswordAsync(Isabella.Common.Dtos.Users.ChangePasswordUserDto)">
+            <summary>
+            Cambia la contraseña del usuario.
+            </summary>
+            <param name="changePassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IUserRepositoryAPI.UpdateUserAsync(Isabella.Common.Dtos.Users.UpdateUserDto)">
+            <summary>
+            Actualiza todos los campos que desee el usuario menos el correo.
+            </summary>
+            <param name="updateUser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IUserRepositoryAPI.BannerUserAsync(System.Int32)">
+            <summary>
+            Banea un usuario del sistema.
+            </summary>
+            <param name="UserId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IUserRepositoryAPI.LoginUserForApiAsync(Isabella.Common.Dtos.Users.LoginUserWithUserNameDto)">
+            <summary>
+            Login del usuario.
+            </summary>
+            <param name="loginUser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IUserRepositoryAPI.ConfirmEmailUserAsync(Isabella.Common.Dtos.Users.ConfirmEmailDto)">
+            <summary>
+            Confirma el registro del usuario.
+            </summary>
+            <param name="confirmEmail"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IUserRepositoryAPI.ResetPasswordUserAsync(Isabella.Common.Dtos.Users.ResetPasswordDto)">
+            <summary>
+            Envia un correo al usuario con los detalles para la recuperaión de su contraseña.
+            </summary>
+            <param name="resetPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.API.IUserRepositoryAPI.RecoverPasswwordUserAsync(Isabella.Common.Dtos.Users.RecoverPasswordDto)">
+            <summary>
+            Recupera la contraseña del usuario contraseña del usuario. 
+            </summary>
+            <param name="recoverPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Repositorys.IGenericRepository`1">
+            <summary>
+            Repositorio Generico.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.IGenericRepository`1.GetByIdAsync(System.Int32)">
+            <summary>
+            Accede a un elemento por su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.IGenericRepository`1.CreateAsync(`0)">
+            <summary>
+            Crea un elemento en el sistema y devuelve el elemento creado.
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.IGenericRepository`1.UpdateAsync(`0)">
+            <summary>
+            Actualiza un elemento en el sistema y devuelve el elemento actualizado.
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.IGenericRepository`1.DeleteAsync(`0)">
+            <summary>
+            Borra un elemento del sistema.
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.IGenericRepository`1.ExistAsync(System.Int32)">
+            <summary>
+            Verifica si un elemento existe en el sistema.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.IGenericRepository`1.SaveAllAsync">
+            <summary>
+             Guarda los cambios hechos en el sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Repositorys.IMailRepositoryCommon">
+            <summary>
+            Repositorio para el manejo de el envio de correos.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Repositorys.IMailRepositoryCommon.SendMail(System.String,System.String,System.String)">
+            <summary>
+            Envia un correo a un destinatario.
+            </summary>
+            <param name="destiny"></param>
+            <param name="subject"></param>
+            <param name="body_message"></param>
+        </member>
+        <member name="T:Isabella.Web.SeederDb.SeedDb">
+            <summary>
+            Seeder
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.SeederDb.SeedDb.#ctor(Isabella.Web.Data.DataContext,Microsoft.AspNetCore.Identity.RoleManager{Microsoft.AspNetCore.Identity.IdentityRole{System.Int32}},Microsoft.AspNetCore.Identity.UserManager{Isabella.Web.Models.Entities.User})">
+            <summary>
+            Constructor del Seeder
+            </summary>
+            <param name="dataContext"></param>
+            <param name="roleManager"></param>
+            <param name="userManager"></param>
+        </member>
+        <member name="M:Isabella.Web.SeederDb.SeedDb.SeedAsync">
+            <summary>
+            Seeder
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Services.API.ProductSpecialServiceAPI">
+            <summary>
+            Servicio de Productos Especiales.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Services.API.ProductSpecialServiceAPI.#ctor(Isabella.Web.Data.DataContext)">
+            <summary>
+            Cosntructor 
+            </summary>
+            <param name="dataContext"></param>
+        </member>
+        <member name="M:Isabella.Web.Services.API.ProductSpecialServiceAPI.AddCalificationForProductSpecialAsync(Isabella.Common.Dtos.ProductSpecial.AddCalificationProductSpecialDto)">
+            <summary>
+            Agrega una calificación a un producto del restaurante.
+            </summary>
+            <param name="addCalificationProductSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.ProductSpecialServiceAPI.AddProductSpecialAsync(Isabella.Common.Dtos.ProductSpecial.AddProductSpecialDto)">
+            <summary>
+            Agrega el producto.
+            </summary>
+            <param name="addProductSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.ProductSpecialServiceAPI.EnableProductSpecialAsync(Isabella.Common.Dtos.ProductSpecial.EnableOrDisableProductSpecialDto)">
+            <summary>
+            Establece el producto en no disponible o disponible.
+            </summary>
+            <param name="enableOrDisableProductSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.ProductSpecialServiceAPI.GetAllProductSpecialAsync">
+            <summary>
+            Accede a todos los productos de este tipo que esten disponibles en el restaurante.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.ProductSpecialServiceAPI.GetProductSpecialByIdAsync(System.Int32)">
+            <summary>
+            Accede a un producto del restaurante que este disponible dado su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.ProductSpecialServiceAPI.UpdateProductSpecialAsync(Isabella.Common.Dtos.ProductSpecial.UpdateProductSpecialDto)">
+            <summary>
+            Actualiza el producto.
+            </summary>
+            <param name="updateProductSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Services.API.ProductStandardServiceAPI">
+            <summary>
+            Servicio de Productos Standards.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Services.API.ProductStandardServiceAPI.#ctor(Isabella.Web.Data.DataContext)">
+            <summary>
+            Constructor. 
+            </summary>
+            <param name="dataContext"></param>
+        </member>
+        <member name="M:Isabella.Web.Services.API.ProductStandardServiceAPI.AddProductStandardAsync(Isabella.Common.Dtos.ProductStandard.AddProductStandardDto)">
+            <summary>
+            Agrega el producto.
+            </summary>
+            <param name="addProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.ProductStandardServiceAPI.GetAllProductStandardAsync">
+            <summary>
+            Accede a todos los productos de este tipo que esten disponibles en el restaurante.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.ProductStandardServiceAPI.GetProductStandardByIdAsync(System.Int32)">
+            <summary>
+            Accede a un producto del restaurante que este disponible dado su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.ProductStandardServiceAPI.UpdateProductStandardAsync(Isabella.Common.Dtos.ProductStandard.UpdateProductStandardDto)">
+            <summary>
+            Actualiza el producto.
+            </summary>
+            <param name="updateProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.ProductStandardServiceAPI.AddCalificationForProductStandardAsync(Isabella.Common.Dtos.ProductStandard.AddCalificationProductStandardDto)">
+            <summary>
+            Agrega una calificación a un producto del restaurante.
+            </summary>
+            <param name="addCalificationProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.ProductStandardServiceAPI.EnableProductStandardAsync(Isabella.Common.Dtos.ProductStandard.EnableOrDisableProductStandardDto)">
+            <summary>
+            Establece el producto en no disponible o disponible.
+            </summary>
+            <param name="enableOrDisableProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Services.API.ProductTypeCheeseServiceAPI">
+            <summary>
+            Servicios de Tipos de Quesos.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Services.API.ProductTypeCheeseServiceAPI.#ctor(Isabella.Web.Data.DataContext)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="dataContext"></param>
+        </member>
+        <member name="M:Isabella.Web.Services.API.ProductTypeCheeseServiceAPI.AddProductTypeCheeseAsync(Isabella.Common.Dtos.ProductTypeCheese.AddProductTypeCheeseDto)">
+            <summary>
+            Agrega el producto.
+            </summary>
+            <param name="addProductTypeCheese"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.ProductTypeCheeseServiceAPI.EnableProductTypeCheeseAsync(Isabella.Common.Dtos.ProductTypeCheese.EnableOrDisableProductTypeCheeseDto)">
+            <summary>
+            Establece el producto en no disponible o disponible.
+            </summary>
+            <param name="enableOrDisableProductTypeCheese"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.ProductTypeCheeseServiceAPI.GetAllProductTypeCheeseAsync">
+            <summary>
+            Accede a todos los productos de este tipo que esten disponibles en el restaurante.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.ProductTypeCheeseServiceAPI.GetProductTypeCheeseByIdAsync(System.Int32)">
+            <summary>
+            Accede a un producto del restaurante que este disponible dado su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.ProductTypeCheeseServiceAPI.UpdateProductTypeCheeseAsync(Isabella.Common.Dtos.ProductTypeCheese.UpdateProductTypeCheeseDto)">
+            <summary>
+            Actualiza el producto.
+            </summary>
+            <param name="updateProductTypeCheese"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Services.API.UserServiceAPI">
+            <summary>
+            Servicio para el manejo de usuarios.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Services.API.UserServiceAPI.#ctor(AutoMapper.IMapper,Isabella.Web.Data.DataContext,Microsoft.Extensions.Configuration.IConfiguration,Microsoft.AspNetCore.Identity.RoleManager{Microsoft.AspNetCore.Identity.IdentityRole{System.Int32}},Microsoft.AspNetCore.Identity.UserManager{Isabella.Web.Models.Entities.User},Isabella.Web.Repositorys.IMailRepositoryCommon)">
+            <summary>
+            Constructor de UserService.
+            </summary>
+            <param name="userManager"></param>
+            <param name="mailService"></param>
+            <param name="roleManager"></param>
+            <param name="mapper"></param>
+            <param name="dataContext"></param>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:Isabella.Web.Services.API.UserServiceAPI.ConfirmEmailUserAsync(Isabella.Common.Dtos.Users.ConfirmEmailDto)">
+            <summary>
+            Confirma el registro del nuevo usuario.
+            </summary>
+            <param name="confirmEmail"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.UserServiceAPI.AddUserAsync(Isabella.Common.Dtos.Users.RegisterUserDto,System.String)">
+            <summary>
+            Agrega un usuario a la base de datos.
+            </summary>
+            <param name="newuser"></param>
+            <param name="newrole"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.UserServiceAPI.BannerUserAsync(System.Int32)">
+            <summary>
+            Banea un usuario del sistema.
+            </summary>
+            <param name="UserId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.UserServiceAPI.GetAllUserAsync">
+            <summary>
+            Obtiene todos los usuarios del sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.UserServiceAPI.GetCantUserAsync(System.Int32,System.Int32)">
+            <summary>
+            Devuelve una lista de usuarios a partir de un Id de referencia.
+            </summary>
+            <param name="UserId"></param>
+            <param name="CantUsers"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.UserServiceAPI.GetUserByUserNameAsync(System.String)">
+            <summary>
+            Obtiene un usuario dado su UserName.
+            </summary>
+            <param name="UserName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.UserServiceAPI.GetUserByIdAsync(System.Int32)">
+            <summary>
+            Obtiene un usuario dado su Id.
+            </summary>
+            <param name="UserId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.UserServiceAPI.GetUserByEmailAsync(System.String)">
+            <summary>
+            Obtiene un usuario por su correo.
+            </summary>
+            <param name="Email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.UserServiceAPI.UpdatePasswordAsync(Isabella.Common.Dtos.Users.ChangePasswordUserDto)">
+            <summary>
+            Cambia la contraseña del usuario.
+            </summary>
+            <param name="changePassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.UserServiceAPI.UpdateUserAsync(Isabella.Common.Dtos.Users.UpdateUserDto)">
+            <summary>
+            Actualiza todos los campos que desee el usuario menos el correo.
+            </summary>
+            <param name="updateUser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.UserServiceAPI.CreateTokenAsync(Isabella.Web.Models.Entities.User)">
+            <summary>
+            Crea un Token Web Json.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.UserServiceAPI.LoginUserForApiAsync(Isabella.Common.Dtos.Users.LoginUserWithUserNameDto)">
+            <summary>
+            Logea un usuario en el sistema.
+            </summary>
+            <param name="loginUser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.UserServiceAPI.ResetPasswordUserAsync(Isabella.Common.Dtos.Users.ResetPasswordDto)">
+            <summary>
+            Envia un correo al usuario con los detalles para la recuperaión de su contraseña.
+            </summary>
+            <param name="resetPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.API.UserServiceAPI.RecoverPasswwordUserAsync(Isabella.Common.Dtos.Users.RecoverPasswordDto)">
+            <summary>
+            Recupera la contraseña del usuario contraseña del usuario. 
+            </summary>
+            <param name="recoverPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Services.GenericService`1">
+            <summary>
+            Servicio Génerico.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:Isabella.Web.Services.GenericService`1.#ctor(Isabella.Web.Data.DataContext)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="dataContext"></param>
+        </member>
+        <member name="M:Isabella.Web.Services.GenericService`1.SaveAllAsync">
+            <summary>
+            Guarda los cambios en la base de datos.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.GenericService`1.GetByIdAsync(System.Int32)">
+            <summary>
+             Accede a un elemento por su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.GenericService`1.CreateAsync(`0)">
+            <summary>
+            Guarda una entidad en la base de datos y guarda los cambios en la base de datos.
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.GenericService`1.DeleteAsync(`0)">
+            <summary>
+            Borra un elemento de la base de datos y guarda los cambios en la base de datos.
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.GenericService`1.ExistAsync(System.Int32)">
+            <summary>
+            Verifica si un elemento existe en la base de datos.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Services.GenericService`1.UpdateAsync(`0)">
+            <summary>
+            Actualiza un elemento en la base de datos y guarda los cambios en la base de datos.
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Services.MailServiceCommon">
+            <summary>
+            Servicio para el manejo de los correos.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Services.MailServiceCommon.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:Isabella.Web.Services.MailServiceCommon.SendMail(System.String,System.String,System.String)">
+            <summary>
+            Envia correos a un destinatario.
+            </summary>
+            <param name="destiny"></param>
+            <param name="subject"></param>
+            <param name="body_message"></param>
+        </member>
+        <member name="T:Isabella.Web.Services.UploadFileServiceCommon">
+            <summary>
+            Servicio para el manejo de archivos de subida.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Services.UploadFileServiceCommon.UploadFile(System.IO.MemoryStream,System.String,System.String)">
+            <summary>
+            Guarda un archivo que envio el usuario en el servidor.
+            </summary>
+            <param name="memoryStream"></param>
+            <param name="folder"></param>
+            <param name="fileName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Startup">
+            <summary>
+            StartUp
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Constructor Starup
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="P:Isabella.Web.Startup.Configuration">
+            <summary>
+            Configuration
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:Isabella.Web.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
+        </member>
+    </members>
+</doc>

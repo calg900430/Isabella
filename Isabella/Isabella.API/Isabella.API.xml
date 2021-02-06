@@ -1,0 +1,3358 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Isabella.API</name>
+    </assembly>
+    <members>
+        <member name="T:Isabella.API.Controllers.AllDeleteDatabaseExecuteSeederController">
+            <summary>
+            Controlador para el servicio de login con proveedores externos.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Controllers.AllDeleteDatabaseExecuteSeederController.#ctor(Isabella.API.ServicesModels.AllDeleteDatabaseExecuteSeederServiceModel)">
+            <summary>
+            
+            </summary>
+            <param name="allDeleteDatabaseExecuteSeeder"></param>
+        </member>
+        <member name="M:Isabella.API.Controllers.AllDeleteDatabaseExecuteSeederController.DeleteAllExecuteSeederAsync">
+            <summary>
+            Borra todos los elementos disponibles en la base de datos y ejecuta el Seeder(Solo para pruebas en modo de desarrollo).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.Controllers.CarShopController">
+            <summary>
+            Controlador para el carrito de compras.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Controllers.CarShopController.#ctor(Isabella.API.ServicesControllers.CarShopServiceController)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="carShopServiceController"></param>
+        </member>
+        <member name="M:Isabella.API.Controllers.CarShopController.AddProductStandardToCarShopAsync(Isabella.Common.Dtos.CarShop.AddProductStandardToCarShopDto)">
+            <summary>
+            Agregar un producto standard al carrito de compras.
+            </summary>
+            <param name="addProductStandardToCarShop"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.CarShopController.AddProductSpecialToCarShopAsync(Isabella.Common.Dtos.CarShop.AddProductSpecialToCarShopDto)">
+            <summary>
+            Agregar un producto special al carrito de compras.
+            </summary>
+            <param name="addProductSpecialToCarShop"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.Controllers.CodeIdentificationController">
+            <summary>
+            Controlador para los códigos de verificación.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Controllers.CodeIdentificationController.#ctor(Isabella.API.ServicesControllers.CodeIdentificationServiceController)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="codeVerificationRepository"></param>
+        </member>
+        <member name="M:Isabella.API.Controllers.CodeIdentificationController.CheckCodeVerificationAsync(System.Guid)">
+            <summary>
+            Verifica si el código de identificación es correcto.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.CodeIdentificationController.GeCodeVerificationAsync">
+            <summary>
+            Solicita un código de identificación para registrarse e iniciar sesión en la aplicación.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.Controllers.ProductAggregateController">
+            <summary>
+            Controlador para los productos special.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductAggregateController.#ctor(Isabella.API.ServicesControllers.ProductAggregateServiceController)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="productAggregateService"></param>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductAggregateController.AddProductAggregateAsync(Isabella.Common.Dtos.ProductAggregate.AddProductAggregateDto)">
+            <summary>
+            Agregar un nuevo producto.
+            </summary>
+            <param name="addProductAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductAggregateController.UpdateProductAggregatedAsync(Isabella.Common.Dtos.ProductAggregate.UpdateProductAggregateDto)">
+            <summary>
+            Actualiza un producto.
+            </summary>
+            <param name="updateProductAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductAggregateController.GetProductAggregateForIdAsync(System.Int32)">
+            <summary>
+            Obtiene un producto dado su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductAggregateController.GetAllProductAggregateAsync">
+            <summary>
+            Obtiene todos los productos disponibles.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductAggregateController.GetIdOfLastProductAggregateAsync">
+            <summary>
+            Obtiene el Id del último producto que se registró en el sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductAggregateController.GetImageProductAggregateAsync(System.Int32,System.Int32)">
+            <summary>
+            Accede una imagen especifica de un producto.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductAggregateController.AddImageProductAggregateAsync(Microsoft.AspNetCore.Http.IFormFile,System.Int32)">
+            <summary>
+            Agrega una imagen de un producto(Usando IFormFile).
+            </summary>
+            <param name="formFile"></param>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductAggregateController.AddImageProductAggregateAsync(Isabella.Common.Dtos.ProductAggregate.AddImageProductAggregateDto)">
+            <summary>
+            Agrega una imagen a un producto(Usando Dto).
+            </summary>
+            <param name="addImageProductAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductAggregateController.DeleteImageProductAggregateAsync(System.Int32,System.Int32)">
+            <summary>
+            Borra una imagen de un producto.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductAggregateController.EnableProductAggregateAsync(System.Int32)">
+            <summary>
+            Pone un producto en disponible.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductAggregateController.DisableProductAggregateAsync(System.Int32)">
+            <summary>
+            Pone un producto en no disponible.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductAggregateController.GetCantProductAggregateAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad determinada de productos dado un producto de referencia y la cantidad.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="CantProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductAggregateController.GetListIdOfImageProductAggregateAsync(System.Int32)">
+            <summary>
+            Obtiene todos los Id de las imagenes de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductAggregateController.GetAllImageProductAggregateAsync(System.Int32)">
+            <summary>
+            Obtiene todas las imagenes de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductAggregateController.GetCantImageProductAggregateAsync(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad especifica de imagenes de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="ImageId"></param>
+            <param name="CantImages"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.Controllers.ProductSpecialController">
+            <summary>
+            Controlador para los productos special.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductSpecialController.#ctor(Isabella.API.ServicesControllers.ProductSpecialServiceController)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="productSpecialService"></param>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductSpecialController.AddProductSpecialAsync(Isabella.Common.Dtos.ProductSpecial.AddProductStandardSpecialDto)">
+            <summary>
+            Agregar un nuevo producto.
+            </summary>
+            <param name="addProductSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductSpecialController.UpdateProductSpecialdAsync(Isabella.Common.Dtos.ProductSpecial.UpdateProductSpecialDto)">
+            <summary>
+            Actualiza un producto.
+            </summary>
+            <param name="updateProductSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductSpecialController.GetProductSpecialForIdAsync(System.Int32)">
+            <summary>
+            Obtiene un producto dado su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductSpecialController.GetAllProductSpecialAsync">
+            <summary>
+            Obtiene todos los productos disponibles.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductSpecialController.GetIdOfLastProductSpecialAsync">
+            <summary>
+            Obtiene el Id del último producto que se registró en el sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductSpecialController.GetImageProductSpecialAsync(System.Int32,System.Int32)">
+            <summary>
+            Accede una imagen especifica de un producto.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductSpecialController.AddImageProductSpecialAsync(Microsoft.AspNetCore.Http.IFormFile,System.Int32)">
+            <summary>
+            Agrega una imagen de un producto(Usando IFormFile).
+            </summary>
+            <param name="formFile"></param>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductSpecialController.AddImageProductSpecialAsync(Isabella.Common.Dtos.ProductSpecial.AddImageProductSpecialDto)">
+            <summary>
+            Agrega una imagen a un producto(Usando Dto).
+            </summary>
+            <param name="addImageProductSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductSpecialController.DeleteImageProductSpecialAsync(System.Int32,System.Int32)">
+            <summary>
+            Borra una imagen de un producto.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductSpecialController.EnableProductSpecialAsync(System.Int32)">
+            <summary>
+            Pone un producto en disponible.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductSpecialController.DisableProductSpecialAsync(System.Int32)">
+            <summary>
+            Pone un producto en no disponible.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductSpecialController.GetCantProductSpecialAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad determinada de productos dado un producto de referencia y la cantidad.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="CantProducts"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductSpecialController.GetListIdOfImageProductSpecialAsync(System.Int32)">
+            <summary>
+            Obtiene todos los Id de las imagenes de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductSpecialController.GetAllImageProductSpecialAsync(System.Int32)">
+            <summary>
+            Obtiene todas las imagenes de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductSpecialController.GetCantImageProductSpecialAsync(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad especifica de imagenes de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="ImageId"></param>
+            <param name="CantImages"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.Controllers.ProductStandardController">
+            <summary>
+            Controlador para los productos standard.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductStandardController.#ctor(Isabella.API.ServicesControllers.ProductStandardServiceController)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="productStandardRepository"></param>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductStandardController.AddProductStandardAsync(Isabella.Common.Dtos.ProductStandard.AddProductStandardDto)">
+            <summary>
+            Agregar un nuevo producto.
+            </summary>
+            <param name="addProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductStandardController.UpdateProductStandardAsync(Isabella.Common.Dtos.ProductStandard.UpdateProductStandardDto)">
+            <summary>
+            Actualiza un producto.
+            </summary>
+            <param name="updateProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductStandardController.GetProductStandardForIdAsync(System.Int32)">
+            <summary>
+            Obtiene un producto dado su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductStandardController.GetAllProductStandardAsync">
+            <summary>
+            Obtiene todos los productos disponibles.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductStandardController.GetIdOfLastProductStandardAsync">
+            <summary>
+            Obtiene el Id del último producto que se registró en el sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductStandardController.GetImageProductStandardAsync(System.Int32,System.Int32)">
+            <summary>
+            Accede una imagen especifica de un producto.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductStandardController.AddImageProductStandardAsync(Microsoft.AspNetCore.Http.IFormFile,System.Int32)">
+            <summary>
+            Agrega una imagen de un producto(Usando IFormFile).
+            </summary>
+            <param name="formFile"></param>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductStandardController.AddImageProductStandardAsync(Isabella.Common.Dtos.ProductStandard.AddImageProductStandardDto)">
+            <summary>
+            Agrega una imagen a un producto(Usando Dto).
+            </summary>
+            <param name="addImageProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductStandardController.DeleteImageProductStandardAsync(System.Int32,System.Int32)">
+            <summary>
+            Borra una imagen de un producto.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductStandardController.EnableProductStandardAsync(System.Int32)">
+            <summary>
+            Pone un producto en disponible.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductStandardController.DisableProductStandardAsync(System.Int32)">
+            <summary>
+            Pone un producto en no disponible.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductStandardController.GetCantProductStandardAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad determinada de productos dado un producto de referencia y la cantidad.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="CantProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductStandardController.GetListIdOfImageProductStandardAsync(System.Int32)">
+            <summary>
+            Obtiene todos los Id de las imagenes de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductStandardController.GetAllImageProductStandardAsync(System.Int32)">
+            <summary>
+            Obtiene todas las imagenes de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.ProductStandardController.GetCantImageProductStandardAsync(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad especifica de imagenes de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="ImageId"></param>
+            <param name="CantImages"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.Controllers.UsersController">
+            <summary>
+            Controlador para el servicio de usuarios.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Controllers.UsersController.#ctor(Isabella.API.ServicesControllers.UserServiceController,Isabella.API.RepositorysModels.IUserRepositoryModel)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="userRepositoryDto"></param>
+            <param name="userRepositoryModel"></param>
+        </member>
+        <member name="M:Isabella.API.Controllers.UsersController.AddUserAsync(Isabella.Common.Dtos.Users.RegisterUserDto)">
+            <summary>
+            Agrega un usuario y le envia un correo con el código de confirmación del registro(Agrega un usuario admin solo, puede hacerlo otro usuario admin).
+            </summary>
+            <param name="newuser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.UsersController.ConfirmRegisterUserAsync(Isabella.Common.Dtos.Users.ConfirmEmailDto)">
+            <summary>
+            Confirma el registro de un usuario en el sistema con el código enviado a su correo.
+            </summary>
+            <param name="confirmEmail"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.UsersController.DeleteImageProfileUserAsync">
+            <summary>
+            Borra la imagen de perfil del usuario.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.UsersController.GetIdOfLastUserAsync">
+            <summary>
+            Obtiene el Id del último usuario que se registró en el sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.UsersController.GetUserForUserIdAsync(System.Int32)">
+            <summary>
+            Obtiene un usuario dado su Id.
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.UsersController.GetAllUserAsync">
+            <summary>
+            Obtiene todos los usuarios del sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.UsersController.GetUserForUserNameAsync(System.String)">
+            <summary>
+            Obtiene un usuario dada su cuenta de usuario.
+            </summary>
+            <param name="UserName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.UsersController.GetUserForUserEmailAsync(System.String)">
+            <summary>
+            Obtiene un usuario dado su email.
+            </summary>
+            <param name="Email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.UsersController.LoginUserAsync(Isabella.Common.Dtos.Users.LoginUserWithUserNameDto)">
+            <summary>
+            Login del usuario y obtiene el token de acceso,el tiempo de expiración y otros datos del usuario.
+            </summary>
+            <param name="loginUser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.UsersController.LoginExternProviderForAsync(System.String)">
+            <summary>
+            Login de usuarios con proveedores externos(Google, Facebook, Twitter y Apple). 
+            Si el usuario no existe lo registra en la aplicación.
+            </summary>
+            <param name="scheme"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.UsersController.ConfirmRecoverPasswordUserAsync(Isabella.Common.Dtos.Users.RecoverPasswordDto)">
+            <summary>
+            Recupera la contraseña del usuario con el código de recuperación enviado a su correo.
+            </summary>
+            <param name="recoverPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.UsersController.GetUsersForIdAndCantAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene un número determinado de usuarios dado un Id y la cantidad deseada.
+            </summary>
+            <param name="UserId"></param>
+            <param name="CantUsers"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.UsersController.UpdateUserAsync(Isabella.Common.Dtos.Users.UpdateUserDto)">
+            <summary>
+            Actualiza un usuario.
+            </summary>
+            <param name="updateUser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.UsersController.ChangePasswordUserAsync(Isabella.Common.Dtos.Users.ChangePasswordUserDto)">
+            <summary>
+            Cambia la contraseña de un usuario.
+            </summary>
+            <param name="changePassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.UsersController.EmailForRecoverPasswordUserAsync(Isabella.Common.Dtos.Users.ResetPasswordDto)">
+            <summary>
+            Envia un correo al usuario con el código de recuperación de la contraseña.
+            </summary>
+            <param name="resetPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.UsersController.NewEmailConfirmRegisterUserAsync(Isabella.Common.Dtos.Users.SendToNewCodeConfirmationRegisterDto)">
+            <summary>
+            Envia un nuevo correo al usuario con el código para la confirmación del registro.
+            </summary>
+            <param name="sendToNewCodeConfirmationRegister"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.UsersController.AddImageProfileUserAsync(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Agrega o actualiza una imagen de perfil de un usuario determinado usando IFormFile.
+            </summary>
+            <param name="formFile"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.Data.DataContext">
+            <summary>
+            DataContext
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Data.DataContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{Isabella.API.Data.DataContext})">
+            <summary>
+            Constructor del Context
+            </summary>
+            <param name="dbContextOptions"></param>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.CodeIdentifications">
+            <summary>
+            Códigos de Verificación.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.ConfirmationRegisterForEmail">
+            <summary>
+            Confirmación de registro de usuario.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.RecoverPasswords">
+            <summary>
+            Recuperación de contraseña.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.Gps">
+            <summary>
+            Coordenadas Gps.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.Orders">
+            <summary>
+            Pedidos de los usuarios.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.OrderDetails">
+            <summary>
+            Detalles de los pedidos.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.CalificationProductSpecials">
+            <summary>
+            Calificación de un producto special.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.CalificationProductStandards">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.CalificationRestaurants">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.CarShops">
+            <summary>
+            Carrito de compra
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.ProductImages">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.ProductAggregates">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.ProductsSpecials">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.ProductsStandards">
+            <summary>
+            Productos Standards.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.ImageProductSpecials">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.ImageProductStandards">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.ImageProductAggregates">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.RequestedProductAggregates">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.RequestedProductStandards">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.RequestedProductSpecials">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.CategoryProductSpecials">
+            <summary>
+            Categoria de los productos especiales.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.CategoryProductStandards">
+            <summary>
+            Categoria de los productos standards.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.CategoryProductAggregates">
+            <summary>
+            Categoria de los productos de agregados.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Data.DataContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Crea el modelo para la base de datos
+            </summary>
+            <param name="builder"></param>
+        </member>
+        <member name="T:Isabella.API.Extras.CantRequestProductAggregate">
+            <summary>
+            Representa un producto agregado y la cantidad deseada.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Extras.CantRequestProductAggregate.ProductAggregate">
+            <summary>
+            ProductoStandard.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Extras.CantRequestProductAggregate.Quantity">
+            <summary>
+            Cantidad que desea.
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Extras.Constants">
+            <summary>
+            Esta clase tiene todas las constantes del proyecto y recibe los parametros para la conexión
+            con nuestra cuenta de Cosmos Azure DB.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Extras.Constants.GetStringConnectionSQLServer(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Obtiene la cadena de conexión de la base de datos SQL Server
+            desde el archivo de configuración appsetting.json
+            </summary>
+            <param name="configurationSection"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Isabella.API.Extras.Constants.RolesOfSystem">
+            <summary>
+            Roles del sistema.
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Extras.Constants.MAX_LENTHG_IMAGE_PROFILE_USER">
+            <summary>
+            Capacidad Máxima de la imagen de perfil de usuario.
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Extras.Constants.MAX_LENTHG_IMAGE_PRODUCT">
+            <summary>
+            Capacidad Máxima de las imagen de un producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Extras.ManagerRolesForUsers">
+            <summary>
+            Obtiene el tipo de role, según su nombre.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Extras.ManagerRolesForUsers.GetRoles(System.Collections.Generic.IList{System.String})">
+            <summary>
+            Devuelve una lista Enum que identifica los roles del usuario.
+            </summary>
+            <param name="names_roles"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.Extras.IModel">
+            <summary>
+            Interfaz para implementar Id.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Extras.IModel.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Extras.Token_DateTimeExpired_Roles">
+            <summary>
+            Representa el Token y la fecha de expiración del mismo
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Extras.Token_DateTimeExpired_Roles.Token">
+            <summary>
+            Token
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Extras.Token_DateTimeExpired_Roles.DateTime">
+            <summary>
+            DateTime Expired
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Extras.Token_DateTimeExpired_Roles.UserRoles">
+            <summary>
+            Roles
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Hubs.NotificationsHub">
+            <summary>
+            Hub para las notificaciones que usa Isabellsa 
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Hubs.NotificationsHub.#ctor(Isabella.API.Hubs.Services.DicctionaryConnectedHubService,Isabella.API.Data.DataContext)">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Hubs.NotificationsHub.OnConnectedAsync">
+            <summary>
+            Evento OnConnected, se ejecuta cada vez que un usuario se conecta.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Hubs.NotificationsHub.OnDisconnectedAsync(System.Exception)">
+            <summary>
+            Evento OnDisconnectedAsync, se ejecuta cada vez que 
+            un usuario se desconecta.
+            </summary>
+            <param name="exception"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.Hubs.Services.DicctionaryConnectedHubService">
+            <summary>
+            Servicio Externo al Hub para el manejo de las conexiones.
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Hubs.Services.DicctionaryConnectedHubService._devicesconnecteds">
+            <summary>
+            Representa un diccionario con las conexiones a un Hub especifico.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Hubs.Services.DicctionaryConnectedHubService.CantConnected">
+            <summary>
+            Devuelve la cantidad de usuarios que están conectados al servidor Hub.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Hubs.Services.DicctionaryConnectedHubService.GetAllDeviceConnected(System.Collections.Generic.List{System.String})">
+            <summary>
+            Devuelve los Id de la conexión de los dispositivos de un usuario que están conectados 
+            actualmente, dada una lista de Keys.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Hubs.Services.DicctionaryConnectedHubService.AddNewDevice(System.String,System.String)">
+            <summary>
+            Agrega un nuevo dispositivo que se conectó al Hub al diccionario.
+            </summary>
+            <param name="key"></param>
+            <param name="connectionID"></param>
+        </member>
+        <member name="M:Isabella.API.Hubs.Services.DicctionaryConnectedHubService.RemoveDevice(System.String,System.String)">
+            <summary>
+            Elimina un dispositivo del diccionario(Cuando se desconecta del Hub)
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Hubs.Services.DicctionaryConnectedHubService.GetAllDeviceConnectedOfUser(System.String)">
+            <summary>
+            Devuelve todos los dispositivos que están conectados actualmente de un usuario.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.Models.CalificationProductSpecial">
+            <summary>
+            Entidad que representa la calificación del Cliente acerca de un Producto
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CalificationProductSpecial.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CalificationProductSpecial.Product">
+            <summary>
+            Producto 
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CalificationProductSpecial.User">
+            <summary>
+            Usuario
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CalificationProductSpecial.DateCreated">
+            <summary>
+            Fecha en la que el usuario dió la calificación del producto
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CalificationProductSpecial.Calification">
+            <summary>
+            Calificación del cliente acerca del Producto(1-5 Estrellas)
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CalificationProductSpecial.Opinion">
+            <summary>
+            Opinión del cliente acerca del Producto
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.CalificationProductStandard">
+            <summary>
+            Calificación de los productos Standard
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CalificationProductStandard.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CalificationProductStandard.Product">
+            <summary>
+            Producto 
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CalificationProductStandard.User">
+            <summary>
+            Usuario
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CalificationProductStandard.DateCreated">
+            <summary>
+            Fecha en la que el usuario dió la calificación del producto
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CalificationProductStandard.Calification">
+            <summary>
+            Calificación del cliente acerca del Producto(1-5 Estrellas)
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CalificationProductStandard.Opinion">
+            <summary>
+            Opinión del cliente acerca del Producto
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.CalificationRestaurant">
+            <summary>
+            Entidad que representa la calificación del Cliente acerca del restaurante
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CalificationRestaurant.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CalificationRestaurant.User">
+            <summary>
+            Usuario
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CalificationRestaurant.DateCreated">
+            <summary>
+            Fecha en la que el usuario dió la calificación del producto
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CalificationRestaurant.Calification">
+            <summary>
+            Calificación del cliente acerca del Producto(1-5 Estrellas)
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CalificationRestaurant.Opinion">
+            <summary>
+            Opinión del cliente acerca del Producto
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.CarShop">
+            <summary>
+            Carro de compras Fast(Para pedidos informales, o sea usuarios que no desean ser clientes oficiales)
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CarShop.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CarShop.CodeVerification">
+            <summary>
+            Código de identificación.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CarShop.RequestedProductStandard">
+            <summary>
+            Producto Standard
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CarShop.RequestedProductSpecial">
+            <summary>
+            Producto Special
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.CategoryProductAggregate">
+            <summary>
+            Entidad que representa la categoria de un producto del tipo agregado.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CategoryProductAggregate.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CategoryProductAggregate.Name">
+            <summary>
+            Nombre de la categoría del producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.CategoryProductSpecial">
+            <summary>
+            Entidad que representa la categoria de un producto especial
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CategoryProductSpecial.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CategoryProductSpecial.Name">
+            <summary>
+            Nombre de la categoría del producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.CategoryProductStandard">
+            <summary>
+            Entidad que representa la categoria de un producto standard
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CategoryProductStandard.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CategoryProductStandard.Name">
+            <summary>
+            Nombre de la categoría del producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.CodeIdentification">
+            <summary>
+            Código para indentificar el pedido.(No hay usuarios)
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CodeIdentification.Id">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CodeIdentification.Code">
+            <summary>
+            Código para el pedido en modo Fast.
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.ConfirmationRegisterForEmail">
+            <summary>
+            Representa la entidad para la confirmación de registro.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.ConfirmationRegisterForEmail.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.ConfirmationRegisterForEmail.User">
+            <summary>
+            User
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.ConfirmationRegisterForEmail.Token">
+            <summary>
+            Token
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.Gps">
+            <summary>
+            GPS
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Gps.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Gps.Latitude_Gps">
+            <summary>
+            Latitud(Coordenada GPS)
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Gps.Longitude_Gps">
+            <summary>
+            Longitude(Coordenada GPS)
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Gps.Favorite_Gps">
+            <summary>
+            GPS Favorito
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Gps.Name_Gps">
+            <summary>
+            Nombre del GPS
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.ImageProductAggregate">
+            <summary>
+            Entidad que representa las imagenes de los Productos
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.ImageProductAggregate.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.ImageProductAggregate.ProductAggregate">
+            <summary>
+            Producto
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.ImageProductAggregate.Image">
+            <summary>
+            Imagen del producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.ImageProductSpecial">
+            <summary>
+            Entidad que representa las imagenes de los Productos
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.ImageProductSpecial.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.ImageProductSpecial.ProductSpecial">
+            <summary>
+            Producto
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.ImageProductSpecial.Image">
+            <summary>
+            Imagen del producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.ImageProductStandard">
+            <summary>
+            Entidad que representa las imagenes de los Productos
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.ImageProductStandard.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.ImageProductStandard.ProductStandard">
+            <summary>
+            Producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.ImageProductStandard.Image">
+            <summary>
+            Imagen del producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.Order">
+            <summary>
+            Ordenes del tipo fast(Para pedidos informales, o sea usuarios que no desean ser clientes oficiales)
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Order.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Order.Gps">
+            <summary>
+            Gps
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Order.Address">
+            <summary>
+            Dirección donde entregar la orden
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Order.Items">
+            <summary>
+            Detalles de cada producto que tiene la orden.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Order.Lines">
+            <summary>
+            Cantidad de productos sin repetir(o sea productos diferentes) que tiene nuestro pedido.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Order.Quantity">
+            <summary>
+            Cantidad Total de todos los productos de la orden
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Order.Value">
+            <summary>
+            Precio Total de la Orden
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Order.OrderDate">
+            <summary>
+            Fecha en que se realizó el pedido.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Order.DeliveryDate">
+            <summary>
+            Tiempo en el que se debe entregar el pedido.
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.OrderDetail">
+            <summary>
+            Detalles de un pedido de tipo Fast
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.OrderDetail.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.OrderDetail.OrderFast">
+            <summary>
+            Orden
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.OrderDetail.RequestedProductStandard">
+            <summary>
+            Producto Standard solicitado por el usuario
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.OrderDetail.Requested_ProductSpecial">
+            <summary>
+            Producto Special solicitado por el usuario
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.OrderDetail.DateCreated">
+            <summary>
+            Fecha en que se agregó el producto al carrito de compras
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.OrderDetail.DateUpdate">
+            <summary>
+            Fecha en que se actualizo el producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.Product">
+            <summary>
+            Entidad producto: Son los platos que oferta el Restaurante.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Product.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Product.Name">
+            <summary>
+            Nombre del Producto ofertado por el Restaurante.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Product.Price">
+            <summary>
+            Precio del Produto.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Product.LastBuy">
+            <summary>
+            Ultima Compra vez que algún usuario compro el producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Product.DateCreated">
+            <summary>
+            Fecha en que se creo el producto
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Product.DateUpdate">
+            <summary>
+            Fecha en que se actualizo el producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Product.IsAvailabe">
+            <summary>
+            Indica si el producto está disponible.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Product.Stock">
+            <summary>
+            Cantidad disponible en el Stock
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Product.Description">
+            <summary>
+            Descripción del Producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Product.Average">
+            <summary>
+            Promedio de calificaciones del usuario acerca del producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.ProductAggregate">
+            <summary>
+            Agregados para productos especiales
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.ProductAggregate.CategoryProductAggregate">
+            <summary>
+            Categoria de los productos de agregados
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.ProductAggregate.ImageProductAggregates">
+            <summary>
+            Imagenes para los productos especiales. 
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.ProductSpecial">
+            <summary>
+            Productos Especiales(Pizza y Pastas)
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.ProductSpecial.CategoryProductSpecial">
+            <summary>
+            Categoria de productos especiales.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.ProductSpecial.ImageProductSpecials">
+            <summary>
+            Tipos de agregados.
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.ProductStandard">
+            <summary>
+            Producto Standard
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.ProductStandard.CategoryProductStandard">
+            <summary>
+            Categoria de los productos estandar.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.ProductStandard.ImageProductStandards">
+            <summary>
+            Imagenes para los productos standars. 
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.RecoverPassword">
+            <summary>
+            Representa la entidad para la recuperación de la contraseña. 
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.RecoverPassword.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.RecoverPassword.User">
+            <summary>
+            User
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.RecoverPassword.Token">
+            <summary>
+            Token
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.RequestedProductAggregate">
+            <summary>
+            Agregados
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.RequestedProductAggregate.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.RequestedProductAggregate.RequestedProductSpecial">
+            <summary>
+            Pedido de producto especial que solicita productos de agregos.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.RequestedProductAggregate.ProductAggregate">
+            <summary>
+            Producto de agrego
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.RequestedProductAggregate.Price">
+            <summary>
+            Precio actual del Producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.RequestedProductAggregate.Quantity">
+            <summary>
+            Cantidad de Productos.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.RequestedProductAggregate.PriceTotal">
+            <summary>
+            Precio total del Producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.RequestedProductSpecial">
+            <summary>
+            Cantidad de productos especiales que solicita el cliente
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.RequestedProductSpecial.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.RequestedProductSpecial.ProductSpecial">
+            <summary>
+            Producto Especial
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.RequestedProductSpecial.CheeseGouda">
+            <summary>
+            Queso Gouda
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.RequestedProductSpecial.RequestedProductAggregates">
+            <summary>
+            Agregados para el producto 
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.RequestedProductSpecial.Price">
+            <summary>
+            Precio actual.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.RequestedProductSpecial.Quantity">
+            <summary>
+            Cantidad de Productos Standards
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.RequestedProductSpecial.PriceTotal">
+            <summary>
+            Precio total del Producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.RequestedProductStandard">
+            <summary>
+            Cantidad de productos standard que solicita el usuario
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.RequestedProductStandard.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.RequestedProductStandard.ProductStandard">
+            <summary>
+            Producto Standard
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.RequestedProductStandard.Price">
+            <summary>
+            Precio actual del Producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.RequestedProductStandard.Quantity">
+            <summary>
+            Cantidad de Productos.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.RequestedProductStandard.PriceTotal">
+            <summary>
+            Precio total del Producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.User">
+            <summary>
+            Users.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.User.IdForClaim">
+            <summary>
+            Id para Claim.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.User.DateCreated">
+            <summary>
+            Fecha en la que se actualizó campos del usuario en el sistema.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.User.DateUpdated">
+            <summary>
+            Fecha en el que se registró el usuario en el sistema.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.User.LastDateConnected">
+            <summary>
+            Ultima vez que el usuario se conecto a la API InkNation.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.User.FirstName">
+            <summary>
+            Nombre
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.User.LastName">
+            <summary>
+            Apellidos
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.User.FullName">
+            <summary>
+            Nombre completo del usuario.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.User.Address">
+            <summary>
+            Dirección.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.User.RecoverPassword">
+            <summary>
+            Indica que el usuario solicito recuperación de contraseña.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.User.Enable">
+            <summary>
+            Enable
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.User.ImageUserProfile">
+            <summary>
+            Imagen de perfil del usuario.
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Program">
+            <summary>
+            Program
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Program.Main(System.String[])">
+            <summary>
+            Main
+            </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:Isabella.API.Program.RunSeeding(Microsoft.Extensions.Hosting.IHost)">
+             <summary>
+            Ejecuta el Seeder.
+             </summary>
+             <param name="host"></param>
+        </member>
+        <member name="M:Isabella.API.Program.CreateHostBuilder(System.String[])">
+            <summary>
+            CreateHostBuilder
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.RepositorysModels.ICarShopRepositoryModel">
+            <summary>
+            Repositorio para el carrito de compras.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.ICarShopRepositoryModel.AddProductsCarShopAsync(Isabella.API.Models.CarShop)">
+            <summary>
+            Agrega un nuevo pedido al carrito de compras de un usuario informal.
+            </summary>
+            <param name="carShop"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.RepositorysModels.ICategoryProductAggregateRepositoryModel">
+            <summary>
+            Repositorio para las categorias de los productos standards.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.ICategoryProductAggregateRepositoryModel.GetCategoryProductAggregateAsync(System.Int32)">
+            <summary>
+            Obtiene una categoria dado su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.RepositorysModels.ICategoryProductSpecialRepositoryModel">
+            <summary>
+            Repositorio para las categorias de los productos standards.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.ICategoryProductSpecialRepositoryModel.GetCategoryProductSpecialAsync(System.Int32)">
+            <summary>
+            Obtiene una categoria standard dado su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.RepositorysModels.ICategoryProductStandardRepositoryModel">
+            <summary>
+            Repositorio para las categorias de los productos standards.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.ICategoryProductStandardRepositoryModel.GetCategoryProductStandardAsync(System.Int32)">
+            <summary>
+            Obtiene una categoria standard dado su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.RepositorysModels.ICodeIdentificationModel">
+            <summary>
+            Repositorio para los códigos de identificación.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.ICodeIdentificationModel.CheckCodeIdentificationAsync(System.Guid)">
+            <summary>
+            Verifica si el código de identificación está registrado.
+            </summary>
+            <param name="Code"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.ICodeIdentificationModel.RegisterNewCodeIdentification">
+            <summary>
+            Solicita el código de identificación para registrarse e iniciar sesión en la aplicación.        /// </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.RepositorysModels.IProductAggregateRepositoryModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductAggregateRepositoryModel.AddProductAggregateAsync(Isabella.API.Models.ProductAggregate)">
+            <summary>
+            Agrega un nuevo producto.
+            </summary>
+            <param name="productAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductAggregateRepositoryModel.UpdateProductAggregateAsync(Isabella.API.Models.ProductAggregate)">
+            <summary>
+            Actualiza un producto.
+            </summary>
+            <param name="productAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductAggregateRepositoryModel.GetProductAggregateForIdNotIncludeAsync(System.Int32)">
+            <summary>
+            Obtiene un producto sin sus relaciones con otras entidades.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductAggregateRepositoryModel.GetProductAggregateForIdWithAllIncludeAsync(System.Int32)">
+            <summary>
+            Obtiene un producto con todas las relaciones de entidades.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductAggregateRepositoryModel.GetProductAggregateForIdWithCategoryAsync(System.Int32)">
+            <summary>
+            Obtiene un producto con las relaciones de categorias.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductAggregateRepositoryModel.GetAllProductAggregateWithCategoryAsync">
+            <summary>
+            Obtiene todos los productos con las relaciones de categorias.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductAggregateRepositoryModel.GetAllProductAggregateWithAllIncludeAsync">
+            <summary>
+            Obtiene todos los productos con todas las relaciones de entidades.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductAggregateRepositoryModel.GetIdOfLastProductAggregateAsync">
+            <summary>
+            Obtiene el Id del último producto disponible.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductAggregateRepositoryModel.AddImageForProductAggregateAsync(Microsoft.AspNetCore.Http.IFormFile,Isabella.API.Models.ProductAggregate)">
+            <summary>
+            Agrega imagenes para un producto.
+            </summary>
+            <param name="formFile"></param>
+            <param name="productAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductAggregateRepositoryModel.AddImageForProductAggregateAsync(System.Byte[],Isabella.API.Models.ProductAggregate)">
+            <summary>
+            Agrega imagenes para un producto.
+            </summary>
+            <param name="Image"></param>
+            <param name="productAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductAggregateRepositoryModel.DeleteImageProductAggregateAsync(Isabella.API.Models.ImageProductAggregate)">
+            <summary>
+            Borra la imagen de un producto.
+            </summary>
+            <param name="image"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductAggregateRepositoryModel.GetImageProductAggregateAsync(Isabella.API.Models.ProductAggregate,System.Int32)">
+            <summary>
+            Accede a una imagen determinada de un producto.
+            </summary>
+            <param name="productAggregate"></param>
+            <param name="ImageId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductAggregateRepositoryModel.GetAllImageProductAggregateAsync(Isabella.API.Models.ProductAggregate)">
+            <summary>
+            Accede a todas las imagenes de un producto.
+            </summary>
+            <param name="productAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductAggregateRepositoryModel.GetIdLastImageProductAggregateAsync(Isabella.API.Models.ProductAggregate)">
+            <summary>
+            Obtiene el Id de la ultima imagen que se agrego de un producto.
+            </summary>
+            <param name="productAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.RepositorysModels.IProductSpecialRepositoryModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductSpecialRepositoryModel.AddProductSpecialAsync(Isabella.API.Models.ProductSpecial)">
+            <summary>
+            Agrega un nuevo producto.
+            </summary>
+            <param name="productSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductSpecialRepositoryModel.UpdateProductSpecialAsync(Isabella.API.Models.ProductSpecial)">
+            <summary>
+            Actualiza un producto.
+            </summary>
+            <param name="productSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductSpecialRepositoryModel.GetProductSpecialForIdNotIncludeAsync(System.Int32)">
+            <summary>
+            Obtiene un producto sin sus relaciones con otras entidades.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductSpecialRepositoryModel.GetProductSpecialForIdWithAllIncludeAsync(System.Int32)">
+            <summary>
+            Obtiene un producto con todas las relaciones de entidades.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductSpecialRepositoryModel.GetProductSpecialForIdWithCategoryAsync(System.Int32)">
+            <summary>
+            Obtiene un producto con las relaciones de categorias.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductSpecialRepositoryModel.GetAllProductSpecialWithCategoryAsync">
+            <summary>
+            Obtiene todos los productos con las relaciones de categorias.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductSpecialRepositoryModel.GetAllProductSpecialWithAllIncludeAsync">
+            <summary>
+            Obtiene todos los productos con todas las relaciones de entidades.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductSpecialRepositoryModel.GetIdOfLastProductSpecialAsync">
+            <summary>
+            Obtiene el Id del último producto disponible.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductSpecialRepositoryModel.AddImageForProductSpecialAsync(Microsoft.AspNetCore.Http.IFormFile,Isabella.API.Models.ProductSpecial)">
+            <summary>
+            Agrega imagenes para un producto.
+            </summary>
+            <param name="formFile"></param>
+            <param name="productSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductSpecialRepositoryModel.AddImageForProductSpecialAsync(System.Byte[],Isabella.API.Models.ProductSpecial)">
+            <summary>
+            Agrega imagenes para un producto.
+            </summary>
+            <param name="Image"></param>
+            <param name="productSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductSpecialRepositoryModel.DeleteImageProductSpecialAsync(Isabella.API.Models.ImageProductSpecial)">
+            <summary>
+            Borra la imagen de un producto.
+            </summary>
+            <param name="image"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductSpecialRepositoryModel.GetImageProductSpecialAsync(Isabella.API.Models.ProductSpecial,System.Int32)">
+            <summary>
+            Accede a una imagen determinada de un producto.
+            </summary>
+            <param name="productSpecial"></param>
+            <param name="ImageId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductSpecialRepositoryModel.GetAllImageProductSpecialAsync(Isabella.API.Models.ProductSpecial)">
+            <summary>
+            Accede a todas las imagenes de un producto.
+            </summary>
+            <param name="productSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductSpecialRepositoryModel.GetIdLastImageProductSpecialAsync(Isabella.API.Models.ProductSpecial)">
+            <summary>
+            Obtiene el Id de la ultima imagen que se agrego de un producto.
+            </summary>
+            <param name="productSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.RepositorysModels.IProductStandardRepositoryModel">
+            <summary>
+            Repositorio para los productos standards
+            </summary>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductStandardRepositoryModel.AddProductStandardAsync(Isabella.API.Models.ProductStandard)">
+            <summary>
+            Agrega un nuevo producto.
+            </summary>
+            <param name="productStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductStandardRepositoryModel.UpdateProductStandardAsync(Isabella.API.Models.ProductStandard)">
+            <summary>
+            Actualiza un nuevo producto.
+            </summary>
+            <param name="productStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductStandardRepositoryModel.GetProductStandardForIdNotIncludeAsync(System.Int32)">
+            <summary>
+            Obtiene un producto sin sus relaciones con otras entidades.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductStandardRepositoryModel.GetProductStandardForIdWithAllIncludeAsync(System.Int32)">
+            <summary>
+            Obtiene un producto con todas las relaciones de entidades.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductStandardRepositoryModel.GetProductStandardForIdWithCategoryAsync(System.Int32)">
+            <summary>
+            Obtiene un producto con las relaciones de categorias.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductStandardRepositoryModel.GetAllProductStandardWithCategoryAsync">
+            <summary>
+            Obtiene todos los productos con las relaciones de categorias.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductStandardRepositoryModel.GetAllProductStandardWithAllIncludeAsync">
+            <summary>
+            Obtiene todos los productos con todas las relaciones de entidades.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductStandardRepositoryModel.GetIdOfLastProductStandardAsync">
+            <summary>
+            Obtiene el Id del último producto disponible.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductStandardRepositoryModel.AddImageForProductStandardAsync(Microsoft.AspNetCore.Http.IFormFile,Isabella.API.Models.ProductStandard)">
+            <summary>
+            Agrega imagenes para un producto.
+            </summary>
+            <param name="formFile"></param>
+            <param name="productStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductStandardRepositoryModel.AddImageForProductStandardAsync(System.Byte[],Isabella.API.Models.ProductStandard)">
+            <summary>
+            Agrega imagenes para un producto.
+            </summary>
+            <param name="Image"></param>
+            <param name="productStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductStandardRepositoryModel.DeleteImageProductStandardAsync(Isabella.API.Models.ImageProductStandard)">
+            <summary>
+            Borra la imagen de un producto.
+            </summary>
+            <param name="image"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductStandardRepositoryModel.GetImageProductStandardAsync(Isabella.API.Models.ProductStandard,System.Int32)">
+            <summary>
+            Accede a una imagen determinada de un producto.
+            </summary>
+            <param name="productStandard"></param>
+            <param name="ImageId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductStandardRepositoryModel.GetAllImageProductStandardAsync(Isabella.API.Models.ProductStandard)">
+            <summary>
+            Accede a todas las imagenes de un producto.
+            </summary>
+            <param name="productStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IProductStandardRepositoryModel.GetIdLastImageProductStandardAsync(Isabella.API.Models.ProductStandard)">
+            <summary>
+            Obtiene el Id de la ultima imagen que se agrego de un producto.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.RepositorysModels.IUserRepositoryModel">
+            <summary>
+            Repositorio para los usuarios.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.AddUserAsync(Isabella.API.Models.User,System.String)">
+            <summary>
+            Agrega un usuario con contraseña definida.
+            </summary>
+            <param name="user"></param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.AddUserAsync(Isabella.API.Models.User)">
+            <summary>
+            Agrega un usuario sin contraseña definida(Esto es para login con proveedor externo).
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.SendEmailWithCodeConfirmRegisterAsync(Isabella.API.Models.User)">
+            <summary>
+            Envia un correo al usuario con el código para confirmación del registro en la aplicación.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.VerifyRoleAsync(System.String)">
+            <summary>
+            Verifica si existe el role en el sistema.
+            </summary>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.VerifyEmailAsync(System.String)">
+            <summary>
+            Verifica si el email dado está en uso.
+            </summary>
+            <param name="email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.VerifyUserNameAsync(System.String)">
+            <summary>
+            Verifica si la cuenta de usuario dada está en uso.
+            </summary>
+            <param name="userName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.GetIdOfLastUserAsync">
+            <summary>
+            Obtiene el Id del último usuario registrado en el sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.GetUserByUserNameAsync(System.String)">
+            <summary>
+            Obtiene un usuario dada su cuenta de usuario.
+            </summary>
+            <param name="userName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.GetUserByIdAsync(System.Int32)">
+            <summary>
+            Obtiene un Usuario dado su Id.
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.GetUserByEmailAsync(System.String)">
+            <summary>
+            Obtiene un usuario dado su correo electrónico.
+            </summary>
+            <param name="email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.GetAllUserAsync">
+            <summary>
+            Obtiene todos los usuarios del sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.AddRoleForUserAsync(Isabella.API.Models.User,System.String)">
+            <summary>
+            Agregar un role a un usuario.
+            </summary>
+            <param name="user"></param>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.VerifyConfirmRegisterUserAsync(Isabella.API.Models.User)">
+            <summary>
+            Verifica si el usuario confirmó su registro.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.ConfirmRegisterUserAsync(Isabella.API.Models.User,System.String)">
+            <summary>
+            Confirma el registro del usuario confirmó su registro.
+            </summary>
+            <param name="user"></param>
+            <param name="Token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.VerifyPasswordUserAsync(Isabella.API.Models.User,System.String)">
+            <summary>
+            Verifica que la contraseña del usuario es correcta.
+            </summary>
+            <param name="user"></param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.CreateTokenAsync(Isabella.API.Models.User)">
+            <summary>
+            Crea un Token Web Json para el usuario.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.DeleteImageProfileUserAsync(Isabella.API.Models.User)">
+            <summary>
+            Borra la imagen de perfil de un usuario determinado.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.UpdatePasswordAsync(Isabella.API.Models.User,System.String,System.String)">
+            <summary>
+            Cambia la contraseña de un usuario.
+            </summary>
+            <param name="user"></param>
+            <param name="oldPassword"></param>
+            <param name="newPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.UpdateUserAsync(Isabella.API.Models.User)">
+            <summary>
+            Actualiza el usuario.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.SendEmailForResetPasswordUserAsync(Isabella.API.Models.User)">
+            <summary>
+            Envia un correo al usuario con un código para la recuperaión de su contraseña.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.VerifyUserRecoverPasswordAsync(Isabella.API.Models.User)">
+            <summary>
+            Verifica si el usuario solicito la recuperación de su contraseña.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.RecoverPasswwordUserAsync(Isabella.API.Models.User,System.String,System.String)">
+            <summary>
+            Recupera la contraseña
+            </summary>
+            <param name="user"></param>
+            <param name="Token"></param>
+            <param name="newPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.IUserRepositoryModel.AddOrUpdateImageProfileUserAsync(Isabella.API.Models.User,Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Agrega o actualiza la imagen de perfil del usuario usando la IFormFile.
+            </summary>
+            <param name="user"></param>
+            <param name="formFile"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.SeederDb.SeedDb">
+            <summary>
+            Seeder
+            </summary>
+        </member>
+        <member name="M:Isabella.API.SeederDb.SeedDb.#ctor(Isabella.API.Data.DataContext,Microsoft.AspNetCore.Identity.RoleManager{Microsoft.AspNetCore.Identity.IdentityRole{System.Int32}},Microsoft.AspNetCore.Identity.UserManager{Isabella.API.Models.User})">
+            <summary>
+            Constructor del Seeder
+            </summary>
+            <param name="dataContext"></param>
+            <param name="roleManager"></param>
+            <param name="userManager"></param>
+        </member>
+        <member name="M:Isabella.API.SeederDb.SeedDb.SeedAsync">
+            <summary>
+            Seeder
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.ServicesControllers.CarShopServiceController">
+            <summary>
+            Servicio para el controlador del carrito de compras.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CarShopServiceController.#ctor(Isabella.API.RepositorysModels.IProductStandardRepositoryModel,Isabella.API.RepositorysModels.ICarShopRepositoryModel,Isabella.API.RepositorysModels.ICodeIdentificationModel,Isabella.API.RepositorysModels.IProductSpecialRepositoryModel,Isabella.API.RepositorysModels.IProductAggregateRepositoryModel)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="productStandardRepositoryModel"></param>
+            <param name="carShopRepositoryModel"></param>
+            <param name="verificationCode"></param>
+            <param name="productSpecialRepositoryModel"></param>
+            <param name="productAggregateRepositoryModel"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CarShopServiceController.AddProductsToCarShop(Isabella.Common.Dtos.CarShop.AddProductStandardToCarShopDto)">
+            <summary>
+            Agrega productos al carrito de compras.
+            </summary>
+            <param name="addProductsToCarShop"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CarShopServiceController.AddProductsToCarShop(Isabella.Common.Dtos.CarShop.AddProductSpecialToCarShopDto)">
+            <summary>
+            Agrega productos al carrito de compras.
+            </summary>
+            <param name="addProductsToCarShop"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.ServicesControllers.CodeIdentificationServiceController">
+            <summary>
+            Servicio para el controlador de los códigos de identificación.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CodeIdentificationServiceController.#ctor(Isabella.API.RepositorysModels.ICodeIdentificationModel)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="verificationCodeModel"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CodeIdentificationServiceController.CheckCodeIdentificationAsync(System.Guid)">
+            <summary>
+            Verifica si el código de identificación está registrado.
+            </summary>
+            <param name="CodeVerification"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CodeIdentificationServiceController.GetCodeIdentificationAsync">
+            <summary>
+            Solicita el código de identificación para registrarse e iniciar sesión en la aplicación
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.ServicesControllers.ProductAggregateServiceController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductAggregateServiceController.#ctor(Isabella.API.RepositorysModels.IProductAggregateRepositoryModel,Isabella.API.RepositorysModels.ICategoryProductAggregateRepositoryModel)">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductAggregateServiceController.AddProductAggregateAsync(Isabella.Common.Dtos.ProductAggregate.AddProductAggregateDto)">
+            <summary>
+            Agrega un nuevo producto.
+            </summary>
+            <param name="addProductStandard"></param> 
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductAggregateServiceController.AddImageProductAggregateAsync(Microsoft.AspNetCore.Http.IFormFile,System.Int32)">
+            <summary>
+            Agrega una imagen de un producto(Usando IFormFile).
+            </summary>
+            <param name="formFile"></param>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductAggregateServiceController.AddImageProductAggregateAsync(Isabella.Common.Dtos.ProductAggregate.AddImageProductAggregateDto)">
+            <summary>
+            Agrega una imagen a un producto.
+            </summary>
+            <param name="addImageProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductAggregateServiceController.DeleteImageProductAggregateAsync(System.Int32,System.Int32)">
+            <summary>
+            Borra una imagen de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="ImageId"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductAggregateServiceController.DisableProductAggregateAsync(System.Int32)">
+            <summary>
+            Pone un producto en no disponible.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductAggregateServiceController.EnableProductAggregateAsync(System.Int32)">
+            <summary>
+            Pone un producto en disponible.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductAggregateServiceController.GetAllImageProductAggregateAsync(System.Int32)">
+            <summary>
+            Obtiene todas las imagenes de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductAggregateServiceController.GetAllProductAggregateAsync">
+            <summary>
+            Obtiene todos los productos disponibles en la base de datos.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductAggregateServiceController.GetCantImageProductAggregateAsync(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad especifica de imagenes de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="ImageId"></param>
+            <param name="CantImages"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductAggregateServiceController.GetCantProductAggregateAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad determinada de productos dado un producto de referencia y la cantidad.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="CantProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductAggregateServiceController.GetIdOfLastProductAggregateAsync">
+            <summary>
+            Obtiene el Id del último producto.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductAggregateServiceController.GetImageProductAggregateForIdAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene una imagen determinada de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="ImageId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductAggregateServiceController.GetListIdOfImageProductAggregateAsync(System.Int32)">
+            <summary>
+            Devuelve una lista con los Id de todas las imagenes del producto.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductAggregateServiceController.GetProductAggregateForIdAsync(System.Int32)">
+            <summary>
+            Obtiene un producto dado su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductAggregateServiceController.UpdateProductAggregateAsync(Isabella.Common.Dtos.ProductAggregate.UpdateProductAggregateDto)">
+            <summary>
+            Actualiza un producto.
+            </summary>
+            <param name="updateProductAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.ServicesControllers.ProductSpecialServiceController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductSpecialServiceController.#ctor(Isabella.API.RepositorysModels.ICategoryProductSpecialRepositoryModel,Isabella.API.RepositorysModels.IProductSpecialRepositoryModel)">
+            <summary>
+            
+            </summary>
+            <param name="categoryProductSpecialRepository"></param>
+            <param name="productSpecialRepository"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductSpecialServiceController.AddProductSpecialAsync(Isabella.Common.Dtos.ProductSpecial.AddProductStandardSpecialDto)">
+            <summary>
+            Agrega un nuevo producto.
+            </summary>
+            <param name="addProductSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductSpecialServiceController.AddImageProductSpecialAsync(Microsoft.AspNetCore.Http.IFormFile,System.Int32)">
+            <summary>
+            Agrega una imagen de un producto(Usando IFormFile).
+            </summary>
+            <param name="formFile"></param>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductSpecialServiceController.AddImageProductSpecialAsync(Isabella.Common.Dtos.ProductSpecial.AddImageProductSpecialDto)">
+            <summary>
+            Agrega una imagen a un producto.
+            </summary>
+            <param name="addImageProductSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductSpecialServiceController.DeleteImageProductSpecialAsync(System.Int32,System.Int32)">
+            <summary>
+            Borra una imagen de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="ImageId"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductSpecialServiceController.DisableProductSpecialAsync(System.Int32)">
+            <summary>
+            Pone un producto en no disponible.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductSpecialServiceController.EnableProductSpecialAsync(System.Int32)">
+            <summary>
+            Pone un producto en disponible.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductSpecialServiceController.GetAllImageProductSpecialAsync(System.Int32)">
+            <summary>
+            Obtiene todas las imagenes de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductSpecialServiceController.GetAllProductSpecialAsync">
+            <summary>
+            Obtiene todos los productos disponibles en la base de datos.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductSpecialServiceController.GetCantImageProductSpecialAsync(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad especifica de imagenes de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="ImageId"></param>
+            <param name="CantImages"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductSpecialServiceController.GetCantProductSpecialAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad determinada de productos dado un producto de referencia y la cantidad.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="CantProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductSpecialServiceController.GetIdOfLastProductSpecialAsync">
+            <summary>
+            Obtiene el Id del último producto.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductSpecialServiceController.GetImageProductSpecialForIdAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene una imagen determinada de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="ImageId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductSpecialServiceController.GetListIdOfImageProductSpecialAsync(System.Int32)">
+            <summary>
+            Devuelve una lista con los Id de todas las imagenes del producto.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductSpecialServiceController.GetProductSpecialForIdAsync(System.Int32)">
+            <summary>
+            Obtiene un producto dado su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductSpecialServiceController.UpdateProductSpecialAsync(Isabella.Common.Dtos.ProductSpecial.UpdateProductSpecialDto)">
+            <summary>
+            Actualiza un producto.
+            </summary>
+            <param name="updateProductSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.ServicesControllers.ProductStandardServiceController">
+            <summary>
+            Servicio para el controlador de los productos standard.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductStandardServiceController.#ctor(Isabella.API.RepositorysModels.IProductStandardRepositoryModel,Isabella.API.RepositorysModels.ICategoryProductStandardRepositoryModel)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="productStandardRepositoryModel"></param>
+            <param name="categoryProductStandardRepository"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductStandardServiceController.AddProductStandardAsync(Isabella.Common.Dtos.ProductStandard.AddProductStandardDto)">
+            <summary>
+            Agregar un nuevo producto.
+            </summary>
+            <param name="addProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductStandardServiceController.UpdateProductStandardAsync(Isabella.Common.Dtos.ProductStandard.UpdateProductStandardDto)">
+            <summary>
+            Actualiza un producto.
+            </summary>
+            <param name="updateProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductStandardServiceController.GetProductStandardForIdAsync(System.Int32)">
+            <summary>
+            Obtiene un producto dado su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductStandardServiceController.GetAllProductStandardAsync">
+            <summary>
+            Obtiene todos los productos disponibles en la base de datos.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductStandardServiceController.GetIdOfLastProductStandardAsync">
+            <summary>
+            Obtiene el Id del último producto.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductStandardServiceController.GetImageProductStandardForIdAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene una imagen determinada de un producto.
+            </summary>
+            <param name="ProductStandardId"></param>
+            <param name="ImageId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductStandardServiceController.AddImageProductStandardAsync(Microsoft.AspNetCore.Http.IFormFile,System.Int32)">
+            <summary>
+            Agrega una imagen de un producto(Usando IFormFile).
+            </summary>
+            <param name="formFile"></param>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductStandardServiceController.AddImageProductStandardAsync(Isabella.Common.Dtos.ProductStandard.AddImageProductStandardDto)">
+            <summary>
+            Agrega una imagen a un producto.
+            </summary>
+            <param name="addImageProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductStandardServiceController.DeleteImageProductStandardAsync(System.Int32,System.Int32)">
+            <summary>
+            Borra una imagen de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="ImageId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductStandardServiceController.EnableProductStandardAsync(System.Int32)">
+            <summary>
+            Pone un producto en disponible.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductStandardServiceController.DisableProductStandardAsync(System.Int32)">
+            <summary>
+            Pone un producto en no disponible.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductStandardServiceController.GetCantProductStandardAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad determinada de productos dado un producto de referencia y la cantidad.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="CantProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductStandardServiceController.GetListIdOfImageProductStandardAsync(System.Int32)">
+            <summary>
+            Devuelve una lista con los Id de todas las imagenes del producto.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductStandardServiceController.GetAllImageProductStandardAsync(System.Int32)">
+            <summary>
+            Obtiene todas las imagenes de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.ProductStandardServiceController.GetCantImageProductStandardAsync(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad especifica de imagenes de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="ImageId"></param>
+            <param name="CantImages"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.ServicesControllers.UserServiceController">
+            <summary>
+            Servicio para el controlador de los usuarios.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.ServicesControllers.UserServiceController.ClaimsPrincipal">
+            <summary>
+            Claims del usuario.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.#ctor(Isabella.API.RepositorysModels.IUserRepositoryModel)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="userRepositoryModelService"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.GetEntityUserForEmailAsync(System.String)">
+            <summary>
+            Devuelve una entidad del modelo User sin mapear dado su correo electrónico.
+            </summary>
+            <param name="Email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.AddUserAsync(Isabella.Common.Dtos.Users.RegisterUserDto)">
+            <summary>
+            Agrega un nuevo usuario a la base de datos.
+            </summary>
+            <param name="newuser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.ConfirmEmailUserAsync(Isabella.Common.Dtos.Users.ConfirmEmailDto)">
+            <summary>
+            Confirma el registro de un usuario en el sistema con el código enviado a su correo electrónico.
+            </summary>
+            <param name="confirmEmail"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.GetAllUserAsync">
+            <summary>
+            Obtiene todos los usuarios del sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.GetIdOfLastUserAsync">
+            <summary>
+            Obtiene el Id del último usuario que se registró en el sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.GetUserByIdAsync(System.Int32)">
+            <summary>
+            Obtiene un usuario dado su Id.
+            </summary>
+            <param name="UserId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.GetUserByUserNameAsync(System.String)">
+            <summary>
+            Obtiene un usuario dada su cuenta de usuario.
+            </summary>
+            <param name="UserName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.GetUserByEmailAsync(System.String)">
+            <summary>
+            Obtiene un usuario dado su email.
+            </summary>
+            <param name="Email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.LoginUserAsync(Isabella.Common.Dtos.Users.LoginUserWithUserNameDto)">
+            <summary>
+            Realiza el login del usuario y obtiene el token de acceso,el tiempo de expiración y otros datos del usuario.
+            </summary>
+            <param name="loginUser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.GetCantUserAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene un número determinado de usuarios dado un Id y la cantidad deseada.
+            </summary>
+            <param name="UserId"></param>
+            <param name="CantUsers"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.ResetPasswordUserAsync(Isabella.Common.Dtos.Users.ResetPasswordDto)">
+            <summary>
+            Solicita la recuperación de la contraseña.
+            </summary>
+            <param name="resetPassword"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.SendToNewCodeConfirmationEmailAsync(Isabella.Common.Dtos.Users.SendToNewCodeConfirmationRegisterDto)">
+            <summary>
+            Envia un nuevo correo al usuario con el código para la confirmación del registro.
+            </summary>
+            <param name="sendToNewCodeConfirmationRegister"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.RecoverPasswwordUserAsync(Isabella.Common.Dtos.Users.RecoverPasswordDto)">
+            <summary>
+            Ejecuta la función que recupera la contraseña del usuario con el código enviado a su correo electronico.
+            </summary>
+            <param name="recoverPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.UpdateUserAsync(Isabella.Common.Dtos.Users.UpdateUserDto)">
+            <summary>
+            Ejecuta la función que actualiza al usuario.
+            </summary>
+            <param name="updateUser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.DeleteImageProfileUserAsync">
+            <summary>
+            Ejecuta la función para borrar la imagen de perfil del usuario especificado.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.UpdatePasswordAsync(Isabella.Common.Dtos.Users.ChangePasswordUserDto)">
+            <summary>
+            Ejecuta la función para cambiar la contraseña de un usuario.
+            </summary>
+            <param name="changePassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.ExecuteDeleteImageProfileUserAsync(System.Security.Claims.ClaimsPrincipal)">
+            <summary>
+            Borra la imagen de perfil del usuario.
+            </summary>
+            <param name="claimsPrincipal"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.ExecuteRecoverPasswwordUserAsync(Isabella.Common.Dtos.Users.RecoverPasswordDto,System.Security.Claims.ClaimsPrincipal)">
+            <summary>
+            Recupera la contraseña del usuario con el código de recuperación enviado a su correo.
+            </summary>
+            <param name="recoverPassword"></param>
+            <param name="claimsPrincipal"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.ExecuteUpdateUserAsync(Isabella.Common.Dtos.Users.UpdateUserDto,System.Security.Claims.ClaimsPrincipal)">
+            <summary>
+            Actualiza el usuario.
+            </summary>
+            <param name="updateUser"></param>
+            <param name="claimsPrincipal"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.ExecuteUpdatePasswordAsync(Isabella.Common.Dtos.Users.ChangePasswordUserDto,System.Security.Claims.ClaimsPrincipal)">
+            <summary>
+            Cambia la contraseña del usuario.
+            </summary>
+            <param name="changePassword"></param>
+            <param name="claimsPrincipal"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.AddOrUpdateImageProfileUser(Microsoft.AspNetCore.Http.IFormFile,System.Security.Claims.ClaimsPrincipal)">
+            <summary>
+            Agrega o actualiza una imagen de usuario usando IFormFile
+            </summary>
+            <param name="formFile"></param>
+            <param name="claimsPrincipal"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.LoginExternProviderForAsync(System.String)">
+            <summary>
+            Login de usuarios con proveedores externos(Google, Facebook, Twitter y Apple). 
+            Si el usuario no existe lo registra en la aplicación.
+            </summary>
+            <param name="scheme"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.ServicesModels.AllDeleteDatabaseExecuteSeederServiceModel">
+            <summary>
+            Servicio de pruebas para eliminar el contenido de las tablas de la base de datos.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.AllDeleteDatabaseExecuteSeederServiceModel.#ctor(Isabella.API.Data.DataContext,Isabella.API.SeederDb.SeedDb)">
+            <summary>
+            
+            </summary>
+            <param name="dataContext"></param>
+            <param name="seederDb"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.AllDeleteDatabaseExecuteSeederServiceModel.DeleteAllAsync">
+            <summary>
+            Borra todas la base de datos y ejecuta el Seeder
+            </summary>
+        </member>
+        <member name="T:Isabella.API.ServicesModels.CarShopServiceModel">
+            <summary>
+            Servicio para la entidad que representa el carrito de compras.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.CarShopServiceModel.#ctor(Isabella.API.Data.DataContext)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="dataContext"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.CarShopServiceModel.AddProductsCarShopAsync(Isabella.API.Models.CarShop)">
+            <summary>
+            Agrega un nuevo producto al carrito de compras de un usuario.
+            </summary>
+            <param name="carShop"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.ServicesModels.CategoryProductAggregateServiceModel">
+            <summary>
+            Servicio para la entidad que representa las categorias de los productos de agregados.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.CategoryProductAggregateServiceModel.#ctor(Isabella.API.Data.DataContext)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="dataContext"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.CategoryProductAggregateServiceModel.GetCategoryProductAggregateAsync(System.Int32)">
+            <summary>
+            Obtiene una categoria special dado su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.ServicesModels.CategoryProductSpecialServiceModel">
+            <summary>
+            Servicio para la entidad que representa las categorias de los productos standards.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.CategoryProductSpecialServiceModel.#ctor(Isabella.API.Data.DataContext)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="dataContext"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.CategoryProductSpecialServiceModel.GetCategoryProductSpecialAsync(System.Int32)">
+            <summary>
+            Obtiene una categoria special dado su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.ServicesModels.CategoryProductStandardServiceModel">
+            <summary>
+            Servicio para la entidad que representa las categorias de los productos standards.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.CategoryProductStandardServiceModel.#ctor(Isabella.API.Data.DataContext)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="dataContext"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.CategoryProductStandardServiceModel.GetCategoryProductStandardAsync(System.Int32)">
+            <summary>
+            Obtiene una categoria standard dado su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.ServicesModels.CodeIdentificationServiceModel">
+            <summary>
+            Servicio para la entidad que representa los códigos de identificación.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.CodeIdentificationServiceModel.#ctor(Isabella.API.Data.DataContext)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.CodeIdentificationServiceModel.CheckCodeIdentificationAsync(System.Guid)">
+            <summary>
+            Verifica si un código de identificación está registrado.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.CodeIdentificationServiceModel.RegisterNewCodeIdentification">
+            <summary>
+            Registra un nuevo código de identificación.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.ServicesModels.MailServiceModel">
+            <summary>
+            Servicio para el envio de correos electronicos.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.MailServiceModel.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.MailServiceModel.SendMail(System.String,System.String,System.String)">
+            <summary>
+            Envia correos a un destinatario.
+            </summary>
+            <param name="destiny"></param>
+            <param name="subject"></param>
+            <param name="body_message"></param>
+        </member>
+        <member name="T:Isabella.API.ServicesModels.ProductAggregateServiceModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductAggregateServiceModel.#ctor(Isabella.API.Data.DataContext)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="dataContext"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductAggregateServiceModel.AddImageForProductAggregateAsync(Microsoft.AspNetCore.Http.IFormFile,Isabella.API.Models.ProductAggregate)">
+            <summary>
+            Agrega imagenes para un producto.
+            </summary>
+            <param name="formFile"></param>
+            <param name="productAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductAggregateServiceModel.AddImageForProductAggregateAsync(System.Byte[],Isabella.API.Models.ProductAggregate)">
+            <summary>
+            Agrega imagenes para un producto.
+            </summary>
+            <param name="Image"></param>
+            <param name="productAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductAggregateServiceModel.AddProductAggregateAsync(Isabella.API.Models.ProductAggregate)">
+            <summary>
+            Agrega un nuevo producto.
+            </summary>
+            <param name="productAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductAggregateServiceModel.DeleteImageProductAggregateAsync(Isabella.API.Models.ImageProductAggregate)">
+            <summary>
+            Borra la imagen de un producto.
+            </summary>
+            <param name="image"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductAggregateServiceModel.GetAllImageProductAggregateAsync(Isabella.API.Models.ProductAggregate)">
+            <summary>
+            Accede a todas las imagenes de un producto.
+            </summary>
+            <param name="productAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductAggregateServiceModel.GetAllProductAggregateWithAllIncludeAsync">
+            <summary>
+            Obtiene todos los productos con todas las relaciones de entidades.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductAggregateServiceModel.GetAllProductAggregateWithCategoryAsync">
+            <summary>
+            Obtiene todos los productos con las relaciones de categorias.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductAggregateServiceModel.GetIdLastImageProductAggregateAsync(Isabella.API.Models.ProductAggregate)">
+            <summary>
+            Obtiene el Id de la ultima imagen que se agrego de un producto.
+            </summary>
+            <param name="productAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductAggregateServiceModel.GetIdOfLastProductAggregateAsync">
+            <summary>
+            Obtiene el Id del último producto disponible.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductAggregateServiceModel.GetImageProductAggregateAsync(Isabella.API.Models.ProductAggregate,System.Int32)">
+            <summary>
+            Accede a una imagen determinada de un producto.
+            </summary>
+            <param name="productAggregate"></param>
+            <param name="ImageId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductAggregateServiceModel.GetProductAggregateForIdNotIncludeAsync(System.Int32)">
+            <summary>
+            Obtiene un producto sin sus relaciones con otras entidades.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductAggregateServiceModel.GetProductAggregateForIdWithAllIncludeAsync(System.Int32)">
+            <summary>
+            Obtiene un producto con todas las relaciones de entidades.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductAggregateServiceModel.GetProductAggregateForIdWithCategoryAsync(System.Int32)">
+            <summary>
+            Obtiene un producto con las relaciones de categorias.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductAggregateServiceModel.UpdateProductAggregateAsync(Isabella.API.Models.ProductAggregate)">
+            <summary>
+            Actualiza un producto.
+            </summary>
+            <param name="productAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.ServicesModels.ProductSpecialServiceModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductSpecialServiceModel.#ctor(Isabella.API.Data.DataContext)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="dataContext"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductSpecialServiceModel.AddProductSpecialAsync(Isabella.API.Models.ProductSpecial)">
+            <summary>
+            Agrega un nuevo producto.
+            </summary>
+            <param name="productSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductSpecialServiceModel.UpdateProductSpecialAsync(Isabella.API.Models.ProductSpecial)">
+            <summary>
+            Actualiza un producto.
+            </summary>
+            <param name="productSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductSpecialServiceModel.GetProductSpecialForIdNotIncludeAsync(System.Int32)">
+            <summary>
+            Obtiene un producto sin sus relaciones con otras entidades.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductSpecialServiceModel.GetProductSpecialForIdWithAllIncludeAsync(System.Int32)">
+            <summary>
+            Obtiene un producto con todas las relaciones de entidades.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductSpecialServiceModel.GetProductSpecialForIdWithCategoryAsync(System.Int32)">
+            <summary>
+            Obtiene un producto con las relaciones de categorias.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductSpecialServiceModel.AddImageForProductSpecialAsync(Microsoft.AspNetCore.Http.IFormFile,Isabella.API.Models.ProductSpecial)">
+            <summary>
+            Agrega imagenes para un producto.
+            </summary>
+            <param name="formFile"></param>
+            <param name="productSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductSpecialServiceModel.AddImageForProductSpecialAsync(System.Byte[],Isabella.API.Models.ProductSpecial)">
+            <summary>
+            Agrega imagenes para un producto.
+            </summary>
+            <param name="Image"></param>
+            <param name="productSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductSpecialServiceModel.DeleteImageProductSpecialAsync(Isabella.API.Models.ImageProductSpecial)">
+            <summary>
+            Borra la imagen de un producto.
+            </summary>
+            <param name="image"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductSpecialServiceModel.GetAllImageProductSpecialAsync(Isabella.API.Models.ProductSpecial)">
+            <summary>
+            Accede a todas las imagenes de un producto.
+            </summary>
+            <param name="productSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductSpecialServiceModel.GetAllProductSpecialWithAllIncludeAsync">
+            <summary>
+            Obtiene todos los productos con todas las relaciones de entidades.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductSpecialServiceModel.GetAllProductSpecialWithCategoryAsync">
+            <summary>
+            Obtiene todos los productos con las relaciones de categorias.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductSpecialServiceModel.GetIdLastImageProductSpecialAsync(Isabella.API.Models.ProductSpecial)">
+            <summary>
+            Obtiene el Id de la ultima imagen que se agrego de un producto.
+            </summary>
+            <param name="productSpecial"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductSpecialServiceModel.GetIdOfLastProductSpecialAsync">
+            <summary>
+            Obtiene el Id del último producto disponible.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductSpecialServiceModel.GetImageProductSpecialAsync(Isabella.API.Models.ProductSpecial,System.Int32)">
+            <summary>
+            Accede a una imagen determinada de un producto.
+            </summary>
+            <param name="productSpecial"></param>
+            <param name="ImageId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.ServicesModels.ProductStandardServiceModel">
+            <summary>
+            Servicio para la entidad que representa los productos standard.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductStandardServiceModel.#ctor(Isabella.API.Data.DataContext)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="dataContext"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductStandardServiceModel.AddProductStandardAsync(Isabella.API.Models.ProductStandard)">
+            <summary>
+            Agrega un nuevo producto.
+            </summary>
+            <param name="productStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductStandardServiceModel.UpdateProductStandardAsync(Isabella.API.Models.ProductStandard)">
+            <summary>
+            Actualiza un nuevo producto.
+            </summary>
+            <param name="productStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductStandardServiceModel.GetProductStandardForIdWithCategoryAsync(System.Int32)">
+            <summary>
+            Obtiene un producto con las relaciones de categorias.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductStandardServiceModel.GetAllProductStandardWithCategoryAsync">
+            <summary>
+            Obtiene todos los productos con las relaciones de categorias.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductStandardServiceModel.GetProductStandardForIdNotIncludeAsync(System.Int32)">
+            <summary>
+            Obtiene un producto sin sus relaciones con otras entidades.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductStandardServiceModel.GetAllProductStandardWithAllIncludeAsync">
+            <summary>
+            Obtiene todos los productos disponibles con su relación de categoría y imagenes.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductStandardServiceModel.GetProductStandardForIdWithAllIncludeAsync(System.Int32)">
+            <summary>
+            Obtiene un producto con su relación de categoría dado su Id y imagenes.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductStandardServiceModel.GetIdOfLastProductStandardAsync">
+            <summary>
+            Obtiene el Id del último producto disponible.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductStandardServiceModel.AddImageForProductStandardAsync(Microsoft.AspNetCore.Http.IFormFile,Isabella.API.Models.ProductStandard)">
+            <summary>
+            Agrega imagenes para un producto.
+            </summary>
+            <param name="formFile"></param>
+            <param name="productStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductStandardServiceModel.AddImageForProductStandardAsync(System.Byte[],Isabella.API.Models.ProductStandard)">
+            <summary>
+            Agrega imagenes para un producto.
+            </summary>
+            <param name="Image"></param>
+            <param name="productStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductStandardServiceModel.DeleteImageProductStandardAsync(Isabella.API.Models.ImageProductStandard)">
+            <summary>
+            Borra la imagen de un producto.
+            </summary>
+            <param name="image"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductStandardServiceModel.GetImageProductStandardAsync(Isabella.API.Models.ProductStandard,System.Int32)">
+            <summary>
+            Verifica si la imagen pertenece al producto.
+            </summary>
+            <param name="productStandard"></param>
+            <param name="ImageId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductStandardServiceModel.GetAllImageProductStandardAsync(Isabella.API.Models.ProductStandard)">
+            <summary>
+            Accede a todas las imagenes de un producto.
+            </summary>
+            <param name="productStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.ProductStandardServiceModel.GetIdLastImageProductStandardAsync(Isabella.API.Models.ProductStandard)">
+            <summary>
+            Obtiene el Id de la ultima imagen que se agrego de un producto.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.ServicesModels.UploadFileServiceModel">
+            <summary>
+            Servicio para el manejo de archivos de subida.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UploadFileServiceModel.UploadFile(System.IO.MemoryStream,System.String,System.String)">
+            <summary>
+            Guarda un archivo que envio el usuario en el servidor.
+            </summary>
+            <param name="memoryStream"></param>
+            <param name="folder"></param>
+            <param name="fileName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.ServicesModels.UserServiceModel">
+            <summary>
+            Servicio para la entidad que representa los usuarios.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.#ctor(Isabella.API.Data.DataContext,Microsoft.AspNetCore.Identity.UserManager{Isabella.API.Models.User},Microsoft.AspNetCore.Identity.RoleManager{Microsoft.AspNetCore.Identity.IdentityRole{System.Int32}},Isabella.API.ServicesModels.MailServiceModel,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="dataContext"></param>
+            <param name="userManager"></param>
+            <param name="roleManager"></param>
+            <param name="mailService"></param>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.AddUserAsync(Isabella.API.Models.User,System.String)">
+            <summary>
+            Agrega un usuario con contraseña definida.
+            </summary>
+            <param name="user"></param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.AddUserAsync(Isabella.API.Models.User)">
+            <summary>
+            Agrega un usuario sin contraseña definida(Esto es para login con proveedor externo).
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.AddRoleForUserAsync(Isabella.API.Models.User,System.String)">
+            <summary>
+            Agrega un role determinado a un usuario.
+            </summary>
+            <param name="user"></param>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.VerifyEmailAsync(System.String)">
+            <summary>
+            Verifica si un email está en uso.
+            </summary>
+            <param name="email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.VerifyUserNameAsync(System.String)">
+            <summary>
+            Verifica si una cuenta de usuario está en uso.
+            </summary>
+            <param name="username"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.SendEmailWithCodeConfirmRegisterAsync(Isabella.API.Models.User)">
+            <summary>
+            Envia un correo al usuario con el código para confirmación del registro en la aplicación.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.VerifyRoleAsync(System.String)">
+            <summary>
+            Verifica si el role está definido en la app.
+            </summary>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.GetIdOfLastUserAsync">
+            <summary>
+            Obtiene el Id del último usuario registrado en el sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.GetUserByUserNameAsync(System.String)">
+            <summary>
+            Obtiene un usuario dada su cuenta de usuario.
+            </summary>
+            <param name="userName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.GetUserByIdAsync(System.Int32)">
+            <summary>
+            Obtiene un Usuario dado su Id.
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.GetUserByEmailAsync(System.String)">
+            <summary>
+            Obtiene un usuario dado su correo electrónico.
+            </summary>
+            <param name="email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.VerifyConfirmRegisterUserAsync(Isabella.API.Models.User)">
+            <summary>
+            Verifica si el usuario confirmó su registro.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.ConfirmRegisterUserAsync(Isabella.API.Models.User,System.String)">
+            <summary>
+            Verifica si el usuario confirmó su registro.
+            </summary>
+            <param name="user"></param>
+            <param name="Token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.VerifyPasswordUserAsync(Isabella.API.Models.User,System.String)">
+            <summary>
+            Verifica que la contraseña del usuario es correcta.
+            </summary>
+            <param name="user"></param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.CreateTokenAsync(Isabella.API.Models.User)">
+            <summary>
+            Crea un Token Web Json para el usuario.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.GetAllUserAsync">
+            <summary>
+            Obtiene todos los usuarios del sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.UpdatePasswordAsync(Isabella.API.Models.User,System.String,System.String)">
+            <summary>
+            Cambia la contraseña de un usuario.
+            </summary>
+            <param name="user"></param>
+            <param name="oldPassword"></param>
+            <param name="newPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.DeleteImageProfileUserAsync(Isabella.API.Models.User)">
+            <summary>
+            Borra la imagen de perfil de un usuario determinado.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.UpdateUserAsync(Isabella.API.Models.User)">
+            <summary>
+            Actualiza un usuario.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.SendEmailForResetPasswordUserAsync(Isabella.API.Models.User)">
+            <summary>
+            Envia un correo al usuario con un código para la recuperaión de su contraseña.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.VerifyUserRecoverPasswordAsync(Isabella.API.Models.User)">
+            <summary>
+            Verifica si el usuario solicito la recuperación de su contraseña.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.RecoverPasswwordUserAsync(Isabella.API.Models.User,System.String,System.String)">
+            <summary>
+            Recupera la contraseña del usuario. 
+            </summary>
+            <param name="user"></param>
+            <param name="Token"></param>
+            <param name="newPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.UserServiceModel.AddOrUpdateImageProfileUserAsync(Isabella.API.Models.User,Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Agrega o actualiza la imagen de perfil del usuario.
+            </summary>
+            <param name="user"></param>
+            <param name="formFile"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.Startup">
+            <summary>
+            Startup
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Startup.#ctor(Microsoft.Extensions.Configuration.IConfiguration,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="configuration"></param>
+            <param name="webHostEnvironment"></param>
+        </member>
+        <member name="P:Isabella.API.Startup.Configuration">
+            <summary>
+            ConfigureService
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Startup.WebHostEnvironment">
+            <summary>
+            WebHostEnvironment
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Startup.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            This method gets called by the runtime. Use this method to add services to the container.
+            </summary>
+            <param name="services"></param>
+        </member>
+        <member name="M:Isabella.API.Startup.Configure(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.AspNetCore.Hosting.IWebHostEnvironment)">
+            <summary>
+            This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            </summary>
+            <param name="app"></param>
+            <param name="env"></param>
+        </member>
+    </members>
+</doc>
