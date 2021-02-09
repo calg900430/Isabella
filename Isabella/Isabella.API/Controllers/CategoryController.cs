@@ -11,7 +11,7 @@
     using Microsoft.EntityFrameworkCore;
 
     using Common;
-    using Common.Dtos.CarShop;
+    using Common.Dtos.Category;
     using Common.Extras;
     using Common.RepositorysDtos;
     using Extras;
@@ -20,40 +20,40 @@
     using ServicesControllers;
 
     /// <summary>
-    /// Controlador para el carrito de compras.
+    /// Controlador para las categorias de productos standards.
     /// </summary>
     [ApiController]
     [Route("api/[controller]")]
-    public class CarShopController : Controller
+    public class CategoryController : Controller
     {
-        private readonly CarShopServiceController _carShopServiceController;
+        private readonly CategoryServiceController _categoryService;
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="carShopServiceController"></param>
-        public CarShopController(CarShopServiceController carShopServiceController)
+        /// <param name="categoryServiceController"></param>
+        public CategoryController(CategoryServiceController categoryServiceController)
         {
-            this._carShopServiceController = carShopServiceController;
+            this._categoryService = categoryServiceController;
         }
 
         /// <summary>
-        /// Agregar un producto standard al carrito de compras.
+        /// Agrega una nueva categoria.
         /// </summary>
-        /// <param name="addProductStandardToCarShop"></param>
+        /// <param name="addCategory"></param>
         /// <returns></returns>
-        [HttpPost("addtocarshop/productstandard")]
+        [HttpPost("add/category")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> AddProductStandardToCarShopAsync([FromBody] AddProductStandardToCarShopDto addProductStandardToCarShop)
+        public async Task<IActionResult> AddCategoryStandardAsync([FromBody] AddCategoryDto addCategory)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     var result = await this
-                    ._carShopServiceController.AddProductsToCarShop(addProductStandardToCarShop)
+                    ._categoryService.AddCategoryAsync(addCategory)
                     .ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
@@ -70,23 +70,22 @@
         }
 
         /// <summary>
-        /// Agregar un producto special al carrito de compras.
+        /// Obtiene una categoria por su Id.
         /// </summary>
-        /// <param name="addProductSpecialToCarShop"></param>
+        /// <param name="Id"></param>
         /// <returns></returns>
-        [HttpPost("addtocarshop/productspecial")]
+        [HttpGet("get/id_category")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> AddProductSpecialToCarShopAsync([FromBody] AddProductSpecialToCarShopDto addProductSpecialToCarShop)
+        public async Task<IActionResult> GetCategoryForIdAsync(int Id)
         {
-
             try
             {
                 if (ModelState.IsValid)
                 {
                     var result = await this
-                    ._carShopServiceController.AddProductsToCarShop(addProductSpecialToCarShop)
+                    ._categoryService.GetCategoryForIdAsync(Id)
                     .ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
@@ -94,7 +93,7 @@
                     return BadRequest(result);
                 }
                 else
-                    return BadRequest(); //400
+                return BadRequest(); //400
             }
             catch (Exception ex)
             {
@@ -103,30 +102,63 @@
         }
 
         /// <summary>
-        /// Obtiene el carrito de compras del usuario.
+        /// Obtiene una categoria por su nombre.
         /// </summary>
-        /// <param name="CodeIdentification"></param>
+        /// <param name="Name"></param>
         /// <returns></returns>
-        [HttpGet("get/my_carshop")]
+        [HttpGet("get/category/id_name")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> GetMyCarShopAsync(Guid CodeIdentification)
+        public async Task<IActionResult> GetCategoryForNameAsync(string Name)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     var result = await this
-                    ._carShopServiceController.GetMyCarShop(CodeIdentification)
+                    ._categoryService
+                    .GetCategoryForNameAsync(Name)
                     .ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
                     else
-                     return BadRequest(result);
+                    return BadRequest(result);
                 }
                 else
-                    return BadRequest(); //400
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todas las categorias disponibles.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("get/all_category")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> GetAllCategoriesAsync()
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this
+                    ._categoryService
+                    .GetAllCategoryAsync()
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
             }
             catch (Exception ex)
             {

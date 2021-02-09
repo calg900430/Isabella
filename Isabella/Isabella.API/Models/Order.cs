@@ -16,6 +16,18 @@
         [Key]
         public int Id { get; set; }
 
+
+        /// <summary>
+        /// Código de identificación.
+        /// </summary>
+        public CodeIdentification CodeVerification { get; set; }
+
+        /// <summary>
+        /// Gps
+        /// </summary>
+        [Phone(ErrorMessage = "El formato del número de telefono no es valido.")]
+        public string PhoneNumber { get; set; }
+
         /// <summary>
         /// Gps
         /// </summary>
@@ -40,7 +52,7 @@
         {  
            get
            {
-                int cantProductSpecial = 0;
+                /*int cantProductSpecial = 0;
                 int cantProductStandard = 0;
                 var AllProductSpecial = this.Items.Select(c => c.Requested_ProductSpecial).ToList();
                 if(AllProductSpecial != null)
@@ -48,7 +60,8 @@
                 var AllProductStandard = this.Items.Select(c => c.RequestedProductStandard).ToList();
                 if(AllProductStandard != null)
                 cantProductStandard = AllProductStandard.Count;
-                return cantProductSpecial + cantProductStandard;
+                return cantProductSpecial + cantProductStandard;*/
+                return -1;
            } 
         }
 

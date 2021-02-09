@@ -22,16 +22,16 @@
     public class ProductAggregateServiceController : IProductAggregateRepositoryDto
     {
         private readonly IProductAggregateRepositoryModel _productAggregateRepositoryModel;
-        private readonly ICategoryProductAggregateRepositoryModel _categoryProductAggregateRepositoryModel; 
+        private readonly ICategoryRepositoryModel _categorRepositoryModel; 
 
         /// <summary>
         /// Constructor
         /// </summary>
         public ProductAggregateServiceController(IProductAggregateRepositoryModel productAggregateRepositoryModel,
-        ICategoryProductAggregateRepositoryModel categoryProductAggregateRepositoryModel)
+        ICategoryRepositoryModel categoryRepositoryModel)
         {
             this._productAggregateRepositoryModel = productAggregateRepositoryModel;
-            this._categoryProductAggregateRepositoryModel = categoryProductAggregateRepositoryModel;
+            this._categorRepositoryModel = categoryRepositoryModel;
         }
 
         /// <summary>
@@ -53,8 +53,8 @@
                     return serviceResponse;
                 }
                 //Verifica que la categoria es valida
-                var category = await this._categoryProductAggregateRepositoryModel
-                .GetCategoryProductAggregateAsync(addProductStandard.CategoryId)
+                var category = await this._categorRepositoryModel
+                .GetCategoryForIdAsync(addProductStandard.CategoryId)
                 .ConfigureAwait(false);
                 if (category == null)
                 {
@@ -67,7 +67,7 @@
                 //Mapea de AddProductStandardDto a ProductStandard
                 var new_product = new ProductAggregate
                 {
-                    CategoryProductAggregate = category,
+                    Category = category,
                     DateCreated = DateTime.UtcNow,
                     DateUpdate = DateTime.UtcNow,
                     Description = addProductStandard.Description,
@@ -489,15 +489,14 @@
                 serviceResponse.Data = all_productstandard.Select(c => new GetProductAggregateDto
                 {
                     Id = c.Id,
-                    Category = new Common.Dtos.CategoryProductAggregate.GetCategoryProductAggregateDto
+                    Category = new Common.Dtos.Category.GetCategoryDto
                     {
-                        Id = c.CategoryProductAggregate.Id,
-                        Name = c.CategoryProductAggregate.Name,
+                        Id = c.Category.Id,
+                        Name = c.Category.Name,
                     },
                     Description = c.Description,
                     Name = c.Name,
                     Price = c.Price,
-                    Average = c.Average,
                 }).ToList();
                 serviceResponse.Success = true;
                 serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeSuccess_Ok);
@@ -687,15 +686,14 @@
                     serviceResponse.Data = list_products_to_send.Select(c => new GetProductAggregateDto
                     {
                         Id = c.Id,
-                        Category = new Common.Dtos.CategoryProductAggregate.GetCategoryProductAggregateDto
+                        Category = new Common.Dtos.Category.GetCategoryDto
                         {
-                            Id = c.CategoryProductAggregate.Id,
-                            Name = c.CategoryProductAggregate.Name,
+                            Id = c.Category.Id,
+                            Name = c.Category.Name,
                         },
                         Description = c.Description,
                         Name = c.Name,
                         Price = c.Price,
-                        Average = c.Average,
                     }).ToList();
                     serviceResponse.Code = CodeMessage.Code.CodeSuccess_Ok;
                     serviceResponse.Success = true;
@@ -710,15 +708,14 @@
                     serviceResponse.Data = list_products_to_send.Select(c => new GetProductAggregateDto
                     {
                         Id = c.Id,
-                        Category = new Common.Dtos.CategoryProductAggregate.GetCategoryProductAggregateDto
+                        Category = new Common.Dtos.Category.GetCategoryDto
                         {
-                            Id = c.CategoryProductAggregate.Id,
-                            Name = c.CategoryProductAggregate.Name,
+                            Id = c.Category.Id,
+                            Name = c.Category.Name,
                         },
                         Description = c.Description,
                         Name = c.Name,
                         Price = c.Price,
-                        Average = c.Average,
                     }).ToList();
                     serviceResponse.Code = CodeMessage.Code.CodeSuccess_Ok;
                     serviceResponse.Success = true;
@@ -905,15 +902,14 @@
                 serviceResponse.Data = new GetProductAggregateDto
                 {
                     Id = product.Id,
-                    Category = new Common.Dtos.CategoryProductAggregate.GetCategoryProductAggregateDto
+                    Category = new Common.Dtos.Category.GetCategoryDto
                     {
-                        Id = product.CategoryProductAggregate.Id,
-                        Name = product.CategoryProductAggregate.Name,
+                        Id = product.Category.Id,
+                        Name = product.Category.Name,
                     },
                     Description = product.Description,
                     Name = product.Name,
                     Price = product.Price,
-                    Average = product.Average,
                 };
                 serviceResponse.Success = true;
                 serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeSuccess_Ok);
@@ -961,12 +957,12 @@
                 }
                 //Actualiza los campos del producto.
                 if (updateProductAggregate.IsAvailabe != null)
-                    product.IsAvailabe = (bool)updateProductAggregate.IsAvailabe;
+                product.IsAvailabe = (bool)updateProductAggregate.IsAvailabe;
                 if (updateProductAggregate.CategoryId != null)
                 {
                     //Busca si la nueva categoria está en la base de datos.
-                    var category = await this._categoryProductAggregateRepositoryModel
-                    .GetCategoryProductAggregateAsync((int)updateProductAggregate.CategoryId)
+                    var category = await this._categorRepositoryModel
+                    .GetCategoryForIdAsync((int)updateProductAggregate.CategoryId)
                     .ConfigureAwait(false);
                     if (category == null)
                     {
@@ -976,7 +972,7 @@
                         serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeCategory_NotFound);
                         return serviceResponse;
                     }
-                    product.CategoryProductAggregate = category;
+                    product.Category = category;
                 }
                 if (updateProductAggregate.Description != null)
                 product.Description = updateProductAggregate.Description;
@@ -1001,12 +997,11 @@
                 serviceResponse.Code = CodeMessage.Code.CodeSuccess_Ok;
                 serviceResponse.Data = new GetProductAggregateDto
                 {
-                    Average = product.Average,
                     Description = product.Description,
-                    Category = new Common.Dtos.CategoryProductAggregate.GetCategoryProductAggregateDto
+                    Category = new Common.Dtos.Category.GetCategoryDto
                     {
-                        Id = product.CategoryProductAggregate.Id,
-                        Name = product.CategoryProductAggregate.Name,
+                        Id = product.Category.Id,
+                        Name = product.Category.Name,
                     },
                     Id = product.Id,
                     Name = product.Name,

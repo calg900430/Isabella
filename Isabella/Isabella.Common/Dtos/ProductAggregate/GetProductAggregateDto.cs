@@ -2,8 +2,9 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using Isabella.Common.Dtos.CategoryProductAggregate;
-   
+
+    using Isabella.Common.Dtos.Category;
+
     public class GetProductAggregateDto
     {
         /// <summary>
@@ -14,7 +15,7 @@
         /// <summary>
         /// Categoria del producto.
         /// </summary>
-        public GetCategoryProductAggregateDto Category { get; set; }
+        public GetCategoryDto Category { get; set; }
 
         /// <summary>
         /// Nombre del Producto ofertado por el Restaurante.
@@ -31,10 +32,5 @@
         /// Descripción del Producto.
         /// </summary>
         public string Description { get; set; }
-
-        /// <summary>
-        /// Promedio de calificaciones del usuario acerca del producto.
-        /// </summary>
-        public float Average { get; set; }
     }
 }

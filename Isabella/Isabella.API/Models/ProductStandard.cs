@@ -8,9 +8,9 @@
     public class ProductStandard : Product
     {
         /// <summary>
-        /// Categoria de los productos estandar.
+        /// SubCategorias.
         /// </summary>
-        public CategoryProductStandard CategoryProductStandard { get; set; }
+        public ICollection<SubCategory_ProductStandard> SubCategory_ProductStandards { get; set; }
 
         /// <summary>
         /// Imagenes para los productos standars. 

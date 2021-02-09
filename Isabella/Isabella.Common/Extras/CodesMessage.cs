@@ -7,18 +7,18 @@
         public enum Code
         {
             //Success//
-            CodeSuccess_Ok = 5,
+            CodeSuccess_Ok = 1,
 
             //Errors//
-            CodeError_Exception = 10,
-            CodeError_NullObjectSend = 15,
-            CodeError_DataBase = 20,   
+            CodeError_Exception = 2,
+            CodeError_NullObjectSend = 3,
+            CodeError_DataBase = 4,   
             
             //Users//
-            CodeUser_NotFound = 100,
-            CodeUser_AllNotFound = 101,
-            CodeUser_BadUserName = 102,
-            CodeUser_NotConfirmRegister = 103,
+            CodeUser_NotFound = 5,
+            CodeUser_AllNotFound = 6,
+            CodeUser_BadUserName = 7,
+            CodeUser_NotConfirmRegister = 8,
             CodeUser_ErrorGenerateToken = 104,
             CodeUser_LoginTokenUser = 105,
             CodeUser_CodeVerificationNotCorrect = 106,
@@ -50,6 +50,8 @@
 
             //Category
             CodeCategory_NotFound = 500,
+            CodeCategory_Exist = 501,
+            CodeCategory_NotAllFound = 502,
             
 
             //Images        
@@ -61,7 +63,10 @@
             CodeImage_ProductNotImage = 605,
             CodeImage_ProductNotNewImage = 606,
 
+            //CodeIdentification
             CodeIdentification_NotCode = 607,
+            //CarShop
+            CodeCarShop_NotProducts = 608,
         }
 
         public static string MessageOfCode(Code code)
@@ -141,7 +146,11 @@
                 //CategoryProductStandard
                 case Code.CodeCategory_NotFound:
                 return "La categoria no se encuentra en la base de datos.";
-                
+                case Code.CodeCategory_NotAllFound:
+                return "No hay categorias de este tipo en la base de datos.";
+                case Code.CodeCategory_Exist:
+                return "La categoria ya existe en la base de datos.";
+
                 //Imagenes
                 case Code.CodeImage_ImageUserNotValide:      
                 return "La imagen de perfil de usuario no puede ser mayor de 100Kb.";
@@ -161,6 +170,10 @@
                 //Codigo de identificación
                 case Code.CodeIdentification_NotCode:
                 return "El código de identificación no está disponible.Solicite un código de identificación para poder realizar un pedido.";
+
+                //CarShop
+                case Code.CodeCarShop_NotProducts:
+                return "No hay productos en el carro de compras.";
 
                 default:
                 return "Código desconocido";

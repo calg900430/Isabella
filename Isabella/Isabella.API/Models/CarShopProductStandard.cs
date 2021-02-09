@@ -3,12 +3,10 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    using Extras;
-
     /// <summary>
-    /// Agregados
+    /// Carro de compras Fast(Para pedidos informales, o sea usuarios que no desean ser clientes oficiales)
     /// </summary>
-    public class RequestedProductAggregate : IModel
+    public class CarShopProductStandard
     {
         /// <summary>
         /// Key
@@ -17,14 +15,14 @@
         public int Id { get; set; }
 
         /// <summary>
-        /// Pedido de producto especial que solicita productos de agregos.
+        /// Código de identificación.
         /// </summary>
-        public RequestedProductSpecial RequestedProductSpecial { get; set; }
+        public CodeIdentification CodeIdentification {get; set; }
 
         /// <summary>
-        /// Producto de agrego
+        /// Producto Standard
         /// </summary>
-        public ProductAggregate ProductAggregate { get; set; }
+        public ProductStandard ProductStandard { get; set; }
 
         /// <summary>
         /// Precio actual del Producto.

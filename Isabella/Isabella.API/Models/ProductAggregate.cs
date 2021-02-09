@@ -1,17 +1,16 @@
 ﻿namespace Isabella.API.Models
 {
+    using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+
+    using Extras;
 
     /// <summary>
     /// Agregados para productos especiales
     /// </summary>
     public class ProductAggregate : Product
     {
-        /// <summary>
-        /// Categoria de los productos de agregados
-        /// </summary>
-        public CategoryProductAggregate CategoryProductAggregate { get; set; }
-
         /// <summary>
         /// Imagenes para los productos especiales. 
         /// </summary>

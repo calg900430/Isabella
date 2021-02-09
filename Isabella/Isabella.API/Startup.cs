@@ -202,9 +202,10 @@ namespace Isabella.API
             services.AddScoped<ProductAggregateServiceController>();
 
             //Agrega los servicios para el manejo de las categorias.
-            services.AddScoped<ICategoryProductStandardRepositoryModel, CategoryProductStandardServiceModel>();
-            services.AddScoped<ICategoryProductSpecialRepositoryModel, CategoryProductSpecialServiceModel>();
-            services.AddScoped<ICategoryProductAggregateRepositoryModel, CategoryProductAggregateServiceModel>();
+            services.AddScoped<ICategoryRepositoryModel, CategoryServiceModel>();
+            services.AddScoped<CategoryServiceController>();
+            services.AddScoped<ISubCategoryRepositoryModel, SubCategoryServiceModel>();
+            services.AddScoped<SubCategoryServiceController>();
 
             //Agrega los servicios para el manejo del carrito de compras
             services.AddScoped<ICarShopRepositoryModel, CarShopServiceModel>();
@@ -213,7 +214,6 @@ namespace Isabella.API
             //Agrega los servicios para el manejo de los códigos de verificación
             services.AddScoped<ICodeIdentificationModel, CodeIdentificationServiceModel>();
             services.AddScoped<CodeIdentificationServiceController>();
-
         }
 
         /// <summary>

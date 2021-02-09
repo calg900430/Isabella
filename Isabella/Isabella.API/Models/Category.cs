@@ -4,9 +4,9 @@
     using Extras;
 
     /// <summary>
-    /// Entidad que representa la categoria de un producto especial
+    /// Entidad que representa la categoria de un producto standard
     /// </summary>
-    public class CategoryProductSpecial : IModel
+    public class Category : IModel
     {
         /// <summary>
         /// Id

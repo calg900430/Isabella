@@ -18,6 +18,13 @@
         public int Id { get; set; }
 
         /// <summary>
+        /// Categoria del producto.
+        /// </summary>
+        public Category Category { get; set; }
+
+
+
+        /// <summary>
         /// Nombre del Producto ofertado por el Restaurante.
         /// </summary>
         [MaxLength(50, ErrorMessage = "El nombre no puede exceder de los 50 caracteres.")]
@@ -68,5 +75,6 @@
         /// Promedio de calificaciones del usuario acerca del producto.
         /// </summary>
         public float Average { get; set; }
+
     }
 }

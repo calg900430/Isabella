@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using CategoryProductStandard;
+    using Category;
 
     public class UpdateProductSpecialDto
     {

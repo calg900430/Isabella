@@ -59,7 +59,7 @@ namespace Isabella.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CategoryProductAggregates",
+                name: "Categories",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -68,33 +68,7 @@ namespace Isabella.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CategoryProductAggregates", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CategoryProductSpecials",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CategoryProductSpecials", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CategoryProductStandards",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CategoryProductStandards", x => x.Id);
+                    table.PrimaryKey("PK_Categories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -124,6 +98,20 @@ namespace Isabella.API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Gps", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubCategories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    Price = table.Column<decimal>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubCategories", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -300,6 +288,7 @@ namespace Isabella.API.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CategoryId = table.Column<int>(nullable: true),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Price = table.Column<decimal>(nullable: false),
                     LastBuy = table.Column<DateTime>(nullable: true),
@@ -308,16 +297,15 @@ namespace Isabella.API.Migrations
                     IsAvailabe = table.Column<bool>(nullable: false),
                     Stock = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    Average = table.Column<float>(nullable: false),
-                    CategoryProductAggregateId = table.Column<int>(nullable: true)
+                    Average = table.Column<float>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductAggregates", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductAggregates_CategoryProductAggregates_CategoryProductAggregateId",
-                        column: x => x.CategoryProductAggregateId,
-                        principalTable: "CategoryProductAggregates",
+                        name: "FK_ProductAggregates_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -328,6 +316,7 @@ namespace Isabella.API.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CategoryId = table.Column<int>(nullable: true),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Price = table.Column<decimal>(nullable: false),
                     LastBuy = table.Column<DateTime>(nullable: true),
@@ -336,16 +325,15 @@ namespace Isabella.API.Migrations
                     IsAvailabe = table.Column<bool>(nullable: false),
                     Stock = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    Average = table.Column<float>(nullable: false),
-                    CategoryProductSpecialId = table.Column<int>(nullable: true)
+                    Average = table.Column<float>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductsSpecials", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductsSpecials_CategoryProductSpecials_CategoryProductSpecialId",
-                        column: x => x.CategoryProductSpecialId,
-                        principalTable: "CategoryProductSpecials",
+                        name: "FK_ProductsSpecials_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -356,6 +344,7 @@ namespace Isabella.API.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CategoryId = table.Column<int>(nullable: true),
                     Name = table.Column<string>(maxLength: 50, nullable: false),
                     Price = table.Column<decimal>(nullable: false),
                     LastBuy = table.Column<DateTime>(nullable: true),
@@ -364,16 +353,15 @@ namespace Isabella.API.Migrations
                     IsAvailabe = table.Column<bool>(nullable: false),
                     Stock = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    Average = table.Column<float>(nullable: false),
-                    CategoryProductStandardId = table.Column<int>(nullable: true)
+                    Average = table.Column<float>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductsStandards", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductsStandards_CategoryProductStandards_CategoryProductStandardId",
-                        column: x => x.CategoryProductStandardId,
-                        principalTable: "CategoryProductStandards",
+                        name: "FK_ProductsStandards_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -384,6 +372,8 @@ namespace Isabella.API.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CodeVerificationId = table.Column<int>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
                     GpsId = table.Column<int>(nullable: true),
                     Address = table.Column<string>(nullable: false),
                     OrderDate = table.Column<DateTime>(nullable: false),
@@ -392,6 +382,12 @@ namespace Isabella.API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_CodeIdentifications_CodeVerificationId",
+                        column: x => x.CodeVerificationId,
+                        principalTable: "CodeIdentifications",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Orders_Gps_GpsId",
                         column: x => x.GpsId,
@@ -450,6 +446,35 @@ namespace Isabella.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CarShopsProductsSpecials",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CodeIdentificationId = table.Column<int>(nullable: true),
+                    ProductSpecialId = table.Column<int>(nullable: true),
+                    CheeseGouda = table.Column<bool>(nullable: false),
+                    Price = table.Column<decimal>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CarShopsProductsSpecials", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CarShopsProductsSpecials_CodeIdentifications_CodeIdentificationId",
+                        column: x => x.CodeIdentificationId,
+                        principalTable: "CodeIdentifications",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CarShopsProductsSpecials_ProductsSpecials_ProductSpecialId",
+                        column: x => x.ProductSpecialId,
+                        principalTable: "ProductsSpecials",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ImageProductSpecials",
                 columns: table => new
                 {
@@ -470,23 +495,27 @@ namespace Isabella.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Requested_ProductSpecials",
+                name: "SubCategory_ProductSpecials",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductSpecialId = table.Column<int>(nullable: true),
-                    CheeseGouda = table.Column<bool>(nullable: false),
-                    Price = table.Column<decimal>(nullable: false),
-                    Quantity = table.Column<int>(nullable: false)
+                    SubCategoryId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Requested_ProductSpecials", x => x.Id);
+                    table.PrimaryKey("PK_SubCategory_ProductSpecials", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Requested_ProductSpecials_ProductsSpecials_ProductSpecialId",
+                        name: "FK_SubCategory_ProductSpecials_ProductsSpecials_ProductSpecialId",
                         column: x => x.ProductSpecialId,
                         principalTable: "ProductsSpecials",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SubCategory_ProductSpecials_SubCategories_SubCategoryId",
+                        column: x => x.SubCategoryId,
+                        principalTable: "SubCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -521,7 +550,35 @@ namespace Isabella.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ImageProductStandard",
+                name: "CarShopsProductsStandards",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CodeIdentificationId = table.Column<int>(nullable: true),
+                    ProductStandardId = table.Column<int>(nullable: true),
+                    Price = table.Column<decimal>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CarShopsProductsStandards", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CarShopsProductsStandards_CodeIdentifications_CodeIdentificationId",
+                        column: x => x.CodeIdentificationId,
+                        principalTable: "CodeIdentifications",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CarShopsProductsStandards_ProductsStandards_ProductStandardId",
+                        column: x => x.ProductStandardId,
+                        principalTable: "ProductsStandards",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ImageProductStandards",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -531,9 +588,9 @@ namespace Isabella.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ImageProductStandard", x => x.Id);
+                    table.PrimaryKey("PK_ImageProductStandards", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ImageProductStandard_ProductsStandards_ProductStandardId",
+                        name: "FK_ImageProductStandards_ProductsStandards_ProductStandardId",
                         column: x => x.ProductStandardId,
                         principalTable: "ProductsStandards",
                         principalColumn: "Id",
@@ -541,83 +598,27 @@ namespace Isabella.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Requested_ProductStandards",
+                name: "SubCategory_ProductStandards",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductStandardId = table.Column<int>(nullable: true),
-                    Price = table.Column<decimal>(nullable: false),
-                    Quantity = table.Column<int>(nullable: false)
+                    SubCategoryId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Requested_ProductStandards", x => x.Id);
+                    table.PrimaryKey("PK_SubCategory_ProductStandards", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Requested_ProductStandards_ProductsStandards_ProductStandardId",
+                        name: "FK_SubCategory_ProductStandards_ProductsStandards_ProductStandardId",
                         column: x => x.ProductStandardId,
                         principalTable: "ProductsStandards",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Requested_ProductAggregates",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RequestedProductSpecialId = table.Column<int>(nullable: true),
-                    ProductAggregateId = table.Column<int>(nullable: true),
-                    Price = table.Column<decimal>(nullable: false),
-                    Quantity = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Requested_ProductAggregates", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Requested_ProductAggregates_ProductAggregates_ProductAggregateId",
-                        column: x => x.ProductAggregateId,
-                        principalTable: "ProductAggregates",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Requested_ProductAggregates_Requested_ProductSpecials_RequestedProductSpecialId",
-                        column: x => x.RequestedProductSpecialId,
-                        principalTable: "Requested_ProductSpecials",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CarShops",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CodeVerificationId = table.Column<int>(nullable: true),
-                    RequestedProductStandardId = table.Column<int>(nullable: true),
-                    RequestedProductSpecialId = table.Column<int>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CarShops", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CarShops_CodeIdentifications_CodeVerificationId",
-                        column: x => x.CodeVerificationId,
-                        principalTable: "CodeIdentifications",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_CarShops_Requested_ProductSpecials_RequestedProductSpecialId",
-                        column: x => x.RequestedProductSpecialId,
-                        principalTable: "Requested_ProductSpecials",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_CarShops_Requested_ProductStandards_RequestedProductStandardId",
-                        column: x => x.RequestedProductStandardId,
-                        principalTable: "Requested_ProductStandards",
+                        name: "FK_SubCategory_ProductStandards_SubCategories_SubCategoryId",
+                        column: x => x.SubCategoryId,
+                        principalTable: "SubCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -628,9 +629,7 @@ namespace Isabella.API.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderFastId = table.Column<int>(nullable: true),
-                    RequestedProductStandardId = table.Column<int>(nullable: true),
-                    Requested_ProductSpecialId = table.Column<int>(nullable: true),
+                    OrderId = table.Column<int>(nullable: true),
                     DateCreated = table.Column<DateTime>(nullable: false),
                     DateUpdate = table.Column<DateTime>(nullable: true)
                 },
@@ -638,21 +637,37 @@ namespace Isabella.API.Migrations
                 {
                     table.PrimaryKey("PK_OrderDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderDetails_Orders_OrderFastId",
-                        column: x => x.OrderFastId,
+                        name: "FK_OrderDetails_Orders_OrderId",
+                        column: x => x.OrderId,
                         principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CarShopProductAggregates",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CarShopProductSpecialId = table.Column<int>(nullable: true),
+                    ProductAggregateId = table.Column<int>(nullable: true),
+                    Price = table.Column<decimal>(nullable: false),
+                    Quantity = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CarShopProductAggregates", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrderDetails_Requested_ProductStandards_RequestedProductStandardId",
-                        column: x => x.RequestedProductStandardId,
-                        principalTable: "Requested_ProductStandards",
+                        name: "FK_CarShopProductAggregates_CarShopsProductsSpecials_CarShopProductSpecialId",
+                        column: x => x.CarShopProductSpecialId,
+                        principalTable: "CarShopsProductsSpecials",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_OrderDetails_Requested_ProductSpecials_Requested_ProductSpecialId",
-                        column: x => x.Requested_ProductSpecialId,
-                        principalTable: "Requested_ProductSpecials",
+                        name: "FK_CarShopProductAggregates_ProductAggregates_ProductAggregateId",
+                        column: x => x.ProductAggregateId,
+                        principalTable: "ProductAggregates",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -722,19 +737,34 @@ namespace Isabella.API.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CarShops_CodeVerificationId",
-                table: "CarShops",
-                column: "CodeVerificationId");
+                name: "IX_CarShopProductAggregates_CarShopProductSpecialId",
+                table: "CarShopProductAggregates",
+                column: "CarShopProductSpecialId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CarShops_RequestedProductSpecialId",
-                table: "CarShops",
-                column: "RequestedProductSpecialId");
+                name: "IX_CarShopProductAggregates_ProductAggregateId",
+                table: "CarShopProductAggregates",
+                column: "ProductAggregateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CarShops_RequestedProductStandardId",
-                table: "CarShops",
-                column: "RequestedProductStandardId");
+                name: "IX_CarShopsProductsSpecials_CodeIdentificationId",
+                table: "CarShopsProductsSpecials",
+                column: "CodeIdentificationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CarShopsProductsSpecials_ProductSpecialId",
+                table: "CarShopsProductsSpecials",
+                column: "ProductSpecialId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CarShopsProductsStandards_CodeIdentificationId",
+                table: "CarShopsProductsStandards",
+                column: "CodeIdentificationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CarShopsProductsStandards_ProductStandardId",
+                table: "CarShopsProductsStandards",
+                column: "ProductStandardId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ConfirmationsEmails_UserId",
@@ -752,24 +782,19 @@ namespace Isabella.API.Migrations
                 column: "ProductSpecialId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ImageProductStandard_ProductStandardId",
-                table: "ImageProductStandard",
+                name: "IX_ImageProductStandards_ProductStandardId",
+                table: "ImageProductStandards",
                 column: "ProductStandardId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderDetails_OrderFastId",
+                name: "IX_OrderDetails_OrderId",
                 table: "OrderDetails",
-                column: "OrderFastId");
+                column: "OrderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrderDetails_RequestedProductStandardId",
-                table: "OrderDetails",
-                column: "RequestedProductStandardId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderDetails_Requested_ProductSpecialId",
-                table: "OrderDetails",
-                column: "Requested_ProductSpecialId");
+                name: "IX_Orders_CodeVerificationId",
+                table: "Orders",
+                column: "CodeVerificationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_GpsId",
@@ -777,19 +802,19 @@ namespace Isabella.API.Migrations
                 column: "GpsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductAggregates_CategoryProductAggregateId",
+                name: "IX_ProductAggregates_CategoryId",
                 table: "ProductAggregates",
-                column: "CategoryProductAggregateId");
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductsSpecials_CategoryProductSpecialId",
+                name: "IX_ProductsSpecials_CategoryId",
                 table: "ProductsSpecials",
-                column: "CategoryProductSpecialId");
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductsStandards_CategoryProductStandardId",
+                name: "IX_ProductsStandards_CategoryId",
                 table: "ProductsStandards",
-                column: "CategoryProductStandardId");
+                column: "CategoryId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RecoverPassword_UserId",
@@ -797,24 +822,24 @@ namespace Isabella.API.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Requested_ProductAggregates_ProductAggregateId",
-                table: "Requested_ProductAggregates",
-                column: "ProductAggregateId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Requested_ProductAggregates_RequestedProductSpecialId",
-                table: "Requested_ProductAggregates",
-                column: "RequestedProductSpecialId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Requested_ProductSpecials_ProductSpecialId",
-                table: "Requested_ProductSpecials",
+                name: "IX_SubCategory_ProductSpecials_ProductSpecialId",
+                table: "SubCategory_ProductSpecials",
                 column: "ProductSpecialId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Requested_ProductStandards_ProductStandardId",
-                table: "Requested_ProductStandards",
+                name: "IX_SubCategory_ProductSpecials_SubCategoryId",
+                table: "SubCategory_ProductSpecials",
+                column: "SubCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubCategory_ProductStandards_ProductStandardId",
+                table: "SubCategory_ProductStandards",
                 column: "ProductStandardId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubCategory_ProductStandards_SubCategoryId",
+                table: "SubCategory_ProductStandards",
+                column: "SubCategoryId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -844,7 +869,10 @@ namespace Isabella.API.Migrations
                 name: "CalificationRestaurants");
 
             migrationBuilder.DropTable(
-                name: "CarShops");
+                name: "CarShopProductAggregates");
+
+            migrationBuilder.DropTable(
+                name: "CarShopsProductsStandards");
 
             migrationBuilder.DropTable(
                 name: "ConfirmationsEmails");
@@ -856,7 +884,7 @@ namespace Isabella.API.Migrations
                 name: "ImageProductSpecials");
 
             migrationBuilder.DropTable(
-                name: "ImageProductStandard");
+                name: "ImageProductStandards");
 
             migrationBuilder.DropTable(
                 name: "OrderDetails");
@@ -865,46 +893,43 @@ namespace Isabella.API.Migrations
                 name: "RecoverPassword");
 
             migrationBuilder.DropTable(
-                name: "Requested_ProductAggregates");
+                name: "SubCategory_ProductSpecials");
+
+            migrationBuilder.DropTable(
+                name: "SubCategory_ProductStandards");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "CodeIdentifications");
-
-            migrationBuilder.DropTable(
-                name: "Orders");
-
-            migrationBuilder.DropTable(
-                name: "Requested_ProductStandards");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "CarShopsProductsSpecials");
 
             migrationBuilder.DropTable(
                 name: "ProductAggregates");
 
             migrationBuilder.DropTable(
-                name: "Requested_ProductSpecials");
+                name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Gps");
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "ProductsStandards");
 
             migrationBuilder.DropTable(
-                name: "CategoryProductAggregates");
+                name: "SubCategories");
 
             migrationBuilder.DropTable(
                 name: "ProductsSpecials");
 
             migrationBuilder.DropTable(
-                name: "CategoryProductStandards");
+                name: "CodeIdentifications");
 
             migrationBuilder.DropTable(
-                name: "CategoryProductSpecials");
+                name: "Gps");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

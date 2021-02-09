@@ -1,12 +1,14 @@
 ﻿namespace Isabella.API.Models
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
+
     using Extras;
 
     /// <summary>
-    /// Cantidad de productos standard que solicita el usuario
+    /// Agregados
     /// </summary>
-    public class RequestedProductStandard : IModel
+    public class CarShopProductAggregate : IModel
     {
         /// <summary>
         /// Key
@@ -15,9 +17,14 @@
         public int Id { get; set; }
 
         /// <summary>
-        /// Producto Standard
+        /// Carrito de Compras
         /// </summary>
-        public ProductStandard ProductStandard { get; set; }
+        public CarShopProductSpecial CarShopProductSpecial { get; set; }
+
+        /// <summary>
+        /// Producto de agrego
+        /// </summary>
+        public ProductAggregate ProductAggregate { get; set; }
 
         /// <summary>
         /// Precio actual del Producto.

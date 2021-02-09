@@ -9,6 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Isabella.API.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Isabella.API.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Hubs\Repositorys\" />
     <Folder Include="Migrations\" />
     <Folder Include="wwwroot\images\images_products\agregados\" />

@@ -17,18 +17,9 @@
         /// <summary>
         /// Orden
         /// </summary>
-        public Order OrderFast { get; set; }
+        public Order Order { get; set; }
 
-        /// <summary>
-        /// Producto Standard solicitado por el usuario
-        /// </summary>
-        public RequestedProductStandard RequestedProductStandard { get; set; }
-
-        /// <summary>
-        /// Producto Special solicitado por el usuario
-        /// </summary>
-        public RequestedProductSpecial Requested_ProductSpecial { get; set; }
-
+        
         /// <summary>
         /// Fecha en que se agregó el producto al carrito de compras
         /// </summary>

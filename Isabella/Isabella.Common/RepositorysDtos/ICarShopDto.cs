@@ -1,5 +1,6 @@
 ﻿namespace Isabella.Common.RepositorysDtos
 {
+    using System;
     using System.Threading.Tasks;
     using Dtos.CarShop;
 
@@ -21,5 +22,12 @@
         /// <param name="addProductsToCarShop"></param>
         /// <returns></returns>
         Task<ServiceResponse<bool>> AddProductsToCarShop(AddProductSpecialToCarShopDto addProductsToCarShop);
+
+        /// <summary>
+        /// Obtiene el caarito de compras para la posible compra de un usuario
+        /// </summary>
+        /// <param name="CodeVerification"></param>
+        /// <returns></returns>
+        Task<ServiceResponse<GetCarShopDto>> GetMyCarShop(Guid CodeVerification);
     }
 }

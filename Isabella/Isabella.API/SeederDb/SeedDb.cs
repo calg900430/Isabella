@@ -45,7 +45,7 @@
             {
                 //Borra la base de datos si existe(Esto solo está habilitado en el momento de hacer pruebas, 
                 //cuando todo este listo, debemos comentar esta linea)
-                await _dataContext.Database.EnsureDeletedAsync().ConfigureAwait(false);
+                //await _dataContext.Database.EnsureDeletedAsync().ConfigureAwait(false);
                 //Verifica si existe la base de datos, si no existe la crea.
                 await _dataContext.Database.EnsureCreatedAsync().ConfigureAwait(false);
 
@@ -128,88 +128,66 @@
                     }
                 }
 
-                /*Crea las categorias de los productos standard*/
-                List<CategoryProductStandard> category_standard = new List<CategoryProductStandard>();
-                if (!await this._dataContext.CategoryProductStandards.AnyAsync().ConfigureAwait(false))
+                /*Crea las categorias de los productos.*/
+                List<Category> categorys = new List<Category>();
+                if (!await this._dataContext.Categories.AnyAsync().ConfigureAwait(false))
                 {
-                    category_standard = new List<CategoryProductStandard>
+                    categorys = new List<Category>
                     {
-                        new CategoryProductStandard
+                        new Category
                         {            
                            Name = "Entrantes"
                         }, //0-Entrantes
-                        new CategoryProductStandard
+                        new Category
                         {
                             Name = "Postres"
                         }, //1-Postres
-                        new CategoryProductStandard
+                        new Category
                         {
                              Name = "Platos Principales"
                         }, //2-Platos Principales
-                        new CategoryProductStandard
+                        new Category
                         {
                            Name = "Mariscos"
                         }, //3-Mariscos
-                        new CategoryProductStandard
+                        new Category
                         {
                              Name = "Bebidas"
                         }, //4-Bebidas
-                        new CategoryProductStandard
+                        new Category
                         {
                              Name = "Vinos y Licores"
                         }, //5-Vinos y Licores
+                        new Category
+                        {
+                             Name = "Pizzas"
+                        }, //6-Pizzas
+                        new Category
+                        {
+                             Name = "Pastas"
+                        }, //7-Pastas
+                        new Category
+                        {
+                             Name = "Quesos"
+                        }, //8-Quesos
+                        new Category
+                        {
+                             Name = "Frutas"
+                        }, //9-Frutas
+                        new Category
+                        {
+                             Name = "Setas"
+                        }, //10-Setas
+                        new Category
+                        {
+                             Name = "Embutidos"
+                        }, //11-Embutidos
+                        new Category
+                        {
+                             Name = "Pescados"
+                        }, //12-Pescados
                     };
-                    await this._dataContext.CategoryProductStandards.AddRangeAsync(category_standard).ConfigureAwait(false);
-                    await this._dataContext.SaveChangesAsync().ConfigureAwait(false);
-                }
-
-                /*Crea las categorias de los productos especiales*/
-                List<CategoryProductSpecial> category_especial = new List<CategoryProductSpecial>();
-                if (!await this._dataContext.CategoryProductSpecials.AnyAsync().ConfigureAwait(false))
-                {
-                    category_especial = new List<CategoryProductSpecial>
-                    {
-                       new CategoryProductSpecial
-                       {
-                          Name = "Pastas"
-                       }, //6-Pastas
-                       new CategoryProductSpecial
-                       {
-                            Name = "Pizzas"
-                       }, //7-Pizzas
-                    };
-                    await this._dataContext.CategoryProductSpecials.AddRangeAsync(category_especial).ConfigureAwait(false);
-                    await this._dataContext.SaveChangesAsync().ConfigureAwait(false);
-                }
-
-                /*Crea las categorias de los productos de agrego*/
-                List<CategoryProductAggregate> category_aggregate = new List<CategoryProductAggregate>();
-                if (!await this._dataContext.CategoryProductAggregates.AnyAsync().ConfigureAwait(false))
-                {
-                    category_aggregate = new List<CategoryProductAggregate>
-                    {
-                       new CategoryProductAggregate
-                       {
-                          Name = "Quesos"
-                       },
-                       new CategoryProductAggregate
-                       {
-                          Name = "Frutas"
-                       },
-                       new CategoryProductAggregate
-                       {
-                          Name = "Setas"
-                       },
-                       new CategoryProductAggregate
-                       {
-                          Name = "Embutidos"
-                       },
-                       new CategoryProductAggregate
-                       {
-                          Name = "Mariscos"
-                       },
-                    };
-                    await this._dataContext.CategoryProductAggregates.AddRangeAsync(category_aggregate).ConfigureAwait(false);
+                    await this._dataContext.Categories.AddRangeAsync(categorys).ConfigureAwait(false);
                     await this._dataContext.SaveChangesAsync().ConfigureAwait(false);
                 }
 
@@ -221,7 +199,7 @@
                         new ProductAggregate
                         {
                             Name = "Queso",
-                            CategoryProductAggregate = category_aggregate[0],
+                            Category = categorys[8],
                             DateCreated = DateTime.UtcNow,
                             DateUpdate = DateTime.UtcNow,
                             Description = "Queso blanco de excelente calidad",
@@ -233,7 +211,7 @@
                         new ProductAggregate     //1-Queso Gouda
                         {
                             Name = "Queso Gouda",
-                            CategoryProductAggregate = category_aggregate[0],
+                            Category = categorys[8],
                             DateCreated = DateTime.UtcNow,
                             DateUpdate = DateTime.UtcNow,
                             Description = "Queso Gouda de importación.",
@@ -245,7 +223,7 @@
                         new ProductAggregate
                         {
                             Name = "Jamón",
-                            CategoryProductAggregate = category_aggregate[3],
+                            Category = categorys[11],
                             DateCreated = DateTime.UtcNow,
                             DateUpdate = DateTime.UtcNow,
                             Description = "Jamón de excelente calidad.",
@@ -257,7 +235,7 @@
                         new ProductAggregate
                         {
                             Name = "Chorizo",
-                            CategoryProductAggregate = category_aggregate[3],
+                            Category = categorys[11],
                             DateCreated = DateTime.UtcNow,
                             DateUpdate = DateTime.UtcNow,
                             Description = "Chorizo de excelente calidad.",
@@ -269,7 +247,7 @@
                         new ProductAggregate
                         {
                             Name = "Aceitunas",
-                            CategoryProductAggregate = category_aggregate[1],
+                            Category = categorys[9],
                             DateCreated = DateTime.UtcNow,
                             DateUpdate = DateTime.UtcNow,
                             Description = "Aceitunas de Goya.",
@@ -281,7 +259,7 @@
                         new ProductAggregate
                         {
                             Name = "Champiñón",
-                            CategoryProductAggregate = category_aggregate[2],
+                            Category = categorys[10],
                             DateCreated = DateTime.UtcNow,
                             DateUpdate = DateTime.UtcNow,
                             Description = "Champiñón de importación.",
@@ -293,7 +271,7 @@
                         new ProductAggregate
                         {
                             Name = "Atún",
-                            CategoryProductAggregate = category_aggregate[4],
+                            Category = categorys[12],
                             DateCreated = DateTime.UtcNow,
                             DateUpdate = DateTime.UtcNow,
                             Description = "Atún de excelente calidad.",
@@ -305,7 +283,7 @@
                         new ProductAggregate
                         {
                             Name = "Camarón",
-                            CategoryProductAggregate = category_aggregate[4],
+                            Category = categorys[3],
                             DateCreated = DateTime.UtcNow,
                             DateUpdate = DateTime.UtcNow,
                             Description = "Camarón de producción nacional.",
@@ -388,7 +366,7 @@
                         new ProductStandard
                         {
                            Name = "Ensalda Fría",
-                           CategoryProductStandard = category_standard[0],
+                           Category = categorys[0],
                            Description = "Ensalada Fría con queso, jamón y aceitunas.",
                            Stock = 100,
                            IsAvailabe = true,
@@ -400,7 +378,7 @@
                         new ProductStandard
                          {
                            Name = "Coco Glasé",
-                           CategoryProductStandard = category_standard[1],
+                           Category = categorys[1],
                            Description = "Excelente postre de coco.",
                            Stock = 65,
                            IsAvailabe = true,
@@ -412,7 +390,7 @@
                         new ProductStandard
                         {
                            Name = "Bistec de Cerdo",
-                           CategoryProductStandard = category_standard[2],
+                           Category = categorys[2],
                            Description = "Bistec de Cerdo, un plato recomendado por la casa.",
                            Stock = 150,
                            IsAvailabe = true,
@@ -424,7 +402,7 @@
                         new ProductStandard
                         {
                            Name = "Camarón Grillé",
-                           CategoryProductStandard = category_standard[3],
+                           Category = categorys[3],
                            Description = "Excelente variante de camarones, recomendado por la casa.",
                            Stock = 180,
                            IsAvailabe = true,
@@ -436,7 +414,7 @@
                         new ProductStandard
                         {
                            Name = "Malta Holland",
-                           CategoryProductStandard = category_standard[4],
+                           Category = categorys[4],
                            Description = "Malta de excelente calidad",
                            Stock = 240,
                            IsAvailabe = true,
@@ -448,7 +426,7 @@
                         new ProductStandard
                         {
                            Name = "Vino Blanco Constelación",
-                           CategoryProductStandard = category_standard[5],
+                           Category = categorys[5],
                            Description = "Vino recomendado para cenas especiales.",
                            Stock = 240,
                            IsAvailabe = true,
@@ -542,7 +520,7 @@
                        new ProductSpecial
                        {
                           Name = "Espaguetti con Jamon",
-                          CategoryProductSpecial = category_especial[0],
+                          Category = categorys[7],
                           Description = "Espagueti con jamón, queso y aceitunas.",
                           Stock = 80,
                           IsAvailabe = true,
@@ -554,7 +532,7 @@
                        new ProductSpecial
                        {
                           Name = "Pizza con Camarones",
-                          CategoryProductSpecial = category_especial[1],
+                          Category = categorys[6],
                           Description = "Esta es la mejor pizza de la casa.",
                           Stock = 140,
                           IsAvailabe = true,

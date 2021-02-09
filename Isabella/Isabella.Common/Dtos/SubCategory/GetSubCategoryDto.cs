@@ -1,9 +1,9 @@
-﻿namespace Isabella.Common.Dtos.CategoryProductAggregate
+﻿namespace Isabella.Common.Dtos.SubCategory
 {
-    public class GetCategoryProductAggregateDto
+    public class GetSubCategoryDto
     {
         /// <summary>
-        /// Id
+        /// Key
         /// </summary>
         public int Id { get; set; }
 
@@ -11,5 +11,10 @@
         /// Nombre de la categoría del producto.
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Precio del Produto.
+        /// </summary>
+        public decimal Price { get; set; }
     }
 }

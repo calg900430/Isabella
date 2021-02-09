@@ -21,18 +21,18 @@
     /// </summary>
     public class ProductSpecialServiceController : IProductSpecialRepositoryDto
     {
-        private readonly ICategoryProductSpecialRepositoryModel _categoryProductSpecialRepository;
+        private readonly ICategoryRepositoryModel _categoryRepository;
         private readonly IProductSpecialRepositoryModel _productSpecialRepositoryModel;
 
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="categoryProductSpecialRepository"></param>
+        /// <param name="categoryRepository"></param>
         /// <param name="productSpecialRepository"></param>
-        public ProductSpecialServiceController(ICategoryProductSpecialRepositoryModel categoryProductSpecialRepository,
+        public ProductSpecialServiceController(ICategoryRepositoryModel categoryRepository,
         IProductSpecialRepositoryModel productSpecialRepository)
         {
-            this._categoryProductSpecialRepository = categoryProductSpecialRepository;
+            this._categoryRepository = categoryRepository;
             this._productSpecialRepositoryModel = productSpecialRepository;
         }
 
@@ -55,8 +55,8 @@
                     return serviceResponse;
                 }
                 //Verifica que la categoria es valida
-                var category = await this._categoryProductSpecialRepository
-                .GetCategoryProductSpecialAsync(addProductSpecial.CategoryId)
+                var category = await this._categoryRepository
+                .GetCategoryForIdAsync(addProductSpecial.CategoryId)
                 .ConfigureAwait(false);
                 if (category == null)
                 {
@@ -69,7 +69,7 @@
                 //Mapea de AddProductStandardDto a ProductStandard
                 var new_product = new ProductSpecial
                 {
-                    CategoryProductSpecial = category,
+                    Category = category,
                     DateCreated = DateTime.UtcNow,
                     DateUpdate = DateTime.UtcNow,
                     Description = addProductSpecial.Description,
@@ -491,10 +491,10 @@
                 serviceResponse.Data = all_productstandard.Select(c => new GetProductSpecialDto
                 {
                     Id = c.Id,
-                    Category = new Common.Dtos.CategoryProductSpecial.GetCategoryProductSpecialDto
+                    Category = new Common.Dtos.Category.GetCategoryDto
                     {
-                        Id = c.CategoryProductSpecial.Id,
-                        Name = c.CategoryProductSpecial.Name,
+                        Id = c.Category.Id,
+                        Name = c.Category.Name,
                     },
                     Description = c.Description,
                     Name = c.Name,
@@ -689,10 +689,10 @@
                     serviceResponse.Data = list_products_to_send.Select(c => new GetProductSpecialDto
                     {
                         Id = c.Id,
-                        Category = new Common.Dtos.CategoryProductSpecial.GetCategoryProductSpecialDto
+                        Category = new Common.Dtos.Category.GetCategoryDto
                         {
-                            Id = c.CategoryProductSpecial.Id,
-                            Name = c.CategoryProductSpecial.Name,
+                            Id = c.Category.Id,
+                            Name = c.Category.Name,
                         },
                         Description = c.Description,
                         Name = c.Name,
@@ -712,10 +712,10 @@
                     serviceResponse.Data = list_products_to_send.Select(c => new GetProductSpecialDto
                     {
                         Id = c.Id,
-                        Category = new Common.Dtos.CategoryProductSpecial.GetCategoryProductSpecialDto
+                        Category = new Common.Dtos.Category.GetCategoryDto
                         {
-                            Id = c.CategoryProductSpecial.Id,
-                            Name = c.CategoryProductSpecial.Name,
+                            Id = c.Category.Id,
+                            Name = c.Category.Name,
                         },
                         Description = c.Description,
                         Name = c.Name,
@@ -907,10 +907,10 @@
                 serviceResponse.Data = new GetProductSpecialDto
                 {
                     Id = product.Id,
-                    Category = new Common.Dtos.CategoryProductSpecial.GetCategoryProductSpecialDto
+                    Category = new Common.Dtos.Category.GetCategoryDto
                     {
-                        Id = product.CategoryProductSpecial.Id,
-                        Name = product.CategoryProductSpecial.Name,
+                        Id = product.Category.Id,
+                        Name = product.Category.Name,
                     },
                     Description = product.Description,
                     Name = product.Name,
@@ -967,8 +967,8 @@
                 if (updateProductSpecial.CategoryId != null)
                 {
                     //Busca si la nueva categoria está en la base de datos.
-                    var category = await this._categoryProductSpecialRepository
-                    .GetCategoryProductSpecialAsync((int)updateProductSpecial.CategoryId)
+                    var category = await this._categoryRepository
+                    .GetCategoryForIdAsync((int)updateProductSpecial.CategoryId)
                     .ConfigureAwait(false);
                     if (category == null)
                     {
@@ -978,7 +978,7 @@
                         serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeCategory_NotFound);
                         return serviceResponse;
                     }
-                    product.CategoryProductSpecial = category;
+                    product.Category = category;
                 }
                 if (updateProductSpecial.Description != null)
                 product.Description = updateProductSpecial.Description;
@@ -1005,10 +1005,10 @@
                 {
                     Average = product.Average,
                     Description = product.Description,
-                    Category = new Common.Dtos.CategoryProductSpecial.GetCategoryProductSpecialDto
+                    Category = new Common.Dtos.Category.GetCategoryDto
                     {
-                        Id = product.CategoryProductSpecial.Id,
-                        Name = product.CategoryProductSpecial.Name,
+                        Id = product.Category.Id,
+                        Name = product.Category.Name,
                     },
                     Id = product.Id,
                     Name = product.Name,

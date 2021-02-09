@@ -46,6 +46,51 @@
             <param name="addProductSpecialToCarShop"></param>
             <returns></returns>
         </member>
+        <member name="M:Isabella.API.Controllers.CarShopController.GetMyCarShopAsync(System.Guid)">
+            <summary>
+            Obtiene el carrito de compras del usuario.
+            </summary>
+            <param name="CodeIdentification"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.Controllers.CategoryController">
+            <summary>
+            Controlador para las categorias de productos standards.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Controllers.CategoryController.#ctor(Isabella.API.ServicesControllers.CategoryServiceController)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="categoryServiceController"></param>
+        </member>
+        <member name="M:Isabella.API.Controllers.CategoryController.AddCategoryStandardAsync(Isabella.Common.Dtos.Category.AddCategoryDto)">
+            <summary>
+            Agrega una nueva categoria.
+            </summary>
+            <param name="addCategory"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.CategoryController.GetCategoryForIdAsync(System.Int32)">
+            <summary>
+            Obtiene una categoria por su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.CategoryController.GetCategoryForNameAsync(System.String)">
+            <summary>
+            Obtiene una categoria por su nombre.
+            </summary>
+            <param name="Name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.CategoryController.GetAllCategoriesAsync">
+            <summary>
+            Obtiene todas las categorias disponibles.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Isabella.API.Controllers.CodeIdentificationController">
             <summary>
             Controlador para los códigos de verificación.
@@ -417,6 +462,44 @@
             <param name="CantImages"></param>
             <returns></returns>
         </member>
+        <member name="T:Isabella.API.Controllers.SubCategoryController">
+            <summary>
+            Controlador para las subcategorias.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Controllers.SubCategoryController.#ctor(Isabella.API.ServicesControllers.SubCategoryServiceController)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="subCategoryServiceController"></param>
+        </member>
+        <member name="M:Isabella.API.Controllers.SubCategoryController.AddCategoryStandardAsync(Isabella.Common.Dtos.SubCategory.AddSubCategoryDto)">
+            <summary>
+            Agrega una nueva subcategoria.
+            </summary>
+            <param name="addSubCategory"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.SubCategoryController.GetCategoryForIdAsync(System.Int32)">
+            <summary>
+            Obtiene una subcategoria por su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.SubCategoryController.GetCategoryForNameAsync(System.String)">
+            <summary>
+            Obtiene una subcategoria por su nombre.
+            </summary>
+            <param name="Name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.SubCategoryController.GetAllCategoriesAsync">
+            <summary>
+            Obtiene todas las subcategorias disponibles.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Isabella.API.Controllers.UsersController">
             <summary>
             Controlador para el servicio de usuarios.
@@ -595,32 +678,32 @@
         </member>
         <member name="P:Isabella.API.Data.DataContext.CalificationProductStandards">
             <summary>
-            
+            Calificación de Productos Standards.
             </summary>
         </member>
         <member name="P:Isabella.API.Data.DataContext.CalificationRestaurants">
             <summary>
-            
+            Calificacion
             </summary>
         </member>
-        <member name="P:Isabella.API.Data.DataContext.CarShops">
+        <member name="P:Isabella.API.Data.DataContext.CarShopsProductsStandards">
             <summary>
-            Carrito de compra
+            Carrito de compra de productos standards
             </summary>
         </member>
-        <member name="P:Isabella.API.Data.DataContext.ProductImages">
+        <member name="P:Isabella.API.Data.DataContext.CarShopsProductsSpecials">
             <summary>
-            
+            Carrito de compra de productos especiales
             </summary>
         </member>
         <member name="P:Isabella.API.Data.DataContext.ProductAggregates">
             <summary>
-            
+            Productos de agregos.
             </summary>
         </member>
         <member name="P:Isabella.API.Data.DataContext.ProductsSpecials">
             <summary>
-            
+            Productos Specials.
             </summary>
         </member>
         <member name="P:Isabella.API.Data.DataContext.ProductsStandards">
@@ -630,47 +713,42 @@
         </member>
         <member name="P:Isabella.API.Data.DataContext.ImageProductSpecials">
             <summary>
-            
+            Imagenes de productos especiales.
             </summary>
         </member>
         <member name="P:Isabella.API.Data.DataContext.ImageProductStandards">
             <summary>
-            
+            Imagenes de productos standards.
             </summary>
         </member>
         <member name="P:Isabella.API.Data.DataContext.ImageProductAggregates">
             <summary>
-            
+            Imagenes de productos de agrego.
             </summary>
         </member>
-        <member name="P:Isabella.API.Data.DataContext.RequestedProductAggregates">
+        <member name="P:Isabella.API.Data.DataContext.CarShopProductAggregates">
             <summary>
-            
+            Pedidos de productos de agrego para un producto special.
             </summary>
         </member>
-        <member name="P:Isabella.API.Data.DataContext.RequestedProductStandards">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Data.DataContext.RequestedProductSpecials">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Data.DataContext.CategoryProductSpecials">
-            <summary>
-            Categoria de los productos especiales.
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Data.DataContext.CategoryProductStandards">
+        <member name="P:Isabella.API.Data.DataContext.Categories">
             <summary>
             Categoria de los productos standards.
             </summary>
         </member>
-        <member name="P:Isabella.API.Data.DataContext.CategoryProductAggregates">
+        <member name="P:Isabella.API.Data.DataContext.SubCategories">
             <summary>
-            Categoria de los productos de agregados.
+            SubCategorias.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.SubCategory_ProductStandards">
+            <summary>
+            SubCategoria de Productos Standards.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.SubCategory_ProductSpecials">
+            <summary>
+            SubCategoria de Productos Speciales.
             </summary>
         </member>
         <member name="M:Isabella.API.Data.DataContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
@@ -678,21 +756,6 @@
             Crea el modelo para la base de datos
             </summary>
             <param name="builder"></param>
-        </member>
-        <member name="T:Isabella.API.Extras.CantRequestProductAggregate">
-            <summary>
-            Representa un producto agregado y la cantidad deseada.
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Extras.CantRequestProductAggregate.ProductAggregate">
-            <summary>
-            ProductoStandard.
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Extras.CantRequestProductAggregate.Quantity">
-            <summary>
-            Cantidad que desea.
-            </summary>
         </member>
         <member name="T:Isabella.API.Extras.Constants">
             <summary>
@@ -928,72 +991,142 @@
             Opinión del cliente acerca del Producto
             </summary>
         </member>
-        <member name="T:Isabella.API.Models.CarShop">
+        <member name="T:Isabella.API.Models.CarShopProductAggregate">
             <summary>
-            Carro de compras Fast(Para pedidos informales, o sea usuarios que no desean ser clientes oficiales)
+            Agregados
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.CarShop.Id">
+        <member name="P:Isabella.API.Models.CarShopProductAggregate.Id">
             <summary>
             Key
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.CarShop.CodeVerification">
+        <member name="P:Isabella.API.Models.CarShopProductAggregate.CarShopProductSpecial">
+            <summary>
+            Carrito de Compras
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CarShopProductAggregate.ProductAggregate">
+            <summary>
+            Producto de agrego
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CarShopProductAggregate.Price">
+            <summary>
+            Precio actual del Producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CarShopProductAggregate.Quantity">
+            <summary>
+            Cantidad de Productos.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CarShopProductAggregate.PriceTotal">
+            <summary>
+            Precio total del Producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.CarShopProductSpecial">
+            <summary>
+            Carro de compras Fast(Para pedidos informales, o sea usuarios que no desean ser clientes oficiales)
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CarShopProductSpecial.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CarShopProductSpecial.CodeIdentification">
             <summary>
             Código de identificación.
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.CarShop.RequestedProductStandard">
+        <member name="P:Isabella.API.Models.CarShopProductSpecial.ProductSpecial">
+            <summary>
+            Producto Especial
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CarShopProductSpecial.CheeseGouda">
+            <summary>
+            Queso Gouda
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CarShopProductSpecial.CarShopProductAggregates">
+            <summary>
+            Agregados para el producto 
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CarShopProductSpecial.Price">
+            <summary>
+            Precio actual.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CarShopProductSpecial.PriceTotalProductAggregate">
+            <summary>
+            Precio Total de los productos de agregado.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CarShopProductSpecial.QuantityTotalProductAggregate">
+            <summary>
+            Cantidad Total de los productos de agregado.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CarShopProductSpecial.Quantity">
+            <summary>
+            Cantidad de Productos.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CarShopProductSpecial.PriceTotal">
+            <summary>
+            Precio total del Producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.API.Models.CarShopProductStandard">
+            <summary>
+            Carro de compras Fast(Para pedidos informales, o sea usuarios que no desean ser clientes oficiales)
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CarShopProductStandard.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CarShopProductStandard.CodeIdentification">
+            <summary>
+            Código de identificación.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.CarShopProductStandard.ProductStandard">
             <summary>
             Producto Standard
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.CarShop.RequestedProductSpecial">
+        <member name="P:Isabella.API.Models.CarShopProductStandard.Price">
             <summary>
-            Producto Special
+            Precio actual del Producto.
             </summary>
         </member>
-        <member name="T:Isabella.API.Models.CategoryProductAggregate">
+        <member name="P:Isabella.API.Models.CarShopProductStandard.Quantity">
             <summary>
-            Entidad que representa la categoria de un producto del tipo agregado.
+            Cantidad de Productos.
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.CategoryProductAggregate.Id">
+        <member name="P:Isabella.API.Models.CarShopProductStandard.PriceTotal">
             <summary>
-            Id
+            Precio total del Producto.
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.CategoryProductAggregate.Name">
-            <summary>
-            Nombre de la categoría del producto.
-            </summary>
-        </member>
-        <member name="T:Isabella.API.Models.CategoryProductSpecial">
-            <summary>
-            Entidad que representa la categoria de un producto especial
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.CategoryProductSpecial.Id">
-            <summary>
-            Id
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.CategoryProductSpecial.Name">
-            <summary>
-            Nombre de la categoría del producto.
-            </summary>
-        </member>
-        <member name="T:Isabella.API.Models.CategoryProductStandard">
+        <member name="T:Isabella.API.Models.Category">
             <summary>
             Entidad que representa la categoria de un producto standard
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.CategoryProductStandard.Id">
+        <member name="P:Isabella.API.Models.Category.Id">
             <summary>
             Id
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.CategoryProductStandard.Name">
+        <member name="P:Isabella.API.Models.Category.Name">
             <summary>
             Nombre de la categoría del producto.
             </summary>
@@ -1133,6 +1266,16 @@
             Key
             </summary>
         </member>
+        <member name="P:Isabella.API.Models.Order.CodeVerification">
+            <summary>
+            Código de identificación.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Order.PhoneNumber">
+            <summary>
+            Gps
+            </summary>
+        </member>
         <member name="P:Isabella.API.Models.Order.Gps">
             <summary>
             Gps
@@ -1183,19 +1326,9 @@
             Key
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.OrderDetail.OrderFast">
+        <member name="P:Isabella.API.Models.OrderDetail.Order">
             <summary>
             Orden
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.OrderDetail.RequestedProductStandard">
-            <summary>
-            Producto Standard solicitado por el usuario
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.OrderDetail.Requested_ProductSpecial">
-            <summary>
-            Producto Special solicitado por el usuario
             </summary>
         </member>
         <member name="P:Isabella.API.Models.OrderDetail.DateCreated">
@@ -1216,6 +1349,11 @@
         <member name="P:Isabella.API.Models.Product.Id">
             <summary>
             Key
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Product.Category">
+            <summary>
+            Categoria del producto.
             </summary>
         </member>
         <member name="P:Isabella.API.Models.Product.Name">
@@ -1268,11 +1406,6 @@
             Agregados para productos especiales
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.ProductAggregate.CategoryProductAggregate">
-            <summary>
-            Categoria de los productos de agregados
-            </summary>
-        </member>
         <member name="P:Isabella.API.Models.ProductAggregate.ImageProductAggregates">
             <summary>
             Imagenes para los productos especiales. 
@@ -1283,9 +1416,9 @@
             Productos Especiales(Pizza y Pastas)
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.ProductSpecial.CategoryProductSpecial">
+        <member name="P:Isabella.API.Models.ProductSpecial.SubCategory_ProductSpecials">
             <summary>
-            Categoria de productos especiales.
+            SubCategorias.
             </summary>
         </member>
         <member name="P:Isabella.API.Models.ProductSpecial.ImageProductSpecials">
@@ -1298,9 +1431,9 @@
             Producto Standard
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.ProductStandard.CategoryProductStandard">
+        <member name="P:Isabella.API.Models.ProductStandard.SubCategory_ProductStandards">
             <summary>
-            Categoria de los productos estandar.
+            SubCategorias.
             </summary>
         </member>
         <member name="P:Isabella.API.Models.ProductStandard.ImageProductStandards">
@@ -1328,109 +1461,64 @@
             Token
             </summary>
         </member>
-        <member name="T:Isabella.API.Models.RequestedProductAggregate">
+        <member name="T:Isabella.API.Models.SubCategory">
             <summary>
-            Agregados
+            
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.RequestedProductAggregate.Id">
+        <member name="P:Isabella.API.Models.SubCategory.Id">
             <summary>
             Key
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.RequestedProductAggregate.RequestedProductSpecial">
+        <member name="P:Isabella.API.Models.SubCategory.Name">
             <summary>
-            Pedido de producto especial que solicita productos de agregos.
+            Nombre de la categoría del producto.
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.RequestedProductAggregate.ProductAggregate">
+        <member name="P:Isabella.API.Models.SubCategory.Price">
             <summary>
-            Producto de agrego
+            Precio del Produto.
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.RequestedProductAggregate.Price">
+        <member name="T:Isabella.API.Models.SubCategory_ProductSpecial">
             <summary>
-            Precio actual del Producto.
+            SubCategoria de Productom Special.
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.RequestedProductAggregate.Quantity">
-            <summary>
-            Cantidad de Productos.
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.RequestedProductAggregate.PriceTotal">
-            <summary>
-            Precio total del Producto.
-            </summary>
-        </member>
-        <member name="T:Isabella.API.Models.RequestedProductSpecial">
-            <summary>
-            Cantidad de productos especiales que solicita el cliente
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.RequestedProductSpecial.Id">
+        <member name="P:Isabella.API.Models.SubCategory_ProductSpecial.Id">
             <summary>
             Key
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.RequestedProductSpecial.ProductSpecial">
+        <member name="P:Isabella.API.Models.SubCategory_ProductSpecial.ProductSpecial">
             <summary>
-            Producto Especial
+            Producto Special
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.RequestedProductSpecial.CheeseGouda">
+        <member name="P:Isabella.API.Models.SubCategory_ProductSpecial.SubCategory">
             <summary>
-            Queso Gouda
+            SubCategoria.
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.RequestedProductSpecial.RequestedProductAggregates">
+        <member name="T:Isabella.API.Models.SubCategory_ProductStandard">
             <summary>
-            Agregados para el producto 
+            SubCategoria de Producto Standard
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.RequestedProductSpecial.Price">
-            <summary>
-            Precio actual.
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.RequestedProductSpecial.Quantity">
-            <summary>
-            Cantidad de Productos Standards
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.RequestedProductSpecial.PriceTotal">
-            <summary>
-            Precio total del Producto.
-            </summary>
-        </member>
-        <member name="T:Isabella.API.Models.RequestedProductStandard">
-            <summary>
-            Cantidad de productos standard que solicita el usuario
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.RequestedProductStandard.Id">
+        <member name="P:Isabella.API.Models.SubCategory_ProductStandard.Id">
             <summary>
             Key
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.RequestedProductStandard.ProductStandard">
+        <member name="P:Isabella.API.Models.SubCategory_ProductStandard.ProductStandard">
             <summary>
-            Producto Standard
+            Producto Special
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.RequestedProductStandard.Price">
+        <member name="P:Isabella.API.Models.SubCategory_ProductStandard.SubCategory">
             <summary>
-            Precio actual del Producto.
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.RequestedProductStandard.Quantity">
-            <summary>
-            Cantidad de Productos.
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.RequestedProductStandard.PriceTotal">
-            <summary>
-            Precio total del Producto.
+            SubCategoria.
             </summary>
         </member>
         <member name="T:Isabella.API.Models.User">
@@ -1522,47 +1610,64 @@
             Repositorio para el carrito de compras.
             </summary>
         </member>
-        <member name="M:Isabella.API.RepositorysModels.ICarShopRepositoryModel.AddProductsCarShopAsync(Isabella.API.Models.CarShop)">
+        <member name="M:Isabella.API.RepositorysModels.ICarShopRepositoryModel.AddProductsCarShopAsync(Isabella.API.Models.CarShopProductStandard)">
             <summary>
             Agrega un nuevo pedido al carrito de compras de un usuario informal.
             </summary>
             <param name="carShop"></param>
             <returns></returns>
         </member>
-        <member name="T:Isabella.API.RepositorysModels.ICategoryProductAggregateRepositoryModel">
+        <member name="M:Isabella.API.RepositorysModels.ICarShopRepositoryModel.AddProductsCarShopAsync(Isabella.API.Models.CarShopProductSpecial)">
+            <summary>
+            Agrega un nuevo pedido al carrito de compras de un usuario informal.
+            </summary>
+            <param name="carShop"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.ICarShopRepositoryModel.GetMyCarShopProductStandard(Isabella.API.Models.CodeIdentification)">
+            <summary>
+            Devuelve el carrito de compras de un usuario.
+            </summary>
+            <param name="codeIdentification"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.ICarShopRepositoryModel.GetMyCarShopProductSpecial(Isabella.API.Models.CodeIdentification)">
+            <summary>
+            Devuelve el carrito de compras de un usuario.
+            </summary>
+            <param name="codeIdentification"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.RepositorysModels.ICategoryRepositoryModel">
             <summary>
             Repositorio para las categorias de los productos standards.
             </summary>
         </member>
-        <member name="M:Isabella.API.RepositorysModels.ICategoryProductAggregateRepositoryModel.GetCategoryProductAggregateAsync(System.Int32)">
+        <member name="M:Isabella.API.RepositorysModels.ICategoryRepositoryModel.GetCategoryForNameAsync(System.String)">
+            <summary>
+            Obtiene una categoria dado su nombre.
+            </summary>
+            <param name="Name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.ICategoryRepositoryModel.GetCategoryForIdAsync(System.Int32)">
             <summary>
             Obtiene una categoria dado su Id.
             </summary>
             <param name="Id"></param>
             <returns></returns>
         </member>
-        <member name="T:Isabella.API.RepositorysModels.ICategoryProductSpecialRepositoryModel">
+        <member name="M:Isabella.API.RepositorysModels.ICategoryRepositoryModel.GetAllCategoryAsync">
             <summary>
-            Repositorio para las categorias de los productos standards.
+            Obtiene todas las categorias disponibles.
             </summary>
-        </member>
-        <member name="M:Isabella.API.RepositorysModels.ICategoryProductSpecialRepositoryModel.GetCategoryProductSpecialAsync(System.Int32)">
-            <summary>
-            Obtiene una categoria standard dado su Id.
-            </summary>
-            <param name="Id"></param>
             <returns></returns>
         </member>
-        <member name="T:Isabella.API.RepositorysModels.ICategoryProductStandardRepositoryModel">
+        <member name="M:Isabella.API.RepositorysModels.ICategoryRepositoryModel.AddCategoryAsync(Isabella.API.Models.Category)">
             <summary>
-            Repositorio para las categorias de los productos standards.
+            Agrega una nueva categoria.
             </summary>
-        </member>
-        <member name="M:Isabella.API.RepositorysModels.ICategoryProductStandardRepositoryModel.GetCategoryProductStandardAsync(System.Int32)">
-            <summary>
-            Obtiene una categoria standard dado su Id.
-            </summary>
-            <param name="Id"></param>
+            <param name="categoryProductStandard"></param>
             <returns></returns>
         </member>
         <member name="T:Isabella.API.RepositorysModels.ICodeIdentificationModel">
@@ -1890,6 +1995,38 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:Isabella.API.RepositorysModels.ISubCategoryRepositoryModel">
+            <summary>
+            Repositorio para las subcategorias.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.ISubCategoryRepositoryModel.GetSubCategoryForNameAsync(System.String)">
+            <summary>
+            Obtiene una categoria dado su nombre.
+            </summary>
+            <param name="Name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.ISubCategoryRepositoryModel.GetSubCategoryProductForIdAsync(System.Int32)">
+            <summary>
+            Obtiene una categoria dado su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.ISubCategoryRepositoryModel.GetAllSubCategoryAsync">
+            <summary>
+            Obtiene todas las categorias disponibles.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.RepositorysModels.ISubCategoryRepositoryModel.AddSubCategoryAsync(Isabella.API.Models.SubCategory)">
+            <summary>
+            Agrega una nueva categoria.
+            </summary>
+            <param name="subCategory"></param>
+            <returns></returns>
+        </member>
         <member name="T:Isabella.API.RepositorysModels.IUserRepositoryModel">
             <summary>
             Repositorio para los usuarios.
@@ -2111,6 +2248,51 @@
             <param name="addProductsToCarShop"></param>
             <returns></returns>
         </member>
+        <member name="M:Isabella.API.ServicesControllers.CarShopServiceController.GetMyCarShop(System.Guid)">
+            <summary>
+            Obtiene el carrito de compras de un usuario.
+            </summary>
+            <param name="CodeVerification"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.ServicesControllers.CategoryServiceController">
+            <summary>
+            Servicio para el controlador de las categorias de los productos.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CategoryServiceController.#ctor(Isabella.API.RepositorysModels.ICategoryRepositoryModel)">
+            <summary>
+            Categorias
+            </summary>
+            <param name="categoryRepositoryModel"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CategoryServiceController.AddCategoryAsync(Isabella.Common.Dtos.Category.AddCategoryDto)">
+            <summary>
+            Agrega una nueva categoria.
+            </summary> 
+            <param name="addCategory"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CategoryServiceController.GetAllCategoryAsync">
+            <summary>
+            Devuelve las categorias disponibles.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CategoryServiceController.GetCategoryForIdAsync(System.Int32)">
+            <summary>
+            Devuelve una categoria por su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CategoryServiceController.GetCategoryForNameAsync(System.String)">
+            <summary>
+            Devuelve una categoria dado su nombre.
+            </summary>
+            <param name="Name"></param>
+            <returns></returns>
+        </member>
         <member name="T:Isabella.API.ServicesControllers.CodeIdentificationServiceController">
             <summary>
             Servicio para el controlador de los códigos de identificación.
@@ -2140,7 +2322,7 @@
             
             </summary>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.ProductAggregateServiceController.#ctor(Isabella.API.RepositorysModels.IProductAggregateRepositoryModel,Isabella.API.RepositorysModels.ICategoryProductAggregateRepositoryModel)">
+        <member name="M:Isabella.API.ServicesControllers.ProductAggregateServiceController.#ctor(Isabella.API.RepositorysModels.IProductAggregateRepositoryModel,Isabella.API.RepositorysModels.ICategoryRepositoryModel)">
             <summary>
             Constructor
             </summary>
@@ -2258,11 +2440,11 @@
             
             </summary>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.ProductSpecialServiceController.#ctor(Isabella.API.RepositorysModels.ICategoryProductSpecialRepositoryModel,Isabella.API.RepositorysModels.IProductSpecialRepositoryModel)">
+        <member name="M:Isabella.API.ServicesControllers.ProductSpecialServiceController.#ctor(Isabella.API.RepositorysModels.ICategoryRepositoryModel,Isabella.API.RepositorysModels.IProductSpecialRepositoryModel)">
             <summary>
             
             </summary>
-            <param name="categoryProductSpecialRepository"></param>
+            <param name="categoryRepository"></param>
             <param name="productSpecialRepository"></param>
         </member>
         <member name="M:Isabella.API.ServicesControllers.ProductSpecialServiceController.AddProductSpecialAsync(Isabella.Common.Dtos.ProductSpecial.AddProductStandardSpecialDto)">
@@ -2378,7 +2560,7 @@
             Servicio para el controlador de los productos standard.
             </summary>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.ProductStandardServiceController.#ctor(Isabella.API.RepositorysModels.IProductStandardRepositoryModel,Isabella.API.RepositorysModels.ICategoryProductStandardRepositoryModel)">
+        <member name="M:Isabella.API.ServicesControllers.ProductStandardServiceController.#ctor(Isabella.API.RepositorysModels.IProductStandardRepositoryModel,Isabella.API.RepositorysModels.ICategoryRepositoryModel)">
             <summary>
             Constructor
             </summary>
@@ -2492,6 +2674,43 @@
             <param name="ProductId"></param>
             <param name="ImageId"></param>
             <param name="CantImages"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.ServicesControllers.SubCategoryServiceController">
+            <summary>
+            Servicio para el controlador de las subcategorias.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.SubCategoryServiceController.#ctor(Isabella.API.RepositorysModels.ISubCategoryRepositoryModel)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="categoryRepositoryModel"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.SubCategoryServiceController.AddSubCategoryAsync(Isabella.Common.Dtos.SubCategory.AddSubCategoryDto)">
+            <summary>
+            Agrega una nueva subcategoria.
+            </summary>
+            <param name="addSubCategoryProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.SubCategoryServiceController.GetAllSubCategoryAsync">
+            <summary>
+            Obtiene todas las subcategorias disponibles.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.SubCategoryServiceController.GetSubCategoryForIdAsync(System.Int32)">
+            <summary>
+            Obtiene una subcategoria por su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.SubCategoryServiceController.GetSubCategoryForNameAsync(System.String)">
+            <summary>
+            Obtiene una subcategoria por su nombre.
+            </summary>
+            <param name="Name"></param>
             <returns></returns>
         </member>
         <member name="T:Isabella.API.ServicesControllers.UserServiceController">
@@ -2688,71 +2907,77 @@
             Servicio para la entidad que representa el carrito de compras.
             </summary>
         </member>
-        <member name="M:Isabella.API.ServicesModels.CarShopServiceModel.#ctor(Isabella.API.Data.DataContext)">
+        <member name="M:Isabella.API.ServicesModels.CarShopServiceModel.#ctor(Isabella.API.Data.DataContext,Isabella.API.RepositorysModels.IProductSpecialRepositoryModel)">
             <summary>
             Constructor.
             </summary>
             <param name="dataContext"></param>
+            <param name="productSpecialRepositoryModel"></param>
         </member>
-        <member name="M:Isabella.API.ServicesModels.CarShopServiceModel.AddProductsCarShopAsync(Isabella.API.Models.CarShop)">
+        <member name="M:Isabella.API.ServicesModels.CarShopServiceModel.AddProductsCarShopAsync(Isabella.API.Models.CarShopProductStandard)">
             <summary>
             Agrega un nuevo producto al carrito de compras de un usuario.
             </summary>
             <param name="carShop"></param>
             <returns></returns>
         </member>
-        <member name="T:Isabella.API.ServicesModels.CategoryProductAggregateServiceModel">
+        <member name="M:Isabella.API.ServicesModels.CarShopServiceModel.AddProductsCarShopAsync(Isabella.API.Models.CarShopProductSpecial)">
             <summary>
-            Servicio para la entidad que representa las categorias de los productos de agregados.
+            Agrega un nuevo producto al carrito de compras de un usuario.
             </summary>
-        </member>
-        <member name="M:Isabella.API.ServicesModels.CategoryProductAggregateServiceModel.#ctor(Isabella.API.Data.DataContext)">
-            <summary>
-            Constructor
-            </summary>
-            <param name="dataContext"></param>
-        </member>
-        <member name="M:Isabella.API.ServicesModels.CategoryProductAggregateServiceModel.GetCategoryProductAggregateAsync(System.Int32)">
-            <summary>
-            Obtiene una categoria special dado su Id.
-            </summary>
-            <param name="Id"></param>
+            <param name="carShop"></param>
             <returns></returns>
         </member>
-        <member name="T:Isabella.API.ServicesModels.CategoryProductSpecialServiceModel">
+        <member name="M:Isabella.API.ServicesModels.CarShopServiceModel.GetMyCarShopProductStandard(Isabella.API.Models.CodeIdentification)">
+            <summary>
+            Devuelve el carrito de compras de productos de un usuario
+            </summary>
+            <param name="codeIdentification"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.CarShopServiceModel.GetMyCarShopProductSpecial(Isabella.API.Models.CodeIdentification)">
+            <summary>
+            Devuelve el carrito de compras de productos de un usuario
+            </summary>
+            <param name="codeIdentification"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.ServicesModels.CategoryServiceModel">
             <summary>
             Servicio para la entidad que representa las categorias de los productos standards.
             </summary>
         </member>
-        <member name="M:Isabella.API.ServicesModels.CategoryProductSpecialServiceModel.#ctor(Isabella.API.Data.DataContext)">
+        <member name="M:Isabella.API.ServicesModels.CategoryServiceModel.#ctor(Isabella.API.Data.DataContext)">
             <summary>
             Constructor
             </summary>
             <param name="dataContext"></param>
         </member>
-        <member name="M:Isabella.API.ServicesModels.CategoryProductSpecialServiceModel.GetCategoryProductSpecialAsync(System.Int32)">
+        <member name="M:Isabella.API.ServicesModels.CategoryServiceModel.AddCategoryAsync(Isabella.API.Models.Category)">
             <summary>
-            Obtiene una categoria special dado su Id.
+            Agrega una nueva categoria.
+            </summary>
+            <param name="categoryProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.CategoryServiceModel.GetAllCategoryAsync">
+            <summary>
+            Obtiene todas las categorias disponibles.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.CategoryServiceModel.GetCategoryForIdAsync(System.Int32)">
+            <summary>
+            Obtiene una categoria dado su Id.
             </summary>
             <param name="Id"></param>
             <returns></returns>
         </member>
-        <member name="T:Isabella.API.ServicesModels.CategoryProductStandardServiceModel">
+        <member name="M:Isabella.API.ServicesModels.CategoryServiceModel.GetCategoryForNameAsync(System.String)">
             <summary>
-            Servicio para la entidad que representa las categorias de los productos standards.
+            Obtiene una categoria dado su nombre.
             </summary>
-        </member>
-        <member name="M:Isabella.API.ServicesModels.CategoryProductStandardServiceModel.#ctor(Isabella.API.Data.DataContext)">
-            <summary>
-            Constructor
-            </summary>
-            <param name="dataContext"></param>
-        </member>
-        <member name="M:Isabella.API.ServicesModels.CategoryProductStandardServiceModel.GetCategoryProductStandardAsync(System.Int32)">
-            <summary>
-            Obtiene una categoria standard dado su Id.
-            </summary>
-            <param name="Id"></param>
+            <param name="Name"></param>
             <returns></returns>
         </member>
         <member name="T:Isabella.API.ServicesModels.CodeIdentificationServiceModel">
@@ -3120,6 +3345,44 @@
             <summary>
             Obtiene el Id de la ultima imagen que se agrego de un producto.
             </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.API.ServicesModels.SubCategoryServiceModel">
+            <summary>
+            Servicio para la entidad que representa las categorias de los productos de agregados.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.SubCategoryServiceModel.#ctor(Isabella.API.Data.DataContext)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="dataContext"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.SubCategoryServiceModel.AddSubCategoryAsync(Isabella.API.Models.SubCategory)">
+            <summary>
+            Agrega una nueva categoria.
+            </summary>
+            <param name="subCategory"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.SubCategoryServiceModel.GetAllSubCategoryAsync">
+            <summary>
+            Obtiene todas las categorias dispnibles.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.SubCategoryServiceModel.GetSubCategoryProductForIdAsync(System.Int32)">
+            <summary>
+            Obtiene una categoria dado su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesModels.SubCategoryServiceModel.GetSubCategoryForNameAsync(System.String)">
+            <summary>
+            Obtiene una categoria dado su nombre.
+            </summary>
+            <param name="Name"></param>
             <returns></returns>
         </member>
         <member name="T:Isabella.API.ServicesModels.UploadFileServiceModel">

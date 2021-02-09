@@ -72,7 +72,7 @@
         /// <returns></returns>
         public async Task<ProductSpecial> GetProductSpecialForIdWithAllIncludeAsync(int Id)
          => await this._dataContext.ProductsSpecials
-        .Include(c => c.CategoryProductSpecial)
+        .Include(c => c.Category)
         .Include(c => c.ImageProductSpecials)
         .FirstOrDefaultAsync(c => c.Id == Id)
         .ConfigureAwait(false);
@@ -84,7 +84,7 @@
         /// <returns></returns>
         public async Task<ProductSpecial> GetProductSpecialForIdWithCategoryAsync(int Id)
          => await this._dataContext.ProductsSpecials
-        .Include(c => c.CategoryProductSpecial)
+        .Include(c => c.Category)
         .FirstOrDefaultAsync(c => c.Id == Id)
         .ConfigureAwait(false);
 
@@ -194,7 +194,7 @@
         /// <returns></returns>
         public async Task<List<ProductSpecial>> GetAllProductSpecialWithAllIncludeAsync()
         => await this._dataContext.ProductsSpecials
-        .Include(c => c.CategoryProductSpecial)
+        .Include(c => c.Category)
         .Include(c => c.ImageProductSpecials)
         .ToListAsync()
         .ConfigureAwait(false);
@@ -205,7 +205,7 @@
         /// <returns></returns>
         public async Task<List<ProductSpecial>> GetAllProductSpecialWithCategoryAsync()
         => await this._dataContext.ProductsSpecials
-        .Include(c => c.CategoryProductSpecial)
+        .Include(c => c.Category)
         .ToListAsync()
         .ConfigureAwait(false);
 

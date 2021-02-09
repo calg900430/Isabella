@@ -2,8 +2,9 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using Isabella.Common.Dtos.CategoryProductSpecial;
-   
+
+    using Category;
+    
     public class GetProductSpecialDto
     {
         /// <summary>
@@ -14,7 +15,7 @@
         /// <summary>
         /// Categoria del producto.
         /// </summary>
-        public GetCategoryProductSpecialDto Category { get; set; }
+        public GetCategoryDto Category { get; set; }
 
         /// <summary>
         /// Nombre del Producto ofertado por el Restaurante.

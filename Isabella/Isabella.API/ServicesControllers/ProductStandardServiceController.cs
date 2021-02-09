@@ -22,7 +22,7 @@
     public class ProductStandardServiceController : IProductStandardRepositoryDto
     {
         private readonly IProductStandardRepositoryModel _productStandardRepositoryModel;
-        private readonly ICategoryProductStandardRepositoryModel _categoryProductStandardRepository;
+        private readonly ICategoryRepositoryModel _categoryProductStandardRepository;
 
         /// <summary>
         /// Constructor
@@ -30,7 +30,7 @@
         /// <param name="productStandardRepositoryModel"></param>
         /// <param name="categoryProductStandardRepository"></param>
         public ProductStandardServiceController(IProductStandardRepositoryModel productStandardRepositoryModel, 
-        ICategoryProductStandardRepositoryModel categoryProductStandardRepository)
+        ICategoryRepositoryModel categoryProductStandardRepository)
         {
             this._productStandardRepositoryModel = productStandardRepositoryModel;
             this._categoryProductStandardRepository = categoryProductStandardRepository;
@@ -56,7 +56,7 @@
                 }
                 //Verifica que la categoria es valida
                 var category = await this._categoryProductStandardRepository
-                .GetCategoryProductStandardAsync(addProductStandard.CategoryId)
+                .GetCategoryForIdAsync(addProductStandard.CategoryId)
                 .ConfigureAwait(false);
                 if (category == null)
                 {
@@ -69,7 +69,7 @@
                 //Mapea de AddProductStandardDto a ProductStandard
                 var new_product = new ProductStandard
                 {
-                    CategoryProductStandard = category,
+                    Category = category,
                     DateCreated = DateTime.UtcNow,
                     DateUpdate = DateTime.UtcNow,
                     Description = addProductStandard.Description,
@@ -135,7 +135,7 @@
                 {
                     //Busca si la nueva categoria está en la base de datos.
                     var category = await this._categoryProductStandardRepository
-                    .GetCategoryProductStandardAsync((int)updateProductStandard.CategoryId)
+                    .GetCategoryForIdAsync((int)updateProductStandard.CategoryId)
                     .ConfigureAwait(false);
                     if (category == null)
                     {
@@ -145,7 +145,7 @@
                         serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeCategory_NotFound);
                         return serviceResponse;
                     }
-                    product.CategoryProductStandard = category;
+                    product.Category = category;
                 }
                 if (updateProductStandard.Description != null)
                 product.Description = updateProductStandard.Description;
@@ -172,10 +172,10 @@
                 { 
                    Average = product.Average,
                    Description = product.Description,
-                   Category = new Common.Dtos.CategoryProductStandard.GetCategoryProductStandardDto
+                   Category = new Common.Dtos.Category.GetCategoryDto
                    {
-                       Id = product.CategoryProductStandard.Id,
-                       Name = product.CategoryProductStandard.Name,
+                       Id = product.Category.Id,
+                       Name = product.Category.Name,
                    },
                    Id = product.Id,
                    Name = product.Name,
@@ -221,10 +221,10 @@
                 serviceResponse.Data = new GetProductStandardDto
                 {
                     Id = product.Id,
-                    Category = new Common.Dtos.CategoryProductStandard.GetCategoryProductStandardDto
+                    Category = new Common.Dtos.Category.GetCategoryDto
                     {
-                        Id = product.CategoryProductStandard.Id,
-                        Name = product.CategoryProductStandard.Name,
+                        Id = product.Category.Id,
+                        Name = product.Category.Name,
                     },
                     Description = product.Description,
                     Name = product.Name,
@@ -268,10 +268,10 @@
                 serviceResponse.Data = all_productstandard.Select(c => new GetProductStandardDto
                 {
                     Id = c.Id,
-                    Category = new Common.Dtos.CategoryProductStandard.GetCategoryProductStandardDto
+                    Category = new Common.Dtos.Category.GetCategoryDto
                     {
-                        Id = c.CategoryProductStandard.Id,
-                        Name = c.CategoryProductStandard.Name,
+                        Id = c.Category.Id,
+                        Name = c.Category.Name,
                     },
                     Description = c.Description,
                     Name = c.Name,
@@ -764,10 +764,10 @@
                     serviceResponse.Data = list_products_to_send.Select(c => new GetProductStandardDto
                     {
                         Id = c.Id,
-                        Category = new Common.Dtos.CategoryProductStandard.GetCategoryProductStandardDto
+                        Category = new Common.Dtos.Category.GetCategoryDto
                         {
-                            Id = c.CategoryProductStandard.Id,
-                            Name = c.CategoryProductStandard.Name,
+                            Id = c.Category.Id,
+                            Name = c.Category.Name,
                         },
                         Description = c.Description,
                         Name = c.Name,
@@ -787,10 +787,10 @@
                     serviceResponse.Data = list_products_to_send.Select(c => new GetProductStandardDto
                     {
                         Id = c.Id,
-                        Category = new Common.Dtos.CategoryProductStandard.GetCategoryProductStandardDto
+                        Category = new Common.Dtos.Category.GetCategoryDto
                         {
-                            Id = c.CategoryProductStandard.Id,
-                            Name = c.CategoryProductStandard.Name,
+                            Id = c.Category.Id,
+                            Name = c.Category.Name,
                         },
                         Description = c.Description,
                         Name = c.Name,

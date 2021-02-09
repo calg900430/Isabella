@@ -59,32 +59,32 @@
         public DbSet<CalificationProductSpecial> CalificationProductSpecials { get; set; }
 
         /// <summary>
-        /// 
+        /// Calificación de Productos Standards.
         /// </summary>
         public DbSet<CalificationProductStandard> CalificationProductStandards { get; set; }
 
         /// <summary>
-        /// 
+        /// Calificacion
         /// </summary>
         public DbSet<CalificationRestaurant> CalificationRestaurants { get; set; }
 
         /// <summary>
-        /// Carrito de compra
+        /// Carrito de compra de productos standards
         /// </summary>
-        public DbSet<CarShop> CarShops { get; set; }
+        public DbSet<CarShopProductStandard> CarShopsProductsStandards { get; set; }
 
         /// <summary>
-        /// 
+        /// Carrito de compra de productos especiales
         /// </summary>
-        public DbSet<ImageProductStandard> ProductImages { get; set; }
+        public DbSet<CarShopProductSpecial> CarShopsProductsSpecials { get; set; }
 
         /// <summary>
-        /// 
+        /// Productos de agregos.
         /// </summary>
         public DbSet<ProductAggregate> ProductAggregates { get; set; }
 
         /// <summary>
-        /// 
+        /// Productos Specials.
         /// </summary>
         public DbSet<ProductSpecial> ProductsSpecials { get; set; }
 
@@ -94,51 +94,45 @@
         public DbSet<ProductStandard> ProductsStandards { get; set; }
 
         /// <summary>
-        /// 
+        /// Imagenes de productos especiales.
         /// </summary>
         public DbSet<ImageProductSpecial> ImageProductSpecials { get; set; }
 
         /// <summary>
-        /// 
+        /// Imagenes de productos standards.
         /// </summary>
         public DbSet<ImageProductStandard> ImageProductStandards { get; set; }
 
         /// <summary>
-        /// 
+        /// Imagenes de productos de agrego.
         /// </summary>
         public DbSet<ImageProductAggregate> ImageProductAggregates { get; set; }
 
         /// <summary>
-        /// 
+        /// Pedidos de productos de agrego para un producto special.
         /// </summary>
-        public DbSet<RequestedProductAggregate> RequestedProductAggregates { get; set; }
+        public DbSet<CarShopProductAggregate> CarShopProductAggregates { get; set; }
         
-        /// <summary>
-        /// 
-        /// </summary>
-        public DbSet<RequestedProductStandard> RequestedProductStandards { get; set; }
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public DbSet<RequestedProductSpecial> RequestedProductSpecials { get; set; }
-
-        /// <summary>
-        /// Categoria de los productos especiales.
-        /// </summary>
-        public DbSet<CategoryProductSpecial> CategoryProductSpecials { get; set; }
-
         /// <summary>
         /// Categoria de los productos standards.
         /// </summary>
-        public DbSet<CategoryProductStandard> CategoryProductStandards { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         /// <summary>
-        /// Categoria de los productos de agregados.
+        /// SubCategorias.
         /// </summary>
-        public DbSet<CategoryProductAggregate> CategoryProductAggregates { get; set; }
+        public DbSet<SubCategory> SubCategories { get; set; }
 
-     
+        /// <summary>
+        /// SubCategoria de Productos Standards.
+        /// </summary>
+        public DbSet<SubCategory_ProductStandard> SubCategory_ProductStandards { get; set; }
+
+        /// <summary>
+        /// SubCategoria de Productos Speciales.
+        /// </summary>
+        public DbSet<SubCategory_ProductSpecial> SubCategory_ProductSpecials { get; set; }
+
         /// <summary>
         /// Crea el modelo para la base de datos
         /// </summary>

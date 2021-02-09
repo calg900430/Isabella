@@ -88,16 +88,12 @@
                 //TODO: Verifica que la cantidad de productos solicitados este disponible
                 //TODO: Verificar que los productos esten disponibles
                 //Agrega un nuevo producto standard al carrito de compras
-                var productstandard_for_carshop = new CarShop
+                var productstandard_for_carshop = new CarShopProductStandard
                 {
-                    CodeVerification = codeverification,
-                    RequestedProductStandard = new RequestedProductStandard
-                    {
-                        Price = product.Price,
-                        ProductStandard = product,
-                        Quantity = addProductsToCarShop.Quantity,
-                    },
-                    RequestedProductSpecial = null,
+                    CodeIdentification = codeverification,
+                    Price = product.Price,
+                    ProductStandard = product,
+                    Quantity = addProductsToCarShop.Quantity,
                 };
                 await this._carShopRepositoryModel
                 .AddProductsCarShopAsync(productstandard_for_carshop)
@@ -163,7 +159,7 @@
                 //TODO: Verifica que la cantidad de productos solicitados este disponible
                 //TODO: Verificar que los productos esten disponibles
                 //Verifica que los productos de agregados esten todos disponibles.
-                List<CantRequestProductAggregate> productAggregates = new List<CantRequestProductAggregate>();
+                List<CarShopProductAggregate> productAggregates = new List<CarShopProductAggregate>();
                 if(addProductsToCarShop.CantProductAggregates != null && addProductsToCarShop.CantProductAggregates.Count != 0)
                 {
                     foreach(CantProductAggregate cantProductAggregate in addProductsToCarShop.CantProductAggregates)
@@ -179,32 +175,29 @@
                             serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeProduct_NotFound);
                             return serviceResponse;
                         }
-                        var new_cant_product_aggregate = new CantRequestProductAggregate
+                        var new_cant_product_aggregate = new CarShopProductAggregate
                         {
                             ProductAggregate = product_aggregate,
-                            Quantity = cantProductAggregate.Quantity
+                            Quantity = cantProductAggregate.Quantity,
+                            Price = product_aggregate.Price,
                         };
                         productAggregates.Add(new_cant_product_aggregate);
                     }
                 }
                 //Agrega un nuevo producto standard al carrito de compras
-                var productstandard_for_carshop = new CarShop
+                var productstandard_for_carshop = new CarShopProductSpecial
                 {
-                    CodeVerification = codeverification,
-                    RequestedProductSpecial = new RequestedProductSpecial
+                    CodeIdentification = codeverification,
+                    CarShopProductAggregates = productAggregates.Select(c => new CarShopProductAggregate
                     {
-                        CheeseGouda = addProductsToCarShop.CheeseGouda,
-                        Price = product.Price,
-                        ProductSpecial = product,
-                        Quantity = addProductsToCarShop.Quantity,
-                        RequestedProductAggregates = productAggregates.Select( c => new RequestedProductAggregate 
-                        { 
-                            Price = c.ProductAggregate.Price,
-                            ProductAggregate = c.ProductAggregate,
-                            Quantity = c.Quantity,
-                        }).ToList(),
-                    },
-                    RequestedProductStandard = null,
+                        Price = c.ProductAggregate.Price,
+                        ProductAggregate = c.ProductAggregate,
+                        Quantity = c.Quantity,
+                    }).ToList(),
+                    CheeseGouda = addProductsToCarShop.CheeseGouda,
+                    Price = product.Price,
+                    ProductSpecial = product,
+                    Quantity = addProductsToCarShop.Quantity,
                 };
                 await this._carShopRepositoryModel
                 .AddProductsCarShopAsync(productstandard_for_carshop)
@@ -219,6 +212,172 @@
             {
                 serviceResponse.Code = CodeMessage.Code.CodeError_Exception;
                 serviceResponse.Data = false;
+                serviceResponse.Success = false;
+                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeError_Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene el carrito de compras de un usuario.
+        /// </summary>
+        /// <param name="CodeVerification"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<GetCarShopDto>> GetMyCarShop(Guid CodeVerification)
+        {
+            ServiceResponse<GetCarShopDto > serviceResponse = new ServiceResponse<GetCarShopDto>();
+            try
+            {
+                //Verifica si el código de verificación está disponible
+                var codeverification = await this._verificationCode
+                .CheckCodeIdentificationAsync(CodeVerification)
+                .ConfigureAwait(false);
+                if (codeverification == null)
+                {
+                    serviceResponse.Code = CodeMessage.Code.CodeIdentification_NotCode;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeIdentification_NotCode);
+                    return serviceResponse;
+                }
+                //Verifica si hay productos standards
+                var all_product_standars = await this._carShopRepositoryModel
+                .GetMyCarShopProductStandard(codeverification)
+                .ConfigureAwait(false);
+                //Verifica si hay productos especiales
+                var all_product_specials = await this._carShopRepositoryModel
+                .GetMyCarShopProductSpecial(codeverification)
+                .ConfigureAwait(false);
+                //Verifica si el usuario tiene productos en su carrito.
+                if(all_product_standars == null && all_product_specials == null)
+                {
+                    serviceResponse.Code = CodeMessage.Code.CodeCarShop_NotProducts;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeCarShop_NotProducts);
+                    return serviceResponse;
+                }
+                //EL usuario solicita ambos tipos de productos
+                else if(all_product_specials != null && all_product_standars != null)
+                {
+                    serviceResponse.Code = CodeMessage.Code.CodeSuccess_Ok;
+                    serviceResponse.Data = new GetCarShopDto
+                    {
+                        Verification = codeverification.Code,
+                        CarShopProductStandards = all_product_standars.Select(c => new GetCarShopProductStandard
+                        {
+                            Id = c.Id,
+                            Average = c.ProductStandard.Average,
+                            Category = new Common.Dtos.Category.GetCategoryDto
+                            {
+                                Id = c.ProductStandard.Category.Id,
+                                Name = c.ProductStandard.Category.Name,
+                            },
+                            Price = c.Price,
+                            Quantity = c.Quantity,
+                            Name = c.ProductStandard.Name,
+                        }).ToList(),
+                        CarShopProductSpecial = all_product_specials.Select(c => new GetCarShopProductSpecial
+                        {
+                            Id = c.Id,
+                            Average = c.ProductSpecial.Average,
+                            Category = new Common.Dtos.Category.GetCategoryDto
+                            {
+                                Id = c.ProductSpecial.Category.Id,
+                                Name = c.ProductSpecial.Category.Name,
+                            },
+                            Price = c.Price,
+                            Quantity = c.Quantity,
+                            Name = c.ProductSpecial.Name,
+                            CheeseGouda = c.CheeseGouda,
+                            GetCarShopProductAggregates = c.CarShopProductAggregates.Select(z => new GetCarShopProductAggregate
+                            {
+                                Category = new Common.Dtos.Category.GetCategoryDto
+                                {
+                                    Id = z.ProductAggregate.Category.Id,
+                                    Name = z.ProductAggregate.Category.Name,
+                                },
+                                CarShopProductSpecialId = c.Id,
+                                Id = z.Id,
+                                Name = z.ProductAggregate.Name,
+                                Price = z.Price,
+                                Quantity = z.Quantity
+                            }).ToList()
+                        }).ToList()
+                    };
+                    serviceResponse.Success = true;
+                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeSuccess_Ok);
+                    return serviceResponse;
+                }
+                //El usuario solicita productos standards
+                else if(all_product_standars != null && all_product_specials == null)
+                {
+                    serviceResponse.Code = CodeMessage.Code.CodeSuccess_Ok;
+                    serviceResponse.Data = new GetCarShopDto
+                    {
+                        Verification = codeverification.Code,
+                        CarShopProductStandards = all_product_standars.Select(c => new GetCarShopProductStandard
+                        {
+                            Id = c.Id,
+                            Average = c.ProductStandard.Average,
+                            Category = new Common.Dtos.Category.GetCategoryDto
+                            {
+                                Id = c.ProductStandard.Category.Id,
+                                Name = c.ProductStandard.Category.Name,
+                            },
+                            Price = c.Price,
+                            Quantity = c.Quantity,
+                            Name = c.ProductStandard.Name,
+                        }).ToList(),
+                    };
+                    serviceResponse.Success = true;
+                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeSuccess_Ok);
+                    return serviceResponse;
+                }
+                //El usuario solicita productos especiales
+                else
+                {
+                    serviceResponse.Code = CodeMessage.Code.CodeSuccess_Ok;
+                    serviceResponse.Data = new GetCarShopDto
+                    {
+                        Verification = codeverification.Code,
+                        CarShopProductSpecial = all_product_specials.Select(c => new GetCarShopProductSpecial
+                        {
+                            Id = c.Id,
+                            Average = c.ProductSpecial.Average,
+                            Category = new Common.Dtos.Category.GetCategoryDto
+                            {
+                                Id = c.ProductSpecial.Category.Id,
+                                Name = c.ProductSpecial.Category.Name,
+                            },
+                            Price = c.Price,
+                            Quantity = c.Quantity,
+                            Name = c.ProductSpecial.Name,
+                            CheeseGouda = c.CheeseGouda,
+                            GetCarShopProductAggregates = c.CarShopProductAggregates.Select(z => new GetCarShopProductAggregate
+                            {
+                                Category = new Common.Dtos.Category.GetCategoryDto
+                                {
+                                    Id = z.ProductAggregate.Category.Id,
+                                    Name = z.ProductAggregate.Category.Name,
+                                },
+                                CarShopProductSpecialId = c.Id,
+                                Id = z.Id,
+                                Name = z.ProductAggregate.Name,
+                                Price = z.Price,
+                                Quantity = z.Quantity
+                            }).ToList()
+                        }).ToList()
+                    };
+                    serviceResponse.Success = true;
+                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeSuccess_Ok);
+                    return serviceResponse;
+                }
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = CodeMessage.Code.CodeError_Exception;
+                serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeError_Exception);
                 return serviceResponse;

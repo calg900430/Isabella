@@ -9,7 +9,7 @@
     using Microsoft.EntityFrameworkCore;
 
     using Common;
-    using Common.Dtos.CategoryProductStandard;
+    using Common.Dtos.Category;
     using Common.Dtos.ProductStandard;
     using Common.Extras;
     using Data;
@@ -63,7 +63,7 @@
         /// <returns></returns>
         public async Task<ProductStandard> GetProductStandardForIdWithCategoryAsync(int Id)
          => await this._dataContext.ProductsStandards
-        .Include(c => c.CategoryProductStandard)
+        .Include(c => c.Category)
         .FirstOrDefaultAsync(c => c.Id == Id)
         .ConfigureAwait(false);
 
@@ -73,7 +73,7 @@
         /// <returns></returns>
         public async Task<List<ProductStandard>> GetAllProductStandardWithCategoryAsync()
         => await this._dataContext.ProductsStandards
-        .Include(c => c.CategoryProductStandard)
+        .Include(c => c.Category)
         .ToListAsync()
         .ConfigureAwait(false);
 
@@ -93,7 +93,7 @@
         /// <returns></returns>
         public async Task<List<ProductStandard>> GetAllProductStandardWithAllIncludeAsync()
         => await this._dataContext.ProductsStandards
-        .Include(c => c.CategoryProductStandard)
+        .Include(c => c.Category)
         .Include(c => c.ImageProductStandards)
         .ToListAsync()
         .ConfigureAwait(false);
@@ -105,7 +105,7 @@
         /// <returns></returns>
         public async Task<ProductStandard> GetProductStandardForIdWithAllIncludeAsync(int Id)
         => await this._dataContext.ProductsStandards
-        .Include(c => c.CategoryProductStandard)
+        .Include(c => c.Category)
         .Include(c => c.ImageProductStandards)
         .FirstOrDefaultAsync(c => c.Id == Id)
         .ConfigureAwait(false);

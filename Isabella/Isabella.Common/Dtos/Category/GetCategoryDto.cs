@@ -1,6 +1,6 @@
-﻿namespace Isabella.Common.Dtos.CategoryProductSpecial
+﻿namespace Isabella.Common.Dtos.Category
 {
-    public class GetCategoryProductSpecialDto
+    public class GetCategoryDto
     {
         /// <summary>
         /// Id

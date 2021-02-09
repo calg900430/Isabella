@@ -11,7 +11,7 @@
     using Microsoft.EntityFrameworkCore;
 
     using Common;
-    using Common.Dtos.CategoryProductSpecial;
+    using Common.Dtos.Category;
     using Common.Dtos.ProductSpecial;
     using Common.Extras;
     using Common.RepositorysDtos;

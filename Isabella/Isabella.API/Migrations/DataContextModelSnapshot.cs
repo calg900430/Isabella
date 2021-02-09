@@ -107,34 +107,94 @@ namespace Isabella.API.Migrations
                     b.ToTable("CalificationRestaurants");
                 });
 
-            modelBuilder.Entity("Isabella.API.Models.CarShop", b =>
+            modelBuilder.Entity("Isabella.API.Models.CarShopProductAggregate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CodeVerificationId")
+                    b.Property<int?>("CarShopProductSpecialId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RequestedProductSpecialId")
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("ProductAggregateId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("RequestedProductStandardId")
+                    b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CodeVerificationId");
+                    b.HasIndex("CarShopProductSpecialId");
 
-                    b.HasIndex("RequestedProductSpecialId");
+                    b.HasIndex("ProductAggregateId");
 
-                    b.HasIndex("RequestedProductStandardId");
-
-                    b.ToTable("CarShops");
+                    b.ToTable("CarShopProductAggregates");
                 });
 
-            modelBuilder.Entity("Isabella.API.Models.CategoryProductAggregate", b =>
+            modelBuilder.Entity("Isabella.API.Models.CarShopProductSpecial", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("CheeseGouda")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("CodeIdentificationId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("ProductSpecialId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CodeIdentificationId");
+
+                    b.HasIndex("ProductSpecialId");
+
+                    b.ToTable("CarShopsProductsSpecials");
+                });
+
+            modelBuilder.Entity("Isabella.API.Models.CarShopProductStandard", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CodeIdentificationId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int?>("ProductStandardId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CodeIdentificationId");
+
+                    b.HasIndex("ProductStandardId");
+
+                    b.ToTable("CarShopsProductsStandards");
+                });
+
+            modelBuilder.Entity("Isabella.API.Models.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -146,37 +206,7 @@ namespace Isabella.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CategoryProductAggregates");
-                });
-
-            modelBuilder.Entity("Isabella.API.Models.CategoryProductSpecial", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CategoryProductSpecials");
-                });
-
-            modelBuilder.Entity("Isabella.API.Models.CategoryProductStandard", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("CategoryProductStandards");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Isabella.API.Models.CodeIdentification", b =>
@@ -295,7 +325,7 @@ namespace Isabella.API.Migrations
 
                     b.HasIndex("ProductStandardId");
 
-                    b.ToTable("ImageProductStandard");
+                    b.ToTable("ImageProductStandards");
                 });
 
             modelBuilder.Entity("Isabella.API.Models.Order", b =>
@@ -309,6 +339,9 @@ namespace Isabella.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("CodeVerificationId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("DeliveryDate")
                         .HasColumnType("datetime2");
 
@@ -318,7 +351,12 @@ namespace Isabella.API.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("CodeVerificationId");
 
                     b.HasIndex("GpsId");
 
@@ -338,22 +376,12 @@ namespace Isabella.API.Migrations
                     b.Property<DateTime?>("DateUpdate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("OrderFastId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RequestedProductStandardId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Requested_ProductSpecialId")
+                    b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderFastId");
-
-                    b.HasIndex("RequestedProductStandardId");
-
-                    b.HasIndex("Requested_ProductSpecialId");
+                    b.HasIndex("OrderId");
 
                     b.ToTable("OrderDetails");
                 });
@@ -368,7 +396,7 @@ namespace Isabella.API.Migrations
                     b.Property<float>("Average")
                         .HasColumnType("real");
 
-                    b.Property<int?>("CategoryProductAggregateId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DateCreated")
@@ -399,7 +427,7 @@ namespace Isabella.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryProductAggregateId");
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("ProductAggregates");
                 });
@@ -414,7 +442,7 @@ namespace Isabella.API.Migrations
                     b.Property<float>("Average")
                         .HasColumnType("real");
 
-                    b.Property<int?>("CategoryProductSpecialId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DateCreated")
@@ -445,7 +473,7 @@ namespace Isabella.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryProductSpecialId");
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("ProductsSpecials");
                 });
@@ -460,7 +488,7 @@ namespace Isabella.API.Migrations
                     b.Property<float>("Average")
                         .HasColumnType("real");
 
-                    b.Property<int?>("CategoryProductStandardId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DateCreated")
@@ -491,7 +519,7 @@ namespace Isabella.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryProductStandardId");
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("ProductsStandards");
                 });
@@ -516,81 +544,66 @@ namespace Isabella.API.Migrations
                     b.ToTable("RecoverPassword");
                 });
 
-            modelBuilder.Entity("Isabella.API.Models.RequestedProductAggregate", b =>
+            modelBuilder.Entity("Isabella.API.Models.SubCategory", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("ProductAggregateId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RequestedProductSpecialId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductAggregateId");
-
-                    b.HasIndex("RequestedProductSpecialId");
-
-                    b.ToTable("Requested_ProductAggregates");
+                    b.ToTable("SubCategories");
                 });
 
-            modelBuilder.Entity("Isabella.API.Models.RequestedProductSpecial", b =>
+            modelBuilder.Entity("Isabella.API.Models.SubCategory_ProductSpecial", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("CheeseGouda")
-                        .HasColumnType("bit");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("ProductSpecialId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int?>("SubCategoryId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProductSpecialId");
 
-                    b.ToTable("Requested_ProductSpecials");
+                    b.HasIndex("SubCategoryId");
+
+                    b.ToTable("SubCategory_ProductSpecials");
                 });
 
-            modelBuilder.Entity("Isabella.API.Models.RequestedProductStandard", b =>
+            modelBuilder.Entity("Isabella.API.Models.SubCategory_ProductStandard", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<int?>("ProductStandardId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int?>("SubCategoryId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProductStandardId");
 
-                    b.ToTable("Requested_ProductStandards");
+                    b.HasIndex("SubCategoryId");
+
+                    b.ToTable("SubCategory_ProductStandards");
                 });
 
             modelBuilder.Entity("Isabella.API.Models.User", b =>
@@ -849,19 +862,37 @@ namespace Isabella.API.Migrations
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("Isabella.API.Models.CarShop", b =>
+            modelBuilder.Entity("Isabella.API.Models.CarShopProductAggregate", b =>
                 {
-                    b.HasOne("Isabella.API.Models.CodeIdentification", "CodeVerification")
-                        .WithMany()
-                        .HasForeignKey("CodeVerificationId");
+                    b.HasOne("Isabella.API.Models.CarShopProductSpecial", "CarShopProductSpecial")
+                        .WithMany("CarShopProductAggregates")
+                        .HasForeignKey("CarShopProductSpecialId");
 
-                    b.HasOne("Isabella.API.Models.RequestedProductSpecial", "RequestedProductSpecial")
+                    b.HasOne("Isabella.API.Models.ProductAggregate", "ProductAggregate")
                         .WithMany()
-                        .HasForeignKey("RequestedProductSpecialId");
+                        .HasForeignKey("ProductAggregateId");
+                });
 
-                    b.HasOne("Isabella.API.Models.RequestedProductStandard", "RequestedProductStandard")
+            modelBuilder.Entity("Isabella.API.Models.CarShopProductSpecial", b =>
+                {
+                    b.HasOne("Isabella.API.Models.CodeIdentification", "CodeIdentification")
                         .WithMany()
-                        .HasForeignKey("RequestedProductStandardId");
+                        .HasForeignKey("CodeIdentificationId");
+
+                    b.HasOne("Isabella.API.Models.ProductSpecial", "ProductSpecial")
+                        .WithMany()
+                        .HasForeignKey("ProductSpecialId");
+                });
+
+            modelBuilder.Entity("Isabella.API.Models.CarShopProductStandard", b =>
+                {
+                    b.HasOne("Isabella.API.Models.CodeIdentification", "CodeIdentification")
+                        .WithMany()
+                        .HasForeignKey("CodeIdentificationId");
+
+                    b.HasOne("Isabella.API.Models.ProductStandard", "ProductStandard")
+                        .WithMany()
+                        .HasForeignKey("ProductStandardId");
                 });
 
             modelBuilder.Entity("Isabella.API.Models.ConfirmationRegisterForEmail", b =>
@@ -894,6 +925,10 @@ namespace Isabella.API.Migrations
 
             modelBuilder.Entity("Isabella.API.Models.Order", b =>
                 {
+                    b.HasOne("Isabella.API.Models.CodeIdentification", "CodeVerification")
+                        .WithMany()
+                        .HasForeignKey("CodeVerificationId");
+
                     b.HasOne("Isabella.API.Models.Gps", "Gps")
                         .WithMany()
                         .HasForeignKey("GpsId");
@@ -901,38 +936,30 @@ namespace Isabella.API.Migrations
 
             modelBuilder.Entity("Isabella.API.Models.OrderDetail", b =>
                 {
-                    b.HasOne("Isabella.API.Models.Order", "OrderFast")
+                    b.HasOne("Isabella.API.Models.Order", "Order")
                         .WithMany("Items")
-                        .HasForeignKey("OrderFastId");
-
-                    b.HasOne("Isabella.API.Models.RequestedProductStandard", "RequestedProductStandard")
-                        .WithMany()
-                        .HasForeignKey("RequestedProductStandardId");
-
-                    b.HasOne("Isabella.API.Models.RequestedProductSpecial", "Requested_ProductSpecial")
-                        .WithMany()
-                        .HasForeignKey("Requested_ProductSpecialId");
+                        .HasForeignKey("OrderId");
                 });
 
             modelBuilder.Entity("Isabella.API.Models.ProductAggregate", b =>
                 {
-                    b.HasOne("Isabella.API.Models.CategoryProductAggregate", "CategoryProductAggregate")
+                    b.HasOne("Isabella.API.Models.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryProductAggregateId");
+                        .HasForeignKey("CategoryId");
                 });
 
             modelBuilder.Entity("Isabella.API.Models.ProductSpecial", b =>
                 {
-                    b.HasOne("Isabella.API.Models.CategoryProductSpecial", "CategoryProductSpecial")
+                    b.HasOne("Isabella.API.Models.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryProductSpecialId");
+                        .HasForeignKey("CategoryId");
                 });
 
             modelBuilder.Entity("Isabella.API.Models.ProductStandard", b =>
                 {
-                    b.HasOne("Isabella.API.Models.CategoryProductStandard", "CategoryProductStandard")
+                    b.HasOne("Isabella.API.Models.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryProductStandardId");
+                        .HasForeignKey("CategoryId");
                 });
 
             modelBuilder.Entity("Isabella.API.Models.RecoverPassword", b =>
@@ -942,29 +969,26 @@ namespace Isabella.API.Migrations
                         .HasForeignKey("UserId");
                 });
 
-            modelBuilder.Entity("Isabella.API.Models.RequestedProductAggregate", b =>
-                {
-                    b.HasOne("Isabella.API.Models.ProductAggregate", "ProductAggregate")
-                        .WithMany()
-                        .HasForeignKey("ProductAggregateId");
-
-                    b.HasOne("Isabella.API.Models.RequestedProductSpecial", "RequestedProductSpecial")
-                        .WithMany("RequestedProductAggregates")
-                        .HasForeignKey("RequestedProductSpecialId");
-                });
-
-            modelBuilder.Entity("Isabella.API.Models.RequestedProductSpecial", b =>
+            modelBuilder.Entity("Isabella.API.Models.SubCategory_ProductSpecial", b =>
                 {
                     b.HasOne("Isabella.API.Models.ProductSpecial", "ProductSpecial")
-                        .WithMany()
+                        .WithMany("SubCategory_ProductSpecials")
                         .HasForeignKey("ProductSpecialId");
+
+                    b.HasOne("Isabella.API.Models.SubCategory", "SubCategory")
+                        .WithMany()
+                        .HasForeignKey("SubCategoryId");
                 });
 
-            modelBuilder.Entity("Isabella.API.Models.RequestedProductStandard", b =>
+            modelBuilder.Entity("Isabella.API.Models.SubCategory_ProductStandard", b =>
                 {
                     b.HasOne("Isabella.API.Models.ProductStandard", "ProductStandard")
-                        .WithMany()
+                        .WithMany("SubCategory_ProductStandards")
                         .HasForeignKey("ProductStandardId");
+
+                    b.HasOne("Isabella.API.Models.SubCategory", "SubCategory")
+                        .WithMany()
+                        .HasForeignKey("SubCategoryId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

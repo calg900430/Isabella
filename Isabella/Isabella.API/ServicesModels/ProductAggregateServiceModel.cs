@@ -149,7 +149,7 @@
         /// <returns></returns>
         public async Task<List<ProductAggregate>> GetAllProductAggregateWithAllIncludeAsync()
         => await this._dataContext.ProductAggregates
-        .Include(c => c.CategoryProductAggregate)
+        .Include(c => c.Category)
         .Include(c => c.ImageProductAggregates)
         .ToListAsync();
 
@@ -159,7 +159,7 @@
         /// <returns></returns>
         public async Task<List<ProductAggregate>> GetAllProductAggregateWithCategoryAsync()
           => await this._dataContext.ProductAggregates
-        .Include(c => c.CategoryProductAggregate)
+        .Include(c => c.Category)
         .ToListAsync()
         .ConfigureAwait(false);
 
@@ -228,7 +228,7 @@
         /// <returns></returns>
         public async Task<ProductAggregate> GetProductAggregateForIdWithAllIncludeAsync(int Id)
         => await this._dataContext.ProductAggregates
-        .Include(c => c.CategoryProductAggregate)
+        .Include(c => c.Category)
         .Include(c => c.ImageProductAggregates)
         .FirstOrDefaultAsync(c => c.Id == Id)
         .ConfigureAwait(false);
@@ -240,7 +240,7 @@
         /// <returns></returns>
         public async Task<ProductAggregate> GetProductAggregateForIdWithCategoryAsync(int Id)
          => await this._dataContext.ProductAggregates
-        .Include(c => c.CategoryProductAggregate)
+        .Include(c => c.Category)
         .FirstOrDefaultAsync(c => c.Id == Id)
         .ConfigureAwait(false);
 

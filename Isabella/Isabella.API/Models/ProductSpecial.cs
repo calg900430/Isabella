@@ -9,9 +9,9 @@
     {
         
         /// <summary>
-        /// Categoria de productos especiales.
+        /// SubCategorias.
         /// </summary>
-        public CategoryProductSpecial CategoryProductSpecial { get; set; }
+        public ICollection<SubCategory_ProductSpecial> SubCategory_ProductSpecials { get; set; }
 
         /// <summary>
         /// Tipos de agregados.
