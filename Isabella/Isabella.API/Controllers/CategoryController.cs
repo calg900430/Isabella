@@ -14,9 +14,6 @@
     using Common.Dtos.Category;
     using Common.Extras;
     using Common.RepositorysDtos;
-    using Extras;
-    using Models;
-    using RepositorysModels;
     using ServicesControllers;
 
     /// <summary>
@@ -46,6 +43,9 @@
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
         public async Task<IActionResult> AddCategoryStandardAsync([FromBody] AddCategoryDto addCategory)
         {
             try

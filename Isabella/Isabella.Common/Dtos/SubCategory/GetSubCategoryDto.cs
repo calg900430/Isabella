@@ -8,6 +8,11 @@
         public int Id { get; set; }
 
         /// <summary>
+        /// Producto.
+        /// </summary>
+        public int ProductId { get; set; }
+
+        /// <summary>
         /// Nombre de la categoría del producto.
         /// </summary>
         public string Name { get; set; }

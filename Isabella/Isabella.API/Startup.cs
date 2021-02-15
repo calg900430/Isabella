@@ -16,12 +16,11 @@ namespace Isabella.API
 
     using Common.RepositorysDtos;
     using Data;
-    using Extras;
-    using Models;
-    using RepositorysModels;
+    using Models.Entities;
     using SeederDb;
-    using ServicesModels;
     using ServicesControllers;
+    using Helpers;
+    using Helpers.RepositoryHelpers;
 
     /// <summary>
     /// Startup
@@ -79,6 +78,7 @@ namespace Isabella.API
             //var connectionstring = Constants.GetStringConnectionSQLServer(Configuration.GetSection("SQLServer"));
             services.AddDbContext<DataContext>(c =>
             {
+                //c.UseLazyLoadingProxies() //Para poder usar carga diferida
                 c.UseSqlServer(connectionstring);
             });
 
@@ -177,43 +177,42 @@ namespace Isabella.API
             services.AddTransient<SeedDb>();
 
             //Agrega el servicio para el manejo de correos.
-            services.AddScoped<MailServiceModel>();
+            services.AddScoped<MailHelper>();
 
             //Agrega el servicio para el manejo de archivos que envia el usuario
-            services.AddScoped<UploadFileServiceModel>();
-
-            //Agrega el servicio de pruebas para borrar los elementos de la base de datos.
-            services.AddTransient<AllDeleteDatabaseExecuteSeederServiceModel>();
+            services.AddScoped<UploadFileHelper>();
 
             //Agrega los servicios para el manejo de usuarios
-            services.AddScoped<IUserRepositoryModel, UserServiceModel>();
+            services.AddScoped<IUserRepositoryHelper, UserHelper>();
+            services.AddScoped<ServiceGenericHelper<User>>();
             services.AddScoped<UserServiceController>();
 
-            //Agrega los servicios para el manejo de los productos standard.
-            services.AddScoped<IProductStandardRepositoryModel, ProductStandardServiceModel>();
-            services.AddScoped<ProductStandardServiceController>();
+            //Agrega los servicios para el manejo de los productos.
+            services.AddScoped<ServiceGenericHelper<Product>>();
+            services.AddScoped<ServiceGenericHelper<ImageProduct>>();
+            services.AddScoped<ProductServiceController>();
 
-            //Agrega los servicios para el manejo de los productos special.
-            services.AddScoped<IProductSpecialRepositoryModel, ProductSpecialServiceModel>();
-            services.AddScoped<ProductSpecialServiceController>();
+            //Agrega los servicios para el manejo de los agregados.
+            services.AddScoped<AggregateServiceController>();
+            services.AddScoped<ServiceGenericHelper<Aggregate>>();
+            services.AddScoped<ServiceGenericHelper<ImageAggregate>>();
 
-            //Agrega los servicios para el manejo de los productos aggregate.
-            services.AddScoped<IProductAggregateRepositoryModel, ProductAggregateServiceModel>();
-            services.AddScoped<ProductAggregateServiceController>();
+            //Agrega los servicios para el manejo de las subcategorias.
+            services.AddScoped<CategoryServiceController>();
+            services.AddScoped<ServiceGenericHelper<SubCategory>>();
 
             //Agrega los servicios para el manejo de las categorias.
-            services.AddScoped<ICategoryRepositoryModel, CategoryServiceModel>();
-            services.AddScoped<CategoryServiceController>();
-            services.AddScoped<ISubCategoryRepositoryModel, SubCategoryServiceModel>();
             services.AddScoped<SubCategoryServiceController>();
+            services.AddScoped<ServiceGenericHelper<Category>>();
 
             //Agrega los servicios para el manejo del carrito de compras
-            services.AddScoped<ICarShopRepositoryModel, CarShopServiceModel>();
             services.AddScoped<CarShopServiceController>();
+            services.AddScoped<ServiceGenericHelper<CarShop>>();
+            services.AddScoped<ServiceGenericHelper<CantAggregate>>();
 
             //Agrega los servicios para el manejo de los códigos de verificación
-            services.AddScoped<ICodeIdentificationModel, CodeIdentificationServiceModel>();
             services.AddScoped<CodeIdentificationServiceController>();
+            services.AddScoped<ServiceGenericHelper<CodeIdentification>>();
         }
 
         /// <summary>

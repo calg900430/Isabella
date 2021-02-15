@@ -7,7 +7,8 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
-    using Models;
+
+    using Models.Entities;
 
     /// <summary>
     /// DataContext
@@ -29,16 +30,6 @@
         public DbSet<CodeIdentification> CodeIdentifications { get; set; }
 
         /// <summary>
-        /// Confirmación de registro de usuario.
-        /// </summary>
-        public DbSet<ConfirmationRegisterForEmail> ConfirmationRegisterForEmail { get; set; }
-
-        /// <summary>
-        /// Recuperación de contraseña.
-        /// </summary>
-        public DbSet<RecoverPassword> RecoverPasswords { get; set; }
-
-        /// <summary>
         /// Coordenadas Gps.
         /// </summary>
         public DbSet<Gps> Gps { get; set; }
@@ -54,14 +45,9 @@
         public DbSet<OrderDetail> OrderDetails { get; set; }
 
         /// <summary>
-        /// Calificación de un producto special.
-        /// </summary>
-        public DbSet<CalificationProductSpecial> CalificationProductSpecials { get; set; }
-
-        /// <summary>
         /// Calificación de Productos Standards.
         /// </summary>
-        public DbSet<CalificationProductStandard> CalificationProductStandards { get; set; }
+        public DbSet<CalificationProduct> CalificationProduct { get; set; }
 
         /// <summary>
         /// Calificacion
@@ -71,47 +57,32 @@
         /// <summary>
         /// Carrito de compra de productos standards
         /// </summary>
-        public DbSet<CarShopProductStandard> CarShopsProductsStandards { get; set; }
-
-        /// <summary>
-        /// Carrito de compra de productos especiales
-        /// </summary>
-        public DbSet<CarShopProductSpecial> CarShopsProductsSpecials { get; set; }
+        public DbSet<CarShop> CarShops { get; set; }
 
         /// <summary>
         /// Productos de agregos.
         /// </summary>
-        public DbSet<ProductAggregate> ProductAggregates { get; set; }
+        public DbSet<Aggregate> Aggregates { get; set; }
 
         /// <summary>
-        /// Productos Specials.
+        /// Productos.
         /// </summary>
-        public DbSet<ProductSpecial> ProductsSpecials { get; set; }
-
-        /// <summary>
-        /// Productos Standards.
-        /// </summary>
-        public DbSet<ProductStandard> ProductsStandards { get; set; }
-
-        /// <summary>
-        /// Imagenes de productos especiales.
-        /// </summary>
-        public DbSet<ImageProductSpecial> ImageProductSpecials { get; set; }
+        public DbSet<Product> Products { get; set; }
 
         /// <summary>
         /// Imagenes de productos standards.
         /// </summary>
-        public DbSet<ImageProductStandard> ImageProductStandards { get; set; }
+        public DbSet<ImageProduct> ImagesProducts { get; set; }
 
         /// <summary>
-        /// Imagenes de productos de agrego.
+        /// Imagenes Agregados.
         /// </summary>
-        public DbSet<ImageProductAggregate> ImageProductAggregates { get; set; }
-
+        public DbSet<ImageAggregate> ImageAggregates { get; set; }
+ 
         /// <summary>
         /// Pedidos de productos de agrego para un producto special.
         /// </summary>
-        public DbSet<CarShopProductAggregate> CarShopProductAggregates { get; set; }
+        public DbSet<CantAggregate> CantAggregate { get; set; }
         
         /// <summary>
         /// Categoria de los productos standards.
@@ -122,16 +93,6 @@
         /// SubCategorias.
         /// </summary>
         public DbSet<SubCategory> SubCategories { get; set; }
-
-        /// <summary>
-        /// SubCategoria de Productos Standards.
-        /// </summary>
-        public DbSet<SubCategory_ProductStandard> SubCategory_ProductStandards { get; set; }
-
-        /// <summary>
-        /// SubCategoria de Productos Speciales.
-        /// </summary>
-        public DbSet<SubCategory_ProductSpecial> SubCategory_ProductSpecials { get; set; }
 
         /// <summary>
         /// Crea el modelo para la base de datos

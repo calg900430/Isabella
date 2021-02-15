@@ -8,7 +8,7 @@
     /// </summary>
     public class ServiceResponse<T>
     {
-        public CodeMessage.Code Code { get; set; }   //Código
+        public GetValueResourceFile.KeyResource KeyResource { get; set; }  //Código del recurso solicitado.
 
         public T Data { get; set; }                  //Representa los datos del usuario
 

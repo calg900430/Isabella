@@ -7,10 +7,7 @@
     /// </summary>
     public class ChangePasswordUserDto
     {
-        //Id del usuario.
-        [Required(ErrorMessage = "Debe introducir el Id del usuario.")]
-        public int Id { get; set; }
-
+        
         //Contraseña Antigua
         [Required(ErrorMessage = "Debe escribir la contraseña actual.")]
         public string PasswordOld { get; set; }

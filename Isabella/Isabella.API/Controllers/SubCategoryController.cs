@@ -14,9 +14,6 @@
     using Common.Extras;
     using Common.RepositorysDtos;
     using Common.Dtos.SubCategory;
-    using Extras;
-    using Models;
-    using RepositorysModels;
     using ServicesControllers;
    
     /// <summary>
@@ -46,7 +43,10 @@
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> AddCategoryStandardAsync([FromBody] AddSubCategoryDto addSubCategory)
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        public async Task<IActionResult> AddSubCategoryStandardAsync([FromBody] AddSubCategoryToProductDto addSubCategory)
         {
             try
             {
@@ -78,7 +78,7 @@
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> GetCategoryForIdAsync(int Id)
+        public async Task<IActionResult> GetSubCategoryForIdAsync(int Id)
         {
             try
             {
@@ -110,7 +110,7 @@
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> GetCategoryForNameAsync(string Name)
+        public async Task<IActionResult> GetSubCategoryForNameAsync(string Name)
         {
             try
             {
@@ -142,7 +142,7 @@
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> GetAllCategoriesAsync()
+        public async Task<IActionResult> GetAllSubCategoriesAsync()
         {
             try
             {
@@ -163,6 +163,78 @@
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Elimina una subcategoria.
+        /// </summary>
+        /// <param name="SubCategoryId"></param>
+        /// <returns></returns>
+        [HttpDelete("del/subcategory")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        public async Task<IActionResult> DeleteSubCategoryAsync(int SubCategoryId)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this
+                    ._subCategoryService
+                    .RemoveSubCategoryAsync(SubCategoryId)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Actualiza una subcategoria.
+        /// </summary>
+        /// <param name="updateSubCategory"></param>
+        /// <returns></returns>
+        [HttpPut("update/subcategory")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        public async Task<IActionResult> UpdateSubCategoryAsync(UpdateSubCategoryDto updateSubCategory)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this
+                    ._subCategoryService
+                    .UpdateSubCategoryAsync(updateSubCategory)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+               return BadRequest(ex.Message);
             }
         }
     }

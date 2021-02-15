@@ -11,15 +11,15 @@
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Authentication;
 
-    using RepositorysModels;
     using Common.Dtos.Users;
     using Common.Extras;
     using Common.RepositorysDtos;
     using Common;
-    using Extras;
-    using Models;
+    using Models.Entities;
     using ServicesControllers;
-  
+    using Helpers;
+    using Helpers.RepositoryHelpers;
+
     /// <summary>
     /// Controlador para el servicio de usuarios.
     /// </summary>
@@ -27,18 +27,15 @@
     [Route("api/[controller]")]
     public class UsersController : Controller
     {
-        private readonly UserServiceController _userRepositoryDto;
-        private readonly IUserRepositoryModel _userRepositoryModel;
-
+        private readonly UserServiceController _userRepository;
+        
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="userRepositoryDto"></param>
-        /// <param name="userRepositoryModel"></param>
-        public UsersController(UserServiceController userRepositoryDto, IUserRepositoryModel userRepositoryModel)
+        public UsersController(UserServiceController userRepositoryDto)
         {
-            this._userRepositoryDto = userRepositoryDto;
-            this._userRepositoryModel = userRepositoryModel;
+            this._userRepository = userRepositoryDto;
         }
 
         /// <summary>
@@ -59,7 +56,10 @@
             {
                 if (ModelState.IsValid)
                 {
-                    var result = await this._userRepositoryDto.AddUserAsync(newuser).ConfigureAwait(false);
+                    //Obtiene la dirección Url
+                    this._userRepository.Url = Url;
+                    this._userRepository.HttpRequest = HttpContext.Request;
+                    var result = await this._userRepository.AddUserAsync(newuser).ConfigureAwait(false);
                     if(result.Success)
                     return Ok(result);
                     else
@@ -75,21 +75,22 @@
         }
 
         /// <summary>
-        /// Confirma el registro de un usuario en el sistema con el código enviado a su correo.
+        /// Confirma el registro de un usuario en la aplicación con los detalles enviados a su correo electrónico.
         /// </summary>
-        /// <param name="confirmEmail"></param>
+        /// <param name="Id"></param>
+        /// <param name="Token"></param>
         /// <returns></returns>
         [HttpPost("add/confirmregister")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> ConfirmRegisterUserAsync([FromBody] ConfirmEmailDto confirmEmail)
+        public async Task<IActionResult> ConfirmRegisterUserAsync(string Id, string Token)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var result = await this._userRepositoryDto.ConfirmEmailUserAsync(confirmEmail).ConfigureAwait(false);
+                    var result = await this._userRepository.ConfirmEmailUserAsync(Id, Token).ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
                     else
@@ -100,7 +101,7 @@
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+               return BadRequest(ex.Message);
             }
         }
 
@@ -122,8 +123,8 @@
                 if (ModelState.IsValid)
                 {
                     //Asigna los claims del usuario
-                    this._userRepositoryDto.ClaimsPrincipal = HttpContext.User;
-                    var result = await this._userRepositoryDto.DeleteImageProfileUserAsync().ConfigureAwait(false);
+                    this._userRepository.ClaimsPrincipal = HttpContext.User;
+                    var result = await this._userRepository.DeleteImageProfileUserAsync().ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
                     else
@@ -155,7 +156,7 @@
             {
                 if (ModelState.IsValid)
                 {
-                    var result = await this._userRepositoryDto.GetIdOfLastUserAsync().ConfigureAwait(false);
+                    var result = await this._userRepository.GetIdOfLastUserAsync().ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
                     else
@@ -185,10 +186,10 @@
         public async Task<IActionResult> GetUserForUserIdAsync(int userId)
         {
             try
-            {
+            {   
                 if (ModelState.IsValid)
                 {
-                    var result = await this._userRepositoryDto.GetUserByIdAsync(userId).ConfigureAwait(false);
+                    var result = await this._userRepository.GetUserByIdAsync(userId).ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
                     else
@@ -220,7 +221,7 @@
             {
                 if (ModelState.IsValid)
                 {
-                    var result = await this._userRepositoryDto.GetAllUserAsync().ConfigureAwait(false);
+                    var result = await this._userRepository.GetAllUserAsync().ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
                     else
@@ -253,7 +254,7 @@
             {
                 if (ModelState.IsValid)
                 {
-                    var result = await this._userRepositoryDto.GetUserByUserNameAsync(UserName).ConfigureAwait(false);
+                    var result = await this._userRepository.GetUserByUserNameAsync(UserName).ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
                     else
@@ -286,7 +287,7 @@
             {
                 if (ModelState.IsValid)
                 {
-                    var result = await this._userRepositoryDto.GetUserByEmailAsync(Email).ConfigureAwait(false);
+                    var result = await this._userRepository.GetUserByEmailAsync(Email).ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
                     else
@@ -316,7 +317,7 @@
             {
                 if (ModelState.IsValid)
                 {
-                    var result = await this._userRepositoryDto.LoginUserAsync(loginUser).ConfigureAwait(false);
+                    var result = await this._userRepository.LoginUserAsync(loginUser).ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
                     else
@@ -343,127 +344,43 @@
         [ProducesResponseType(400)]
         public async Task LoginExternProviderForAsync(string scheme)
         {
-            const string callbackScheme = "xamarinessentials";
             try
             {
-                if (scheme != "Google")
-                return;
-                //Verifica si los datos enviados por el proveedor externo son correctos.
-                var auth = await Request.HttpContext.AuthenticateAsync(scheme);
-                if (!auth.Succeeded || auth?.Principal == null
-                || !auth.Principal.Identities.Any(id => id.IsAuthenticated)
-                || string.IsNullOrEmpty(auth.Properties.GetTokenValue("access_token")))
+                if (ModelState.IsValid)
                 {
-                    //Not authenticated, challenge
-                    await Request.HttpContext.ChallengeAsync(scheme);
-                    return;
+                   //Asigna los claims del usuario
+                   this._userRepository.ClaimsPrincipal = HttpContext.User;
+                   this._userRepository.HttpRequest = Request.HttpContext.Request;
+                   await this._userRepository.LoginExternProviderForAsync(scheme).ConfigureAwait(false);
                 }
                 else
-                {
-                    var claims = auth.Principal.Identities.FirstOrDefault()?.Claims;
-                    var email = string.Empty;
-                    //var mobilePhone = string.Empty;
-                    email = claims?.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
-                    //mobilePhone = claims?.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.MobilePhone)?.Value;
-                    //TODO: Resolver el login externo en caso de que el usuario tenga telefono en vez de email(Facebook o Twitter)
-                    //Verifica que el usuario este registrado, si no está registrado lo registra.
-                    var user = await this._userRepositoryDto.GetEntityUserForEmailAsync(email).ConfigureAwait(false);
-                    //Registra el nuevo usuario
-                    if (user == null)
-                    {
-                        user = new User()
-                        {
-                            Email = email,
-                            UserName = email,
-                            DateCreated = DateTime.UtcNow,
-                            DateUpdated = DateTime.UtcNow,
-                            LastDateConnected = DateTime.UtcNow,
-                            IdForClaim = Guid.NewGuid(),
-                        };
-                        var register_user = await this._userRepositoryModel.AddUserAsync(user).ConfigureAwait(false);
-                        if (register_user == null)
-                        {
-                            await Request.HttpContext.ChallengeAsync(scheme);
-                            return;
-                        }
-                        //Asigna el role al usuario
-                        var role_user = await this._userRepositoryModel.AddRoleForUserAsync(user, Constants.RolesOfSystem[1]).ConfigureAwait(false);
-                        if (!role_user)
-                        {
-                            await Request.HttpContext.ChallengeAsync(scheme);
-                            return;
-                        }
-                    }
-                    //Genera un Token Bearer para el usuario
-                    var token = await this._userRepositoryModel.CreateTokenAsync(user).ConfigureAwait(false);
-                    if (token == null)
-                    {
-                        await Request.HttpContext.ChallengeAsync(scheme);
-                        return;
-                    }
-                    //Verifica si el usuario tiene foto de perfil
-                    var image = string.Empty;
-                    if (user.ImageUserProfile != null)
-                    image = Convert.ToBase64String(user.ImageUserProfile);
-                    //Verifica los roles del usuario
-                    var role = string.Empty;
-                    if (token.UserRoles != null)
-                    {
-                        foreach (EnumRoles enumRoles in token.UserRoles)
-                        role += $"{(int)enumRoles},";
-                    }
-                    //Crea los parametros que devolveremos a la url back
-                    var qs = new Dictionary<string, string>
-                    {
-                      { "access_token", auth.Properties.GetTokenValue("access_token") },
-                      { "refresh_token", auth.Properties.GetTokenValue("refresh_token") ?? string.Empty },
-                      { "expires", (auth.Properties.ExpiresUtc?.ToUnixTimeSeconds() ?? -1).ToString() },
-                      { "token_bearer", token.Token},
-                      { "expires_token_bearer", token.DateTime.ToString()},
-                      { "email", user.Email},
-                      { "roles", role},
-                      { "imageUserProfile", image ?? string.Empty},
-                      { "userName", user.UserName ?? string.Empty},
-                      { "firstName", user.FirstName ?? string.Empty },
-                      { "lastName", user.LastName ?? string.Empty},
-                      { "fullName", user.FullName ?? string.Empty},
-                      { "id", user.Id.ToString() ?? string.Empty},
-                      { "address", user.Address ?? string.Empty},
-                      { "phoneNumber", user.PhoneNumber ?? string.Empty},
-                    };
-                    // Build the result url
-                    var url = callbackScheme + "://#" + string.Join("&",
-                    qs.Select(kvp => $"{kvp.Key}={kvp.Value}"));
-                    // Redirect to final url
-                    Request.HttpContext.Response.Redirect(url);
-                    return;
-                }
-            }
-            catch (Exception)
-            {
-                await Request.HttpContext.ChallengeAsync(scheme);
                 return;
+            }
+            catch(Exception)
+            {
+              return;
             }
         }
 
         /// <summary>
-        /// Recupera la contraseña del usuario con el código de recuperación enviado a su correo.
+        /// Recupera la contraseña del usuario con los detalles enviados a su correo electrónico.
         /// </summary>
-        /// <param name="recoverPassword"></param>
+        /// <param name="Id"></param>
+        /// <param name="Token"></param>
+        /// <param name="NewPassword"></param>
         /// <returns></returns>
         [HttpPost("add/recoverpassword")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> ConfirmRecoverPasswordUserAsync([FromBody] RecoverPasswordDto recoverPassword)
+        public async Task<IActionResult> ConfirmRecoverPasswordUserAsync(string Id, string Token, string NewPassword)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     //Asigna los claims del usuario
-                    this._userRepositoryDto.ClaimsPrincipal = HttpContext.User;
-                    var result = await this._userRepositoryDto.RecoverPasswwordUserAsync(recoverPassword).ConfigureAwait(false);
+                    var result = await this._userRepository.RecoverPasswwordUserAsync(Id, Token, NewPassword).ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
                     else
@@ -497,7 +414,7 @@
             {
                 if (ModelState.IsValid)
                 {
-                    var result = await this._userRepositoryDto.GetCantUserAsync(UserId,CantUsers).ConfigureAwait(false);
+                    var result = await this._userRepository.GetCantUserAsync(UserId,CantUsers).ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
                     else
@@ -530,8 +447,8 @@
             {
                 if (ModelState.IsValid)
                 {
-                    this._userRepositoryDto.ClaimsPrincipal = HttpContext.User;
-                    var result = await this._userRepositoryDto.UpdateUserAsync(updateUser).ConfigureAwait(false);
+                    this._userRepository.ClaimsPrincipal = HttpContext.User;
+                    var result = await this._userRepository.UpdateUserAsync(updateUser).ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
                     else
@@ -564,8 +481,8 @@
             {
                 if (ModelState.IsValid)
                 {
-                    this._userRepositoryDto.ClaimsPrincipal = HttpContext.User;
-                    var result = await this._userRepositoryDto.UpdatePasswordAsync(changePassword).ConfigureAwait(false);
+                    this._userRepository.ClaimsPrincipal = HttpContext.User;
+                    var result = await this._userRepository.UpdatePasswordAsync(changePassword).ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
                     else
@@ -581,7 +498,7 @@
         }
 
         /// <summary>
-        /// Envia un correo al usuario con el código de recuperación de la contraseña.
+        /// Envia un correo al usuario con los detalles para la recuperación de la contraseña.
         /// </summary>
         /// <param name="resetPassword"></param>
         /// <returns></returns>
@@ -595,7 +512,9 @@
             {
                 if (ModelState.IsValid)
                 {
-                    var result = await this._userRepositoryDto.ResetPasswordUserAsync(resetPassword).ConfigureAwait(false);
+                    this._userRepository.Url = Url;
+                    this._userRepository.HttpRequest = HttpContext.Request;
+                    var result = await this._userRepository.ResetPasswordUserAsync(resetPassword).ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
                     else
@@ -611,7 +530,7 @@
         }
 
         /// <summary>
-        /// Envia un nuevo correo al usuario con el código para la confirmación del registro.
+        /// Envia un nuevo correo al usuario con los detalles para la confirmación del registro.
         /// </summary>
         /// <param name="sendToNewCodeConfirmationRegister"></param>
         /// <returns></returns>
@@ -625,7 +544,9 @@
             {
                 if (ModelState.IsValid)
                 {
-                    var result = await this._userRepositoryDto
+                    this._userRepository.Url = Url;
+                    this._userRepository.HttpRequest = HttpContext.Request;
+                    var result = await this._userRepository
                     .SendToNewCodeConfirmationEmailAsync(sendToNewCodeConfirmationRegister)
                     .ConfigureAwait(false);
                     if (result.Success)
@@ -660,7 +581,8 @@
             {
                 if (ModelState.IsValid)
                 {
-                    var result = await this._userRepositoryDto
+                    this._userRepository.Url = Url;
+                    var result = await this._userRepository
                     .AddOrUpdateImageProfileUser(formFile, HttpContext.User)
                     .ConfigureAwait(false);
                     if (result.Success)

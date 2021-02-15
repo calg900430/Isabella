@@ -4,24 +4,26 @@
     using System.Threading.Tasks;
 
     using Common.RepositorysDtos;
-    using RepositorysModels;
     using Common;
     using Common.Extras;
-
+    using Helpers;
+    using Helpers.RepositoryHelpers;
+    using Models.Entities;
+ 
     /// <summary>
     /// Servicio para el controlador de los códigos de identificación.
     /// </summary>
     public class CodeIdentificationServiceController : ICodeIdentificationRepositoryDto
     {
-        private readonly ICodeIdentificationModel _verificationCodeModel;
-    
+        private readonly ServiceGenericHelper<CodeIdentification> _serviceGenericCodeIdentificationHelper;
+
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="verificationCodeModel"></param>
-        public CodeIdentificationServiceController(ICodeIdentificationModel verificationCodeModel)
+        /// <param name="serviceGenericCodeIdentificationHelper"></param>
+        public CodeIdentificationServiceController(ServiceGenericHelper<CodeIdentification>  serviceGenericCodeIdentificationHelper)
         {
-            this._verificationCodeModel = verificationCodeModel;
+            this._serviceGenericCodeIdentificationHelper = serviceGenericCodeIdentificationHelper;
         }
 
         /// <summary>
@@ -35,29 +37,30 @@
             try
             {
                 //Verifica si el código de identificación está disponible
-                var codeidentification = await this._verificationCodeModel
-                .CheckCodeIdentificationAsync(CodeVerification)
+                var codeidentification = await this._serviceGenericCodeIdentificationHelper
+                .WhereFirstEntityAsync(c => c.Code == CodeVerification)
                 .ConfigureAwait(false);
-                if (codeidentification == null)
+                if(codeidentification == null)
                 {
-                    serviceResponse.Code = CodeMessage.Code.CodeIdentification_NotCode;
+                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.NotCodeIdentification;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeIdentification_NotCode);
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.NotCodeIdentification);
                     return serviceResponse;
                 }
-                serviceResponse.Code = CodeMessage.Code.CodeSuccess_Ok;
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeSuccess_Ok);
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
             catch
             {
-                serviceResponse.Code = CodeMessage.Code.CodeError_Exception;
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeError_Exception);
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
             }
         }
@@ -71,29 +74,28 @@
             ServiceResponse<Guid?> serviceResponse = new ServiceResponse<Guid?>();
             try
             {
-                //Verifica si el código de identificación está disponible
-                var codeidentification = await this._verificationCodeModel.RegisterNewCodeIdentification()
-                .ConfigureAwait(false);
-                if (codeidentification == null)
+                var code_identification = new CodeIdentification
                 {
-                    serviceResponse.Code = CodeMessage.Code.CodeError_DataBase;
-                    serviceResponse.Data = null;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeError_DataBase);
-                    return serviceResponse;
-                }
-                serviceResponse.Code = CodeMessage.Code.CodeSuccess_Ok;
-                serviceResponse.Data = codeidentification.Code;
+                    Code = Guid.NewGuid()
+                };
+                 await this._serviceGenericCodeIdentificationHelper
+                .AddEntityAsync(code_identification)
+                .ConfigureAwait(false);
+                await this._serviceGenericCodeIdentificationHelper
+                .SaveChangesBDAsync()
+                .ConfigureAwait(false);
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = code_identification.Code;
                 serviceResponse.Success = true;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeSuccess_Ok);
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
             catch
             {
-                serviceResponse.Code = CodeMessage.Code.CodeError_Exception;
-                serviceResponse.Data = null;
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data =  null;
                 serviceResponse.Success = false;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeError_Exception);
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
             }
         }

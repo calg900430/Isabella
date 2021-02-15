@@ -14,9 +14,7 @@
     using Common.Dtos.CarShop;
     using Common.Extras;
     using Common.RepositorysDtos;
-    using Extras;
-    using Models;
-    using RepositorysModels;
+    using Models.Entities;
     using ServicesControllers;
 
     /// <summary>
@@ -46,7 +44,7 @@
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> AddProductStandardToCarShopAsync([FromBody] AddProductStandardToCarShopDto addProductStandardToCarShop)
+        public async Task<IActionResult> AddProductStandardToCarShopAsync([FromBody] AddProductToCarShopDto addProductStandardToCarShop)
         {
             try
             {
@@ -62,39 +60,6 @@
                 }
                 else
                 return BadRequest(); //400
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Agregar un producto special al carrito de compras.
-        /// </summary>
-        /// <param name="addProductSpecialToCarShop"></param>
-        /// <returns></returns>
-        [HttpPost("addtocarshop/productspecial")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(400)]
-        public async Task<IActionResult> AddProductSpecialToCarShopAsync([FromBody] AddProductSpecialToCarShopDto addProductSpecialToCarShop)
-        {
-
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    var result = await this
-                    ._carShopServiceController.AddProductsToCarShop(addProductSpecialToCarShop)
-                    .ConfigureAwait(false);
-                    if (result.Success)
-                    return Ok(result);
-                    else
-                    return BadRequest(result);
-                }
-                else
-                    return BadRequest(); //400
             }
             catch (Exception ex)
             {

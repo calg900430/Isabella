@@ -9,23 +9,24 @@
     using Common;
     using Common.Dtos.Category;
     using Common.Extras;
-    using RepositorysModels;
-    using Models;
-    
+    using Models.Entities;
+    using Helpers;
+    using Helpers.RepositoryHelpers;
+
     /// <summary>
     /// Servicio para el controlador de las categorias de los productos.
     /// </summary>
     public class CategoryServiceController : ICategoryRepositoryDto
     {
-        private readonly ICategoryRepositoryModel _categoryRepositoryModel;
+        private readonly ServiceGenericHelper<Category> _serviceGenericCategoryHelper;
 
         /// <summary>
         /// Categorias
         /// </summary>
-        /// <param name="categoryRepositoryModel"></param>
-        public CategoryServiceController(ICategoryRepositoryModel categoryRepositoryModel)
+        /// <param name="serviceGenericCategoryHelper"></param>
+        public CategoryServiceController(ServiceGenericHelper<Category> serviceGenericCategoryHelper)
         {
-            this._categoryRepositoryModel = categoryRepositoryModel;
+            this._serviceGenericCategoryHelper = serviceGenericCategoryHelper;
         }
 
         /// <summary>
@@ -40,43 +41,45 @@
             {
                 if (addCategory == null)
                 {
-                    serviceResponse.Code = CodeMessage.Code.CodeError_NullObjectSend;
+                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeError_NullObjectSend);
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
                     return serviceResponse;
                 }
                 //Verifica que la categoria es valida
-                var category = await this._categoryRepositoryModel
-                .GetCategoryForNameAsync(addCategory.Name)
+                var category = await this._serviceGenericCategoryHelper
+                .WhereSingleEntityAsync(c => c.Name == addCategory.Name)
                 .ConfigureAwait(false);
                 if (category != null)
                 {
-                    serviceResponse.Code = CodeMessage.Code.CodeCategory_Exist;
+                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.CategoryExist;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeCategory_Exist);
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.CategoryExist);
                     return serviceResponse;
                 }
                 var new_category = new Category
                 {
                    Name = addCategory.Name,
                 };
-                await this._categoryRepositoryModel
-                .AddCategoryAsync(new_category)
+                await this._serviceGenericCategoryHelper
+                .AddEntityAsync(new_category)
                 .ConfigureAwait(false);
-                serviceResponse.Code = CodeMessage.Code.CodeSuccess_Ok;
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeSuccess_Ok);
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
             catch(Exception)
             {
-                serviceResponse.Code = CodeMessage.Code.CodeError_Exception;
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeError_Exception);
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
             }
         }
@@ -90,34 +93,35 @@
             ServiceResponse<List<GetCategoryDto>> serviceResponse = new ServiceResponse<List<GetCategoryDto>>();
             try
             {
-                //Verifica que la categoria es valida
-                var category = await this._categoryRepositoryModel
-                .GetAllCategoryAsync()
+                var category = await this._serviceGenericCategoryHelper
+                .GetLoadAsync()
                 .ConfigureAwait(false);
                 if (category == null)
                 {
-                    serviceResponse.Code = CodeMessage.Code.CodeCategory_NotAllFound;
+                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.CategoryNotAllFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeCategory_NotAllFound);
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.CategoryNotAllFound);
                     return serviceResponse;
                 }
-                serviceResponse.Code = CodeMessage.Code.CodeSuccess_Ok;
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = category.Select(c => new GetCategoryDto 
                 { 
                    Id = c.Id,
                    Name = c.Name
                 }).ToList();
                 serviceResponse.Success = true;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeSuccess_Ok);
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
             catch (Exception)
             {
-                serviceResponse.Code = CodeMessage.Code.CodeError_Exception;
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeError_Exception);
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
             }
         }
@@ -133,33 +137,36 @@
             try
             {
                 //Verifica que la categoria es valida
-                var category = await this._categoryRepositoryModel
-                .GetCategoryForIdAsync(Id)
+                var category = await this._serviceGenericCategoryHelper
+                .WhereFirstEntityAsync(c => c.Id == Id)
                 .ConfigureAwait(false);
                 if (category == null)
                 {
-                    serviceResponse.Code = CodeMessage.Code.CodeCategory_NotFound;
+                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.CategoryNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeCategory_NotFound);
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.CategoryNotFound);
                     return serviceResponse;
                 }
-                serviceResponse.Code = CodeMessage.Code.CodeSuccess_Ok;
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = new GetCategoryDto
                 {
                     Id = category.Id,
                     Name = category.Name
                 };
                 serviceResponse.Success = true;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeSuccess_Ok);
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
             catch (Exception)
             {
-                serviceResponse.Code = CodeMessage.Code.CodeError_Exception;
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeError_Exception);
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
             }
         }
@@ -175,33 +182,34 @@
             try
             {
                 //Verifica que la categoria es valida
-                var category = await this._categoryRepositoryModel
-                .GetCategoryForNameAsync(Name)
+                var category = await this._serviceGenericCategoryHelper
+                .WhereSingleEntityAsync(c => c.Name == Name)
                 .ConfigureAwait(false);
                 if (category == null)
                 {
-                    serviceResponse.Code = CodeMessage.Code.CodeCategory_NotFound;
+                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.CategoryNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeCategory_NotFound);
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.CategoryNotFound);
                     return serviceResponse;
                 }
-                serviceResponse.Code = CodeMessage.Code.CodeSuccess_Ok;
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = new GetCategoryDto
                 {
                     Id = category.Id,
                     Name = category.Name
                 };
                 serviceResponse.Success = true;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeSuccess_Ok);
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
             catch (Exception)
             {
-                serviceResponse.Code = CodeMessage.Code.CodeError_Exception;
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeError_Exception);
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
             }
         }

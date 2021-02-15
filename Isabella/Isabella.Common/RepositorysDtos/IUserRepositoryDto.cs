@@ -80,14 +80,15 @@
         /// </summary>
         /// <param name="loginUser"></param>
         /// <returns></returns>
-        Task<ServiceResponse<ResponseLoginTokenDto>> LoginUserAsync(LoginUserWithUserNameDto loginUser);
+        Task<ServiceResponse<GetDataUserForLoginDto>> LoginUserAsync(LoginUserWithUserNameDto loginUser);
 
         /// <summary>
         /// Confirma el registro del usuario.
         /// </summary>
-        /// <param name="confirmEmail"></param>
+        /// <param name="Id"></param>
+        /// <param name="Token"></param>
         /// <returns></returns>
-        Task<ServiceResponse<bool>> ConfirmEmailUserAsync(ConfirmEmailDto confirmEmail);
+        Task<ServiceResponse<bool>> ConfirmEmailUserAsync(string Id, string Token);
 
         /// <summary>
         /// Solicita un correo con un código para recuperaión de su contraseña.
@@ -97,14 +98,16 @@
         Task<ServiceResponse<bool>> ResetPasswordUserAsync(ResetPasswordDto resetPassword);
 
         /// <summary>
-        /// Recupera la contraseña del usuario con el código enviado a su correo. 
+        /// Recupera la contraseña del usuario con los detalles enviados a su correo. 
         /// </summary>
-        /// <param name="recoverPassword"></param>
+        /// <param name="Id"></param>
+        /// <param name="Token"></param>
+        /// <param name="newPassword"></param>
         /// <returns></returns>
-        Task<ServiceResponse<bool>> RecoverPasswwordUserAsync(RecoverPasswordDto recoverPassword);
+        Task<ServiceResponse<bool>> RecoverPasswwordUserAsync(string Id, string Token, string newPassword);
 
         /// <summary>
-        /// Envia un nuevo código para la confirmación del registro.
+        /// Envia un nuevo correo  con detalles para la confirmación del registro.
         /// </summary>
         /// <param name="sendToNewCodeConfirmationRegister"></param>
         /// <returns></returns>

@@ -17,13 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Hubs\Repositorys\" />
+    <Folder Include="ElementsForResourceFile\audio\" />
+    <Folder Include="Hubs\RepositorysHubs\" />
     <Folder Include="Migrations\" />
-    <Folder Include="wwwroot\images\images_products\agregados\" />
-    <Folder Include="wwwroot\images\images_products\news\" />
-    <Folder Include="wwwroot\images\images_products\type_cheeses\" />
-    <Folder Include="wwwroot\images\temp\products\" />
-    <Folder Include="wwwroot\images\temp\users\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,6 +35,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Twitter" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.3">
       <PrivateAssets>all</PrivateAssets>
@@ -48,6 +45,7 @@
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.5.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.4.1" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.1" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.5.0" />
   </ItemGroup>
     

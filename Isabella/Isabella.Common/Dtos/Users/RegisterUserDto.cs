@@ -7,13 +7,6 @@
     /// </summary>
     public class RegisterUserDto
     {
-        /// <summary>
-        /// Cuenta de usuario
-        /// </summary>
-        [Required(ErrorMessage ="Introduzca el nombre de usuario.")]
-        [MaxLength(1000, ErrorMessage = "Ha superado el limite máximo de caracteres permitidos para la cuenta de usuario.")]
-        public string UserName { get; set; }
-
         //Email
         [Required(ErrorMessage ="Debe introducir el correo del usuario.")]
         [EmailAddress(ErrorMessage = "El formato del email no es válido.")]

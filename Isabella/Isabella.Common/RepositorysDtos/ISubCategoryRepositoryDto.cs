@@ -30,10 +30,24 @@
         Task<ServiceResponse<GetSubCategoryDto>> GetSubCategoryForIdAsync(int Id);
 
         /// <summary>
-        /// Agrega una nueva subcategoria.
+        /// Agrega una nueva subcategoria a un producto.
         /// </summary>
         /// <param name="addSubCategoryProduct"></param>
         /// <returns></returns>
-        Task<ServiceResponse<bool>> AddSubCategoryAsync(AddSubCategoryDto addSubCategoryProduct);
+        Task<ServiceResponse<bool>> AddSubCategoryAsync(AddSubCategoryToProductDto addSubCategoryProduct);
+
+        /// <summary>
+        /// Actualiza una nueva subcategoria.
+        /// </summary>
+        /// <param name="updateSubCategoryDto"></param>
+        /// <returns></returns>
+        Task<ServiceResponse<bool>> UpdateSubCategoryAsync(UpdateSubCategoryDto updateSubCategoryDto);
+
+        /// <summary>
+        /// Elimina una subcategoria.
+        /// </summary>
+        /// <param name="SubCategoryId"></param>
+        /// <returns></returns>
+        Task<ServiceResponse<bool>> RemoveSubCategoryAsync(int SubCategoryId);
     }
 }

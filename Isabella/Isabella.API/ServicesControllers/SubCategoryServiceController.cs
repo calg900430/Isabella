@@ -1,6 +1,7 @@
 ﻿namespace Isabella.API.ServicesControllers
 {
     using System;
+    using System.Linq;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -8,77 +9,100 @@
     using Common;
     using Common.Dtos.SubCategory;
     using Common.Extras;
-    using RepositorysModels;
-    using Models;
-    using System.Linq;
-   
+    using Models.Entities;
+    using Helpers;
+    using Helpers.RepositoryHelpers;
+
     /// <summary>
     /// Servicio para el controlador de las subcategorias.
     /// </summary>
     public class SubCategoryServiceController : ISubCategoryRepositoryDto
     {
-        private readonly ISubCategoryRepositoryModel _subCategoryRepositoryModel;
+        private readonly ServiceGenericHelper<SubCategory> _serviceGenericSubCategoryHelper;
+        private readonly ServiceGenericHelper<Product> _serviceGenericProductHelper;
 
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="categoryRepositoryModel"></param>
-        public SubCategoryServiceController(ISubCategoryRepositoryModel categoryRepositoryModel)
+        /// <param name="serviceGenericSubCategoryHelper"></param>
+        /// <param name="serviceGenericProductHelper"></param>
+        public SubCategoryServiceController(ServiceGenericHelper<SubCategory> serviceGenericSubCategoryHelper, 
+        ServiceGenericHelper<Product> serviceGenericProductHelper)
         {
-            this._subCategoryRepositoryModel = categoryRepositoryModel;
-
+            this._serviceGenericSubCategoryHelper = serviceGenericSubCategoryHelper;
+            this._serviceGenericProductHelper = serviceGenericProductHelper;
         }
 
         /// <summary>
-        /// Agrega una nueva subcategoria.
+        /// Agrega una nueva subcategoria a un producto.
         /// </summary>
         /// <param name="addSubCategoryProduct"></param>
         /// <returns></returns>
-        public async Task<ServiceResponse<bool>> AddSubCategoryAsync(AddSubCategoryDto addSubCategoryProduct)
+        public async Task<ServiceResponse<bool>> AddSubCategoryAsync(AddSubCategoryToProductDto addSubCategoryProduct)
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
                 if (addSubCategoryProduct == null)
                 {
-                    serviceResponse.Code = CodeMessage.Code.CodeError_NullObjectSend;
+                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeError_NullObjectSend);
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
                     return serviceResponse;
                 }
-                //Verifica que la categoria es valida
-                var category = await this._subCategoryRepositoryModel
-                .GetSubCategoryForNameAsync(addSubCategoryProduct.Name)
+                //Verifica que la subcategoria es valida
+                var subcategory = await this._serviceGenericSubCategoryHelper
+                .WhereSingleEntityAsync(c => c.Name == addSubCategoryProduct.Name, c => c.Product)
                 .ConfigureAwait(false);
-                if (category != null)
+                if (subcategory != null)
                 {
-                    serviceResponse.Code = CodeMessage.Code.CodeCategory_Exist;
+                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SubCategoryExist;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeCategory_Exist);
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryExist);
                     return serviceResponse;
                 }
-                var new_category = new SubCategory
+                //Verifica que el producto existe.
+                var product = await this._serviceGenericProductHelper
+                .GetLoadAsync(c => c.Id == addSubCategoryProduct.ProductId)
+                .ConfigureAwait(false);
+                if (product == null)
                 {
+                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ProductNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotFound);
+                    return serviceResponse;
+                }
+                var new_subcategory = new SubCategory
+                {
+                    Product = product,
                     Name = addSubCategoryProduct.Name,
                     Price = addSubCategoryProduct.Price,
                 };
-                await this._subCategoryRepositoryModel
-                .AddSubCategoryAsync(new_category)
+                await this._serviceGenericSubCategoryHelper
+                .AddEntityAsync(new_subcategory)
                 .ConfigureAwait(false);
-                serviceResponse.Code = CodeMessage.Code.CodeSuccess_Ok;
+                await this._serviceGenericSubCategoryHelper
+                .SaveChangesBDAsync()
+                .ConfigureAwait(false);
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeSuccess_Ok);
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
             catch (Exception)
             {
-                serviceResponse.Code = CodeMessage.Code.CodeError_Exception;
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeError_Exception);
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
             }
         }
@@ -91,35 +115,36 @@
             ServiceResponse<List<GetSubCategoryDto>> serviceResponse = new ServiceResponse<List<GetSubCategoryDto>>();
             try
             {
-                //Verifica que la categoria es valida
-                var category = await this._subCategoryRepositoryModel
-                .GetAllSubCategoryAsync()
+                var all_subcategories = await this._serviceGenericSubCategoryHelper
+                .GetLoadAsync(c => c.Product)
                 .ConfigureAwait(false);
-                if (category == null)
+                if (all_subcategories == null)
                 {
-                    serviceResponse.Code = CodeMessage.Code.CodeCategory_NotAllFound;
+                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SubCategoryNotAllFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeCategory_NotAllFound);
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryNotAllFound);
                     return serviceResponse;
                 }
-                serviceResponse.Code = CodeMessage.Code.CodeSuccess_Ok;
-                serviceResponse.Data = category.Select(c => new GetSubCategoryDto
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = all_subcategories.Select(c => new GetSubCategoryDto
                 {
                     Id = c.Id,
                     Name = c.Name,
-                    Price = c.Price,
+                    Price = c.Price, 
+                    ProductId = c.Product.Id
                 }).ToList();
                 serviceResponse.Success = true;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeSuccess_Ok);
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
             catch (Exception)
             {
-                serviceResponse.Code = CodeMessage.Code.CodeError_Exception;
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeError_Exception);
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
             }
         }
@@ -135,34 +160,36 @@
             try
             {
                 //Verifica que la categoria es valida
-                var category = await this._subCategoryRepositoryModel
-                .GetSubCategoryProductForIdAsync(Id)
+                var subcategory = await this._serviceGenericSubCategoryHelper
+                .GetLoadAsync(c => c.Id == Id, c => c.Product)
                 .ConfigureAwait(false);
-                if (category == null)
+                if (subcategory == null)
                 {
-                    serviceResponse.Code = CodeMessage.Code.CodeCategory_NotFound;
+                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SubCategoryNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeCategory_NotFound);
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryNotFound);
                     return serviceResponse;
                 }
-                serviceResponse.Code = CodeMessage.Code.CodeSuccess_Ok;
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = new GetSubCategoryDto
                 {
-                    Id = category.Id,
-                    Name = category.Name,
-                    Price = category.Price
+                    Id = subcategory.Id,
+                    Name = subcategory.Name,
+                    Price = subcategory.Price,
+                    ProductId = subcategory.Product.Id,
                 };
                 serviceResponse.Success = true;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeSuccess_Ok);
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
             catch (Exception)
             {
-                serviceResponse.Code = CodeMessage.Code.CodeError_Exception;
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeError_Exception);
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
             }
         }
@@ -178,34 +205,122 @@
             try
             {
                 //Verifica que la categoria es valida
-                var category = await this._subCategoryRepositoryModel
-                .GetSubCategoryForNameAsync(Name)
+                var subcategory = await this._serviceGenericSubCategoryHelper
+                .WhereSingleEntityAsync(c => c.Name == Name, c => c.Product)
                 .ConfigureAwait(false);
-                if (category == null)
+                if (subcategory == null)
                 {
-                    serviceResponse.Code = CodeMessage.Code.CodeCategory_NotFound;
+                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SubCategoryNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeCategory_NotFound);
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryNotFound);
                     return serviceResponse;
                 }
-                serviceResponse.Code = CodeMessage.Code.CodeSuccess_Ok;
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = new GetSubCategoryDto
                 {
-                    Id = category.Id,
-                    Name = category.Name,
-                    Price = category.Price
+                    Id = subcategory.Id,
+                    Name = subcategory.Name,
+                    Price = subcategory.Price,
+                    ProductId = subcategory.Product.Id
                 };
                 serviceResponse.Success = true;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeSuccess_Ok);
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
             catch (Exception)
             {
-                serviceResponse.Code = CodeMessage.Code.CodeError_Exception;
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeError_Exception);
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Elimina una subcategoria de un producto.
+        /// </summary>
+        /// <param name="SubCategoryId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<bool>> RemoveSubCategoryAsync(int SubCategoryId)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            try
+            {
+                //Verifica que la categoria es valida
+                var subcategory = await this._serviceGenericSubCategoryHelper
+                .WhereSingleEntityAsync(c => c.Id == SubCategoryId, c => c.Product)
+                .ConfigureAwait(false);
+                if (subcategory == null)
+                {
+                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SubCategoryNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryNotFound);
+                    return serviceResponse;
+                }
+                this._serviceGenericSubCategoryHelper.RemoveEntity(subcategory);
+                await this._serviceGenericSubCategoryHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = true;
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = false;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Actualiza una subcategoria.
+        /// </summary>
+        /// <param name="updateSubCategoryDto"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<bool>> UpdateSubCategoryAsync(UpdateSubCategoryDto updateSubCategoryDto)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            try
+            {
+                //Verifica que la categoria es valida
+                var subcategory = await this._serviceGenericSubCategoryHelper
+                .WhereSingleEntityAsync(c => c.Id == updateSubCategoryDto.Id, c => c.Product)
+                .ConfigureAwait(false);
+                if (subcategory == null)
+                {
+                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SubCategoryNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryNotFound);
+                    return serviceResponse;
+                }
+                if(updateSubCategoryDto.Price != null || updateSubCategoryDto.Price < 0)
+                subcategory.Price =(decimal) updateSubCategoryDto.Price;
+                if(updateSubCategoryDto.Name != null)
+                subcategory.Name = updateSubCategoryDto.Name;
+                this._serviceGenericSubCategoryHelper.UpdateEntity(subcategory);
+                await this._serviceGenericSubCategoryHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = true;
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = false;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
             }
         }

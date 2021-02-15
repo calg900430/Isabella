@@ -9,9 +9,9 @@
     using Microsoft.EntityFrameworkCore;
 
     using Common.Extras;
-    using Models;
+    using Models.Entities;
     using Data;
-   
+    using ElementsForResourceFile;
 
     /// <summary>
     /// Seeder
@@ -43,6 +43,10 @@
         {
             try
             {
+                //Verifica si el archivo de recursos existe, sino lo manda a generar.
+                var file_exist = File.Exists($"{Directory.GetCurrentDirectory()}//ResourceFile.resources");
+                if (!file_exist)
+                ManagerResourceFile.GenerateResourceFileAsync();
                 //Borra la base de datos si existe(Esto solo está habilitado en el momento de hacer pruebas, 
                 //cuando todo este listo, debemos comentar esta linea)
                 //await _dataContext.Database.EnsureDeletedAsync().ConfigureAwait(false);
@@ -191,12 +195,12 @@
                     await this._dataContext.SaveChangesAsync().ConfigureAwait(false);
                 }
 
-                /*Crea los productos de agrego*/
-                if (!await this._dataContext.ProductAggregates.AnyAsync().ConfigureAwait(false))
+                /*Crea 8 agregados*/
+                if (!await this._dataContext.Aggregates.AnyAsync().ConfigureAwait(false))
                 {
-                    var products_agregate = new List<ProductAggregate>
+                    var products_agregate = new List<Aggregate>
                     {
-                        new ProductAggregate
+                        new Aggregate
                         {
                             Name = "Queso",
                             Category = categorys[8],
@@ -207,8 +211,8 @@
                             LastBuy = DateTime.UtcNow,
                             Price = 30,
                             Stock = 120,
-                        }, //0-Queso
-                        new ProductAggregate     //1-Queso Gouda
+                        }, //0-Queso Blanco
+                        new Aggregate     //1-Queso Gouda
                         {
                             Name = "Queso Gouda",
                             Category = categorys[8],
@@ -220,7 +224,7 @@
                             Price = 45,
                             Stock = 150,
                         }, //1-Queso Gouda
-                        new ProductAggregate
+                        new Aggregate
                         {
                             Name = "Jamón",
                             Category = categorys[11],
@@ -232,7 +236,7 @@
                             Price = 30,
                             Stock = 170,
                         }, //2-Jamóm
-                        new ProductAggregate
+                        new Aggregate
                         {
                             Name = "Chorizo",
                             Category = categorys[11],
@@ -244,7 +248,7 @@
                             Price = 30,
                             Stock = 250,
                         }, //3-Chorizo
-                        new ProductAggregate
+                        new Aggregate
                         {
                             Name = "Aceitunas",
                             Category = categorys[9],
@@ -256,7 +260,7 @@
                             Price = 45,
                             Stock = 150,
                         }, //4-Aceitunas
-                        new ProductAggregate
+                        new Aggregate
                         {
                             Name = "Champiñón",
                             Category = categorys[10],
@@ -268,7 +272,7 @@
                             Price = 40,
                             Stock = 250,
                         }, //5-Champiñón
-                        new ProductAggregate
+                        new Aggregate
                         {
                             Name = "Atún",
                             Category = categorys[12],
@@ -280,7 +284,7 @@
                             Price = 55,
                             Stock = 110,
                         }, //6-Atún
-                        new ProductAggregate
+                        new Aggregate
                         {
                             Name = "Camarón",
                             Category = categorys[3],
@@ -294,76 +298,76 @@
                         }, //7-Camarón
                     };
                     //Asigna las imagenes a los agregos
-                    /*products_agregate[0].ImageProductAggregates = new List<ImageProductAggregate>
+                    /*products_agregate[0].Images = new List<ImageAggregate>
                     {
-                       new ImageProductAggregate
+                       new ImageAggregate
                        {
-                           Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/agregados/queso_blanco0.jpg"),
-                       },
-                    };
-                    products_agregate[1].ImageProductAggregates = new List<ImageProductAggregate>
-                    {
-                       new ImageProductAggregate
-                       {
-                          Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/agregados/queso_gouda0.jpg"),
-                       },
-                    };
-                    products_agregate[2].ImageProductAggregates = new List<ImageProductAggregate>
-                    {
-                       new ImageProductAggregate
-                       {
-                          Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/agregados/jamon0.jpg"),
-                       },
-                    };
-                    products_agregate[3].ImageProductAggregates = new List<ImageProductAggregate>
-                    {
-                       new ImageProductAggregate
-                       {
-                         Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/agregados/chorizo0.jpg"),
-                       },
-                    };
-                    products_agregate[4].ImageProductAggregates = new List<ImageProductAggregate>
-                    {
-                       new ImageProductAggregate
-                       {
-                         Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/agregados/aceitunas0.jpg"),
-                       },
-                    };
-                    products_agregate[5].ImageProductAggregates = new List<ImageProductAggregate>
-                    {
-                       new ImageProductAggregate
-                       {
-                         Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/agregados/champiñon0.jpg"),
-                       },
-                    };
-                    products_agregate[6].ImageProductAggregates = new List<ImageProductAggregate>
-                    {
-                       new ImageProductAggregate
-                       {
-                         Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/agregados/atun0.jpg"),
-                       },
-                    };
-                    products_agregate[7].ImageProductAggregates = new List<ImageProductAggregate>
-                    {
-                       new ImageProductAggregate
-                       {
-                         Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/agregados/camaron0.jpg"),
+                           Image = GetValueResourceFile.GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageQuesoBlanco)
                        },
                     };*/
-                    await this._dataContext.ProductAggregates
+                    products_agregate[1].Images = new List<ImageAggregate>
+                    {
+                       new ImageAggregate
+                       {
+                           Image = GetValueResourceFile.GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageQuesoGouda)
+                       },
+                    };
+                    products_agregate[2].Images = new List<ImageAggregate>
+                    {
+                       new ImageAggregate
+                       {
+                          Image = GetValueResourceFile.GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageJamon)
+                       },
+                    };
+                    products_agregate[3].Images = new List<ImageAggregate>
+                    {
+                       new ImageAggregate
+                       {
+                          Image = GetValueResourceFile.GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageChorizo)
+                       },
+                    };
+                    products_agregate[4].Images = new List<ImageAggregate>
+                    {
+                       new ImageAggregate
+                       {
+                          Image = GetValueResourceFile.GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageAceitunas)
+                       },
+                    };
+                    products_agregate[5].Images = new List<ImageAggregate>
+                    {
+                       new ImageAggregate
+                       {
+                          Image = GetValueResourceFile.GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageSetas)
+                       },
+                    };
+                    products_agregate[6].Images = new List<ImageAggregate>
+                    {
+                       new ImageAggregate
+                       {
+                          Image = GetValueResourceFile.GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageAtun)
+                       },
+                    };
+                    products_agregate[7].Images = new List<ImageAggregate>
+                    {
+                       new ImageAggregate
+                       {
+                          Image = GetValueResourceFile.GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageCamarones)
+                       },
+                    };
+                    await this._dataContext.Aggregates
                     .AddRangeAsync(products_agregate)
                     .ConfigureAwait(false);
                     await this._dataContext.SaveChangesAsync()
                     .ConfigureAwait(false);
                 }
 
-                /*Crea 6 productos estandar*/
-                if (!await this._dataContext.ProductsStandards.AnyAsync().ConfigureAwait(false))
+                /*Crea 8 productos*/
+                if (!await this._dataContext.Products.AnyAsync().ConfigureAwait(false))
                 {
-                    var products_standars = new List<ProductStandard>
+                    var products = new List<Product>
                     {
                         //Entrantes
-                        new ProductStandard
+                        new Product
                         {
                            Name = "Ensalda Fría",
                            Category = categorys[0],
@@ -375,7 +379,7 @@
                            DateUpdate = DateTime.UtcNow,
                            LastBuy = DateTime.UtcNow,
                         },
-                        new ProductStandard
+                        new Product
                          {
                            Name = "Coco Glasé",
                            Category = categorys[1],
@@ -387,7 +391,7 @@
                            DateUpdate = DateTime.UtcNow,
                            LastBuy = DateTime.UtcNow,
                          },
-                        new ProductStandard
+                        new Product
                         {
                            Name = "Bistec de Cerdo",
                            Category = categorys[2],
@@ -399,7 +403,7 @@
                            DateUpdate = DateTime.UtcNow,
                            LastBuy = DateTime.UtcNow,
                         },
-                        new ProductStandard
+                        new Product
                         {
                            Name = "Camarón Grillé",
                            Category = categorys[3],
@@ -411,7 +415,7 @@
                            DateUpdate = DateTime.UtcNow,
                            LastBuy = DateTime.UtcNow,
                         },
-                        new ProductStandard
+                        new Product
                         {
                            Name = "Malta Holland",
                            Category = categorys[4],
@@ -423,7 +427,7 @@
                            DateUpdate = DateTime.UtcNow,
                            LastBuy = DateTime.UtcNow,
                         },
-                        new ProductStandard
+                        new Product
                         {
                            Name = "Vino Blanco Constelación",
                            Category = categorys[5],
@@ -435,139 +439,135 @@
                            DateUpdate = DateTime.UtcNow,
                            LastBuy = DateTime.UtcNow,
                         },
+                        new Product
+                        {
+                           Name = "Espaguetti con Jamon",
+                           Category = categorys[7],
+                           Description = "Espagueti con jamón, queso y aceitunas.",
+                           Stock = 80,
+                           IsAvailabe = true,
+                           Price = 130,
+                           DateCreated = DateTime.UtcNow,
+                           DateUpdate = DateTime.UtcNow,
+                           LastBuy = DateTime.UtcNow,
+                        },
+                        new Product
+                        {
+                           Name = "Pizza con Camarones",
+                           Category = categorys[6],
+                           Description = "Esta es la mejor pizza de la casa.",
+                           Stock = 140,
+                           IsAvailabe = true,
+                           Price = 155,
+                           DateCreated = DateTime.UtcNow,
+                           DateUpdate = DateTime.UtcNow,
+                           LastBuy = DateTime.UtcNow,
+                        },
                     };
                     //Agrega las imagenes del producto1(Ensalada Fria)
-                    products_standars[0].ImageProductStandards = new List<ImageProductStandard>
+                    products[0].Images = new List<ImageProduct>
                     {
-                       new ImageProductStandard
+                       new ImageProduct
                        {
-                         Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/entrantes/ensalada_fria1.jpg"),
-  
+                          Image = GetValueResourceFile
+                          .GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageEnsaldadaFria1)
                        },
-                       new ImageProductStandard
+                       new ImageProduct
                        {
-                         Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/entrantes/ensalada_fria2.jpg"),
+                           Image = GetValueResourceFile
+                          .GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageEnsaldadaFria2)
                        }
                     };
                     //Agrega las imagenes del producto2(Coco Glasé)
-                    products_standars[1].ImageProductStandards = new List<ImageProductStandard>
+                    products[1].Images = new List<ImageProduct>
                     {
-                       new ImageProductStandard
+                       new ImageProduct
                        {
-                          Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/postres/coco_glaset1.jpg"),
+                          Image = GetValueResourceFile
+                          .GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageCocoGlaset)
                        },
                     };
                     //Agrega las imagenes del producto3(Bistec de Cerdo)
-                    products_standars[2].ImageProductStandards = new List<ImageProductStandard>
+                    products[2].Images = new List<ImageProduct>
                     {
-                       new ImageProductStandard
+                       new ImageProduct
                        {
-                          Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/platos_principales/bisteccerdo1.jpg"),
+                          Image = GetValueResourceFile
+                          .GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageBistecCerdo1)
                        },
-                       new ImageProductStandard
+                       new ImageProduct
                        {
-                          Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/platos_principales/bisteccerdo2.jpg"),
-                       },
-                       new ImageProductStandard
-                       {
-                          Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/platos_principales/bisteccerdo3.jpg"),
+                          Image = GetValueResourceFile
+                          .GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageBistecCerdo2)
                        },
                     };
                     //Agrega las imagenes del producto4(Camarón Grille)
-                    products_standars[3].ImageProductStandards = new List<ImageProductStandard>
+                    products[3].Images = new List<ImageProduct>
                     {
-                       new ImageProductStandard
+                       new ImageProduct
                        {
-                         
-                         Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/mariscos/camaron_grille1.jpg"),
+                          Image = GetValueResourceFile
+                          .GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageCamaronGrille1)
                        },
-                       new ImageProductStandard
+                       new ImageProduct
                        {
+                          Image = GetValueResourceFile
+                          .GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageCamaronGrille2)
+                       },
+                       new ImageProduct
+                       {
+                          Image = GetValueResourceFile
+                          .GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageCamaronGrille2)
+                       },
 
-                         Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/mariscos/camaron_grille2.jpg"),
-                       },
-                       new ImageProductStandard
-                       {
-
-                         Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/mariscos/camaron_grille3.jpg"),
-                       },
                     };
                     //Agrega las imagenes del producto5(Malta Holland)
-                    products_standars[4].ImageProductStandards = new List<ImageProductStandard>
+                    products[4].Images = new List<ImageProduct>
                     {
-                       new ImageProductStandard
+                       new ImageProduct
                        {
-                           Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/bebidas/malta_holland1.jpg"),
+                          Image = GetValueResourceFile
+                          .GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageMaltaHolland)
                        },
                     };
                     //Agrega las imagenes del producto6(Vino Blanco Constelación)
-                    products_standars[5].ImageProductStandards = new List<ImageProductStandard>
+                    products[5].Images = new List<ImageProduct>
                     {
-                       new ImageProductStandard
+                       new ImageProduct
                        {
-                         Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/vinos_licores/vino_blanco1.jpg"),
-                       },
-                    };
-                    await this._dataContext.ProductsStandards.AddRangeAsync(products_standars).ConfigureAwait(false);
-                    await this._dataContext.SaveChangesAsync().ConfigureAwait(false);
-                }
-                
-                /*Crea 2 productos especiales*/
-                if(!await this._dataContext.ProductsSpecials.AnyAsync().ConfigureAwait(false))
-                {
-                    var product_special = new List<ProductSpecial>
-                    {
-                       new ProductSpecial
-                       {
-                          Name = "Espaguetti con Jamon",
-                          Category = categorys[7],
-                          Description = "Espagueti con jamón, queso y aceitunas.",
-                          Stock = 80,
-                          IsAvailabe = true,
-                          Price = 130,
-                          DateCreated = DateTime.UtcNow,
-                          DateUpdate = DateTime.UtcNow,
-                          LastBuy = DateTime.UtcNow,
-                       },
-                       new ProductSpecial
-                       {
-                          Name = "Pizza con Camarones",
-                          Category = categorys[6],
-                          Description = "Esta es la mejor pizza de la casa.",
-                          Stock = 140,
-                          IsAvailabe = true,
-                          Price = 155,
-                          DateCreated = DateTime.UtcNow,
-                          DateUpdate = DateTime.UtcNow,
-                          LastBuy = DateTime.UtcNow,
+                          Image = GetValueResourceFile
+                          .GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageVinoBlanco)
                        },
                     };
                     //Agrega las imagenes del producto7(Espagatti con jamon)
-                    product_special[0].ImageProductSpecials = new List<ImageProductSpecial>
+                    products[6].Images = new List<ImageProduct>
                     {
-                       new ImageProductSpecial
+                       new ImageProduct
                        {
-                         
-                         Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/pastas/espaguetti_jamon1.jpg"),
+                          Image = GetValueResourceFile
+                          .GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageEspaguettiJamon1)
                        },
-                       new ImageProductSpecial
+                       new ImageProduct
                        {
-                         Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/pastas/espaguetti_jamon2.jpg"),
+                          Image = GetValueResourceFile
+                          .GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageEspaguettiJamon2)
                        },
                     };
                     //Agrega las imagenes del producto8(Pizza con camarones)
-                    product_special[1].ImageProductSpecials = new List<ImageProductSpecial>
+                    products[7].Images = new List<ImageProduct>
                     {
-                       new ImageProductSpecial
+                       new ImageProduct
                        {
-                          Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/pizzas/pizza_camarones1.jpg"),
+                          Image = GetValueResourceFile
+                          .GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImagePizzaCamarones1)
                        },
-                       new ImageProductSpecial
+                       new ImageProduct
                        {
-                         Image = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}/wwwroot/images/images_products/pizzas/pizza_camarones2.jpg"),
+                          Image = GetValueResourceFile
+                          .GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImagePizzaCamarones2)
                        },
                     };
-                    await this._dataContext.ProductsSpecials.AddRangeAsync(product_special).ConfigureAwait(false);
+                    await this._dataContext.Products.AddRangeAsync(products).ConfigureAwait(false);
                     await this._dataContext.SaveChangesAsync().ConfigureAwait(false);
                 }
             }

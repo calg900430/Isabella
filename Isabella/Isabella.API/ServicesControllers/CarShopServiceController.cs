@@ -1,46 +1,51 @@
 ﻿namespace Isabella.API.ServicesControllers
 {
     using System;
-    using System.Threading.Tasks;
-    using System.Linq;
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Microsoft.EntityFrameworkCore;
 
     using Common;
     using Common.Dtos.CarShop;
     using Common.Extras;
     using Common.RepositorysDtos;
-    using RepositorysModels;
-    using Models;
-    using Extras;
+    using Helpers.RepositoryHelpers;
+    using Helpers;
+    using Models.Entities;
+   
 
     /// <summary>
     /// Servicio para el controlador del carrito de compras.
     /// </summary>
     public class CarShopServiceController : ICarShopDto
     {
-        private readonly IProductStandardRepositoryModel _productStandardRepositoryModel;
-        private readonly ICarShopRepositoryModel _carShopRepositoryModel;
-        private readonly ICodeIdentificationModel _verificationCode;
-        private readonly IProductSpecialRepositoryModel _productSpecialRepositoryModel;
-        private readonly IProductAggregateRepositoryModel _productAggregateRepositoryModel;
+
+        private readonly ServiceGenericHelper<CarShop> _serviceGenericCarShopHelper;
+        private readonly ServiceGenericHelper<Product> _serviceGenericProductHelper;
+        private readonly ServiceGenericHelper<Aggregate> _serviceGenericAggregateHelper;
+        private readonly ServiceGenericHelper<CodeIdentification> _serviceGenericCodeIdentificationHelper;
+        private readonly ServiceGenericHelper<CantAggregate> _serviceGenericCantAggregateHelper;
 
         /// <summary>
-        /// Constructor
+        /// Constructor.
         /// </summary>
-        /// <param name="productStandardRepositoryModel"></param>
-        /// <param name="carShopRepositoryModel"></param>
-        /// <param name="verificationCode"></param>
-        /// <param name="productSpecialRepositoryModel"></param>
-        /// <param name="productAggregateRepositoryModel"></param>
-        public CarShopServiceController(IProductStandardRepositoryModel productStandardRepositoryModel,
-        ICarShopRepositoryModel carShopRepositoryModel, ICodeIdentificationModel verificationCode,
-        IProductSpecialRepositoryModel productSpecialRepositoryModel, IProductAggregateRepositoryModel productAggregateRepositoryModel)
+        /// <param name="serviceGenericCarShopHelper"></param>
+        /// <param name="serviceGenericProductHelper"></param>
+        /// <param name="serviceGenericAggregateHelper"></param>
+        /// <param name="serviceGenericCodeIdentificationHelper"></param>
+        /// <param name="serviceGenericCantAggregateHelper"></param>
+        public CarShopServiceController(ServiceGenericHelper<CarShop> serviceGenericCarShopHelper, 
+        ServiceGenericHelper<Product> serviceGenericProductHelper, 
+        ServiceGenericHelper<Aggregate> serviceGenericAggregateHelper,
+        ServiceGenericHelper<CodeIdentification> serviceGenericCodeIdentificationHelper,
+        ServiceGenericHelper<CantAggregate> serviceGenericCantAggregateHelper)
         {
-            this._productStandardRepositoryModel = productStandardRepositoryModel;
-            this._carShopRepositoryModel = carShopRepositoryModel;
-            this._verificationCode = verificationCode;
-            this._productSpecialRepositoryModel = productSpecialRepositoryModel;
-            this._productAggregateRepositoryModel = productAggregateRepositoryModel;
+            this._serviceGenericCarShopHelper = serviceGenericCarShopHelper;
+            this._serviceGenericProductHelper = serviceGenericProductHelper;
+            this._serviceGenericAggregateHelper = serviceGenericAggregateHelper;
+            this._serviceGenericCodeIdentificationHelper = serviceGenericCodeIdentificationHelper;
+            this._serviceGenericCantAggregateHelper = serviceGenericCantAggregateHelper;
         }
 
         /// <summary>
@@ -48,338 +53,201 @@
         /// </summary>
         /// <param name="addProductsToCarShop"></param>
         /// <returns></returns>
-        public async Task<ServiceResponse<bool>> AddProductsToCarShop(AddProductStandardToCarShopDto addProductsToCarShop)
+        public async Task<ServiceResponse<bool>> AddProductsToCarShop(AddProductToCarShopDto addProductsToCarShop)
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
+                //Manejar la cantidad de productos
                 if (addProductsToCarShop == null)
                 {
-                    serviceResponse.Code = CodeMessage.Code.CodeError_NullObjectSend;
+                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeError_NullObjectSend);
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
                     return serviceResponse;
                 }
                 //Verifica si el código de verificación está disponible
-                var codeverification = await this._verificationCode
-                .CheckCodeIdentificationAsync(addProductsToCarShop.Verification)
+                var code_identification = await this._serviceGenericCodeIdentificationHelper
+                .WhereSingleEntityAsync(c => c.Code == addProductsToCarShop.CodeIdentification)
                 .ConfigureAwait(false);
-                if(codeverification == null)
+                if(code_identification == null)
                 {
-                    serviceResponse.Code = CodeMessage.Code.CodeIdentification_NotCode;
+                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.NotCodeIdentification;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeIdentification_NotCode);
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.NotCodeIdentification);
                     return serviceResponse;
                 }
-                //Verifica si el producto standard está disponible 
-                var product = await this._productStandardRepositoryModel
-                .GetProductStandardForIdNotIncludeAsync(addProductsToCarShop.ProductStandardId)
+                //Verifica si el producto está en la base de datos.
+                var product = await this._serviceGenericProductHelper
+                .WhereFirstEntityAsync(c => c.Id == addProductsToCarShop.ProductId)
                 .ConfigureAwait(false);
                 if(product == null)
                 {
-                    serviceResponse.Code = CodeMessage.Code.CodeProduct_NotFound;
+                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ProductNotFound;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeProduct_NotFound);
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotFound);
                     return serviceResponse;
                 }
-                //TODO: Verifica que la cantidad de productos solicitados este disponible
-                //TODO: Verificar que los productos esten disponibles
-                //Agrega un nuevo producto standard al carrito de compras
-                var productstandard_for_carshop = new CarShopProductStandard
+                //TODO: Verificar que el producto este disponible.
+                //TODO: Verifica que la cantidad de productos solicitados este disponibles.
+                //Verifica que los agregados solicitados esten en la base de datos.
+                List<Models.Entities.CantAggregate> cantAggregates = new List<Models.Entities.CantAggregate>();
+                foreach (string key in addProductsToCarShop.CantAggregates.Keys)
+                {      
+                    var aggregate = await this._serviceGenericAggregateHelper
+                    .WhereFirstEntityAsync(c => c.Id == int.Parse(key), c => c.Category)
+                    .ConfigureAwait(false);
+                    if(aggregate == null)
+                    {
+                        serviceResponse.KeyResource = GetValueResourceFile.KeyResource.AggregateNotFound;
+                        serviceResponse.Data = false;
+                        serviceResponse.Success = false;
+                        serviceResponse.Message = GetValueResourceFile
+                        .GetValueResourceString(GetValueResourceFile.KeyResource.AggregateNotFound);
+                        return serviceResponse;
+                    }
+                    //TODO: Verifica que la cantidad de agregados solicitados este disponible
+                    var new_aggregate = new Models.Entities.CantAggregate
+                    {
+                        Aggregate = aggregate,
+                        Price = aggregate.Price,
+                        Quantity = addProductsToCarShop.CantAggregates.GetValueOrDefault(key)
+                    };
+                    cantAggregates.Add(new_aggregate);
+                }
+                //Si el usuario no tiene este producto en el carrito lo agrega
+
+                //Si el usuario tiene el producto en el carrito actualiza suma las cantidades
+                //Agrega un nuevo producto al carrito de compras
+                var new_product_to_carshop = new CarShop
                 {
-                    CodeIdentification = codeverification,
+                    CodeIdentification = code_identification,
                     Price = product.Price,
-                    ProductStandard = product,
+                    Product = product,
                     Quantity = addProductsToCarShop.Quantity,
+                    CantAggregates = cantAggregates.Select(c =>new Models.Entities.CantAggregate 
+                    { 
+                        Aggregate = c.Aggregate,
+                        Price = c.Price,
+                        Quantity =  c.Quantity  
+                    }).ToList(),
+                    CheeseGouda = addProductsToCarShop.ChesseGouda,
                 };
-                await this._carShopRepositoryModel
-                .AddProductsCarShopAsync(productstandard_for_carshop)
+                await this._serviceGenericCarShopHelper
+                .AddEntityAsync(new_product_to_carshop)
                 .ConfigureAwait(false);
-                serviceResponse.Code = CodeMessage.Code.CodeSuccess_Ok;
+                await this._serviceGenericCarShopHelper
+                .SaveChangesBDAsync()
+                .ConfigureAwait(false);
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeSuccess_Ok);
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
             catch(Exception)
             {
-                serviceResponse.Code = CodeMessage.Code.CodeError_Exception;
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeError_Exception);
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
             }
         }
 
-        /// <summary>
-        /// Agrega productos al carrito de compras.
-        /// </summary>
-        /// <param name="addProductsToCarShop"></param>
-        /// <returns></returns>
-        public async Task<ServiceResponse<bool>> AddProductsToCarShop(AddProductSpecialToCarShopDto addProductsToCarShop)
-        {
-            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
-            try
-            {
-                if (addProductsToCarShop == null)
-                {
-                    serviceResponse.Code = CodeMessage.Code.CodeError_NullObjectSend;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeError_NullObjectSend);
-                    return serviceResponse;
-                }
-                //Verifica si el código de verificación está disponible
-                var codeverification = await this._verificationCode
-                .CheckCodeIdentificationAsync(addProductsToCarShop.Verification)
-                .ConfigureAwait(false);
-                if (codeverification == null)
-                {
-                    serviceResponse.Code = CodeMessage.Code.CodeIdentification_NotCode;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeIdentification_NotCode);
-                    return serviceResponse;
-                }
-                //Verifica si el producto standard está disponible 
-                var product = await this._productSpecialRepositoryModel
-                .GetProductSpecialForIdNotIncludeAsync(addProductsToCarShop.ProductSpecialId)
-                .ConfigureAwait(false);
-                if (product == null)
-                {
-                    serviceResponse.Code = CodeMessage.Code.CodeProduct_NotFound;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeProduct_NotFound);
-                    return serviceResponse;
-                }
-                //TODO: Verifica que la cantidad de productos solicitados este disponible
-                //TODO: Verificar que los productos esten disponibles
-                //Verifica que los productos de agregados esten todos disponibles.
-                List<CarShopProductAggregate> productAggregates = new List<CarShopProductAggregate>();
-                if(addProductsToCarShop.CantProductAggregates != null && addProductsToCarShop.CantProductAggregates.Count != 0)
-                {
-                    foreach(CantProductAggregate cantProductAggregate in addProductsToCarShop.CantProductAggregates)
-                    {
-                        var product_aggregate = await this._productAggregateRepositoryModel
-                        .GetProductAggregateForIdNotIncludeAsync(cantProductAggregate.ProductAggregateId)
-                        .ConfigureAwait(false);
-                        if(product_aggregate == null)
-                        {
-                            serviceResponse.Code = CodeMessage.Code.CodeProduct_NotFound;
-                            serviceResponse.Data = false;
-                            serviceResponse.Success = false;
-                            serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeProduct_NotFound);
-                            return serviceResponse;
-                        }
-                        var new_cant_product_aggregate = new CarShopProductAggregate
-                        {
-                            ProductAggregate = product_aggregate,
-                            Quantity = cantProductAggregate.Quantity,
-                            Price = product_aggregate.Price,
-                        };
-                        productAggregates.Add(new_cant_product_aggregate);
-                    }
-                }
-                //Agrega un nuevo producto standard al carrito de compras
-                var productstandard_for_carshop = new CarShopProductSpecial
-                {
-                    CodeIdentification = codeverification,
-                    CarShopProductAggregates = productAggregates.Select(c => new CarShopProductAggregate
-                    {
-                        Price = c.ProductAggregate.Price,
-                        ProductAggregate = c.ProductAggregate,
-                        Quantity = c.Quantity,
-                    }).ToList(),
-                    CheeseGouda = addProductsToCarShop.CheeseGouda,
-                    Price = product.Price,
-                    ProductSpecial = product,
-                    Quantity = addProductsToCarShop.Quantity,
-                };
-                await this._carShopRepositoryModel
-                .AddProductsCarShopAsync(productstandard_for_carshop)
-                .ConfigureAwait(false);
-                serviceResponse.Code = CodeMessage.Code.CodeSuccess_Ok;
-                serviceResponse.Data = true;
-                serviceResponse.Success = true;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeSuccess_Ok);
-                return serviceResponse;
-            }
-            catch (Exception)
-            {
-                serviceResponse.Code = CodeMessage.Code.CodeError_Exception;
-                serviceResponse.Data = false;
-                serviceResponse.Success = false;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeError_Exception);
-                return serviceResponse;
-            }
-        }
-
+     
         /// <summary>
         /// Obtiene el carrito de compras de un usuario.
         /// </summary>
-        /// <param name="CodeVerification"></param>
+        /// <param name="codeIdentification"></param>
         /// <returns></returns>
-        public async Task<ServiceResponse<GetCarShopDto>> GetMyCarShop(Guid CodeVerification)
+        public async Task<ServiceResponse<GetAllPorductOfMyCarShopDto>> GetMyCarShop(Guid codeIdentification)
         {
-            ServiceResponse<GetCarShopDto > serviceResponse = new ServiceResponse<GetCarShopDto>();
+            ServiceResponse<GetAllPorductOfMyCarShopDto> serviceResponse = new ServiceResponse<GetAllPorductOfMyCarShopDto>();
             try
             {
+                //Verifica si el código de identificación está disponible
                 //Verifica si el código de verificación está disponible
-                var codeverification = await this._verificationCode
-                .CheckCodeIdentificationAsync(CodeVerification)
+                var code_identification = await this._serviceGenericCodeIdentificationHelper
+                .WhereSingleEntityAsync(c => c.Code == codeIdentification)
                 .ConfigureAwait(false);
-                if (codeverification == null)
+                if (code_identification == null)
                 {
-                    serviceResponse.Code = CodeMessage.Code.CodeIdentification_NotCode;
+                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.NotCodeIdentification;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeIdentification_NotCode);
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.NotCodeIdentification);
                     return serviceResponse;
                 }
-                //Verifica si hay productos standards
-                var all_product_standars = await this._carShopRepositoryModel
-                .GetMyCarShopProductStandard(codeverification)
+                //Verifica si hay productos en el carrito
+                var all_products = await this._serviceGenericCarShopHelper._context
+                .Include(c => c.Product).ThenInclude(c => c.Category)
+                .Include(c => c.CantAggregates)
+                .ThenInclude(x => x.Aggregate.Category)
+                .Where(c => c.CodeIdentification == code_identification)
+                .ToListAsync()
                 .ConfigureAwait(false);
-                //Verifica si hay productos especiales
-                var all_product_specials = await this._carShopRepositoryModel
-                .GetMyCarShopProductSpecial(codeverification)
-                .ConfigureAwait(false);
-                //Verifica si el usuario tiene productos en su carrito.
-                if(all_product_standars == null && all_product_specials == null)
+                if (all_products == null)
                 {
-                    serviceResponse.Code = CodeMessage.Code.CodeCarShop_NotProducts;
+                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.CarShopNotProducts;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeCarShop_NotProducts);
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.CarShopNotProducts);
                     return serviceResponse;
                 }
-                //EL usuario solicita ambos tipos de productos
-                else if(all_product_specials != null && all_product_standars != null)
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = new GetAllPorductOfMyCarShopDto
                 {
-                    serviceResponse.Code = CodeMessage.Code.CodeSuccess_Ok;
-                    serviceResponse.Data = new GetCarShopDto
-                    {
-                        Verification = codeverification.Code,
-                        CarShopProductStandards = all_product_standars.Select(c => new GetCarShopProductStandard
-                        {
-                            Id = c.Id,
-                            Average = c.ProductStandard.Average,
-                            Category = new Common.Dtos.Category.GetCategoryDto
-                            {
-                                Id = c.ProductStandard.Category.Id,
-                                Name = c.ProductStandard.Category.Name,
-                            },
-                            Price = c.Price,
-                            Quantity = c.Quantity,
-                            Name = c.ProductStandard.Name,
-                        }).ToList(),
-                        CarShopProductSpecial = all_product_specials.Select(c => new GetCarShopProductSpecial
-                        {
-                            Id = c.Id,
-                            Average = c.ProductSpecial.Average,
-                            Category = new Common.Dtos.Category.GetCategoryDto
-                            {
-                                Id = c.ProductSpecial.Category.Id,
-                                Name = c.ProductSpecial.Category.Name,
-                            },
-                            Price = c.Price,
-                            Quantity = c.Quantity,
-                            Name = c.ProductSpecial.Name,
-                            CheeseGouda = c.CheeseGouda,
-                            GetCarShopProductAggregates = c.CarShopProductAggregates.Select(z => new GetCarShopProductAggregate
-                            {
-                                Category = new Common.Dtos.Category.GetCategoryDto
-                                {
-                                    Id = z.ProductAggregate.Category.Id,
-                                    Name = z.ProductAggregate.Category.Name,
-                                },
-                                CarShopProductSpecialId = c.Id,
-                                Id = z.Id,
-                                Name = z.ProductAggregate.Name,
-                                Price = z.Price,
-                                Quantity = z.Quantity
-                            }).ToList()
-                        }).ToList()
-                    };
-                    serviceResponse.Success = true;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeSuccess_Ok);
-                    return serviceResponse;
-                }
-                //El usuario solicita productos standards
-                else if(all_product_standars != null && all_product_specials == null)
-                {
-                    serviceResponse.Code = CodeMessage.Code.CodeSuccess_Ok;
-                    serviceResponse.Data = new GetCarShopDto
-                    {
-                        Verification = codeverification.Code,
-                        CarShopProductStandards = all_product_standars.Select(c => new GetCarShopProductStandard
-                        {
-                            Id = c.Id,
-                            Average = c.ProductStandard.Average,
-                            Category = new Common.Dtos.Category.GetCategoryDto
-                            {
-                                Id = c.ProductStandard.Category.Id,
-                                Name = c.ProductStandard.Category.Name,
-                            },
-                            Price = c.Price,
-                            Quantity = c.Quantity,
-                            Name = c.ProductStandard.Name,
-                        }).ToList(),
-                    };
-                    serviceResponse.Success = true;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeSuccess_Ok);
-                    return serviceResponse;
-                }
-                //El usuario solicita productos especiales
-                else
-                {
-                    serviceResponse.Code = CodeMessage.Code.CodeSuccess_Ok;
-                    serviceResponse.Data = new GetCarShopDto
-                    {
-                        Verification = codeverification.Code,
-                        CarShopProductSpecial = all_product_specials.Select(c => new GetCarShopProductSpecial
-                        {
-                            Id = c.Id,
-                            Average = c.ProductSpecial.Average,
-                            Category = new Common.Dtos.Category.GetCategoryDto
-                            {
-                                Id = c.ProductSpecial.Category.Id,
-                                Name = c.ProductSpecial.Category.Name,
-                            },
-                            Price = c.Price,
-                            Quantity = c.Quantity,
-                            Name = c.ProductSpecial.Name,
-                            CheeseGouda = c.CheeseGouda,
-                            GetCarShopProductAggregates = c.CarShopProductAggregates.Select(z => new GetCarShopProductAggregate
-                            {
-                                Category = new Common.Dtos.Category.GetCategoryDto
-                                {
-                                    Id = z.ProductAggregate.Category.Id,
-                                    Name = z.ProductAggregate.Category.Name,
-                                },
-                                CarShopProductSpecialId = c.Id,
-                                Id = z.Id,
-                                Name = z.ProductAggregate.Name,
-                                Price = z.Price,
-                                Quantity = z.Quantity
-                            }).ToList()
-                        }).ToList()
-                    };
-                    serviceResponse.Success = true;
-                    serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeSuccess_Ok);
-                    return serviceResponse;
-                }
+                    Identification = code_identification.Code,
+                    GetCarShopProducts = all_products.Select(c => new GetCarShopProductDto 
+                    { 
+                       GetProductDto = new Common.Dtos.Product.GetProductDto 
+                       { 
+                          Average = c.Product.Average,
+                          Category = new Common.Dtos.Category.GetCategoryDto
+                          {
+                              Id = c.Product.Category.Id,
+                              Name = c.Product.Category.Name,
+                          },
+                          Description = c.Product.Description,
+                          Name = c.Product.Name,
+                          Id = c.Product.Id,
+                          Price = c.Product.Price
+                       },
+                       CheeseGouda = c.CheeseGouda,
+                       Quantity = c.Quantity,
+                       CantAggregates = c.CantAggregates.Select(x => new GetCantAggregateDto
+                       { 
+                           Category = new Common.Dtos.Category.GetCategoryDto
+                           {
+                              Id = x.Aggregate.Category.Id,
+                              Name = x.Aggregate.Category.Name
+                           },
+                           Id = x.Id,
+                           Price = x.Price,
+                           Name = x.Aggregate.Name,
+                           Quantity = x.Quantity
+                       }).ToList(),
+                    }).ToList(),  
+                };
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
             }
             catch (Exception)
             {
-                serviceResponse.Code = CodeMessage.Code.CodeError_Exception;
+                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
-                serviceResponse.Message = CodeMessage.MessageOfCode(CodeMessage.Code.CodeError_Exception);
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
             }
         }

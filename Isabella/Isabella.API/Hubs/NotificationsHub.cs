@@ -20,13 +20,13 @@
     //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class NotificationsHub : Hub
     {
-        private readonly DicctionaryConnectedHubService _dicctionaryConnectedHubService;
+        private readonly DicctionaryConnectedHub _dicctionaryConnectedHubService;
         private readonly DataContext _dataContext;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public NotificationsHub(DicctionaryConnectedHubService dicctionaryConnectedHubService, DataContext dataContext)
+        public NotificationsHub(DicctionaryConnectedHub dicctionaryConnectedHubService, DataContext dataContext)
         {
             this._dicctionaryConnectedHubService = dicctionaryConnectedHubService;
             this._dataContext = dataContext;
