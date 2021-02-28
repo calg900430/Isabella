@@ -12,14 +12,8 @@
     using Microsoft.AspNetCore.Authentication;
 
     using Common.Dtos.Users;
-    using Common.Extras;
-    using Common.RepositorysDtos;
-    using Common;
-    using Models.Entities;
     using ServicesControllers;
-    using Helpers;
-    using Helpers.RepositoryHelpers;
-
+   
     /// <summary>
     /// Controlador para el servicio de usuarios.
     /// </summary>
@@ -39,18 +33,15 @@
         }
 
         /// <summary>
-        /// Agrega un usuario y le envia un correo con el código de confirmación del registro(Agrega un usuario admin solo, puede hacerlo otro usuario admin).
+        /// Agrega un nuevo usuario y inicialmente le asigna el rol cliente y le envia un correo con el código de confirmación del registro.
         /// </summary>
         /// <param name="newuser"></param>
         /// <returns></returns>
-        [HttpPost("add/new_user")]
+        [HttpPost("add/new_user_client")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(403)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        public async Task<IActionResult> AddUserAsync([FromBody] RegisterUserDto newuser)
+        public async Task<IActionResult> AddUserClientAsync([FromBody] RegisterUserDto newuser)
         {
             try
             {
@@ -59,7 +50,7 @@
                     //Obtiene la dirección Url
                     this._userRepository.Url = Url;
                     this._userRepository.HttpRequest = HttpContext.Request;
-                    var result = await this._userRepository.AddUserAsync(newuser).ConfigureAwait(false);
+                    var result = await this._userRepository.AddUserClientAsync(newuser).ConfigureAwait(false);
                     if(result.Success)
                     return Ok(result);
                     else
@@ -72,6 +63,78 @@
             {
                 return BadRequest(ex.Message);
             } 
+        }
+
+        /// <summary>
+        /// Agrega un nuevo usuario y inicialmente le asigna el role admin y le envia un correo con el código de confirmación del registro.
+        /// </summary>
+        /// <param name="newuser"></param>
+        /// <returns></returns>
+        [HttpPost("add/new_user_admin")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        public async Task<IActionResult> AddUserAdminAsync([FromBody] RegisterUserDto newuser)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    //Obtiene la dirección Url
+                    this._userRepository.Url = Url;
+                    this._userRepository.HttpRequest = HttpContext.Request;
+                    var result = await this._userRepository.AddUserAdminAsync(newuser).ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Agrega un nuevo usuario y inicialmente le asigna el role owner y le envia un correo con el código de confirmación del registro.
+        /// </summary>
+        /// <param name="newuser"></param>
+        /// <returns></returns>
+        [HttpPost("add/new_user_owner")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        public async Task<IActionResult> AddUserOwnerAsync([FromBody] RegisterUserDto newuser)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    //Obtiene la dirección Url
+                    this._userRepository.Url = Url;
+                    this._userRepository.HttpRequest = HttpContext.Request;
+                    var result = await this._userRepository.AddUserOwnerAsync(newuser).ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         /// <summary>
@@ -598,6 +661,356 @@
                 return BadRequest(ex.Message);
             }
 
-        } 
+        }
+
+        /// <summary>
+        /// Elimina el role admin de un usuario.
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        [HttpDelete("delete/role_admin")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        public async Task<IActionResult> DeleteRoleAdminOfUserAsync(int UserId)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._userRepository
+                    .RemoveRoleAdminAsync(UserId)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        /// <summary>
+        /// Elimina el role owner de un usuario.
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        [HttpDelete("delete/role_owner")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        public async Task<IActionResult> DeleteRoleOwnerOfUserAsync(int UserId)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._userRepository
+                    .RemoveRoleOwnerAsync(UserId)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
+        /// <summary>
+        /// Obtiene todos los usuarios clientes.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("get/allusersclients")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        public async Task<IActionResult> GetAllUserClientsAsync()
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._userRepository
+                    .GetAllUserClientAsync()
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todos los usuarios dueños.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("get/allusersowners")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        public async Task<IActionResult> GetAllUserOwnersAsync()
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._userRepository
+                    .GetAllUserOwnerAsync()
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                    return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todos los usuarios con todos sus datos, disponible solo para usuarios admins.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("get/alldata_allusers")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        public async Task<IActionResult> GetAllUserAllDataAsync()
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._userRepository
+                    .GetAllDataOfUserAsync()
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                    return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todos los datos de un usuario, disponible solo para usuarios admins.
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        [HttpGet("get/alldata_user")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        public async Task<IActionResult> GetUserAllDataAsync(int UserId)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._userRepository
+                    .GetAllDataOfOnlyUserAsync(UserId)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                        return Ok(result);
+                    else
+                        return BadRequest(result);
+                }
+                else
+                    return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Asigna el role admin a un usuario.
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        [HttpPost("add/role_admin")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        public async Task<IActionResult> AddRoleAdminAsync(int UserId)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._userRepository
+                    .AssigningRoleAdminToUserAsync(UserId)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Asigna el role owner a un usuario.
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        [HttpPost("add/role_owner")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        public async Task<IActionResult> AddRoleOwnerAsync(int UserId)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._userRepository
+                    .AssigningRoleOwnerToUserAsync(UserId)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Asigna el role client a un usuario.
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        [HttpPost("add/role_client")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        public async Task<IActionResult> AddRoleClientAsync(int UserId)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._userRepository
+                    .AssigningRoleClientToUserAsync(UserId)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Indica si un usuario es baneado o no.
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <param name="banner"></param>
+        /// <returns></returns>
+        [HttpPost("banner_user")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        public async Task<IActionResult> UserBannerUserAsync(int UserId, bool banner)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._userRepository
+                    .BannerUserAsync(UserId, banner)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

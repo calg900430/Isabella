@@ -8,10 +8,9 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
-    using Common.Extras;
     using Models.Entities;
     using Data;
-    using ElementsForResourceFile;
+    using Resources;
 
     /// <summary>
     /// Seeder
@@ -44,12 +43,13 @@
             try
             {
                 //Verifica si el archivo de recursos existe, sino lo manda a generar.
-                var file_exist = File.Exists($"{Directory.GetCurrentDirectory()}//ResourceFile.resources");
+                var path = $"{Directory.GetCurrentDirectory()}//Resources//ResourceFile.resources";
+                var file_exist = File.Exists(path);
                 if (!file_exist)
-                ManagerResourceFile.GenerateResourceFileAsync();
+                CreateResourcesFile.GenerateResourceFileAsync(path);
                 //Borra la base de datos si existe(Esto solo está habilitado en el momento de hacer pruebas, 
                 //cuando todo este listo, debemos comentar esta linea)
-                //await _dataContext.Database.EnsureDeletedAsync().ConfigureAwait(false);
+                await _dataContext.Database.EnsureDeletedAsync().ConfigureAwait(false);
                 //Verifica si existe la base de datos, si no existe la crea.
                 await _dataContext.Database.EnsureCreatedAsync().ConfigureAwait(false);
 
@@ -139,60 +139,38 @@
                     categorys = new List<Category>
                     {
                         new Category
-                        {            
+                        {    
+                           Id = 1,
                            Name = "Entrantes"
                         }, //0-Entrantes
                         new Category
                         {
+                            Id = 2,
+                            Name = "Platos Principales"
+                        }, //1-Platos Principales
+                        new Category
+                        {
+                             Id = 3,
+                             Name = "Pizzas y Pastas"
+                        }, //2-Pizzas y Pastas
+                        new Category
+                        {
+                            Id = 4,
                             Name = "Postres"
-                        }, //1-Postres
+                        }, //3-Postres
                         new Category
                         {
-                             Name = "Platos Principales"
-                        }, //2-Platos Principales
-                        new Category
-                        {
-                           Name = "Mariscos"
-                        }, //3-Mariscos
-                        new Category
-                        {
+                             Id = 5,
                              Name = "Bebidas"
-                        }, //4-Bebidas
-                        new Category
-                        {
-                             Name = "Vinos y Licores"
-                        }, //5-Vinos y Licores
-                        new Category
-                        {
-                             Name = "Pizzas"
-                        }, //6-Pizzas
-                        new Category
-                        {
-                             Name = "Pastas"
-                        }, //7-Pastas
-                        new Category
-                        {
-                             Name = "Quesos"
-                        }, //8-Quesos
-                        new Category
-                        {
-                             Name = "Frutas"
-                        }, //9-Frutas
-                        new Category
-                        {
-                             Name = "Setas"
-                        }, //10-Setas
-                        new Category
-                        {
-                             Name = "Embutidos"
-                        }, //11-Embutidos
-                        new Category
-                        {
-                             Name = "Pescados"
-                        }, //12-Pescados
-                    };
+                        }, //4-Bebidas 
+                    };     
                     await this._dataContext.Categories.AddRangeAsync(categorys).ConfigureAwait(false);
+                    //Habilita la inserción de datos de forma explicita.
+                    await this._dataContext.Database.OpenConnectionAsync().ConfigureAwait(false);
+                    await this._dataContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT Categories ON").ConfigureAwait(false);
                     await this._dataContext.SaveChangesAsync().ConfigureAwait(false);
+                    await this._dataContext.Database.ExecuteSqlRawAsync("SET IDENTITY_INSERT Categories OFF").ConfigureAwait(false);
+                    await this._dataContext.Database.CloseConnectionAsync().ConfigureAwait(false);
                 }
 
                 /*Crea 8 agregados*/
@@ -203,7 +181,6 @@
                         new Aggregate
                         {
                             Name = "Queso",
-                            Category = categorys[8],
                             DateCreated = DateTime.UtcNow,
                             DateUpdate = DateTime.UtcNow,
                             Description = "Queso blanco de excelente calidad",
@@ -215,11 +192,10 @@
                         new Aggregate     //1-Queso Gouda
                         {
                             Name = "Queso Gouda",
-                            Category = categorys[8],
                             DateCreated = DateTime.UtcNow,
                             DateUpdate = DateTime.UtcNow,
                             Description = "Queso Gouda de importación.",
-                            IsAvailabe = true,
+                            IsAvailabe = false,
                             LastBuy = DateTime.UtcNow,
                             Price = 45,
                             Stock = 150,
@@ -227,7 +203,6 @@
                         new Aggregate
                         {
                             Name = "Jamón",
-                            Category = categorys[11],
                             DateCreated = DateTime.UtcNow,
                             DateUpdate = DateTime.UtcNow,
                             Description = "Jamón de excelente calidad.",
@@ -239,7 +214,6 @@
                         new Aggregate
                         {
                             Name = "Chorizo",
-                            Category = categorys[11],
                             DateCreated = DateTime.UtcNow,
                             DateUpdate = DateTime.UtcNow,
                             Description = "Chorizo de excelente calidad.",
@@ -251,7 +225,6 @@
                         new Aggregate
                         {
                             Name = "Aceitunas",
-                            Category = categorys[9],
                             DateCreated = DateTime.UtcNow,
                             DateUpdate = DateTime.UtcNow,
                             Description = "Aceitunas de Goya.",
@@ -263,11 +236,10 @@
                         new Aggregate
                         {
                             Name = "Champiñón",
-                            Category = categorys[10],
                             DateCreated = DateTime.UtcNow,
                             DateUpdate = DateTime.UtcNow,
                             Description = "Champiñón de importación.",
-                            IsAvailabe = true,
+                            IsAvailabe = false,
                             LastBuy = DateTime.UtcNow,
                             Price = 40,
                             Stock = 250,
@@ -275,7 +247,6 @@
                         new Aggregate
                         {
                             Name = "Atún",
-                            Category = categorys[12],
                             DateCreated = DateTime.UtcNow,
                             DateUpdate = DateTime.UtcNow,
                             Description = "Atún de excelente calidad.",
@@ -287,7 +258,6 @@
                         new Aggregate
                         {
                             Name = "Camarón",
-                            Category = categorys[3],
                             DateCreated = DateTime.UtcNow,
                             DateUpdate = DateTime.UtcNow,
                             Description = "Camarón de producción nacional.",
@@ -298,13 +268,13 @@
                         }, //7-Camarón
                     };
                     //Asigna las imagenes a los agregos
-                    /*products_agregate[0].Images = new List<ImageAggregate>
+                    products_agregate[0].Images = new List<ImageAggregate>
                     {
                        new ImageAggregate
                        {
                            Image = GetValueResourceFile.GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageQuesoBlanco)
                        },
-                    };*/
+                    };
                     products_agregate[1].Images = new List<ImageAggregate>
                     {
                        new ImageAggregate
@@ -366,7 +336,6 @@
                 {
                     var products = new List<Product>
                     {
-                        //Entrantes
                         new Product
                         {
                            Name = "Ensalda Fría",
@@ -382,10 +351,10 @@
                         new Product
                          {
                            Name = "Coco Glasé",
-                           Category = categorys[1],
+                           Category = categorys[3],
                            Description = "Excelente postre de coco.",
                            Stock = 65,
-                           IsAvailabe = true,
+                           IsAvailabe = false,
                            Price = 120,
                            DateCreated = DateTime.UtcNow,
                            DateUpdate = DateTime.UtcNow,
@@ -394,7 +363,7 @@
                         new Product
                         {
                            Name = "Bistec de Cerdo",
-                           Category = categorys[2],
+                           Category = categorys[1],
                            Description = "Bistec de Cerdo, un plato recomendado por la casa.",
                            Stock = 150,
                            IsAvailabe = true,
@@ -406,7 +375,7 @@
                         new Product
                         {
                            Name = "Camarón Grillé",
-                           Category = categorys[3],
+                           Category = categorys[1],
                            Description = "Excelente variante de camarones, recomendado por la casa.",
                            Stock = 180,
                            IsAvailabe = true,
@@ -430,7 +399,7 @@
                         new Product
                         {
                            Name = "Vino Blanco Constelación",
-                           Category = categorys[5],
+                           Category = categorys[4],
                            Description = "Vino recomendado para cenas especiales.",
                            Stock = 240,
                            IsAvailabe = true,
@@ -442,7 +411,7 @@
                         new Product
                         {
                            Name = "Espaguetti con Jamon",
-                           Category = categorys[7],
+                           Category = categorys[2],
                            Description = "Espagueti con jamón, queso y aceitunas.",
                            Stock = 80,
                            IsAvailabe = true,
@@ -454,10 +423,10 @@
                         new Product
                         {
                            Name = "Pizza con Camarones",
-                           Category = categorys[6],
+                           Category = categorys[2],
                            Description = "Esta es la mejor pizza de la casa.",
                            Stock = 140,
-                           IsAvailabe = true,
+                           IsAvailabe = false,
                            Price = 155,
                            DateCreated = DateTime.UtcNow,
                            DateUpdate = DateTime.UtcNow,

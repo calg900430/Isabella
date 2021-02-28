@@ -83,5 +83,10 @@
         /// Promedio de calificaciones del usuario acerca del producto.
         /// </summary>
         public float Average { get; set; }
+
+        /// <summary>
+        /// Indica si el producto se le puede incluir agregados.
+        /// </summary>
+        public bool SupportAggregate { get; set; }
     }
 }

@@ -4,8 +4,8 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    using Common.Extras;
-    using Models;
+    using Common;
+    using Models.Entities;
 
     /// <summary>
     /// Entidad que representa la calificación del Cliente acerca del restaurante
@@ -31,7 +31,7 @@
         /// <summary>
         /// Calificación del cliente acerca del Producto(1-5 Estrellas)
         /// </summary>
-        public EnumCalification Calification { get; set; }
+        public CommonConstants.EnumCalification Calification { get; set; }
 
         /// <summary>
         /// Opinión del cliente acerca del Producto

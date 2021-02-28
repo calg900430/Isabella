@@ -35,6 +35,12 @@
         public Task<string> GenerateTokenForConfirmRegisterAsync(User user);
 
         /// <summary>
+        /// Obtiene el Id del último usuario registrado.
+        /// </summary>
+        /// <returns></returns>
+        public Task<int> GetIdOfLastUserAsync();
+
+        /// <summary>
         /// Verifica si existe el role en el sistema.
         /// </summary>
         /// <param name="role"></param>
@@ -56,10 +62,12 @@
         public Task<bool> VerifyUserNameAsync(string userName);
 
         /// <summary>
-        /// Obtiene el Id del último usuario registrado en el sistema.
+        /// Elimina un role especifico de un usuario.
         /// </summary>
+        /// <param name="user"></param>
+        /// <param name="role"></param>
         /// <returns></returns>
-        public Task<int> GetIdOfLastUserAsync();
+        public Task<bool> RemoveRoleOfUserAsync(User user, string role);
 
         /// <summary>
         /// Obtiene un usuario dada su cuenta de usuario.
@@ -164,5 +172,20 @@
         /// <param name="newPassword"></param>
         /// <returns></returns>
         public Task<bool> RecoverPasswwordUserAsync(User user, string Token, string newPassword);
+
+        /// <summary>
+        /// Verifica si un usuario tiene un role determinado.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        public Task<bool> VerifyRoleInUserAsync(User user, string role);
+
+        /// <summary>
+        /// Obtiene todos los roles que posee un usuario.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public Task<List<string>> GetAllRoleOfUserAsync(User user);
     }
 }

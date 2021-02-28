@@ -18,11 +18,6 @@
         public int Id { get; set; }
 
         /// <summary>
-        /// Categoria del agregado.
-        /// </summary>
-        public Category Category { get; set; }
-
-        /// <summary>
         /// Imagenes para los productos. 
         /// </summary>
         public ICollection<ImageAggregate> Images { get; set; }

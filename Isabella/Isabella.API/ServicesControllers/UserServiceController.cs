@@ -1,24 +1,24 @@
 ﻿namespace Isabella.API.ServicesControllers
 {
     using System;
-    using System.Linq;
-    using System.IO;
     using System.Collections.Generic;
-    using System.Threading.Tasks;
+    using System.IO;
+    using System.Linq;
     using System.Security.Claims;
-    using Microsoft.AspNetCore.Http;
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Authorization;
 
+    using Models.Entities;
     using Common;
     using Common.Dtos.Users;
     using Common.RepositorysDtos;
-    using Isabella.Common.Extras;
-    using Models.Entities;
-    using Helpers.RepositoryHelpers;
     using Helpers;
-    
+    using Helpers.RepositoryHelpers;
+    using Isabella.API.Resources;
+    using Resources;
+
     /// <summary>
     /// Servicio para el controlador de los usuarios.
     /// </summary>
@@ -27,6 +27,8 @@
         private readonly IUserRepositoryHelper _userService;
         private readonly MailHelper _mailHelper;
         private readonly ServiceGenericHelper<User> _serviceGenericUserHelper;
+        private readonly ServiceGenericHelper<UserClient> _serviceGenericUserClientHelper;
+        private readonly ServiceGenericHelper<UserOwner> _serviceGenericUserOwnerHelper;
 
         /// <summary>
         /// Claims del usuario.
@@ -43,136 +45,160 @@
         /// </summary>
         public HttpRequest HttpRequest { get; set; }
 
+     
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="userRepository"></param>
         /// <param name="mailHelper"></param>
         /// <param name="serviceGenericUserHelper"></param>
+        /// <param name="serviceGenericUserClientHelper"></param>
+        /// <param name="serviceGenericUserOwnerHelper"></param>
         public UserServiceController(IUserRepositoryHelper userRepository, MailHelper mailHelper,
-        ServiceGenericHelper<User> serviceGenericUserHelper)
+        ServiceGenericHelper<User> serviceGenericUserHelper, 
+        ServiceGenericHelper<UserClient> serviceGenericUserClientHelper, 
+        ServiceGenericHelper<UserOwner> serviceGenericUserOwnerHelper)
         {
             this._userService = userRepository;
             this._mailHelper = mailHelper;
             this._serviceGenericUserHelper = serviceGenericUserHelper;
+            this._serviceGenericUserClientHelper = serviceGenericUserClientHelper;
+            this._serviceGenericUserOwnerHelper = serviceGenericUserOwnerHelper;
         }
 
         /// <summary>
-        /// Agrega un nuevo usuario a la base de datos.
+        /// Agrega un nuevo usuario admin a la base de datos.
         /// </summary>
         /// <param name="newuser"></param>
         /// <returns></returns>
-        public async Task<ServiceResponse<bool>> AddUserAsync(RegisterUserDto newuser)
+        public async Task<ServiceResponse<bool>> AddUserAdminAsync(RegisterUserDto newuser)
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
-                //Verifica que los datos enviados por el usuario sean correctos.
-                if (newuser == null)
+                var result = await AddUserWithRole(newuser, Constants.RolesOfSystem[0]).ConfigureAwait(false);
+                if (result.Success)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
+                    serviceResponse.Code = result.Code;
+                    serviceResponse.Data = true;
+                    serviceResponse.Success = true;
+                    serviceResponse.Message = result.Message;
                     return serviceResponse;
                 }
-                //Verifica si el role(admin en este caso) que se desea dar al usuario está disponible en la base de datos.
-                var role_existing = await this._userService.VerifyRoleAsync(Constants.RolesOfSystem[0]).ConfigureAwait(false);
-                if (role_existing == false)
+                else
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.BadRole;
+                    serviceResponse.Code = result.Code;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile
-                    .GetValueResourceString(GetValueResourceFile.KeyResource.BadRole);
+                    serviceResponse.Message = result.Message;
                     return serviceResponse;
                 }
-                //Verifica que el email dado no este en uso.
-                var email_existing = await this._userService.VerifyEmailAsync(newuser.Email).ConfigureAwait(false);
-                if (email_existing)
-                {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.BadEmail;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.BadEmail);
-                    return serviceResponse;
-                }
-                //Verifica que la cuenta de usuario dada no este disponible, que es lo mismo que el email.
-                var username_existing = await this._userService.VerifyUserNameAsync(newuser.Email).ConfigureAwait(false);
-                if (username_existing)
-                {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.BadEmail;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.BadEmail);
-                    return serviceResponse;
-                }
-                //Crea el nuevo usuario con los parametros especificados por el usuario(Mapea de RegisterUserDto a User)
-                var new_registeruser = new User
-                {
-                    Email = newuser.Email,
-                    UserName = newuser.Email,
-                    DateCreated = DateTime.UtcNow,
-                    DateUpdated = DateTime.UtcNow,
-                    LastDateConnected = DateTime.UtcNow,
-                    IdForClaim = Guid.NewGuid(),
-                    RecoverPassword = false,
-                    EmailConfirmed = false,
-                };
-                //Guarda el usuario con una contraseña definida.
-                var user = await this._userService.AddUserAsync(new_registeruser, newuser.Password).ConfigureAwait(false);
-                if (user == null)
-                {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity);
-                    return serviceResponse;
-                }
-                //Asigna el role al usuario
-                var role = await this._userService.AddRoleForUserAsync(user, Constants.RolesOfSystem[0]).ConfigureAwait(false);
-                if (!role)
-                {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity);
-                    return serviceResponse;
-                }
-                //Obtiene el Token de confirmación de registro del usuario.
-                var token = await this._userService.GenerateTokenForConfirmRegisterAsync(user).ConfigureAwait(false);
-                //Crea un Link que contiene el Token de confirmación.
-                var tokenLink = this.Url.Action("ConfirmRegisterUserAsync", "Users", new
-                {  
-                   userid = user.Id,
-                   token = token,
-                }, protocol: HttpRequest.Scheme); 
-                var body_message = $"<h1>Email Confirmation</h1>" +
-                 "Hello you have registered in the Isabella application," +
-                 $"to allow the user, plase click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>";
-                //Envia un correo al usuario con el código de verificación.
-                var send_mail = this._mailHelper.SendMail(user.Email, "Email confirmation", body_message);
-                if (!send_mail)
-                {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EmailNotSend;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EmailNotSend);
-                    return serviceResponse;
-                }
-                //Mapea de User a GetUserDto
-                serviceResponse.Data = true;
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EmailRegisterConfirmation;
-                serviceResponse.Success = true;
-                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EmailRegisterConfirmation);
-                return serviceResponse;
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int) GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
-                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Agrega un nuevo usuario dueño a la base de datos.
+        /// </summary>
+        /// <param name="newuser"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<bool>> AddUserOwnerAsync(RegisterUserDto newuser)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            try
+            {
+                var result = await AddUserWithRole(newuser, Constants.RolesOfSystem[1]).ConfigureAwait(false);
+                if (result.Success == true && result.Data != null)
+                {
+                    //Agrega el usuario al grupo de usuarios owner
+                    var user_owner = new UserOwner
+                    {
+                        User = result.Data
+                    };
+                    await this._serviceGenericUserOwnerHelper
+                    .AddEntityAsync(user_owner)
+                    .ConfigureAwait(false);
+                    await this._serviceGenericUserOwnerHelper
+                    .SaveChangesBDAsync().ConfigureAwait(false);
+                    serviceResponse.Code = result.Code;
+                    serviceResponse.Data = true;
+                    serviceResponse.Success = true;
+                    serviceResponse.Message = result.Message;
+                    return serviceResponse;
+                }
+                else
+                {
+                    serviceResponse.Code = result.Code;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = result.Message;
+                    return serviceResponse;
+                }
+            }
+            catch
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = false;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Agrega un nuevo usuario cliente a la base de datos.
+        /// </summary>
+        /// <param name="newuser"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<bool>> AddUserClientAsync(RegisterUserDto newuser)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            try
+            {
+                var result = await AddUserWithRole(newuser, Constants.RolesOfSystem[2]).ConfigureAwait(false);
+                if (result.Success == true && result.Data != null)
+                {
+                    //Agrega el usuario al grupo de usuarios clients
+                    var user_client = new UserClient
+                    {
+                        User = result.Data
+                    };
+                    await this._serviceGenericUserClientHelper
+                    .AddEntityAsync(user_client)
+                    .ConfigureAwait(false);
+                    await this._serviceGenericUserClientHelper
+                    .SaveChangesBDAsync().ConfigureAwait(false);
+                    serviceResponse.Code = result.Code;
+                    serviceResponse.Data = true;
+                    serviceResponse.Success = true;
+                    serviceResponse.Message = result.Message;
+                    return serviceResponse;
+                }
+                else
+                {
+                    serviceResponse.Code = result.Code;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = result.Message;
+                    return serviceResponse;
+                }
+            }
+            catch
+            {
+                serviceResponse.Code =(int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = false;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
             }
         }
@@ -192,7 +218,7 @@
                 var user = await this._userService.GetUserByIdAsync(int.Parse(Id)).ConfigureAwait(false);
                 if (user == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
@@ -202,7 +228,7 @@
                 var verify_confirm_register = await this._userService.VerifyConfirmRegisterUserAsync(user).ConfigureAwait(false);
                 if (verify_confirm_register)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.UserConfirmRegister;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserConfirmRegister;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.UserConfirmRegister);
@@ -213,12 +239,12 @@
                 if (confirm_register == false)
                 {
                     serviceResponse.Data = false;
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.TokeConfirmRegisterBad;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.TokeConfirmRegisterBad;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.TokeConfirmRegisterBad);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -226,7 +252,7 @@
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -246,7 +272,7 @@
                 var list_users = await this._userService.GetAllUserAsync().ConfigureAwait(false);
                 if (list_users == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.UserAllNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserAllNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.UserAllNotFound);
@@ -262,14 +288,14 @@
                     PhoneNumber = c.PhoneNumber,
                     ImageUserProfile = c.ImageUserProfile,
                 }).ToList();
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;    
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -289,13 +315,13 @@
                 var Id = await this._userService.GetIdOfLastUserAsync().ConfigureAwait(false);
                 if (Id == -1)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.UserAllNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserAllNotFound;
                     serviceResponse.Data = -1;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.UserAllNotFound);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = Id;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -304,7 +330,7 @@
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int) GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = -1;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -325,13 +351,13 @@
                 var user = await this._userService.GetUserByIdAsync(UserId).ConfigureAwait(false);
                 if (user == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 //Mapea de User a GetUserDto.
                 serviceResponse.Data = new GetUserDto
                 {
@@ -348,7 +374,7 @@
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -369,13 +395,13 @@
                 var user = await this._userService.GetUserByUserNameAsync(UserName).ConfigureAwait(false);
                 if (user == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 //Mapea de User a GetUserDto.
                 serviceResponse.Data = new GetUserDto
                 {
@@ -392,7 +418,7 @@
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -413,13 +439,13 @@
                 var user = await this._userService.GetUserByEmailAsync(Email).ConfigureAwait(false);
                 if (user == null)
                 {
-                   serviceResponse.KeyResource = GetValueResourceFile.KeyResource.UserNotFound;
+                   serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
                    serviceResponse.Data = null;
                    serviceResponse.Success = false;
                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
                    return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 //Mapea de User a GetUserDto.
                 serviceResponse.Data = new GetUserDto
                 {
@@ -436,7 +462,7 @@
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -457,7 +483,7 @@
                 //Verifica que los datos enviados por el usuario sean correctos.
                 if (loginUser == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
@@ -466,7 +492,7 @@
                 if (loginUser.Email == null || loginUser.Email == string.Empty)
                 {
                     serviceResponse.Data = null;
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.RequiredEmailOfUser;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.RequiredEmailOfUser;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.RequiredEmailOfUser);
                     return serviceResponse;
@@ -475,10 +501,10 @@
                 var user = await this._userService.GetUserByEmailAsync(loginUser.Email).ConfigureAwait(false);
                 if (user == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.VerifyPasswordAndEmail;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.VerifyPasswordAndEmail);
                     return serviceResponse;
                 }
                 //Verifica que el usuario haya confirmado el registro anteriormente.
@@ -486,7 +512,7 @@
                 if (!confirm_register)
                 {
                     serviceResponse.Data = null;
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.NotConfirmRegister;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.NotConfirmRegister;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.NotConfirmRegister);
                     return serviceResponse;
@@ -495,7 +521,7 @@
                 var password_correct = await this._userService.VerifyPasswordUserAsync(user, loginUser.Password).ConfigureAwait(false);
                 if (!password_correct)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.VerifyPasswordAndEmail;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.VerifyPasswordAndEmail;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.VerifyPasswordAndEmail);
@@ -505,7 +531,7 @@
                 var token_datetime_expires = await this._userService.CreateTokenAsync(user).ConfigureAwait(false);
                 if (token_datetime_expires.Item1 == null || token_datetime_expires.Item2 == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ErrorGenerateToken;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorGenerateToken;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ErrorGenerateToken);
@@ -523,16 +549,17 @@
                     DateExpirationToken = token_datetime_expires.Item1,
                     Token = token_datetime_expires.Item2,
                     Email = user.Email,
+                    RolesOfUsers = await this._userService.GetAllRoleOfUserAsync(user).ConfigureAwait(false),
                 };
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.LoginUserSuccess;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.LoginUserSuccess;
                 serviceResponse.Data = getdatauserlogin;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.LoginUserSuccess);
                 return serviceResponse;
             }
-            catch
+            catch(Exception ex)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -554,7 +581,7 @@
                 if (CantUsers < 1)
                 {
                     serviceResponse.Data = null;
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.CantIsNegative;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CantIsNegative;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
                     return serviceResponse;
@@ -565,7 +592,7 @@
                 .ConfigureAwait(false);
                 if (user == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -576,7 +603,7 @@
                 .ConfigureAwait(false);
                 if (all_cant_user == null || all_cant_user.Count <= 0)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.UserNotNew;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotNew;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -592,14 +619,14 @@
                     LastName = c.LastName,
                     PhoneNumber = c.PhoneNumber,
                 }).ToList();
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -619,7 +646,7 @@
                 if (resetPassword == null)
                 {
                     serviceResponse.Data = false;
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
                     return serviceResponse;
@@ -627,7 +654,7 @@
                 var user = await this._userService.GetUserByEmailAsync(resetPassword.Email).ConfigureAwait(false);
                 if (user == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
@@ -649,21 +676,21 @@
                 var send_mail = this._mailHelper.SendMail(user.Email, "Email confirmation", body_message);
                 if (!send_mail)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EmailNotSend;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EmailNotSend;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EmailNotSend);
                     return serviceResponse;
                 }
                 serviceResponse.Data = true;
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.CodeRecoverPassword;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CodeRecoverPassword;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CodeRecoverPassword);
                 return serviceResponse;
             }
             catch(Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -684,7 +711,7 @@
                 if (sendToNewCodeConfirmationRegister == null)
                 {
                     serviceResponse.Data = false;
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
                     return serviceResponse;
@@ -693,7 +720,7 @@
                 var user = await this._userService.GetUserByEmailAsync(sendToNewCodeConfirmationRegister.Email).ConfigureAwait(false);
                 if (user == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
@@ -703,7 +730,7 @@
                 var verify_confirm_register = await this._userService.VerifyConfirmRegisterUserAsync(user).ConfigureAwait(false);
                 if (verify_confirm_register)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.UserConfirmRegister;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserConfirmRegister;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.UserConfirmRegister);
@@ -724,13 +751,13 @@
                 var send_mail = this._mailHelper.SendMail(user.Email, "Email confirmation", body_message);
                 if (!send_mail)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EmailNotSend;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EmailNotSend;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EmailNotSend);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EmailRegisterConfirmation;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EmailRegisterConfirmation;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EmailRegisterConfirmation);
@@ -738,7 +765,7 @@
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -762,7 +789,7 @@
                 var user = await this._userService.GetUserByIdAsync(int.Parse(Id)).ConfigureAwait(false);
                 if (user == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
@@ -775,20 +802,20 @@
                 if (!recover_password)
                 {
                     serviceResponse.Data = false;
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.TokeConfirmRegisterBad;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.TokeConfirmRegisterBad;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.TokeConfirmRegisterBad);
                     return serviceResponse;
                 }
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -820,6 +847,125 @@
         => await ExecuteUpdatePasswordAsync(changePassword, ClaimsPrincipal).ConfigureAwait(false);
 
         /// <summary>
+        /// Agrega un usuario al sistema y le asigna un role
+        /// </summary>
+        /// <param name="newuser"></param>
+        /// <param name="role_user"></param>
+        /// <returns></returns>
+        private async Task<ServiceResponse<User>> AddUserWithRole(RegisterUserDto newuser, string role_user)
+        {
+            ServiceResponse<User> serviceResponse = new ServiceResponse<User>();
+            try
+            {
+                //Verifica que los datos enviados por el usuario sean correctos.
+                if (newuser == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
+                    return serviceResponse;
+                }
+                //Verifica si el role(admin en este caso) que se desea dar al usuario está disponible en la base de datos.
+                var role_existing = await this._userService.VerifyRoleAsync(role_user).ConfigureAwait(false);
+                if (role_existing == false)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.BadRole;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.BadRole);
+                    return serviceResponse;
+                }
+                //Verifica que el email dado no este en uso.
+                var email_existing = await this._userService.VerifyEmailAsync(newuser.Email).ConfigureAwait(false);
+                if (email_existing)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.BadEmail;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.BadEmail);
+                    return serviceResponse;
+                }
+                //Verifica que la cuenta de usuario dada no este disponible, que es lo mismo que el email.
+                var username_existing = await this._userService.VerifyUserNameAsync(newuser.Email).ConfigureAwait(false);
+                if (username_existing)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.BadEmail;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.BadEmail);
+                    return serviceResponse;
+                }
+                //Crea el nuevo usuario con los parametros especificados por el usuario(Mapea de RegisterUserDto a User)
+                var new_registeruser = new User
+                {
+                    Email = newuser.Email,
+                    UserName = newuser.Email,
+                    DateCreated = DateTime.UtcNow,
+                    DateUpdated = DateTime.UtcNow,
+                    LastDateConnected = DateTime.UtcNow,
+                    IdForClaim = Guid.NewGuid(),
+                    EmailConfirmed = false,
+                };
+                //Guarda el usuario con una contraseña definida.
+                var user = await this._userService.AddUserAsync(new_registeruser, newuser.Password).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity);
+                    return serviceResponse;
+                }
+                //Asigna el role al usuario
+                var role = await this._userService.AddRoleForUserAsync(user, role_user).ConfigureAwait(false);
+                if (!role)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity);
+                    return serviceResponse;
+                }
+                //Obtiene el Token de confirmación de registro del usuario.
+                var token = await this._userService.GenerateTokenForConfirmRegisterAsync(user).ConfigureAwait(false);
+                //Crea un Link que contiene el Token de confirmación.
+                var tokenLink = this.Url.Action("ConfirmRegisterUserAsync", "Users", new
+                {
+                    userid = user.Id,
+                    token = token,
+                }, protocol: HttpRequest.Scheme);
+                var body_message = $"<h1>Email Confirmation</h1>" +
+                 "Hello you have registered in the Isabella application," +
+                 $"to allow the user, plase click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>";
+                //Envia un correo al usuario con el código de verificación.
+                var send_mail = this._mailHelper.SendMail(user.Email, "Email confirmation", body_message);
+                if (!send_mail)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EmailNotSend;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EmailNotSend);
+                    return serviceResponse;
+                }
+                serviceResponse.Data = user;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EmailRegisterConfirmation;
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EmailRegisterConfirmation);
+                return serviceResponse;
+            }
+            catch
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
         /// Borra la imagen de perfil del usuario.
         /// </summary>
         /// <param name="claimsPrincipal"></param>
@@ -832,7 +978,7 @@
                 var userName = claimsPrincipal.Identity.Name;
                 if(userName == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ErrorGetCredentialsUser);
@@ -842,7 +988,7 @@
                 var user = await this._userService.GetUserByUserNameAsync(userName).ConfigureAwait(false);
                 if (user == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
@@ -851,13 +997,13 @@
                 var delete_image = await this._userService.DeleteImageProfileUserAsync(user).ConfigureAwait(false);
                 if (!delete_image)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -865,7 +1011,7 @@
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -888,7 +1034,7 @@
                 if (updateUser == null)
                 {
                     serviceResponse.Data = null;
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
                     return serviceResponse;
@@ -898,7 +1044,7 @@
                 {
                     if (updateUser.ImageProfile.Length <= 0)
                     {
-                        serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ImageErrorValue;
+                        serviceResponse.Code = (int) GetValueResourceFile.KeyResource.ImageErrorValue;
                         serviceResponse.Data = null;
                         serviceResponse.Success = false;
                         serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ImageErrorValue);
@@ -906,7 +1052,7 @@
                     }
                     if (updateUser.ImageProfile.Length > Constants.MAX_LENTHG_IMAGE_PROFILE_USER)
                     {
-                        serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ImageUserNotValide;
+                        serviceResponse.Code = (int) GetValueResourceFile.KeyResource.ImageUserNotValide;
                         serviceResponse.Data = null;
                         serviceResponse.Success = false;
                         serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ImageUserNotValide);
@@ -916,7 +1062,7 @@
                 var userName = claimsPrincipal.Identity.Name;
                 if (userName == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ErrorGetCredentialsUser);
@@ -926,7 +1072,7 @@
                 var user = await this._userService.GetUserByUserNameAsync(userName).ConfigureAwait(false);
                 if (user == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
@@ -948,13 +1094,13 @@
                 var user_update = await this._userService.UpdateUserAsync(user).ConfigureAwait(false);
                 if (user_update == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = new GetUserDto
                 {
                     Address = user_update.Address,
@@ -970,7 +1116,7 @@
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -993,7 +1139,7 @@
                 if (changePassword == null)
                 {
                     serviceResponse.Data = false;
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
                     return serviceResponse;
@@ -1002,7 +1148,7 @@
                 var userName = claimsPrincipal.Identity.Name;
                 if (userName == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ErrorGetCredentialsUser);
@@ -1012,7 +1158,7 @@
                 var user = await this._userService.GetUserByUserNameAsync(userName).ConfigureAwait(false);
                 if (user == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
@@ -1022,7 +1168,7 @@
                 var verify_password = await this._userService.VerifyPasswordUserAsync(user, changePassword.PasswordOld).ConfigureAwait(false);
                 if (!verify_password)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.PasswordNotCorrect;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.PasswordNotCorrect;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.PasswordNotCorrect);
@@ -1032,13 +1178,13 @@
                 var change_password_correct = await this._userService.UpdatePasswordAsync(user, changePassword.PasswordOld, changePassword.PasswordNew).ConfigureAwait(false);
                 if (!change_password_correct)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -1046,7 +1192,7 @@
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -1068,7 +1214,7 @@
                 //Verifica que la imagen, cumpla con los reguerimientos para poderla almacenar en la base de datos.
                 if (formFile == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
@@ -1076,7 +1222,7 @@
                 }
                 if (formFile.Length <= 0)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
@@ -1084,7 +1230,7 @@
                 }
                 if (formFile.Length > Constants.MAX_LENTHG_IMAGE_PROFILE_USER)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ImageUserNotValide;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImageUserNotValide;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ImageUserNotValide);
@@ -1094,7 +1240,7 @@
                 var userName = claimsPrincipal.Identity.Name;
                 if (userName == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ErrorGetCredentialsUser);
@@ -1104,7 +1250,7 @@
                 var user = await this._userService.GetUserByUserNameAsync(userName).ConfigureAwait(false);
                 if (user == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
@@ -1132,13 +1278,13 @@
                 File.Delete(path);
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -1255,5 +1401,419 @@
             }
         }
 
+        /// <summary>
+        /// Obtiene todos los usuarios clientes.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ServiceResponse<List<GetUserDto>>> GetAllUserClientAsync()
+        {
+            ServiceResponse<List<GetUserDto>> serviceResponse = new ServiceResponse<List<GetUserDto>>();
+            try
+            {
+                var all_users_clients = await this._serviceGenericUserClientHelper
+                .GetLoadAsync(c => c.User)
+                .ConfigureAwait(false);
+                if(all_users_clients == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.NotUsersClient;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.NotUsersClient);
+                    return serviceResponse;
+                }
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = all_users_clients.Select(c => new GetUserDto
+                {
+                    Address = c.User.Address,
+                    FirstName = c.User.FirstName,
+                    Id = c.Id,
+                    ImageUserProfile = c.User.ImageUserProfile,
+                    LastName = c.User.LastName,
+                    PhoneNumber = c.User.PhoneNumber,
+                }).ToList();
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                serviceResponse.Success = true;
+                return serviceResponse;
+            }
+            catch
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todos los usuarios dueños de negocio.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ServiceResponse<List<GetUserDto>>> GetAllUserOwnerAsync()
+        {
+            ServiceResponse<List<GetUserDto>> serviceResponse = new ServiceResponse<List<GetUserDto>>();
+            try
+            {
+                var all_users_owners = await this._serviceGenericUserOwnerHelper
+                .GetLoadAsync(c => c.User)
+                .ConfigureAwait(false);
+                if (all_users_owners == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.NotUsersOwner;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.NotUsersOwner);
+                    return serviceResponse;
+                }
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = all_users_owners.Select(c => new GetUserDto
+                {
+                    Address = c.User.Address,
+                    FirstName = c.User.FirstName,
+                    Id = c.Id,
+                    ImageUserProfile = c.User.ImageUserProfile,
+                    LastName = c.User.LastName,
+                    PhoneNumber = c.User.PhoneNumber,
+                }).ToList();
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Manda a eliminar el role owner de un usuario
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<bool>> RemoveRoleOwnerAsync(int UserId)
+        => await RemoveRoleUserAsync(UserId, Constants.RolesOfSystem[1]).ConfigureAwait(false);
+
+        /// <summary>
+        /// Manda a eliminar el role admin de un usuario
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<bool>> RemoveRoleAdminAsync(int UserId)
+         => await RemoveRoleUserAsync(UserId, Constants.RolesOfSystem[0]).ConfigureAwait(false);
+
+        /// <summary>
+        /// Manda a asignar el role owner a un usuario.
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<bool>> AssigningRoleOwnerToUserAsync(int UserId)
+        => await AssigningAnyRoleToUserAsync(UserId, Constants.RolesOfSystem[1]).ConfigureAwait(false);
+
+        /// <summary>
+        /// Manda a asignar el role admin a un usuario.
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<bool>> AssigningRoleAdminToUserAsync(int UserId)
+        => await AssigningAnyRoleToUserAsync(UserId, Constants.RolesOfSystem[0]).ConfigureAwait(false);
+
+        /// <summary>
+        /// Manda a asignar el role cliente a un usuario.
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<bool>> AssigningRoleClientToUserAsync(int UserId)
+        => await AssigningAnyRoleToUserAsync(UserId, Constants.RolesOfSystem[2]).ConfigureAwait(false);
+
+        /// <summary>
+        /// Elimina un role a un usuario.
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        private async Task<ServiceResponse<bool>> RemoveRoleUserAsync(int UserId, string role)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            try
+            {
+                //Verifica si el usuario está disponible
+                var user = await this._userService.GetUserByIdAsync(UserId).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
+                    return serviceResponse;
+                }
+                //Verifica si el usuario tiene el role
+                var isrole = await this._userService
+                .VerifyRoleInUserAsync(user, role)
+                .ConfigureAwait(false);
+                if (!isrole)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.IsNotRoleOfUser;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.IsNotRoleOfUser);
+                    return serviceResponse;
+                }
+                //Elimina el role del usuario.
+                var remove_role_owner = await this._userService
+                .RemoveRoleOfUserAsync(user, role)
+                .ConfigureAwait(false);
+                if (!remove_role_owner)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.IsNotRemoveRoleOfUser;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.IsNotRemoveRoleOfUser);
+                    return serviceResponse;
+                }
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = true;
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch(Exception ex)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = false;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Asigna un nuevo role a un usuario.
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        private async Task<ServiceResponse<bool>> AssigningAnyRoleToUserAsync(int UserId, string role)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            try
+            {
+                //Verifica si el usuario está disponible
+                var user = await this._userService.GetUserByIdAsync(UserId).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
+                    return serviceResponse;
+                }
+                //Verifica si el usuario tiene el role
+                var owner_role = await this._userService
+                .VerifyRoleInUserAsync(user, role)
+                .ConfigureAwait(false);
+                if (owner_role)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.IsUserHaveRole;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.IsUserHaveRole);
+                    return serviceResponse;
+                }
+                //Asigna el role al usuario.
+                var assign_role_owner = await this._userService
+                .AddRoleForUserAsync(user, role)
+                .ConfigureAwait(false);
+                if (!assign_role_owner)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.IsNotAssignRoleOfUser;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.IsNotAssignRoleOfUser);
+                    return serviceResponse;
+                }
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = true;
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = false;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todos los usuarios disponibles con datos disponibles solo para usuarios admin.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ServiceResponse<List<GetUserAllDataForOnlyAdmin>>> GetAllDataOfUserAsync()
+        {
+            ServiceResponse<List<GetUserAllDataForOnlyAdmin>> serviceResponse = new ServiceResponse<List<GetUserAllDataForOnlyAdmin>>();
+            try
+            {
+                var list_users = await this._userService.GetAllUserAsync().ConfigureAwait(false);
+                if (list_users == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserAllNotFound;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.UserAllNotFound);
+                    return serviceResponse;
+                }
+                //Mapea de una lista de User a una lista de GetUserDto.
+                List<GetUserAllDataForOnlyAdmin> userAllDataForOnlyAdmins = new List<GetUserAllDataForOnlyAdmin>();
+                foreach(User c in list_users)
+                {
+                    var useralldataforonlyadmins = new GetUserAllDataForOnlyAdmin
+                    {
+                        Id = c.Id,
+                        Address = c.Address,
+                        FirstName = c.FirstName,
+                        LastName = c.LastName,
+                        PhoneNumber = c.PhoneNumber,
+                        ImageUserProfile = c.ImageUserProfile,
+                        DateCreated = c.DateCreated,
+                        DateUpdated = c.DateUpdated,
+                        LastDateConnected = c.LastDateConnected,
+                        Email = c.Email,
+                        IdForClaim = c.IdForClaim,
+                        RolesOfUsers = await this._userService.GetAllRoleOfUserAsync(c).ConfigureAwait(false),
+                    };
+                    userAllDataForOnlyAdmins.Add(useralldataforonlyadmins);
+                }
+                serviceResponse.Data = userAllDataForOnlyAdmins;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene un usuario dado su Id con datos disponibles solo para usuarios admin.
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<GetUserAllDataForOnlyAdmin>> GetAllDataOfOnlyUserAsync(int UserId)
+        {
+            ServiceResponse<GetUserAllDataForOnlyAdmin> serviceResponse = new ServiceResponse<GetUserAllDataForOnlyAdmin>();
+            try
+            {
+                var user = await this._userService.GetUserByIdAsync(UserId).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
+                    return serviceResponse;
+                }
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                //Mapea de User a GetUserDto.
+                serviceResponse.Data = new GetUserAllDataForOnlyAdmin
+                {
+                    Id = user.Id,
+                    Address = user.Address,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    PhoneNumber = user.PhoneNumber,
+                    ImageUserProfile = user.ImageUserProfile,
+                    DateCreated = user.DateCreated,
+                    DateUpdated = user.DateUpdated,
+                    LastDateConnected = user.LastDateConnected,
+                    Email = user.Email,
+                    IdForClaim = user.IdForClaim,
+                    RolesOfUsers = await this._userService.GetAllRoleOfUserAsync(user).ConfigureAwait(false),
+                };
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene los roles disponibles de un usuario.
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<List<string>>> GetAllRoleOfUser(int UserId)
+        {
+            ServiceResponse<List<string>> serviceResponse = new ServiceResponse<List<string>>();
+            try
+            {
+                //Verifica que el usuario este registrado
+                var user = await this._userService.GetUserByIdAsync(UserId).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
+                    return serviceResponse;
+                }
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                //Obtiene los roles del usuario.
+                serviceResponse.Data = await this._userService.GetAllRoleOfUserAsync(user).ConfigureAwait(false);
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Establece si un usuario se banea o no.
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <param name="banner"></param>
+        /// <returns></returns>
+        public Task<ServiceResponse<bool>> BannerUserAsync(int UserId, bool banner)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

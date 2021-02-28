@@ -5,7 +5,6 @@
     using System.ComponentModel.DataAnnotations.Schema;
     using Microsoft.AspNetCore.Identity;
 
-    using Common.Extras;
     using Models;
    
     /// <summary>
@@ -13,11 +12,11 @@
     /// </summary>
     public class User : IdentityUser<int>, IEntity
     {
-        /// <summary>
-        /// Id para Claim.
+	    /// <summary>
+        /// Id para Claim
         /// </summary>
-        public Guid IdForClaim { get; set; }
-
+	    public Guid IdForClaim {get; set;}
+        
         /// <summary>
         /// Fecha en la que se actualizó campos del usuario en el sistema.
         /// </summary>

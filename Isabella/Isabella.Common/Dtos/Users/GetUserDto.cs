@@ -3,10 +3,8 @@
     using System;
     using System.Collections.Generic;
 
-    using Extras;
-
     /// <summary>
-    /// User.
+    /// User
     /// </summary>
     public class GetUserDto
     {
@@ -39,16 +37,5 @@
         /// Imagen de perfil del usuario.
         /// </summary>
         public byte[] ImageUserProfile { get; set; }
-
-        /*/// <summary>
-        /// Devuelve la URL completa donde se encuentran la imagen del usuario(Para apk)
-        /// </summary>
-        public string ImageFullPath { get; set; }
-
-        /// <summary>
-        /// Guarda la URL donde se encuentran la imagen del usuario
-        /// pero partir del caracter virgulilla.
-        /// </summary>
-        public string ImageUserPath { get; set; }*/
     }
 }

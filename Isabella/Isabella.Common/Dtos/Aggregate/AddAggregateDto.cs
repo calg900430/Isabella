@@ -10,12 +10,6 @@
     {
       
         /// <summary>
-        /// Categoria del producto.
-        /// </summary>
-        [Required(ErrorMessage = "Es necesario que agregue la categoria del producto.")]
-        public int CategoryId { get; set; }
-
-        /// <summary>
         /// Nombre 
         /// </summary>
         [Required(ErrorMessage = "Debe introducir el nombre del producto.")]

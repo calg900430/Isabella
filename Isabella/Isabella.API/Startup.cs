@@ -182,10 +182,12 @@ namespace Isabella.API
             //Agrega el servicio para el manejo de archivos que envia el usuario
             services.AddScoped<UploadFileHelper>();
 
-            //Agrega los servicios para el manejo de usuarios
+            //Agrega los servicios para el manejo de usuarios.
+            services.AddScoped<UserServiceController>();
             services.AddScoped<IUserRepositoryHelper, UserHelper>();
             services.AddScoped<ServiceGenericHelper<User>>();
-            services.AddScoped<UserServiceController>();
+            services.AddScoped<ServiceGenericHelper<UserOwner>>();
+            services.AddScoped<ServiceGenericHelper<UserClient>>();
 
             //Agrega los servicios para el manejo de los productos.
             services.AddScoped<ServiceGenericHelper<Product>>();

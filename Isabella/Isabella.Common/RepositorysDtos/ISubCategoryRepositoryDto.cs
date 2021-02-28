@@ -49,5 +49,12 @@
         /// <param name="SubCategoryId"></param>
         /// <returns></returns>
         Task<ServiceResponse<bool>> RemoveSubCategoryAsync(int SubCategoryId);
+
+        /// <summary>
+        /// Elimina una subcategoria.
+        /// </summary>
+        /// <param name="SubCategoryId"></param>
+        /// <returns></returns>
+        Task<ServiceResponse<bool>> DeleteSubCategoryAsync(int SubCategoryId);
     }
 }

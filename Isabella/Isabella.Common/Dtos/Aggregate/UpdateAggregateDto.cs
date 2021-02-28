@@ -13,11 +13,6 @@
         public int AggregateId { get; set; }
 
         /// <summary>
-        /// Categoria del producto.
-        /// </summary>
-        public int? CategoryId { get; set; }
-
-        /// <summary>
         /// Nombre del Producto ofertado por el Restaurante.
         /// </summary>
         [MaxLength(100, ErrorMessage = "Ha superado el limite máximo de caracteres permitidos para el nombre del producto.")]

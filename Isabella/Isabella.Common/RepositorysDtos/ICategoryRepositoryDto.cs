@@ -34,5 +34,12 @@
         /// <param name="addCategory"></param>
         /// <returns></returns>
         Task<ServiceResponse<bool>> AddCategoryAsync(AddCategoryDto addCategory);
+
+        /// <summary>
+        /// Borra una categoria.
+        /// </summary>
+        /// <param name="CategoryId"></param>
+        /// <returns></returns>
+        Task<ServiceResponse<bool>> DeleteCategoryAsync(int CategoryId);
     }
 }

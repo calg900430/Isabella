@@ -32,7 +32,12 @@
         /// <summary>
         /// Indica si el producto está disponible.
         /// </summary>
-        public bool IsAvailabe { get; set; } = true;
+        public bool IsAvailabe { get; set; }
+
+        /// <summary>
+        /// Indica si el producto se le puede incluir agregados.
+        /// </summary>
+        public bool SupportAggregate { get; set; }
 
         /// <summary>
         /// Cantidad disponible en el Stock

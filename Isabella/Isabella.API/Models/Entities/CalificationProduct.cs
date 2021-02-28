@@ -3,7 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    using Isabella.Common.Extras;
+    using Common;
    
     /// <summary>
     /// Calificación de los productos Standard
@@ -34,7 +34,7 @@
         /// <summary>
         /// Calificación del cliente acerca del Producto(1-5 Estrellas)
         /// </summary>
-        public EnumCalification Calification { get; set; }
+        public CommonConstants.EnumCalification Calification { get; set; }
 
         /// <summary>
         /// Opinión del cliente acerca del Producto

@@ -13,7 +13,6 @@
     using Common;
     using Common.Dtos.Category;
     using Common.Dtos.Product;
-    using Common.Extras;
     using Common.RepositorysDtos;
     using Models;
     using ServicesControllers;
@@ -116,7 +115,7 @@
         [ProducesResponseType(400)]
         //[ProducesResponseType(401)]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> GetProductStandardForIdAsync(int Id)
+        public async Task<IActionResult> GetProductForIdAsync(int Id)
         {
             try
             {
@@ -140,7 +139,7 @@
         }
 
         /// <summary>
-        /// Obtiene todos los productos disponibles.
+        /// Obtiene todos los productos.
         /// </summary>
         /// <returns></returns>
         [HttpGet("get/all")]
@@ -149,7 +148,7 @@
         [ProducesResponseType(400)]
         //[ProducesResponseType(401)]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> GetAllProductStandardAsync()
+        public async Task<IActionResult> GetAllProductAsync()
         {
             try
             {
@@ -182,7 +181,7 @@
         [ProducesResponseType(400)]
         //[ProducesResponseType(401)]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> GetIdOfLastProductStandardAsync()
+        public async Task<IActionResult> GetIdOfLastProductAsync()
         {
             try
             {
@@ -215,7 +214,7 @@
         [ProducesResponseType(400)]
         //[ProducesResponseType(401)]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> GetImageProductStandardAsync(int ProductId, int ImageId)
+        public async Task<IActionResult> GetImageProductAsync(int ProductId, int ImageId)
         {
             try
             {
@@ -251,7 +250,7 @@
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        public async Task<IActionResult> AddImageProductStandardAsync(IFormFile formFile, int ProductId)
+        public async Task<IActionResult> AddImageProductAsync(IFormFile formFile, int ProductId)
         {
             try
             {
@@ -286,7 +285,7 @@
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        public async Task<IActionResult> AddImageProductStandardAsync(AddImageProductDto addImageProductStandard)
+        public async Task<IActionResult> AddImageProductAsync(AddImageProductDto addImageProductStandard)
         {
             try
             {
@@ -320,7 +319,7 @@
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        public async Task<IActionResult> DeleteImageProductStandardAsync(int ProductId, int ImageId)
+        public async Task<IActionResult> DeleteImageProductAsync(int ProductId, int ImageId)
         {
             try
             {
@@ -356,7 +355,7 @@
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        public async Task<IActionResult> EnableProductStandardAsync(int ProductId, bool enable)
+        public async Task<IActionResult> EnableProductAsync(int ProductId, bool enable)
         {
             try
             {
@@ -391,7 +390,7 @@
         [ProducesResponseType(400)]
         //[ProducesResponseType(401)]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> GetCantProductStandardAsync(int ProductId, int CantProduct)
+        public async Task<IActionResult> GetCantProductAsync(int ProductId, int CantProduct)
         {
             try
             {
@@ -425,7 +424,7 @@
         [ProducesResponseType(400)]
         //[ProducesResponseType(401)]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> GetListIdOfImageProductStandardAsync(int ProductId)
+        public async Task<IActionResult> GetListIdOfImageProductAsync(int ProductId)
         {
             try
             {
@@ -459,7 +458,7 @@
         [ProducesResponseType(400)]
         //[ProducesResponseType(401)]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> GetAllImageProductStandardAsync(int ProductId)
+        public async Task<IActionResult> GetAllImageProductAsync(int ProductId)
         {
             try
             {
@@ -495,7 +494,7 @@
         [ProducesResponseType(400)]
         //[ProducesResponseType(401)]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> GetCantImageProductStandardAsync(int ProductId, int ImageId, int CantImages)
+        public async Task<IActionResult> GetCantImageProductAsync(int ProductId, int ImageId, int CantImages)
         {
             try
             {
@@ -511,6 +510,209 @@
                 }
                 else
                 return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Obtiene un producto dado su Id si el mismo está disponible.
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        [HttpGet("get/id_available")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        //[ProducesResponseType(401)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> GetProductIsAvailableForIdAsync(int Id)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._productRepository
+                    .GetProductIsAvailableForIdAsync(Id)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                    return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Obtiene una cantidad determinada de productos disponibles dado un producto de referencia y la cantidad.
+        /// </summary>
+        /// <param name="ProductId"></param>
+        /// <param name="CantProduct"></param>
+        /// <returns></returns>
+        [HttpGet("get/cant_available")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        //[ProducesResponseType(401)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> GetCantProductIsAvailabelAsync(int ProductId, int CantProduct)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._productRepository
+                    .GetCantProductIsAvailableAsync(ProductId, CantProduct)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                    return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todos los productos disponibles.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("get/all_available")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        //[ProducesResponseType(401)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> GetAllProductIsAvailableAsync()
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._productRepository
+                    .GetAllProductIsAvailableAsync()
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todos los productos disponibles de una categoria determinada.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("get/all_productavailable_of_category")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        //[ProducesResponseType(401)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> GetAllProductIsAvailableOfCategory(int CategoryId)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._productRepository
+                    .GetAllProductIsAvailableOfCategory(CategoryId)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todos los productos de una categoria determinada.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("get/all_product_of_category")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        //[ProducesResponseType(401)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> GetAllProductOfCategory(int CategoryId)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._productRepository
+                    .GetAllProductOfCategory(CategoryId)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Elimina un producto.
+        /// </summary>
+        /// <param name="ProductId"></param>
+        /// <returns></returns>
+        [HttpDelete("delete/product")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        //[ProducesResponseType(403)]
+        //[ProducesResponseType(401)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> DeleteProductAsync(int ProductId)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._productRepository
+                    .DeleteProductAsync(ProductId)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                    return BadRequest(); //400
             }
             catch (Exception ex)
             {

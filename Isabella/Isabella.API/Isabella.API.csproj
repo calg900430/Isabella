@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <None Remove="Isabella.API.xml" />
+    <None Remove="Resources\ResourceFile.resources" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,7 +18,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ElementsForResourceFile\audio\" />
+    <EmbeddedResource Include="Resources\ResourceFile.resources" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\audio\" />
     <Folder Include="Hubs\RepositorysHubs\" />
     <Folder Include="Migrations\" />
   </ItemGroup>

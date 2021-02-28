@@ -10,10 +10,10 @@
     using Common;
     using Common.Dtos.Aggregate;
     using Common.RepositorysDtos;
-    using Common.Extras;
     using Models;
     using Data;
     using Models.Entities;
+    using Resources;
     using Helpers;
     using Helpers.RepositoryHelpers;
     using System.IO;
@@ -55,24 +55,11 @@
             {
                 if (addAggregate == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int) GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
                     .GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
-                    return serviceResponse;
-                }
-                //Verifica que la categoria es valida
-                var category = await this._serviceGenericCategoryHelper
-                .GetLoadAsync(c => c.Id == addAggregate.CategoryId)
-                .ConfigureAwait(false);
-                if (category == null)
-                {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.CategoryNotFound;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile
-                    .GetValueResourceString(GetValueResourceFile.KeyResource.CategoryNotFound);
                     return serviceResponse;
                 }
                 //Verifica que el nombre no este en uso
@@ -81,7 +68,7 @@
                 .ConfigureAwait(false);
                 if (aggregate_exist != null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.AggregateExist;
+                    serviceResponse.Code = (int) GetValueResourceFile.KeyResource.AggregateExist;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -91,7 +78,6 @@
                 //Mapea de AddProductStandardDto a ProductStandard
                 var new_aggregate = new Aggregate
                 {
-                    Category = category,
                     DateCreated = DateTime.UtcNow,
                     DateUpdate = DateTime.UtcNow,
                     Description = addAggregate.Description,
@@ -107,7 +93,7 @@
                 await this._serviceGenericAggregateHelper
                 .SaveChangesBDAsync()
                 .ConfigureAwait(false);
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile
@@ -116,7 +102,7 @@
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile
@@ -139,7 +125,7 @@
                 //Verifica que la imagen, cumpla con los reguerimientos para poderla almacenar en la base de datos.
                 if (formFile == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -148,7 +134,7 @@
                 }
                 if (formFile.Length <= 0)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -157,7 +143,7 @@
                 }
                 if (formFile.Length > Constants.MAX_LENTHG_IMAGE_AGGREGATE)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ImageAggregateNotValide;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImageAggregateNotValide;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -170,7 +156,7 @@
                 .ConfigureAwait(false);
                 if (aggregate == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.AggregateNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.AggregateNotFound;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -203,7 +189,7 @@
                 .ConfigureAwait(false);
                 //Borra el archivo de imagen temporal
                 File.Delete(path);
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -211,7 +197,7 @@
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -231,7 +217,7 @@
             {
                 if (addImageAggregate == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
@@ -240,7 +226,7 @@
                 //Verifica que la imagen, cumpla con los reguerimientos para poderla almacenar en la base de datos.
                 if (addImageAggregate.Image == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
@@ -248,7 +234,7 @@
                 }
                 if (addImageAggregate.Image.Length <= 0)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
@@ -256,7 +242,7 @@
                 }
                 if (addImageAggregate.Image.Length > Constants.MAX_LENTHG_IMAGE_AGGREGATE)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ImageAggregateNotValide;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImageAggregateNotValide;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -269,7 +255,7 @@
                 .ConfigureAwait(false);
                 if (aggregate == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ProductNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotFound;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -288,7 +274,7 @@
                 await this._serviceGenericImageAggregateHelper
                 .SaveChangesBDAsync()
                 .ConfigureAwait(false);
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -296,7 +282,7 @@
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -321,7 +307,7 @@
                 //Verifica si la imagen existe y si pertenece al producto.
                 if(aggregate_image == null || (aggregate_image.Aggregate.Id != AggregateId))
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ImageNotExist;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImageNotExist;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ImageNotExist);
@@ -333,7 +319,7 @@
                 await this._serviceGenericImageAggregateHelper
                 .SaveChangesBDAsync()
                 .ConfigureAwait(false);
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -341,7 +327,7 @@
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -366,7 +352,7 @@
                 .ConfigureAwait(false);
                 if (aggregate == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.AggregateNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.AggregateNotFound;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -383,7 +369,7 @@
                 await this._serviceGenericAggregateHelper
                 .SaveChangesBDAsync()
                 .ConfigureAwait(false);
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -391,7 +377,7 @@
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -416,7 +402,7 @@
                 //Verifica si el producto existe.
                 if (aggregate == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.AggregateNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.AggregateNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -426,14 +412,14 @@
                 //Verifica si el producto tiene imagenes.
                 if (aggregate.Images == null || aggregate.Images.Count <= 0)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ImagesNoExist;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImagesNoExist;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
                     .GetValueResourceString(GetValueResourceFile.KeyResource.ImagesNoExist);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = aggregate.Images.Select(c => new GetImageAggregateDto
                 {
                     Image = c.Image,
@@ -446,7 +432,7 @@
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -455,7 +441,7 @@
         }
 
         /// <summary>
-        /// Obtiene todos los agregado disponibles en la base de datos.
+        /// Obtiene todos los agregado en la base de datos.
         /// </summary>
         /// <returns></returns>
         public async Task<ServiceResponse<List<GetAggregateDto>>> GetAllAggregateAsync()
@@ -465,29 +451,25 @@
             {
                 //Obtiene los productos disponibles
                 var all_aggregate = await this._serviceGenericAggregateHelper
-                .GetLoadAsync(c => c.Category)
+                .GetLoadAsync()
                 .ConfigureAwait(false);
                 if (all_aggregate == null || all_aggregate.Count <= 0)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.AggregateAllNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.AggregateAllNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
                     .GetValueResourceString(GetValueResourceFile.KeyResource.AggregateAllNotFound);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = all_aggregate.Select(c => new GetAggregateDto
                 {
                     Id = c.Id,
-                    Category = new Common.Dtos.Category.GetCategoryDto
-                    {
-                        Id = c.Category.Id,
-                        Name = c.Category.Name,
-                    },
                     Description = c.Description,
                     Name = c.Name,
                     Price = c.Price,
+                    IsAvailabe = c.IsAvailabe,
                 }).ToList();
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -495,7 +477,7 @@
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -518,7 +500,7 @@
                 if (CantImages < 1)
                 {
                     serviceResponse.Data = null;
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.CantIsNegative;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CantIsNegative;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
                     .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
@@ -531,7 +513,7 @@
                 //Verifica si el producto existe.
                 if (aggregate == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.AggregateNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.AggregateNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -541,7 +523,7 @@
                 //Verifica si el producto tiene imagenes.
                 if (aggregate.Images == null || aggregate.Images.Count <= 0)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ImagesNoExist;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImagesNoExist;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -553,7 +535,7 @@
                 .GetLoadAsync(ImageId, aggregate.Images, CantImages);
                 if (list_images == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ImageNotExist;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImageNotExist;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ImageNotExist);
@@ -561,14 +543,14 @@
                 }
                 if (list_images.Count <= 0)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.AggregateNotNew;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.AggregateNotNew;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
                     .GetValueResourceString(GetValueResourceFile.KeyResource.AggregateNotNew);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = list_images.Select(c => new GetImageAggregateDto
                 {
                     Image = c.Image,
@@ -581,7 +563,7 @@
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -603,7 +585,7 @@
                 if (cantAggregate < 1)
                 {
                     serviceResponse.Data = null;
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.CantIsNegative;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CantIsNegative;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
                     .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
@@ -615,7 +597,7 @@
                 .ConfigureAwait(false);
                 if (aggregate == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.AggregateNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.AggregateNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -623,11 +605,11 @@
                     return serviceResponse;
                 }
                 var all_cant_aggregate = await this._serviceGenericAggregateHelper
-                .GetLoadAsync(aggregate, cantAggregate, c => c.Category)
+                .GetLoadAsync(aggregate, cantAggregate)
                 .ConfigureAwait(false);
                 if (all_cant_aggregate == null || all_cant_aggregate.Count <= 0)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.AggregateAllNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.AggregateAllNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -637,23 +619,19 @@
                 serviceResponse.Data = all_cant_aggregate.Select(c => new GetAggregateDto
                 {
                     Id = c.Id,
-                    Category = new Common.Dtos.Category.GetCategoryDto
-                    {
-                        Id = c.Category.Id,
-                        Name = c.Category.Name,
-                    },
                     Description = c.Description,
                     Name = c.Name,
                     Price = c.Price,
+                    IsAvailabe = c.IsAvailabe,
                 }).ToList();
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -673,7 +651,7 @@
                 var last_product = await this._serviceGenericAggregateHelper
                 .LastEntityAsync()
                 .ConfigureAwait(false);
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = last_product.Id;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -681,7 +659,7 @@
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = -1;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -707,14 +685,14 @@
                 //Verifica si el producto existe.
                 if (image_aggregate == null || image_aggregate.Image == null || (image_aggregate.Aggregate.Id != AggregateId))
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ImageNotExist;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImageNotExist;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
                     .GetValueResourceString(GetValueResourceFile.KeyResource.ImageNotExist);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = new GetImageAggregateDto
                 {
                     Image = image_aggregate.Image,
@@ -727,7 +705,7 @@
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -752,7 +730,7 @@
                 //Verifica si el producto existe.
                 if (aggregate == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.AggregateNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.AggregateNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -762,13 +740,13 @@
                 //Verifica si el producto tiene imagenes.
                 if (aggregate.Images == null || aggregate.Images.Count <= 0)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ImagesNoExist;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImagesNoExist;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ImagesNoExist);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = aggregate.Images.Select(c => c.Id).ToList();
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -776,7 +754,7 @@
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -796,29 +774,25 @@
             {
                 //Obtiene el producto.
                 var aggregate = await this._serviceGenericAggregateHelper
-                .GetLoadAsync(c => c.Id == AggregateId, c => c.Category)
+                .GetLoadAsync(c => c.Id == AggregateId)
                 .ConfigureAwait(false);
                 if (aggregate == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.AggregateNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.AggregateNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
                     .GetValueResourceString(GetValueResourceFile.KeyResource.AggregateNotFound);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = new GetAggregateDto
                 {
                     Id = aggregate.Id,
-                    Category = new Common.Dtos.Category.GetCategoryDto
-                    {
-                        Id = aggregate.Category.Id,
-                        Name = aggregate.Category.Name,
-                    },
                     Description = aggregate.Description,
                     Name = aggregate.Name,
                     Price = aggregate.Price,
+                    IsAvailabe = aggregate.IsAvailabe,
                 };
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile
@@ -827,7 +801,7 @@
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -847,7 +821,7 @@
             {
                 if (updateAggregate == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -860,7 +834,7 @@
                 .ConfigureAwait(false);
                 if (aggregate == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.AggregateNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.AggregateNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -870,22 +844,6 @@
                 //Actualiza los campos del producto.
                 if (updateAggregate.IsAvailabe != null)
                 aggregate.IsAvailabe = (bool)updateAggregate.IsAvailabe;
-                if (updateAggregate.CategoryId != null)
-                {
-                    //Busca si la nueva categoria está en la base de datos.
-                    var category = await this._serviceGenericCategoryHelper
-                    .GetLoadAsync(c => c.Id == updateAggregate.CategoryId)
-                    .ConfigureAwait(false);
-                    if (category == null)
-                    {
-                        serviceResponse.KeyResource = GetValueResourceFile.KeyResource.CategoryNotFound;
-                        serviceResponse.Data = null;
-                        serviceResponse.Success = false;
-                        serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CategoryNotFound);
-                        return serviceResponse;
-                    }
-                    aggregate.Category = category;
-                }
                 if (updateAggregate.Description != null)
                 aggregate.Description = updateAggregate.Description;
                 if (updateAggregate.Name != null)
@@ -901,15 +859,10 @@
                 //Guarda los cambios en la base de datos.
                 await this._serviceGenericAggregateHelper
                 .SaveChangesBDAsync().ConfigureAwait(false);
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = new GetAggregateDto
                 {
                     Description = aggregate.Description,
-                    Category = new Common.Dtos.Category.GetCategoryDto
-                    {
-                        Id = aggregate.Category.Id,
-                        Name = aggregate.Category.Name,
-                    },
                     Id = aggregate.Id,
                     Name = aggregate.Name,
                     Price = aggregate.Price
@@ -920,10 +873,224 @@
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene un agregado dado su Id si el mismo está disponible.
+        /// </summary>
+        /// <param name="AggregateId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<GetAggregateDto>> GetAggregateIsAvailableForIdAsync(int AggregateId)
+        {
+            ServiceResponse<GetAggregateDto> serviceResponse = new ServiceResponse<GetAggregateDto>();
+            try
+            {
+                //Obtiene el producto.
+                var aggregate = await this._serviceGenericAggregateHelper
+                .WhereFirstEntityAsync(c => c.Id == AggregateId && c.IsAvailabe == true)
+                .ConfigureAwait(false);
+                if (aggregate == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.AggregateNotIsAvailable;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.AggregateNotIsAvailable);
+                    return serviceResponse;
+                }
+                //Verifica si el producto está disponible
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = new GetAggregateDto
+                {
+                    Id = aggregate.Id,
+                    Description = aggregate.Description,
+                    Name = aggregate.Name,
+                    Price = aggregate.Price,
+                    IsAvailabe = aggregate.IsAvailabe,
+                };
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todos los agregados disponibles en la base de datos.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ServiceResponse<List<GetAggregateDto>>> GetAllAggregateIsAvailableAsync()
+        {
+            ServiceResponse<List<GetAggregateDto>> serviceResponse = new ServiceResponse<List<GetAggregateDto>>();
+            try
+            {
+                //Obtiene los productos disponibles
+                var all_aggregate = await this._serviceGenericAggregateHelper
+                .WhereListEntityAsync(c => c.IsAvailabe == true)
+                .ConfigureAwait(false);
+                if (all_aggregate == null || all_aggregate.Count <= 0)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductAllNotIsAvailable;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ProductAllNotIsAvailable);
+                    return serviceResponse;
+                }
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = all_aggregate.Select(c => new GetAggregateDto
+                {
+                    Id = c.Id,
+                    Description = c.Description,
+                    Name = c.Name,
+                    Price = c.Price,
+                    IsAvailabe = c.IsAvailabe,
+                }).ToList();
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene una cantidad determinada de agregados disponibles dado un agregado de referencia y la cantidad.
+        /// </summary>
+        /// <param name="AggregateId"></param>
+        /// <param name="cantAggregate"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<List<GetAggregateDto>>> GetCantAggregateIsAvailableAsync(int AggregateId, int cantAggregate)
+        {
+            ServiceResponse<List<GetAggregateDto>> serviceResponse = new ServiceResponse<List<GetAggregateDto>>();
+            try
+            {
+                if (cantAggregate < 1)
+                {
+                    serviceResponse.Data = null;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CantIsNegative;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
+                    return serviceResponse;
+                }
+                //Obtiene el producto.
+                var aggregate = await this._serviceGenericAggregateHelper
+                .WhereFirstEntityAsync(c => c.Id == AggregateId && c.IsAvailabe == true)
+                .ConfigureAwait(false);
+                if (aggregate == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.AggregateNotIsAvailable;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.AggregateNotIsAvailable);
+                    return serviceResponse;
+                }
+                var all_cant_aggregate = await this._serviceGenericAggregateHelper
+                .GetLoadAsync(aggregate, cantAggregate, c => c.IsAvailabe == true)
+                .ConfigureAwait(false);
+                if (all_cant_aggregate == null || all_cant_aggregate.Count <= 0)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotNew;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotNew);
+                    return serviceResponse;
+                }
+                serviceResponse.Data = all_cant_aggregate.Select(c => new GetAggregateDto
+                {
+                    Id = c.Id,
+                    Description = c.Description,
+                    Name = c.Name,
+                    Price = c.Price,
+                    IsAvailabe = c.IsAvailabe,
+                }).ToList();
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Borra un agregado.
+        /// </summary>
+        /// <param name="AggregateId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<bool>> DeleteAggregateAsync(int AggregateId)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            try
+            {
+                var aggregate = await this._serviceGenericAggregateHelper
+                .GetLoadAsync(c => c.Id == AggregateId)
+                .ConfigureAwait(false);
+                if (aggregate == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.AggregateNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.AggregateNotFound);
+                    return serviceResponse;
+                }
+                //Elimina el producto
+                this._serviceGenericAggregateHelper.RemoveEntity(aggregate);
+                //Guarda los cambios en la base de datos.
+                await this._serviceGenericAggregateHelper
+                .SaveChangesBDAsync().ConfigureAwait(false);
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = true;
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ExceptionDeleteEntity;
+                serviceResponse.Data = false;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.ExceptionDeleteEntity);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = false;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
             }
         }

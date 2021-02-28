@@ -13,7 +13,6 @@
     using Common;
     using Common.Dtos.Category;
     using Common.Dtos.Aggregate;
-    using Common.Extras;
     using Common.RepositorysDtos;
     using Models;
     using ServicesControllers;
@@ -140,7 +139,7 @@
         }
 
         /// <summary>
-        /// Obtiene todos los agregados disponibles.
+        /// Obtiene todos los agregados.
         /// </summary>
         /// <returns></returns>
         [HttpGet("get/all")]
@@ -347,6 +346,7 @@
         /// Establece un agregado en disponible o no disponible.
         /// </summary>
         /// <param name="AggregateId"></param>
+        /// <param name="enable"></param>
         /// <returns></returns>
         [HttpPost("enable_product")]
         [ProducesResponseType(200)]
@@ -517,5 +517,141 @@
             }
         }
 
+        /// <summary>
+        /// Obtiene un agregado dado su Id si el mismo está disponible.
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        [HttpGet("get/id_available")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        //[ProducesResponseType(401)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> GetAggregateIsAvailableForIdAsync(int Id)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._aggregateRepository
+                    .GetAggregateIsAvailableForIdAsync(Id)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                    return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Obtiene una cantidad determinada de agregados disponibles dado un agregado de referencia y la cantidad.
+        /// </summary>
+        /// <param name="AggregateId"></param>
+        /// <param name="CantAggregate"></param>
+        /// <returns></returns>
+        [HttpGet("get/cant_available")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        //[ProducesResponseType(401)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> GetCantAggregateIsAvailabelAsync(int AggregateId, int CantAggregate)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._aggregateRepository
+                    .GetCantAggregateIsAvailableAsync(AggregateId, CantAggregate)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todos los agregados disponibles.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("get/all_available")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        //[ProducesResponseType(401)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> GetAllAggregateIsAvailableAsync()
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._aggregateRepository
+                    .GetAllAggregateIsAvailableAsync()
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Elimina un agregado.
+        /// </summary>
+        /// <param name="AggregateId"></param>
+        /// <returns></returns>
+        [HttpDelete("delete/product")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        //[ProducesResponseType(403)]
+        //[ProducesResponseType(401)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> DeleteProductAsync(int AggregateId)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._aggregateRepository
+                    .DeleteAggregateAsync(AggregateId)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

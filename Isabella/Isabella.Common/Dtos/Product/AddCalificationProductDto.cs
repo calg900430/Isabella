@@ -3,7 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    using Isabella.Common.Extras;
+    using Common;
 
     /// <summary>
     /// Emite una calificación sobre un producto.
@@ -22,7 +22,7 @@
         /// </summary>
         [Required]
         [Range(1, 5, ErrorMessage = "La calificación es de 1 a 5 estrellas.")]
-        public EnumCalification Calification { get; set; }
+        public CommonConstants.EnumCalification Calification { get; set; }
 
         /// <summary>
         /// Opinion acerca de la calificación del producto.

@@ -5,11 +5,11 @@
 
     using Common.RepositorysDtos;
     using Common;
-    using Common.Extras;
     using Helpers;
     using Helpers.RepositoryHelpers;
     using Models.Entities;
- 
+    using Resources;
+
     /// <summary>
     /// Servicio para el controlador de los códigos de identificación.
     /// </summary>
@@ -42,14 +42,14 @@
                 .ConfigureAwait(false);
                 if(codeidentification == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.NotCodeIdentification;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.NotCodeIdentification;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
                     .GetValueResourceString(GetValueResourceFile.KeyResource.NotCodeIdentification);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -57,7 +57,7 @@
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -84,7 +84,7 @@
                 await this._serviceGenericCodeIdentificationHelper
                 .SaveChangesBDAsync()
                 .ConfigureAwait(false);
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = code_identification.Code;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -92,7 +92,7 @@
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data =  null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);

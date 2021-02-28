@@ -11,7 +11,7 @@
     using Data;
     using Helpers.RepositoryHelpers;
     using Models;
-    using Common.Extras;
+    using Isabella.API.Resources;
 
     /// <summary>
     /// Helper que representa un servicio generico para realizar CRUD sobre las entidades.
@@ -111,6 +111,38 @@
             .ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Obtiene una cantidad determinada de entidades a partir de una entidad dada más la cantidad deseada mientras cumplan con una condicción determinada.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="CantEntity"></param>
+        /// <param name="create_query"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        public virtual async Task<List<TEntity>> GetLoadAsync(TEntity entity, int CantEntity,
+        Expression<Func<TEntity, bool>> create_query,
+        params Expression<Func<TEntity, object>>[] parameters)
+        {
+            if (entity == null)
+            throw new NullEntityException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
+            if (CantEntity < 0)
+            throw new CantNegativeException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative));
+            //Crea la consulta para determinar las entidades relacionadas deseadas.
+            IQueryable<TEntity> query = m_dbSet.AsQueryable();
+            if (await query.AnyAsync().ConfigureAwait(false))
+            {
+                foreach (Expression<Func<TEntity, object>> entitie in parameters)
+                {
+                    query = query.Include(entitie);
+                }
+            }
+            //Agrega a la consulta la cantidad de entidades que desea y partir de cual debe tomarlas.
+            return await query.Where(c => c.Id > entity.Id).Where(create_query)
+            .Take(CantEntity)
+            .ToListAsync<TEntity>()
+            .ConfigureAwait(false);
+        }
+       
         /// <summary>
         /// Devuelve una cantidad de entidades determinada a partir del Id de una entidad y la cantidad deseada.
         /// Este metodo es útil cuando tenemos una colección de entidades que todas están relacionadas con otra entidad.

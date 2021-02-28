@@ -8,10 +8,10 @@
     using Common.RepositorysDtos;
     using Common;
     using Common.Dtos.SubCategory;
-    using Common.Extras;
     using Models.Entities;
     using Helpers;
     using Helpers.RepositoryHelpers;
+    using Resources;
 
     /// <summary>
     /// Servicio para el controlador de las subcategorias.
@@ -45,7 +45,7 @@
             {
                 if (addSubCategoryProduct == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int) GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -58,7 +58,7 @@
                 .ConfigureAwait(false);
                 if (subcategory != null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SubCategoryExist;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SubCategoryExist;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -71,7 +71,7 @@
                 .ConfigureAwait(false);
                 if (product == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ProductNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotFound;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -90,7 +90,7 @@
                 await this._serviceGenericSubCategoryHelper
                 .SaveChangesBDAsync()
                 .ConfigureAwait(false);
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile
@@ -99,12 +99,17 @@
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
             }
+        }
+
+        public Task<ServiceResponse<bool>> DeleteSubCategoryAsync(int SubCategoryId)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -120,14 +125,14 @@
                 .ConfigureAwait(false);
                 if (all_subcategories == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SubCategoryNotAllFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SubCategoryNotAllFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
                     .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryNotAllFound);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = all_subcategories.Select(c => new GetSubCategoryDto
                 {
                     Id = c.Id,
@@ -141,7 +146,7 @@
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -165,14 +170,14 @@
                 .ConfigureAwait(false);
                 if (subcategory == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SubCategoryNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SubCategoryNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
                     .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryNotFound);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = new GetSubCategoryDto
                 {
                     Id = subcategory.Id,
@@ -186,7 +191,7 @@
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -210,14 +215,14 @@
                 .ConfigureAwait(false);
                 if (subcategory == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SubCategoryNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SubCategoryNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
                     .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryNotFound);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = new GetSubCategoryDto
                 {
                     Id = subcategory.Id,
@@ -231,7 +236,7 @@
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -255,7 +260,7 @@
                 .ConfigureAwait(false);
                 if (subcategory == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SubCategoryNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SubCategoryNotFound;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -264,7 +269,7 @@
                 }
                 this._serviceGenericSubCategoryHelper.RemoveEntity(subcategory);
                 await this._serviceGenericSubCategoryHelper.SaveChangesBDAsync().ConfigureAwait(false);
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -272,7 +277,7 @@
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -296,7 +301,7 @@
                 .ConfigureAwait(false);
                 if (subcategory == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SubCategoryNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SubCategoryNotFound;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -309,7 +314,7 @@
                 subcategory.Name = updateSubCategoryDto.Name;
                 this._serviceGenericSubCategoryHelper.UpdateEntity(subcategory);
                 await this._serviceGenericSubCategoryHelper.SaveChangesBDAsync().ConfigureAwait(false);
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -317,7 +322,7 @@
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);

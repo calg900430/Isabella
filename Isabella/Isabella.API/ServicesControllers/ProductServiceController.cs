@@ -9,12 +9,12 @@
 
     using Common;
     using Common.Dtos.Product;
-    using Common.Extras;
     using Common.RepositorysDtos;
     using Helpers;
     using Helpers.RepositoryHelpers;
     using Models.Entities;
-   
+    using Resources;
+
     /// <summary>
     /// Servicio para el controlador de los productos.
     /// </summary>
@@ -51,7 +51,7 @@
             {
                 if (addProduct == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int) GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
@@ -63,7 +63,7 @@
                 .ConfigureAwait(false);
                 if (category == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.CategoryNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CategoryNotFound;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CategoryNotFound);
@@ -75,7 +75,7 @@
                 .ConfigureAwait(false);
                 if (product_exist != null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ProductExist;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductExist;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -94,6 +94,7 @@
                     Price = addProduct.Price,
                     Stock = addProduct.Stock,
                     LastBuy = DateTime.UtcNow,
+                    SupportAggregate = addProduct.SupportAggregate,
                 };
                 //Guarda el nuevo producto en la base de datos.
                 await this._serviceGenericProductHelper
@@ -101,7 +102,7 @@
                 .ConfigureAwait(false);
                 //Guarda los cambios en la base de datos.
                 await this._serviceGenericProductHelper.SaveChangesBDAsync();
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -109,7 +110,7 @@
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -129,7 +130,7 @@
             {
                 if (updateProduct == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
@@ -141,7 +142,7 @@
                 .ConfigureAwait(false);
                 if (product == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ProductNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotFound);
@@ -158,7 +159,7 @@
                     .ConfigureAwait(false);
                     if (category == null)
                     {
-                        serviceResponse.KeyResource = GetValueResourceFile.KeyResource.CategoryNotFound;
+                        serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CategoryNotFound;
                         serviceResponse.Data = null;
                         serviceResponse.Success = false;
                         serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CategoryNotFound);
@@ -174,13 +175,15 @@
                 product.Price = (decimal)updateProduct.Price;
                 if (updateProduct.Stock != null)
                 product.Stock = (int)updateProduct.Stock;
+                if(updateProduct.SupportAggregate != null)
+                product.SupportAggregate = (bool) updateProduct.SupportAggregate;
                 product.DateUpdate = DateTime.UtcNow;
                 //Actualiza la entidad
                 this._serviceGenericProductHelper
                 .UpdateEntity(product);
                 //Guarda los cambios en la base de datos.
                 await this._serviceGenericProductHelper.SaveChangesBDAsync().ConfigureAwait(false);
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = new GetProductDto
                 { 
                    Average = product.Average,
@@ -200,7 +203,7 @@
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -224,13 +227,13 @@
                 .ConfigureAwait(false);
                 if (product == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ProductNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotFound);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = new GetProductDto
                 {
                     Id = product.Id,
@@ -243,6 +246,8 @@
                     Name = product.Name,
                     Price = product.Price,
                     Average = product.Average,
+                    IsAvailabe = product.IsAvailabe,
+                    SupportAggregate = product.SupportAggregate,
                     GetSubCategoryDtos = product.SubCategories.Select(c => new Common.Dtos.SubCategory.GetSubCategoryDto
                     {
                        Id = c.Id,
@@ -257,7 +262,7 @@
             }
             catch(Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -280,13 +285,14 @@
                 .ConfigureAwait(false);
                 if (all_product == null || all_product.Count <= 0)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ProductAllNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductAllNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ProductAllNotFound);
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ProductAllNotFound);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = all_product.Select(c => new GetProductDto
                 {
                     Id = c.Id,
@@ -298,7 +304,9 @@
                     Description = c.Description,
                     Name = c.Name,
                     Price = c.Price,
+                    IsAvailabe = c.IsAvailabe,
                     Average = c.Average,
+                    SupportAggregate = c.SupportAggregate,
                     GetSubCategoryDtos = c.SubCategories.Select(x => new Common.Dtos.SubCategory.GetSubCategoryDto
                     {
                         Id = x.Id,
@@ -313,7 +321,7 @@
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -333,7 +341,7 @@
                 var last_product = await this._serviceGenericProductHelper
                 .LastEntityAsync()
                 .ConfigureAwait(false);
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = last_product.Id;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -341,7 +349,7 @@
             }
             catch(Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = -1;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -367,13 +375,13 @@
                 //Verifica si el producto existe.
                 if(image_product == null || image_product.Image == null || (image_product.Product.Id != ProductId))
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ImageNotExist;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImageNotExist;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ImageNotExist);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = new GetImageProductDto
                 {
                     Image = image_product.Image,
@@ -386,7 +394,7 @@
             }
             catch(Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -408,7 +416,7 @@
                 //Verifica que la imagen, cumpla con los reguerimientos para poderla almacenar en la base de datos.
                 if (formFile == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
@@ -416,7 +424,7 @@
                 }
                 if (formFile.Length <= 0)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
@@ -424,7 +432,7 @@
                 }
                 if (formFile.Length > Constants.MAX_LENTHG_IMAGE_PRODUCT)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ImageProductNotValide;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImageProductNotValide;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ImageProductNotValide);
@@ -436,7 +444,7 @@
                 .ConfigureAwait(false);
                 if (product == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ProductNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotFound;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -469,7 +477,7 @@
                 .ConfigureAwait(false);
                 //Borra el archivo de imagen temporal
                 File.Delete(path);
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -477,7 +485,7 @@
             }
             catch (Exception ex)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -497,7 +505,7 @@
             {
                 if (addImageProduct == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
@@ -506,7 +514,7 @@
                 //Verifica que la imagen, cumpla con los reguerimientos para poderla almacenar en la base de datos.
                 if (addImageProduct.Image == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
@@ -514,7 +522,7 @@
                 }
                 if (addImageProduct.Image.Length <= 0)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
@@ -522,7 +530,7 @@
                 }
                 if (addImageProduct.Image.Length > Constants.MAX_LENTHG_IMAGE_PRODUCT)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ImageProductNotValide;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImageProductNotValide;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ImageProductNotValide);
@@ -534,7 +542,7 @@
                 .ConfigureAwait(false);
                 if (product == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ProductNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotFound;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -553,7 +561,7 @@
                 await this._serviceGenericImageProductHelper
                 .SaveChangesBDAsync()
                 .ConfigureAwait(false);
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -561,7 +569,7 @@
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -587,7 +595,7 @@
                 //Verifica si la imagen existe y si pertenece al producto.
                 if(product_image == null || (product_image.Product.Id != ProductId ))
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ImageNotExist;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImageNotExist;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ImageNotExist);
@@ -599,7 +607,7 @@
                 await this._serviceGenericImageProductHelper
                 .SaveChangesBDAsync()
                 .ConfigureAwait(false);
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -607,7 +615,7 @@
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -632,7 +640,7 @@
                 .ConfigureAwait(false);
                 if (product == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ProductNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotFound;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -649,7 +657,7 @@
                 await this._serviceGenericProductHelper
                 .SaveChangesBDAsync()
                 .ConfigureAwait(false);
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -657,7 +665,7 @@
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -679,7 +687,7 @@
                 if (cantProduct < 1)
                 {
                     serviceResponse.Data = null;
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.CantIsNegative;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CantIsNegative;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
                     return serviceResponse;
@@ -690,7 +698,7 @@
                 .ConfigureAwait(false);
                 if (product == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ProductNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotFound);
@@ -701,7 +709,7 @@
                 .ConfigureAwait(false);
                 if (all_cant_product == null || all_cant_product.Count <= 0)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ProductNotNew;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotNew;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -719,7 +727,9 @@
                     Description = c.Description,
                     Name = c.Name,
                     Price = c.Price,
+                    IsAvailabe = c.IsAvailabe,
                     Average = c.Average,
+                    SupportAggregate = c.SupportAggregate,
                     GetSubCategoryDtos = c.SubCategories.Select(x => new Common.Dtos.SubCategory.GetSubCategoryDto
                     {
                         Id = x.Id,
@@ -728,14 +738,14 @@
                         ProductId = c.Id
                     }).ToList(),
                 }).ToList();
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -760,7 +770,7 @@
                 //Verifica si el producto existe.
                 if (product == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ProductNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotFound);
@@ -769,13 +779,13 @@
                 //Verifica si el producto tiene imagenes.
                 if (product.Images == null || product.Images.Count <= 0)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ImagesNoExist;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImagesNoExist;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ImagesNoExist);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = product.Images.Select(c => c.Id).ToList();
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -783,7 +793,7 @@
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -808,7 +818,7 @@
                 //Verifica si el producto existe.
                 if (product == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ProductNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotFound);
@@ -817,13 +827,13 @@
                 //Verifica si el producto tiene imagenes.
                 if (product.Images == null || product.Images.Count <= 0)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ImagesNoExist;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImagesNoExist;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ImagesNoExist);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = product.Images.Select(c => new GetImageProductDto
                 { 
                    Image = c.Image,
@@ -836,7 +846,7 @@
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -859,7 +869,7 @@
                 if (cantImages < 1)
                 {
                     serviceResponse.Data = null;
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.CantIsNegative;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CantIsNegative;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
                     return serviceResponse;
@@ -871,7 +881,7 @@
                 //Verifica si el producto existe.
                 if (product == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ProductNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotFound;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotFound);
@@ -880,7 +890,7 @@
                 //Verifica si el producto tiene imagenes.
                 if (product.Images == null || product.Images.Count <= 0)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ImagesNoExist;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImagesNoExist;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ImagesNoExist);
@@ -890,7 +900,7 @@
                 var list_images = this._serviceGenericImageProductHelper.GetLoadAsync(ImageId, product.Images, cantImages);
                 if(list_images == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ImageNotExist;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImageNotExist;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ImageNotExist);
@@ -898,13 +908,13 @@
                 }
                 if (list_images.Count <= 0)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ProductNotNewImage;
+                    serviceResponse.Code = (int) GetValueResourceFile.KeyResource.ProductNotNewImage;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotNewImage);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = list_images.Select(c => new GetImageProductDto
                 {
                     Image = c.Image,
@@ -917,10 +927,411 @@
             }
             catch
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene un producto dado su Id si el mismo está disponible.
+        /// </summary>
+        /// <param name="ProductId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<GetProductDto>> GetProductIsAvailableForIdAsync(int ProductId)
+        {
+            ServiceResponse<GetProductDto> serviceResponse = new ServiceResponse<GetProductDto>();
+            try
+            {
+                //Obtiene el producto.
+                var product = await this._serviceGenericProductHelper
+                .WhereFirstEntityAsync(c => c.Id == ProductId && c.IsAvailabe == true , c => c.Category, c => c.SubCategories)
+                .ConfigureAwait(false);
+                if (product == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotIsAvailable;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotIsAvailable);
+                    return serviceResponse;
+                }
+                //Verifica si el producto está disponible
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = new GetProductDto
+                {
+                    Id = product.Id,
+                    Category = new Common.Dtos.Category.GetCategoryDto
+                    {
+                        Id = product.Category.Id,
+                        Name = product.Category.Name,
+                    },
+                    Description = product.Description,
+                    Name = product.Name,
+                    Price = product.Price,
+                    Average = product.Average,
+                    IsAvailabe = product.IsAvailabe,
+                    SupportAggregate = product.SupportAggregate,
+                    GetSubCategoryDtos = product.SubCategories.Select(c => new Common.Dtos.SubCategory.GetSubCategoryDto
+                    {
+                        Id = c.Id,
+                        Name = c.Name,
+                        Price = c.Price,
+                        ProductId = product.Id
+                    }).ToList(),
+                };
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todos los productos que esten disponibles para la venta.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ServiceResponse<List<GetProductDto>>> GetAllProductIsAvailableAsync()
+        {
+            ServiceResponse<List<GetProductDto>> serviceResponse = new ServiceResponse<List<GetProductDto>>();
+            try
+            {
+                //Obtiene los productos disponibles
+                var all_product = await this._serviceGenericProductHelper
+                .WhereListEntityAsync(c => c.IsAvailabe == true , c => c.Category, x => x.SubCategories)
+                .ConfigureAwait(false);
+                if (all_product == null || all_product.Count <= 0)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductAllNotIsAvailable;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ProductAllNotIsAvailable);
+                    return serviceResponse;
+                }
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = all_product.Select(c => new GetProductDto
+                {
+                    Id = c.Id,
+                    Category = new Common.Dtos.Category.GetCategoryDto
+                    {
+                        Id = c.Category.Id,
+                        Name = c.Category.Name,
+                    },
+                    Description = c.Description,
+                    Name = c.Name,
+                    Price = c.Price,
+                    IsAvailabe = c.IsAvailabe,
+                    Average = c.Average,
+                    SupportAggregate = c.SupportAggregate,
+                    GetSubCategoryDtos = c.SubCategories.Select(x => new Common.Dtos.SubCategory.GetSubCategoryDto
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Price = x.Price,
+                        ProductId = c.Id
+                    }).ToList(),
+                }).ToList();
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene una cantidad determinada de productos disponibles dado un producto de referencia y la cantidad.
+        /// </summary>
+        /// <param name="ProductId"></param>
+        /// <param name="cantProduct"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<List<GetProductDto>>> GetCantProductIsAvailableAsync(int ProductId, int cantProduct)
+        {
+            ServiceResponse<List<GetProductDto>> serviceResponse = new ServiceResponse<List<GetProductDto>>();
+            try
+            {
+                if (cantProduct < 1)
+                {
+                    serviceResponse.Data = null;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CantIsNegative;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
+                    return serviceResponse;
+                }
+                //Obtiene el producto.
+                var product = await this._serviceGenericProductHelper
+                .WhereFirstEntityAsync(c => c.Id == ProductId && c.IsAvailabe == true)
+                .ConfigureAwait(false);
+                if (product == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotIsAvailable;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotIsAvailable);
+                    return serviceResponse;
+                }
+                var all_cant_product = await this._serviceGenericProductHelper
+                .GetLoadAsync(product, cantProduct, c => c.IsAvailabe == true, c => c.Category, c => c.SubCategories)
+                .ConfigureAwait(false);
+                if (all_cant_product == null || all_cant_product.Count <= 0)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotNew;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotNew);
+                    return serviceResponse;
+                }
+                serviceResponse.Data = all_cant_product.Select(c => new GetProductDto
+                {
+                    Id = c.Id,
+                    Category = new Common.Dtos.Category.GetCategoryDto
+                    {
+                        Id = c.Category.Id,
+                        Name = c.Category.Name,
+                    },
+                    Description = c.Description,
+                    Name = c.Name,
+                    Price = c.Price,
+                    IsAvailabe = c.IsAvailabe,
+                    Average = c.Average,
+                    SupportAggregate = c.SupportAggregate,
+                    GetSubCategoryDtos = c.SubCategories.Select(x => new Common.Dtos.SubCategory.GetSubCategoryDto
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Price = x.Price,
+                        ProductId = c.Id
+                    }).ToList(),
+                }).ToList();
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todos los productos de una categoria determinada.
+        /// </summary>
+        /// <param name="CategoryId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<List<GetProductDto>>> GetAllProductOfCategory(int CategoryId)
+        {
+            ServiceResponse<List<GetProductDto>> serviceResponse = new ServiceResponse<List<GetProductDto>>();
+            try
+            {
+                //Verifica que la categoria es valida
+                var category = await this._serviceGenericCategoryHelper
+                .WhereFirstEntityAsync(c => c.Id == CategoryId)
+                .ConfigureAwait(false);
+                if (category == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CategoryNotFound;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.CategoryNotFound);
+                    return serviceResponse;
+                }
+                //Obtiene los productos
+                var all_product = await this._serviceGenericProductHelper
+                .WhereListEntityAsync(c => c.Category == category, c => c.Category, x => x.SubCategories)
+                .ConfigureAwait(false);
+                if (all_product == null || all_product.Count <= 0)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductsOfCategoryNotAvailable;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ProductsOfCategoryNotAvailable);
+                    return serviceResponse;
+                }
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = all_product.Select(c => new GetProductDto
+                {
+                    Id = c.Id,
+                    Category = new Common.Dtos.Category.GetCategoryDto
+                    {
+                        Id = c.Category.Id,
+                        Name = c.Category.Name,
+                    },
+                    Description = c.Description,
+                    Name = c.Name,
+                    Price = c.Price,
+                    IsAvailabe = c.IsAvailabe,
+                    Average = c.Average,
+                    SupportAggregate = c.SupportAggregate,
+                    GetSubCategoryDtos = c.SubCategories.Select(x => new Common.Dtos.SubCategory.GetSubCategoryDto
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Price = x.Price,
+                        ProductId = c.Id
+                    }).ToList(),
+                }).ToList();
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todos los productos disponibles de una categoria determinada.
+        /// </summary>
+        /// <param name="CategoryId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<List<GetProductDto>>> GetAllProductIsAvailableOfCategory(int CategoryId)
+        {
+            ServiceResponse<List<GetProductDto>> serviceResponse = new ServiceResponse<List<GetProductDto>>();
+            try
+            {
+                //Verifica que la categoria es valida
+                var category = await this._serviceGenericCategoryHelper
+                .WhereFirstEntityAsync(c => c.Id == CategoryId)
+                .ConfigureAwait(false);
+                if (category == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CategoryNotFound;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.CategoryNotFound);
+                    return serviceResponse;
+                }
+                //Obtiene los productos
+                var all_product = await this._serviceGenericProductHelper
+                .WhereListEntityAsync(c => c.Category == category && c.IsAvailabe == true, c => c.Category, x => x.SubCategories)
+                .ConfigureAwait(false);
+                if (all_product == null || all_product.Count <= 0)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductsOfCategoryNotAvailable;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ProductsOfCategoryNotAvailable);
+                    return serviceResponse;
+                }
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = all_product.Select(c => new GetProductDto
+                {
+                    Id = c.Id,
+                    Category = new Common.Dtos.Category.GetCategoryDto
+                    {
+                        Id = c.Category.Id,
+                        Name = c.Category.Name,
+                    },
+                    Description = c.Description,
+                    Name = c.Name,
+                    Price = c.Price,
+                    IsAvailabe = c.IsAvailabe,
+                    Average = c.Average,
+                    SupportAggregate = c.SupportAggregate,
+                    GetSubCategoryDtos = c.SubCategories.Select(x => new Common.Dtos.SubCategory.GetSubCategoryDto
+                    {
+                        Id = x.Id,
+                        Name = x.Name,
+                        Price = x.Price,
+                        ProductId = c.Id
+                    }).ToList(),
+                }).ToList();
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Elimina un producto.
+        /// </summary>
+        /// <param name="ProductId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<bool>> DeleteProductAsync(int ProductId)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            try
+            {
+                var product = await this._serviceGenericProductHelper
+                .GetLoadAsync(c => c.Id == ProductId)
+                .ConfigureAwait(false);
+                if (product == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotFound);
+                    return serviceResponse;
+                }
+                //Elimina el producto
+                this._serviceGenericProductHelper.RemoveEntity(product);
+                //Guarda los cambios en la base de datos.
+                await this._serviceGenericProductHelper
+                .SaveChangesBDAsync().ConfigureAwait(false);
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = true;
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ExceptionDeleteEntity;
+                serviceResponse.Data = false;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.ExceptionDeleteEntity);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = false;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
             }
         }

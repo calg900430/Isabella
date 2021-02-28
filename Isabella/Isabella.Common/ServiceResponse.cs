@@ -1,14 +1,12 @@
 ﻿namespace Isabella.Common
 {
-    using Extras;
-
     /// <summary>
     /// Está clase es para enviar las respuestas de la api, además de información adicional 
     /// como un mensaje de éxito o de excepción, o otros datos de importancia que necesite el usuario. 
     /// </summary>
     public class ServiceResponse<T>
     {
-        public GetValueResourceFile.KeyResource KeyResource { get; set; }  //Código del recurso solicitado.
+        public int Code { get; set; }  //Código del recurso solicitado.
 
         public T Data { get; set; }                  //Representa los datos del usuario
 

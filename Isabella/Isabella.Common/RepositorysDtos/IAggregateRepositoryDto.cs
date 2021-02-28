@@ -106,5 +106,33 @@
         /// <returns></returns>
         Task<ServiceResponse<List<GetImageAggregateDto>>> GetCantImageAggregateAsync(int AggregateId, int Image, int cantImage);
 
+        /// <summary>
+        /// Obtiene un agregado dado su Id si el mismo está disponible.
+        /// </summary>
+        /// <param name="AggregateId"></param>
+        /// <returns></returns>
+        Task<ServiceResponse<GetAggregateDto>> GetAggregateIsAvailableForIdAsync(int AggregateId);
+
+        /// <summary>
+        /// Obtiene todos los agregados disponibles en la base de datos.
+        /// </summary>
+        /// <returns></returns>
+        Task<ServiceResponse<List<GetAggregateDto>>> GetAllAggregateIsAvailableAsync();
+
+        /// <summary>
+        /// Obtiene una cantidad determinada de agregados disponibles dado un agregado de referencia y la cantidad.
+        /// </summary>
+        /// <param name="AggregateId"></param>
+        /// <param name="cantAggregate"></param>
+        /// <returns></returns>
+        Task<ServiceResponse<List<GetAggregateDto>>> GetCantAggregateIsAvailableAsync(int AggregateId, int cantAggregate);
+
+        /// <summary>
+        /// Borra un agregado.
+        /// </summary>
+        /// <param name="AggregateId"></param>
+        /// <returns></returns>
+        Task<ServiceResponse<bool>> DeleteAggregateAsync(int AggregateId);
+
     }
 }

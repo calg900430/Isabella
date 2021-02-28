@@ -4,9 +4,9 @@
     using System.Collections.Generic;
 
     /// <summary>
-    /// User.
+    /// Obtiene todos los datos de un usuario.
     /// </summary>
-    public class GetDataUserForLoginDto
+    public class GetUserAllDataForOnlyAdmin
     {
         /// <summary>
         /// Key
@@ -39,16 +39,6 @@
         public byte[] ImageUserProfile { get; set; }
 
         /// <summary>
-        /// Fecha de expiración de Token.
-        /// </summary>
-        public DateTime? DateExpirationToken { get; set; }
-
-        /// <summary>
-        /// Token Bearer
-        /// </summary>
-        public string Token { get; set; }
-        
-        /// <summary>
         /// Email
         /// </summary>
         public string Email { get; set; }
@@ -57,5 +47,26 @@
         /// Role del usuario.
         /// </summary>
         public List<string> RolesOfUsers { get; set; }
+
+        /// <summary>
+        /// Id para Claim
+        /// </summary>
+        public Guid IdForClaim { get; set; }
+
+        /// <summary>
+        /// Fecha en la que se actualizó campos del usuario en el sistema.
+        /// </summary>
+        public DateTime? DateCreated { get; set; }
+
+        /// <summary>
+        /// Fecha en el que se registró el usuario en el sistema.
+        /// </summary
+        public DateTime? DateUpdated { get; set; }
+
+        /// <summary>
+        /// Ultima vez que el usuario se conecto a la API InkNation.
+        /// </summary>
+        public DateTime? LastDateConnected { get; set; }
+
     }
 }

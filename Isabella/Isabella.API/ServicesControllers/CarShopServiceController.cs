@@ -8,12 +8,12 @@
 
     using Common;
     using Common.Dtos.CarShop;
-    using Common.Extras;
     using Common.RepositorysDtos;
     using Helpers.RepositoryHelpers;
     using Helpers;
     using Models.Entities;
-   
+    using Resources;
+
 
     /// <summary>
     /// Servicio para el controlador del carrito de compras.
@@ -61,7 +61,7 @@
                 //Manejar la cantidad de productos
                 if (addProductsToCarShop == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -74,7 +74,7 @@
                 .ConfigureAwait(false);
                 if(code_identification == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.NotCodeIdentification;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.NotCodeIdentification;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -87,7 +87,7 @@
                 .ConfigureAwait(false);
                 if(product == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.ProductNotFound;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotFound;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -101,11 +101,11 @@
                 foreach (string key in addProductsToCarShop.CantAggregates.Keys)
                 {      
                     var aggregate = await this._serviceGenericAggregateHelper
-                    .WhereFirstEntityAsync(c => c.Id == int.Parse(key), c => c.Category)
+                    .WhereFirstEntityAsync(c => c.Id == int.Parse(key))
                     .ConfigureAwait(false);
                     if(aggregate == null)
                     {
-                        serviceResponse.KeyResource = GetValueResourceFile.KeyResource.AggregateNotFound;
+                        serviceResponse.Code = (int)GetValueResourceFile.KeyResource.AggregateNotFound;
                         serviceResponse.Data = false;
                         serviceResponse.Success = false;
                         serviceResponse.Message = GetValueResourceFile
@@ -145,7 +145,7 @@
                 await this._serviceGenericCarShopHelper
                 .SaveChangesBDAsync()
                 .ConfigureAwait(false);
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -153,7 +153,7 @@
             }
             catch(Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
@@ -179,7 +179,7 @@
                 .ConfigureAwait(false);
                 if (code_identification == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.NotCodeIdentification;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.NotCodeIdentification;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
@@ -190,20 +190,19 @@
                 var all_products = await this._serviceGenericCarShopHelper._context
                 .Include(c => c.Product).ThenInclude(c => c.Category)
                 .Include(c => c.CantAggregates)
-                .ThenInclude(x => x.Aggregate.Category)
                 .Where(c => c.CodeIdentification == code_identification)
                 .ToListAsync()
                 .ConfigureAwait(false);
                 if (all_products == null)
                 {
-                    serviceResponse.KeyResource = GetValueResourceFile.KeyResource.CarShopNotProducts;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CarShopNotProducts;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
                     .GetValueResourceString(GetValueResourceFile.KeyResource.CarShopNotProducts);
                     return serviceResponse;
                 }
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = new GetAllPorductOfMyCarShopDto
                 {
                     Identification = code_identification.Code,
@@ -226,11 +225,6 @@
                        Quantity = c.Quantity,
                        CantAggregates = c.CantAggregates.Select(x => new GetCantAggregateDto
                        { 
-                           Category = new Common.Dtos.Category.GetCategoryDto
-                           {
-                              Id = x.Aggregate.Category.Id,
-                              Name = x.Aggregate.Category.Name
-                           },
                            Id = x.Id,
                            Price = x.Price,
                            Name = x.Aggregate.Name,
@@ -244,7 +238,7 @@
             }
             catch (Exception)
             {
-                serviceResponse.KeyResource = GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);

@@ -13,11 +13,6 @@
         public int Id { get; set; }
 
         /// <summary>
-        /// Categoria del producto.
-        /// </summary>
-        public GetCategoryDto Category { get; set; }
-
-        /// <summary>
         /// Nombre del Producto ofertado por el Restaurante.
         /// </summary>
         public string Name { get; set; }
@@ -32,5 +27,10 @@
         /// Descripción del Producto.
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Indica si el producto está disponible.
+        /// </summary>
+        public bool IsAvailabe { get; set; }
     }
 }

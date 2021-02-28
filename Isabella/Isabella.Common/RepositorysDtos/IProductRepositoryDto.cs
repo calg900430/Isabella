@@ -73,7 +73,6 @@
         /// <returns></returns>
         Task<ServiceResponse<bool>> EnableProductAsync(int ProductId, bool enable);
 
-
         /// <summary>
         /// Obtiene una cantidad determinada de productos dado un producto de referencia y la cantidad.
         /// </summary>
@@ -104,5 +103,47 @@
         /// <param name="cantImage"></param>
         /// <returns></returns>
         Task<ServiceResponse<List<GetImageProductDto>>> GetCantImageProductAsync(int ProductId, int Image, int cantImage);
+
+        /// <summary>
+        /// Borra un producto.
+        /// </summary>
+        /// <param name="ProductId"></param>
+        /// <returns></returns>
+        Task<ServiceResponse<bool>> DeleteProductAsync(int ProductId);
+
+        /// <summary>
+        /// Obtiene un producto dado su Id si el mismo está disponible.
+        /// </summary>
+        /// <param name="ProductId"></param>
+        /// <returns></returns>
+        Task<ServiceResponse<GetProductDto>> GetProductIsAvailableForIdAsync(int ProductId);
+
+        /// <summary>
+        /// Obtiene todos los productos disponibles en la base de datos.
+        /// </summary>
+        /// <returns></returns>
+        Task<ServiceResponse<List<GetProductDto>>> GetAllProductIsAvailableAsync();
+
+        /// <summary>
+        /// Obtiene una cantidad determinada de productos dado un producto de referencia y la cantidad.
+        /// </summary>
+        /// <param name="ProductId"></param>
+        /// <param name="cantProduct"></param>
+        /// <returns></returns>
+        Task<ServiceResponse<List<GetProductDto>>> GetCantProductIsAvailableAsync(int ProductId, int cantProduct);
+
+        /// <summary>
+        /// Obtiene todos los productos de una categoria determinada.
+        /// </summary>
+        /// <param name="CategoryId"></param>
+        /// <returns></returns>
+        Task<ServiceResponse<List<GetProductDto>>> GetAllProductOfCategory(int CategoryId);
+
+        /// <summary>
+        /// Obtiene todos los productos disponibles de una categoria determinada.
+        /// </summary>
+        /// <param name="CategoryId"></param>
+        /// <returns></returns>
+        Task<ServiceResponse<List<GetProductDto>>> GetAllProductIsAvailableOfCategory(int CategoryId);
     }
 }

@@ -56,7 +56,7 @@
         {
             if (user == null)
             throw new NullReferenceException();
-            if (password == string.Empty || password ==  null)
+            if (password == string.Empty || password == null)
             throw new NotPasswordIsDefinedException("La contraseña no puede estar en blanco.");
             //Guarda al usuario en la base de datos.
             var user_identity = await this._userManager.CreateAsync(user, password).ConfigureAwait(false);
@@ -74,12 +74,12 @@
         public async Task<User> AddUserAsync(User user)
         {
             if (user == null)
-            throw new NullReferenceException();
+                throw new NullReferenceException();
             //Guarda al usuario en la base de datos.
             var user_identity = await this._userManager.CreateAsync(user).ConfigureAwait(false);
             //No se agregó el usuario
             if (user_identity.Succeeded == false)
-            return null;
+                return null;
             return user;
         }
 
@@ -99,7 +99,54 @@
             var identity_result = await this._userManager.AddToRoleAsync(user, role).ConfigureAwait(false);
             if (!identity_result.Succeeded)
             return false;
+            else
             return true;
+        }
+
+        /// <summary>
+        /// Verifica si un usuario tiene un role asignado
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        public async Task<bool> VerifyRoleInUserAsync(User user, string role)
+        {
+            var role_user = await this._userManager
+            .IsInRoleAsync(user, role)
+            .ConfigureAwait(false);
+            if (role_user)
+            return true;
+            else
+            return false;
+        }
+        
+        /// <summary>
+        /// Obtiene todos los roles que posee un usuario.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public async Task<List<string>> GetAllRoleOfUserAsync(User user)
+        {
+            var all_role = await this._userManager.GetRolesAsync(user).ConfigureAwait(false);
+            if(all_role == null)
+            return null;
+            else
+            return all_role.ToList();
+        }
+
+        /// <summary>
+        /// Elimina un role especifico de un usuario.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <param name="role"></param>
+        /// <returns></returns>
+        public async Task<bool> RemoveRoleOfUserAsync(User user, string role)
+        {
+            var remove_role = await this._userManager.RemoveFromRoleAsync(user, role).ConfigureAwait(false);
+            if(remove_role.Succeeded)
+            return true;
+            else
+            return false;
         }
 
         /// <summary>
@@ -403,7 +450,6 @@
             else
             return false;
         }
-
     }
 
     /*Excepciones para UserHelper*/
