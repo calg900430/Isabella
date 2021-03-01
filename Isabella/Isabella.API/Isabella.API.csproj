@@ -33,6 +33,8 @@
 
   <ItemGroup>
     <PackageReference Include="AspNet.Security.OAuth.Apple" Version="3.0.0" />
+    <PackageReference Include="AutoMapper" Version="9.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="MailKit" Version="2.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.0.3" />

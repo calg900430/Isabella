@@ -132,6 +132,21 @@
             /// 
             /// </summary>
             AggregateAllNotIsAvailable = 60,
+
+            /// <summary>
+            /// El producto no soporta agregados.
+            /// </summary>
+            ProductNotSupportAggregate = 61,
+
+            /// <summary>
+            /// 
+            /// </summary>
+            FormatAggregateNotSupport = 62,
+
+            /// <summary>
+            /// La subcategoria no pertence al producto.
+            /// </summary>
+            SubCategoryNotIsProduct = 63,
         }
 
         /// <summary>
@@ -247,22 +262,22 @@
                     switch (dataType)
                     {
                         case "ResourceTypeCode.Stream":
-                            const int OFFSET = 4;
-                            int size = BitConverter.ToInt32(data, 0);
-                            using (Bitmap image = new Bitmap(new MemoryStream(data, OFFSET, size)))
-                            {
-                                //Convertir em mapa de bit a un arreglo de bytes
-                                image.Save($"{Directory.GetCurrentDirectory()}\\temp.jpg");
-                                image.Dispose();
-                            }
-                            valueResource = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}\\temp.jpg");
-                            //Elimina la imagen anterior
-                            File.Delete($"{Directory.GetCurrentDirectory()}\\temp.jpg");
-                            break;
+                        const int OFFSET = 4;
+                        int size = BitConverter.ToInt32(data, 0);
+                        using (Bitmap image = new Bitmap(new MemoryStream(data, OFFSET, size)))
+                        {
+                           //Convertir em mapa de bit a un arreglo de bytes
+                           image.Save($"{Directory.GetCurrentDirectory()}\\temp.jpg");
+                           image.Dispose();
+                        }
+                        valueResource = File.ReadAllBytes($"{Directory.GetCurrentDirectory()}\\temp.jpg");
+                        //Elimina la imagen anterior
+                        File.Delete($"{Directory.GetCurrentDirectory()}\\temp.jpg");
+                        break;
 
                         default:
-                            valueResource = null;
-                            break;
+                        valueResource = null;
+                        break;
                     }
                     resourceReader.Dispose();
                     resourceReader.Close();

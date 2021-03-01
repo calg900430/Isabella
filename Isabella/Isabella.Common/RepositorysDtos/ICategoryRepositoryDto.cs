@@ -41,5 +41,11 @@
         /// <param name="CategoryId"></param>
         /// <returns></returns>
         Task<ServiceResponse<bool>> DeleteCategoryAsync(int CategoryId);
+
+        /// <summary>
+        /// Devuelve las categorias de los productos que esten disponibles. 
+        /// </summary>
+        /// <returns></returns>
+        Task<ServiceResponse<List<GetCategoryDto>>> GetAllCategoryIsProductIsAvailable();
     }
 }

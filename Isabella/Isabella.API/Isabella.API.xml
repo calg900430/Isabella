@@ -4,6 +4,16 @@
         <name>Isabella.API</name>
     </assembly>
     <members>
+        <member name="T:Isabella.API.AutoMapperProfile">
+            <summary>
+            Perfiles para el AutoMapper
+            </summary>
+        </member>
+        <member name="M:Isabella.API.AutoMapperProfile.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
         <member name="T:Isabella.API.Constants">
             <summary>
             Esta clase tiene todas las constantes del proyecto y recibe los parametros para la conexión
@@ -169,9 +179,9 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Controllers.AggregateController.DeleteProductAsync(System.Int32)">
+        <member name="M:Isabella.API.Controllers.AggregateController.DeleteAggregateAsync(System.Int32)">
             <summary>
-            Elimina un producto.
+            Elimina un agregado.
             </summary>
             <param name="AggregateId"></param>
             <returns></returns>
@@ -189,7 +199,7 @@
         </member>
         <member name="M:Isabella.API.Controllers.CarShopController.AddProductStandardToCarShopAsync(Isabella.Common.Dtos.CarShop.AddProductToCarShopDto)">
             <summary>
-            Agregar un producto standard al carrito de compras.
+            Agregar un nuevo pedido al carrito de compras.
             </summary>
             <param name="addProductStandardToCarShop"></param>
             <returns></returns>
@@ -235,8 +245,21 @@
         </member>
         <member name="M:Isabella.API.Controllers.CategoryController.GetAllCategoriesAsync">
             <summary>
+            Obtiene todas las categorias.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.CategoryController.GetAllCategoriesIsAvailableAsync">
+            <summary>
             Obtiene todas las categorias disponibles.
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.CategoryController.DeleteCategoryAsync(System.Int32)">
+            <summary>
+            Elimina una categoria.
+            </summary>
+            <param name="CategoryId"></param>
             <returns></returns>
         </member>
         <member name="T:Isabella.API.Controllers.CodeIdentificationController">
@@ -275,7 +298,7 @@
         </member>
         <member name="M:Isabella.API.Controllers.ProductController.AddProductdAsync(Isabella.Common.Dtos.Product.AddProductDto)">
             <summary>
-            Agregar un nuevo producto.
+            Agrega un nuevo producto.
             </summary>
             <param name="addProductStandard"></param>
             <returns></returns>
@@ -1550,6 +1573,11 @@
             Producto Standard
             </summary>
         </member>
+        <member name="P:Isabella.API.Models.Entities.CarShop.SubCategory">
+            <summary>
+            SubCategoria del Producto.
+            </summary>
+        </member>
         <member name="P:Isabella.API.Models.Entities.CarShop.CantAggregates">
             <summary>
             Cantidad de agregos.
@@ -1835,6 +1863,16 @@
             Indica si el producto se le puede incluir agregados.
             </summary>
         </member>
+        <member name="T:Isabella.API.Models.Entities.Restaurant">
+            <summary>
+            Restaurante
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.Restaurant.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
         <member name="T:Isabella.API.Models.Entities.SubCategory">
             <summary>
             
@@ -2074,6 +2112,21 @@
             
             </summary>
         </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.ProductNotSupportAggregate">
+            <summary>
+            El producto no soporta agregados.
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.FormatAggregateNotSupport">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.SubCategoryNotIsProduct">
+            <summary>
+            La subcategoria no pertence al producto.
+            </summary>
+        </member>
         <member name="T:Isabella.API.Resources.GetValueResourceFile.KeyResourceImage">
             <summary>
             Recursos de Imagenes de la aplicación
@@ -2287,7 +2340,7 @@
             Servicio para el controlador del carrito de compras.
             </summary>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.CarShopServiceController.#ctor(Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CarShop},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Product},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Aggregate},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CodeIdentification},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CantAggregate})">
+        <member name="M:Isabella.API.ServicesControllers.CarShopServiceController.#ctor(Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CarShop},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Product},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Aggregate},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CodeIdentification},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CantAggregate},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.SubCategory},AutoMapper.IMapper)">
             <summary>
             Constructor.
             </summary>
@@ -2296,6 +2349,8 @@
             <param name="serviceGenericAggregateHelper"></param>
             <param name="serviceGenericCodeIdentificationHelper"></param>
             <param name="serviceGenericCantAggregateHelper"></param>
+            <param name="serviceGenericSubCategoryHelper"></param>
+            <param name="mapper"></param>
         </member>
         <member name="M:Isabella.API.ServicesControllers.CarShopServiceController.AddProductsToCarShop(Isabella.Common.Dtos.CarShop.AddProductToCarShopDto)">
             <summary>
@@ -2316,17 +2371,31 @@
             Servicio para el controlador de las categorias de los productos.
             </summary>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.CategoryServiceController.#ctor(Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Category})">
+        <member name="M:Isabella.API.ServicesControllers.CategoryServiceController.#ctor(Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Category},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Product})">
             <summary>
             Categorias
             </summary>
             <param name="serviceGenericCategoryHelper"></param>
+            <param name="serviceGenericProductHelper"></param>
         </member>
         <member name="M:Isabella.API.ServicesControllers.CategoryServiceController.AddCategoryAsync(Isabella.Common.Dtos.Category.AddCategoryDto)">
             <summary>
             Agrega una nueva categoria.
             </summary> 
             <param name="addCategory"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CategoryServiceController.GetAllCategoryIsProductIsAvailable">
+            <summary>
+            Devuelve las categorias de los productos que esten disponibles. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CategoryServiceController.DeleteCategoryAsync(System.Int32)">
+            <summary>
+            Elimina una categoria
+            </summary>
+            <param name="CategoryId"></param>
             <returns></returns>
         </member>
         <member name="M:Isabella.API.ServicesControllers.CategoryServiceController.GetAllCategoryAsync">
@@ -2548,6 +2617,13 @@
             Agrega una nueva subcategoria a un producto.
             </summary>
             <param name="addSubCategoryProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.SubCategoryServiceController.DeleteSubCategoryAsync(System.Int32)">
+            <summary>
+            Elimina una subcategoria
+            </summary>
+            <param name="SubCategoryId"></param>
             <returns></returns>
         </member>
         <member name="M:Isabella.API.ServicesControllers.SubCategoryServiceController.GetAllSubCategoryAsync">

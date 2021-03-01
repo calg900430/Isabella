@@ -185,7 +185,7 @@
                 {
                     var result = await this
                     ._subCategoryService
-                    .RemoveSubCategoryAsync(SubCategoryId)
+                    .DeleteSubCategoryAsync(SubCategoryId)
                     .ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);

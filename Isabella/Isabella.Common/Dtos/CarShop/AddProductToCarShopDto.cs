@@ -20,6 +20,11 @@
         public int ProductId { get; set; }
 
         /// <summary>
+        /// SubCategoría.
+        /// </summary>
+        public int? SubCategoryId{ get; set; }
+
+        /// <summary>
         /// Cantidad de agregos que desea incluirle al producto.
         /// </summary>
         public Dictionary<string, int> CantAggregates { get; set; }

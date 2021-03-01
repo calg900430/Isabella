@@ -22,6 +22,6 @@
         /// </summary>
         /// <param name="CodeVerification"></param>
         /// <returns></returns>
-        Task<ServiceResponse<GetAllPorductOfMyCarShopDto>> GetMyCarShop(Guid CodeVerification);
+        Task<ServiceResponse<GetAllProductOfMyCarShopDto>> GetMyCarShop(Guid CodeVerification);
     }
 }

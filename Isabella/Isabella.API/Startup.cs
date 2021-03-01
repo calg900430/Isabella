@@ -21,6 +21,7 @@ namespace Isabella.API
     using ServicesControllers;
     using Helpers;
     using Helpers.RepositoryHelpers;
+    using AutoMapper;
 
     /// <summary>
     /// Startup
@@ -172,7 +173,10 @@ namespace Isabella.API
                tw.ConsumerSecret = twitterAuth["TwitterClientSecret"];
                tw.SaveTokens = true;
             });*/
-           
+
+            //Agrega el servicio del AutoMapper
+            services.AddAutoMapper(typeof(Startup));
+
             //Agrega el servicio del Seeder
             services.AddTransient<SeedDb>();
 

@@ -52,6 +52,15 @@
                     .GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
                     return serviceResponse;
                 }
+                if (addSubCategoryProduct.Price < 1)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CantIsNegative;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
+                    return serviceResponse;
+                }
                 //Verifica que la subcategoria es valida
                 var subcategory = await this._serviceGenericSubCategoryHelper
                 .WhereSingleEntityAsync(c => c.Name == addSubCategoryProduct.Name, c => c.Product)
@@ -107,9 +116,58 @@
             }
         }
 
-        public Task<ServiceResponse<bool>> DeleteSubCategoryAsync(int SubCategoryId)
+        /// <summary>
+        /// Elimina una subcategoria
+        /// </summary>
+        /// <param name="SubCategoryId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<bool>> DeleteSubCategoryAsync(int SubCategoryId)
         {
-            throw new NotImplementedException();
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            try
+            {
+                var category = await this._serviceGenericSubCategoryHelper
+                .GetLoadAsync(c => c.Id == SubCategoryId)
+                .ConfigureAwait(false);
+                if (category == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SubCategoryNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryNotFound);
+                    return serviceResponse;
+                }
+                //Elimina la categoria
+                this._serviceGenericSubCategoryHelper.RemoveEntity(category);
+                //Guarda los cambios en la base de datos.
+                await this._serviceGenericSubCategoryHelper
+                .SaveChangesBDAsync().ConfigureAwait(false);
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = true;
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ExceptionDeleteEntity;
+                serviceResponse.Data = false;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.ExceptionDeleteEntity);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = false;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
         }
 
         /// <summary>
@@ -308,8 +366,19 @@
                     .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryNotFound);
                     return serviceResponse;
                 }
-                if(updateSubCategoryDto.Price != null || updateSubCategoryDto.Price < 0)
-                subcategory.Price =(decimal) updateSubCategoryDto.Price;
+                if (updateSubCategoryDto.Price != null)
+                {
+                    if (updateSubCategoryDto.Price < 1)
+                    {
+                        serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CantIsNegative;
+                        serviceResponse.Data = false;
+                        serviceResponse.Success = false;
+                        serviceResponse.Message = GetValueResourceFile
+                        .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
+                        return serviceResponse;
+                    }
+                    subcategory.Price = (decimal)updateSubCategoryDto.Price; 
+                }
                 if(updateSubCategoryDto.Name != null)
                 subcategory.Name = updateSubCategoryDto.Name;
                 this._serviceGenericSubCategoryHelper.UpdateEntity(subcategory);

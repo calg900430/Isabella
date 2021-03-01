@@ -57,6 +57,15 @@
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
                     return serviceResponse;
                 }
+                if (addProduct.Stock < 1 || addProduct.Price < 1)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CantIsNegative;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
+                    return serviceResponse;
+                }
                 //Verifica que la categoria exista.
                 var category = await this._serviceGenericCategoryHelper
                 .GetLoadAsync(c => c.Id == addProduct.CategoryId)
@@ -172,9 +181,31 @@
                 if (updateProduct.Name != null)
                 product.Name = updateProduct.Name;
                 if (updateProduct.Price != null)
-                product.Price = (decimal)updateProduct.Price;
+                { 
+                    product.Price = (decimal)updateProduct.Price;
+                    if (updateProduct.Price < 1)
+                    {
+                        serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CantIsNegative;
+                        serviceResponse.Data = null;
+                        serviceResponse.Success = false;
+                        serviceResponse.Message = GetValueResourceFile
+                        .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
+                        return serviceResponse;
+                    }
+                }
                 if (updateProduct.Stock != null)
-                product.Stock = (int)updateProduct.Stock;
+                {
+                    if (updateProduct.Stock < 1)
+                    {
+                        serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CantIsNegative;
+                        serviceResponse.Data = null;
+                        serviceResponse.Success = false;
+                        serviceResponse.Message = GetValueResourceFile
+                        .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
+                        return serviceResponse;
+                    }
+                    product.Stock = (int)updateProduct.Stock;
+                }
                 if(updateProduct.SupportAggregate != null)
                 product.SupportAggregate = (bool) updateProduct.SupportAggregate;
                 product.DateUpdate = DateTime.UtcNow;

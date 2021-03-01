@@ -4,6 +4,7 @@
     using System.Linq;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Microsoft.EntityFrameworkCore;
 
     using Common.RepositorysDtos;
     using Common;
@@ -12,21 +13,25 @@
     using Resources;
     using Helpers;
     using Helpers.RepositoryHelpers;
-   
+    
     /// <summary>
     /// Servicio para el controlador de las categorias de los productos.
     /// </summary>
     public class CategoryServiceController : ICategoryRepositoryDto
     {
         private readonly ServiceGenericHelper<Category> _serviceGenericCategoryHelper;
+        private readonly ServiceGenericHelper<Product> _serviceGenericProductHelper;
 
         /// <summary>
         /// Categorias
         /// </summary>
         /// <param name="serviceGenericCategoryHelper"></param>
-        public CategoryServiceController(ServiceGenericHelper<Category> serviceGenericCategoryHelper)
+        /// <param name="serviceGenericProductHelper"></param>
+        public CategoryServiceController(ServiceGenericHelper<Category> serviceGenericCategoryHelper,
+        ServiceGenericHelper<Product> serviceGenericProductHelper)
         {
             this._serviceGenericCategoryHelper = serviceGenericCategoryHelper;
+            this._serviceGenericProductHelper = serviceGenericProductHelper;
         }
 
         /// <summary>
@@ -84,9 +89,106 @@
             }
         }
 
-        public Task<ServiceResponse<bool>> DeleteCategoryAsync(int CategoryId)
+        /// <summary>
+        /// Devuelve las categorias de los productos que esten disponibles. 
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ServiceResponse<List<GetCategoryDto>>> GetAllCategoryIsProductIsAvailable()
         {
-            throw new NotImplementedException();
+            ServiceResponse<List<GetCategoryDto>> serviceResponse = new ServiceResponse<List<GetCategoryDto>>();
+            try
+            {
+                //Obtiene el contexto de datos.
+                var _context = this._serviceGenericProductHelper._context;
+                //Obtiene todas las categorias disponibles 
+                var all_categories_availables = _context
+                .Include(c => c.Category)
+                .Where(c => c.IsAvailabe == true)
+                .Select(c => c.Category)
+                .ToHashSet();
+                if (all_categories_availables == null || all_categories_availables.Count <= 0)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductAllNotIsAvailable;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ProductAllNotIsAvailable);
+                    return serviceResponse;
+                }
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = all_categories_availables.Select(c => new GetCategoryDto
+                {
+                    Id = c.Id,
+                    Name = c.Name
+                }).ToList();
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Elimina una categoria
+        /// </summary>
+        /// <param name="CategoryId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<bool>> DeleteCategoryAsync(int CategoryId)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            try
+            {
+                var category = await this._serviceGenericCategoryHelper
+                .GetLoadAsync(c => c.Id == CategoryId)
+                .ConfigureAwait(false);
+                if (category == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CategoryNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.CategoryNotFound);
+                    return serviceResponse;
+                }
+                //Elimina la categoria
+                this._serviceGenericCategoryHelper.RemoveEntity(category);
+                //Guarda los cambios en la base de datos.
+                await this._serviceGenericCategoryHelper
+                .SaveChangesBDAsync().ConfigureAwait(false);
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = true;
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Microsoft.EntityFrameworkCore.DbUpdateException)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ExceptionDeleteEntity;
+                serviceResponse.Data = false;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.ExceptionDeleteEntity);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = false;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
         }
 
         /// <summary>

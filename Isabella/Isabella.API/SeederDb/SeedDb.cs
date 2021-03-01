@@ -43,7 +43,7 @@
             try
             {
                 //Verifica si el archivo de recursos existe, sino lo manda a generar.
-                var path = $"{Directory.GetCurrentDirectory()}//Resources//ResourceFile.resources";
+                var path = $"{Directory.GetCurrentDirectory()}\\Resources\\ResourceFile.resources";
                 var file_exist = File.Exists(path);
                 if (!file_exist)
                 CreateResourcesFile.GenerateResourceFileAsync(path);
@@ -176,7 +176,7 @@
                 /*Crea 8 agregados*/
                 if (!await this._dataContext.Aggregates.AnyAsync().ConfigureAwait(false))
                 {
-                    var products_agregate = new List<Aggregate>
+                    var agregates = new List<Aggregate>
                     {
                         new Aggregate
                         {
@@ -195,7 +195,7 @@
                             DateCreated = DateTime.UtcNow,
                             DateUpdate = DateTime.UtcNow,
                             Description = "Queso Gouda de importación.",
-                            IsAvailabe = false,
+                            IsAvailabe = true,
                             LastBuy = DateTime.UtcNow,
                             Price = 45,
                             Stock = 150,
@@ -239,7 +239,7 @@
                             DateCreated = DateTime.UtcNow,
                             DateUpdate = DateTime.UtcNow,
                             Description = "Champiñón de importación.",
-                            IsAvailabe = false,
+                            IsAvailabe = true,
                             LastBuy = DateTime.UtcNow,
                             Price = 40,
                             Stock = 250,
@@ -268,56 +268,56 @@
                         }, //7-Camarón
                     };
                     //Asigna las imagenes a los agregos
-                    products_agregate[0].Images = new List<ImageAggregate>
+                    agregates[0].Images = new List<ImageAggregate>
                     {
                        new ImageAggregate
                        {
                            Image = GetValueResourceFile.GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageQuesoBlanco)
                        },
                     };
-                    products_agregate[1].Images = new List<ImageAggregate>
+                    agregates[1].Images = new List<ImageAggregate>
                     {
                        new ImageAggregate
                        {
                            Image = GetValueResourceFile.GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageQuesoGouda)
                        },
                     };
-                    products_agregate[2].Images = new List<ImageAggregate>
+                    agregates[2].Images = new List<ImageAggregate>
                     {
                        new ImageAggregate
                        {
                           Image = GetValueResourceFile.GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageJamon)
                        },
                     };
-                    products_agregate[3].Images = new List<ImageAggregate>
+                    agregates[3].Images = new List<ImageAggregate>
                     {
                        new ImageAggregate
                        {
                           Image = GetValueResourceFile.GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageChorizo)
                        },
                     };
-                    products_agregate[4].Images = new List<ImageAggregate>
+                    agregates[4].Images = new List<ImageAggregate>
                     {
                        new ImageAggregate
                        {
                           Image = GetValueResourceFile.GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageAceitunas)
                        },
                     };
-                    products_agregate[5].Images = new List<ImageAggregate>
+                    agregates[5].Images = new List<ImageAggregate>
                     {
                        new ImageAggregate
                        {
                           Image = GetValueResourceFile.GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageSetas)
                        },
                     };
-                    products_agregate[6].Images = new List<ImageAggregate>
+                    agregates[6].Images = new List<ImageAggregate>
                     {
                        new ImageAggregate
                        {
                           Image = GetValueResourceFile.GetValueResourceImage(GetValueResourceFile.KeyResourceImage.ImageAtun)
                        },
                     };
-                    products_agregate[7].Images = new List<ImageAggregate>
+                    agregates[7].Images = new List<ImageAggregate>
                     {
                        new ImageAggregate
                        {
@@ -325,7 +325,7 @@
                        },
                     };
                     await this._dataContext.Aggregates
-                    .AddRangeAsync(products_agregate)
+                    .AddRangeAsync(agregates)
                     .ConfigureAwait(false);
                     await this._dataContext.SaveChangesAsync()
                     .ConfigureAwait(false);
@@ -347,6 +347,7 @@
                            DateCreated = DateTime.UtcNow,
                            DateUpdate = DateTime.UtcNow,
                            LastBuy = DateTime.UtcNow,
+                           SupportAggregate = false,
                         },
                         new Product
                          {
@@ -354,11 +355,21 @@
                            Category = categorys[3],
                            Description = "Excelente postre de coco.",
                            Stock = 65,
-                           IsAvailabe = false,
+                           IsAvailabe = true,
                            Price = 120,
                            DateCreated = DateTime.UtcNow,
                            DateUpdate = DateTime.UtcNow,
                            LastBuy = DateTime.UtcNow,
+                           SupportAggregate = false,
+                           SubCategories = new List<SubCategory>
+                           {
+                               new SubCategory
+                               {
+                                  Name = "Ración Doble",
+                                  Price = 240,
+                                  Description = "El postre coco glasé, en una variante doble."
+                               }
+                           }
                          },
                         new Product
                         {
@@ -371,6 +382,16 @@
                            DateCreated = DateTime.UtcNow,
                            DateUpdate = DateTime.UtcNow,
                            LastBuy = DateTime.UtcNow,
+                           SupportAggregate = false,
+                           SubCategories = new List<SubCategory>
+                           {
+                               new SubCategory
+                               {
+                                  Name = "Ración Doble",
+                                  Price = 400,
+                                  Description = "El bistec de cerdo, en mayor proporción."
+                               }
+                           }
                         },
                         new Product
                         {
@@ -383,6 +404,7 @@
                            DateCreated = DateTime.UtcNow,
                            DateUpdate = DateTime.UtcNow,
                            LastBuy = DateTime.UtcNow,
+                           SupportAggregate = false,
                         },
                         new Product
                         {
@@ -395,6 +417,7 @@
                            DateCreated = DateTime.UtcNow,
                            DateUpdate = DateTime.UtcNow,
                            LastBuy = DateTime.UtcNow,
+                           SupportAggregate = false,
                         },
                         new Product
                         {
@@ -407,6 +430,7 @@
                            DateCreated = DateTime.UtcNow,
                            DateUpdate = DateTime.UtcNow,
                            LastBuy = DateTime.UtcNow,
+                           SupportAggregate = false,
                         },
                         new Product
                         {
@@ -419,6 +443,7 @@
                            DateCreated = DateTime.UtcNow,
                            DateUpdate = DateTime.UtcNow,
                            LastBuy = DateTime.UtcNow,
+                           SupportAggregate = true,
                         },
                         new Product
                         {
@@ -426,11 +451,21 @@
                            Category = categorys[2],
                            Description = "Esta es la mejor pizza de la casa.",
                            Stock = 140,
-                           IsAvailabe = false,
+                           IsAvailabe = true,
                            Price = 155,
                            DateCreated = DateTime.UtcNow,
                            DateUpdate = DateTime.UtcNow,
                            LastBuy = DateTime.UtcNow,
+                           SupportAggregate = true,
+                           SubCategories = new List<SubCategory>
+                           {
+                               new SubCategory
+                               {
+                                  Name = "Ración Familiar",
+                                  Price = 310,
+                                  Description = "Pizza para la familia."
+                               }
+                           }
                         },
                     };
                     //Agrega las imagenes del producto1(Ensalada Fria)

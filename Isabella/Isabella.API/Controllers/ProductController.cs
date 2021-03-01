@@ -36,7 +36,7 @@
         }
 
         /// <summary>
-        /// Agregar un nuevo producto.
+        /// Agrega un nuevo producto.
         /// </summary>
         /// <param name="addProductStandard"></param>
         /// <returns></returns>

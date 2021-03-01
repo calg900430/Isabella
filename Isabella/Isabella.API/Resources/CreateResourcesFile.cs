@@ -28,7 +28,7 @@
                 rw.AddResource("UserAllNotFound", "No hay usuarios registrados en la aplicación.");
                 rw.AddResource("UserBadUserName", "La cuenta de usuario seleccionada está en uso.Seleccione otra.");
                 rw.AddResource("EntityIsNull", "La entidad pasada como parametro es nula.");
-                rw.AddResource("CantIsNegative", "El valor pasado como cantidad es negativo.");
+                rw.AddResource("CantIsNegative", "El valor pasado como cantidad es igual o menor que 0.");
                 rw.AddResource("ProductNotNewImage", "No se han agregado nuevas imagenes al producto.");
                 rw.AddResource("CategoryNotFound", "La categoria no existe.");
                 rw.AddResource("ProductNotFound", "El producto no existe.");
@@ -45,11 +45,13 @@
                 rw.AddResource("CategoryExist", "La categoria ya existe.Seleccione otro nombre.");
                 rw.AddResource("CategoryNotAllFound", "No hay categorias disponibles.");
                 rw.AddResource("ProductNotNew", "No se han agregado nuevos productos.");
+                rw.AddResource("SubCategoryNotIsProduct", "La subcategoria no existe o no pertenece a este producto.");
                 rw.AddResource("SubCategoryExist", "La subcategoria ya existe.Seleccione otro nombre.");
                 rw.AddResource("SubCategoryNotFound", "La subcategoria no existe.");
                 rw.AddResource("SubCategoryNotAllFound", "No hay subcategorias disponibles.");
                 rw.AddResource("ImageAggregateNotValide",
                 $"La imagen de un agregado no puede ser mayor de {Constants.MAX_LENTHG_IMAGE_AGGREGATE} bytes.");
+                rw.AddResource("FormatAggregateNotSupport", "El Id del agregado debe ser un número entero.");
                 rw.AddResource("AggregateNotFound", "El agregado no existe.");
                 rw.AddResource("AggregateAllNotFound", "No hay agregados disponibles.");
                 rw.AddResource("AggregateNotNew", "No se han añadido nuevos agregados.");
@@ -78,8 +80,8 @@
                 rw.AddResource("AggregateExist", "El agregado ya existe.Seleccione otro nombre.");
                 rw.AddResource("ImagesNoExist", "La entidad no tiene imágenes disponibles.");
                 rw.AddResource("NotCodeIdentification", "El código de identificación de usuario no es válido.");
+                rw.AddResource("ProductNotSupportAggregate", "El producto seleccionado no admite agregados.");
                 rw.AddResource("CarShopNotProducts", "El usuario no ha agregado productos a su carrito de compras.");
-                rw.AddResource("ImagesNoExist", "La entidad no tiene imágenes disponibles.");
                 rw.AddResource("NotUsersClient", "No hay usuarios clientes registrados en la aplicación.");
                 rw.AddResource("NotUsersOwner", "No hay dueños de negocios registrados en la aplicación.");
                 rw.AddResource("IsNotRoleOfUser", "El usuario no tiene el rol especificado.");
@@ -90,7 +92,7 @@
                 //Agrega las imagenes que usa por defecto la aplicación.
                 #region Imagenes
                 //Crea mapas de bit a partir de las imagenes obtenidas.
-                var path_images = $"{Directory.GetCurrentDirectory()}\\ElementsForResourceFile\\images";
+                var path_images = $"{Directory.GetCurrentDirectory()}\\Resources\\images";
                 var files = Directory.GetFiles(path_images);
                 foreach (string fileName in files)
                 {
@@ -112,6 +114,8 @@
                 rw.Generate();
                 //Libera los recursos.
                 rw.Dispose();
+                //Cierra
+                rw.Close();
             }
         }
     }

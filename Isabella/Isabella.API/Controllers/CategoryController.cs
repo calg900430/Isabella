@@ -134,7 +134,7 @@
         }
 
         /// <summary>
-        /// Obtiene todas las categorias disponibles.
+        /// Obtiene todas las categorias.
         /// </summary>
         /// <returns></returns>
         [HttpGet("get/all_category")]
@@ -162,6 +162,75 @@
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todas las categorias disponibles.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("get/all_category_availables")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> GetAllCategoriesIsAvailableAsync()
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this
+                    ._categoryService
+                    .GetAllCategoryIsProductIsAvailable()
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                 return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Elimina una categoria.
+        /// </summary>
+        /// <param name="CategoryId"></param>
+        /// <returns></returns>
+        [HttpDelete("del/category")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        public async Task<IActionResult> DeleteCategoryAsync(int CategoryId)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this
+                    ._categoryService
+                    .DeleteCategoryAsync(CategoryId)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+               return BadRequest(ex.Message);
             }
         }
     }

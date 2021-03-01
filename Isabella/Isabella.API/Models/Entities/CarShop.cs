@@ -27,6 +27,11 @@
         public Product Product { get; set; }
 
         /// <summary>
+        /// SubCategoria del Producto.
+        /// </summary>
+        public SubCategory SubCategory { get; set; }
+
+        /// <summary>
         /// Cantidad de agregos.
         /// </summary>
         public ICollection<CantAggregate> CantAggregates { get; set; }

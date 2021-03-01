@@ -35,7 +35,7 @@
         }
 
         /// <summary>
-        /// Agregar un producto standard al carrito de compras.
+        /// Agregar un nuevo pedido al carrito de compras.
         /// </summary>
         /// <param name="addProductStandardToCarShop"></param>
         /// <returns></returns>

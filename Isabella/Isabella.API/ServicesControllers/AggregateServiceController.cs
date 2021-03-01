@@ -62,6 +62,15 @@
                     .GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
                     return serviceResponse;
                 }
+                if (addAggregate.Stock < 1 || addAggregate.Price < 1)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CantIsNegative;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
+                    return serviceResponse;
+                }
                 //Verifica que el nombre no este en uso
                 var aggregate_exist = await this._serviceGenericAggregateHelper
                 .WhereSingleEntityAsync(c => c.Name == addAggregate.Name)
@@ -849,9 +858,31 @@
                 if (updateAggregate.Name != null)
                 aggregate.Name = updateAggregate.Name;
                 if (updateAggregate.Price != null)
-                aggregate.Price = (decimal)updateAggregate.Price;
+                {
+                    if (updateAggregate.Price < 1)
+                    {
+                        serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CantIsNegative;
+                        serviceResponse.Data = null;
+                        serviceResponse.Success = false;
+                        serviceResponse.Message = GetValueResourceFile
+                        .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
+                        return serviceResponse;
+                    }
+                    aggregate.Price = (decimal)updateAggregate.Price; 
+                }
                 if (updateAggregate.Stock != null)
-                aggregate.Stock = (int)updateAggregate.Stock;
+                {
+                    if (updateAggregate.Stock < 1)
+                    {
+                        serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CantIsNegative;
+                        serviceResponse.Data = null;
+                        serviceResponse.Success = false;
+                        serviceResponse.Message = GetValueResourceFile
+                        .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
+                        return serviceResponse;
+                    }
+                    aggregate.Stock = (int)updateAggregate.Stock; 
+                }
                 aggregate.DateUpdate = DateTime.UtcNow;
                 //Actualiza la entidad
                 this._serviceGenericAggregateHelper

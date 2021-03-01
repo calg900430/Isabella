@@ -624,14 +624,14 @@
         /// </summary>
         /// <param name="AggregateId"></param>
         /// <returns></returns>
-        [HttpDelete("delete/product")]
+        [HttpDelete("delete/aggregate")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         //[ProducesResponseType(403)]
         //[ProducesResponseType(401)]
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> DeleteProductAsync(int AggregateId)
+        public async Task<IActionResult> DeleteAggregateAsync(int AggregateId)
         {
             try
             {

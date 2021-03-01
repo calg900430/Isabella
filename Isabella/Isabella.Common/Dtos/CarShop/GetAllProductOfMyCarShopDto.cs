@@ -3,15 +3,15 @@
     using System;
     using System.Linq;
     using System.Collections.Generic;
-
     using System.ComponentModel.DataAnnotations;
+
     using Category;
-    using Product;
+    using SubCategory;
 
     /// <summary>
     /// Productos en el carrito para pedido un futuro pedido.
     /// </summary>
-    public class GetAllPorductOfMyCarShopDto
+    public class GetAllProductOfMyCarShopDto
     {
         /// <summary>
         /// Código de indentificación.
@@ -37,10 +37,7 @@
         /// <summary>
         /// Precio Total del posible pedido.
         /// </summary>
-        public decimal PriceTotal 
-        { 
-            get; set; 
-        }
+        public decimal PriceTotal { get; set; }
     }
 
     /// <summary>
@@ -48,11 +45,51 @@
     /// </summary>
     public class GetCarShopProductDto
     {
-       
         /// <summary>
-        /// Producto.
+        /// Key
         /// </summary>
-        public GetProductDto GetProductDto { get; set; }
+        public int ProductId { get; set; }
+
+        /// <summary>
+        /// Nombre del Producto ofertado por el Restaurante.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Precio del Produto.
+        /// </summary>
+        [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = false)]
+        public decimal Price { get; set; }
+
+        /// <summary>
+        /// Descripción del Producto.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Promedio de calificaciones del usuario acerca del producto.
+        /// </summary>
+        public float Average { get; set; }
+
+        /// <summary>
+        /// Indica si el producto está disponible.
+        /// </summary>
+        public bool IsAvailabe { get; set; }
+
+        /// <summary>
+        /// Indica si el producto se le puede incluir agregados.
+        /// </summary>
+        public bool SupportAggregate { get; set; }
+
+        /// <summary>
+        /// Categoria del producto.
+        /// </summary>
+        public GetCategoryDto Category { get; set; }
+
+        /// <summary>
+        /// SubCategoria
+        /// </summary>
+        public GetSubCategoryDto SubCategory { get; set; }
 
         /// <summary>
         /// Agregados.
@@ -72,10 +109,7 @@
         /// <summary>
         /// Precio total del producto, incluye agregados y en caso de pizzas y pastas si es con queso gouda..
         /// </summary>
-        public decimal PriceTotal 
-        { 
-            get; set; 
-        }
+        public decimal PriceTotal { get; set; }
     }
 
     public class GetCantAggregateDto
@@ -84,11 +118,6 @@
         /// Id
         /// </summary>
         public int Id { get; set; }
-
-        /// <summary>
-        /// Categoria
-        /// </summary>
-        public GetCategoryDto Category { get; set; }
 
         /// <summary>
         /// Nombre del Producto ofertado por el Restaurante.
@@ -109,6 +138,6 @@
         /// Precio total del pedido de este agrego.
         /// </summary>
         [DisplayFormat(DataFormatString = "{0:C2}")]
-        public decimal PriceTotal { get { return this.Price * (decimal)this.Quantity; } }
+        public decimal PriceTotal { get; set; }
     }
 }
