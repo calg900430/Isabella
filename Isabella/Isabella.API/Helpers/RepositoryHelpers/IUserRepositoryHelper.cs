@@ -55,6 +55,13 @@
         public Task<bool> VerifyEmailAsync(string email);
 
         /// <summary>
+        /// Verifica si un role está disponible dado su Id.
+        /// </summary>
+        /// <param name="RoleId"></param>
+        /// <returns></returns>
+        public Task<string> VerifyRoleAsync(int RoleId);
+
+        /// <summary>
         /// Verifica si la cuenta de usuario dada está en uso.
         /// </summary>
         /// <param name="userName"></param>
@@ -95,6 +102,13 @@
         /// </summary>
         /// <returns></returns>
         public Task<List<User>> GetAllUserAsync();
+
+        /// <summary>
+        /// Obtiene todos los usuarios del sistema que tienen un role determinado.
+        /// </summary>
+        /// <param name="RoleId"></param>
+        /// <returns></returns>
+        public Task<List<User>> GetAllUserWithRoleAsync(int RoleId);
 
         /// <summary>
         /// Agregar un role a un usuario.

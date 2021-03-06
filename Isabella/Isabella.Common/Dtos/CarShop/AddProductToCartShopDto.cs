@@ -5,7 +5,7 @@
     using System.ComponentModel.DataAnnotations;
     using Isabella.Common.Dtos.Product;
 
-    public class AddProductToCarShopDto
+    public class AddProductToCartShopDto
     {
         /// <summary>
         /// Código de identificación.
@@ -29,11 +29,6 @@
         /// </summary>
         public Dictionary<string, int> CantAggregates { get; set; }
         
-        /// <summary>
-        /// Queso Gouda
-        /// </summary>
-        public bool? ChesseGouda { get; set; }
-
         /// <summary>
         /// Cantidad deseada.
         /// </summary>

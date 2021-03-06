@@ -1,9 +1,9 @@
-﻿namespace Isabella.Common.Dtos.SubCategory
+﻿namespace Isabella.Common.Dtos.Category
 {
     /// <summary>
     /// Dto para actualizar una subcategoria.
     /// </summary>
-    public class UpdateSubCategoryDto
+    public class UpdateCategoryDto
     {
         /// <summary>
         /// Key
@@ -14,15 +14,5 @@
         /// Nombre de la categoría del producto.
         /// </summary>
         public string Name { get; set; }
-
-        /// <summary>
-        /// Precio del Produto.
-        /// </summary>
-        public decimal? Price { get; set; }
-
-        /// <summary>
-        /// Enable
-        /// </summary>
-        public bool? IsAvailable { get; set; }
     }
 }

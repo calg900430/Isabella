@@ -204,6 +204,19 @@
         }
 
         /// <summary>
+        /// Verifica si el role está definido en la app.
+        /// </summary>
+        /// <param name="RoleId"></param>
+        /// <returns></returns>
+        public async Task<string> VerifyRoleAsync(int RoleId)
+        {
+            var role_existing = await this._roleManager.FindByIdAsync(RoleId.ToString()).ConfigureAwait(false);
+            if (role_existing == null)
+            return null;
+            return role_existing.Name;
+        }
+
+        /// <summary>
         /// Obtiene el Id del último usuario registrado en el sistema.
         /// </summary>
         /// <returns></returns>
@@ -369,6 +382,21 @@
             if (list_users == null)
             return null;
             return list_users;
+        }
+
+        /// <summary>
+        /// Obtiene todos los usuarios del sistema que tienen un role determinado.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<User>> GetAllUserWithRoleAsync(int RoleId)
+        {
+            var role_existing = await this._roleManager.FindByIdAsync(RoleId.ToString()).ConfigureAwait(false);
+            if (role_existing == null)
+            return null;
+            var list_users = await this._userManager.GetUsersInRoleAsync(role_existing.Name).ConfigureAwait(false);
+            if (list_users == null)
+            return null;
+            return list_users.ToList();
         }
 
         /// <summary>

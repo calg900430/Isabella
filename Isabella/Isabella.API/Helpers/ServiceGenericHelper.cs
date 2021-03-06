@@ -247,6 +247,25 @@
         }
 
         /// <summary>
+        /// Verifica si una tabla contiene todas las entidades enviadas dado sus Id.
+        /// </summary>
+        /// <param name="ListEntityId"></param>
+        /// <returns></returns>
+        public virtual async Task<bool> VerifyIsContainsEntity(List<int> ListEntityId)
+        {
+            IQueryable<TEntity> query = m_dbSet.AsQueryable();
+            foreach(int id in ListEntityId)
+            {
+               if(await query.FirstOrDefaultAsync(c => c.Id == id)
+               .ConfigureAwait(false) != null)
+               continue;
+               else
+               return false;
+            }
+            return true;
+        }
+
+        /// <summary>
         /// Guarda una entidad en la base de datos.
         /// </summary>
         /// <param name="entity"></param>
@@ -259,6 +278,18 @@
         }
 
         /// <summary>
+        /// Guarda una lista de entidades en la base de datos.
+        /// </summary>
+        /// <param name="entities"></param>
+        /// <returns></returns>
+        public virtual async Task AddRangeEntityAsync(List<TEntity> entities)
+        {
+            if (entities == null)
+            throw new NullEntityException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
+            await m_dbSet.AddRangeAsync(entities).ConfigureAwait(false);
+        }
+
+        /// <summary>
         /// Guarda los cambios en la base de datos.
         /// </summary>
         /// <returns></returns>
@@ -268,7 +299,7 @@
         }
 
         /// <summary>
-        /// Actualiza una entidad.
+        /// Actualiza una lista de entidades.
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
@@ -277,6 +308,18 @@
             if (entity == null)
                 throw new NullEntityException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
             m_dbSet.Update(entity);
+        }
+
+        /// <summary>
+        /// Actualiza una entidad.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public virtual void UpdateRangeEntity(List<TEntity> entity)
+        {
+            if (entity == null)
+            throw new NullEntityException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
+            m_dbSet.UpdateRange(entity);
         }
 
         /// <summary>
@@ -289,6 +332,19 @@
             throw new NullEntityException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
             m_dbSet.Remove(entity);
         }
+
+        /// <summary>
+        /// Elimina una entidad.
+        /// </summary>
+        /// <param name="entities"></param>
+        public void RemoveRangeEntity(List<TEntity> entities)
+        {
+            if (entities == null)
+            throw new NullEntityException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
+            m_dbSet.RemoveRange(entities);
+        }
+
+
         #endregion
 
         #region Excepciones

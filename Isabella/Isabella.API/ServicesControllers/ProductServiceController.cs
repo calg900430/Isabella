@@ -23,6 +23,7 @@
         private readonly ServiceGenericHelper<Product> _serviceGenericProductHelper;
         private readonly ServiceGenericHelper<Category> _serviceGenericCategoryHelper;
         private readonly ServiceGenericHelper<ImageProduct> _serviceGenericImageProductHelper;
+        private readonly ServiceGenericHelper<SubCategory> _serviceGenericSubCategoryHelper;
 
         /// <summary>
         /// Constructor
@@ -30,13 +31,16 @@
         /// <param name="serviceProductGenericHelper"></param>
         /// <param name="serviceCategoryGenericHelper"></param>
         /// <param name="serviceGenericImageProductHelper"></param>
+        /// <param name="serviceGenericSubCategoryHelper"></param>
         public ProductServiceController(ServiceGenericHelper<Product> serviceProductGenericHelper, 
         ServiceGenericHelper<Category> serviceCategoryGenericHelper, 
-        ServiceGenericHelper<ImageProduct> serviceGenericImageProductHelper)
+        ServiceGenericHelper<ImageProduct> serviceGenericImageProductHelper,
+        ServiceGenericHelper<SubCategory> serviceGenericSubCategoryHelper)
         {
             this._serviceGenericProductHelper = serviceProductGenericHelper;
             this._serviceGenericCategoryHelper = serviceCategoryGenericHelper;
             this._serviceGenericImageProductHelper = serviceGenericImageProductHelper;
+            this._serviceGenericSubCategoryHelper = serviceGenericSubCategoryHelper;
         }
 
         /// <summary>
@@ -284,7 +288,8 @@
                        Id = c.Id,
                        Name = c.Name,
                        Price = c.Price,
-                       ProductId = product.Id
+                       ProductId = product.Id,
+                       IsAvailable = c.IsAvailable,
                     }).ToList(),
                 };
                 serviceResponse.Success = true;
@@ -343,7 +348,8 @@
                         Id = x.Id,
                         Name = x.Name,
                         Price = x.Price,
-                        ProductId = c.Id
+                        ProductId = c.Id,
+                        IsAvailable = x.IsAvailable,
                     }).ToList(),
                 }).ToList();
                 serviceResponse.Success = true;
@@ -766,7 +772,8 @@
                         Id = x.Id,
                         Name = x.Name,
                         Price = x.Price,
-                        ProductId = c.Id
+                        ProductId = c.Id,
+                        IsAvailable = x.IsAvailable,
                     }).ToList(),
                 }).ToList();
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
@@ -967,7 +974,7 @@
         }
 
         /// <summary>
-        /// Obtiene un producto dado su Id si el mismo está disponible.
+        /// Obtiene un producto dado su Id si el mismo está disponible(Obtiene las subcategorias que están disponibles).
         /// </summary>
         /// <param name="ProductId"></param>
         /// <returns></returns>
@@ -978,8 +985,10 @@
             {
                 //Obtiene el producto.
                 var product = await this._serviceGenericProductHelper
-                .WhereFirstEntityAsync(c => c.Id == ProductId && c.IsAvailabe == true , c => c.Category, c => c.SubCategories)
+                .WhereFirstEntityAsync(c => c.Id == ProductId && c.IsAvailabe == true,
+                c => c.Category, c => c.SubCategories)
                 .ConfigureAwait(false);
+                //Verifica si el producto está disponible
                 if (product == null)
                 {
                     serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotIsAvailable;
@@ -989,7 +998,9 @@
                     .GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotIsAvailable);
                     return serviceResponse;
                 }
-                //Verifica si el producto está disponible
+                //Verifica si tiene subcategorias y selecciona solamente las que están disponibles.
+                if(product.SubCategories.Any())
+                product.SubCategories = product.SubCategories.Where(c => c.IsAvailable == true).ToList();
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = new GetProductDto
                 {
@@ -1010,7 +1021,8 @@
                         Id = c.Id,
                         Name = c.Name,
                         Price = c.Price,
-                        ProductId = product.Id
+                        ProductId = product.Id,
+                        IsAvailable = c.IsAvailable,
                     }).ToList(),
                 };
                 serviceResponse.Success = true;
@@ -1028,7 +1040,7 @@
         }
 
         /// <summary>
-        /// Obtiene todos los productos que esten disponibles para la venta.
+        /// Obtiene todos los productos que esten disponibles para la venta(Obtiene las subcategorias que están disponibles).
         /// </summary>
         /// <returns></returns>
         public async Task<ServiceResponse<List<GetProductDto>>> GetAllProductIsAvailableAsync()
@@ -1048,6 +1060,12 @@
                     serviceResponse.Message = GetValueResourceFile
                     .GetValueResourceString(GetValueResourceFile.KeyResource.ProductAllNotIsAvailable);
                     return serviceResponse;
+                }
+                //Verifica si tiene subcategorias y selecciona solamente las que están disponibles.
+                foreach(Product product in all_product)
+                {
+                   if (product.SubCategories.Any())
+                   product.SubCategories = product.SubCategories.Where(c => c.IsAvailable == true).ToList();
                 }
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = all_product.Select(c => new GetProductDto
@@ -1069,7 +1087,8 @@
                         Id = x.Id,
                         Name = x.Name,
                         Price = x.Price,
-                        ProductId = c.Id
+                        ProductId = c.Id,
+                        IsAvailable = x.IsAvailable
                     }).ToList(),
                 }).ToList();
                 serviceResponse.Success = true;
@@ -1088,6 +1107,7 @@
 
         /// <summary>
         /// Obtiene una cantidad determinada de productos disponibles dado un producto de referencia y la cantidad.
+        /// (Obtiene las subcategorias que están disponibles).
         /// </summary>
         /// <param name="ProductId"></param>
         /// <param name="cantProduct"></param>
@@ -1106,10 +1126,10 @@
                     return serviceResponse;
                 }
                 //Obtiene el producto.
-                var product = await this._serviceGenericProductHelper
+                var product_referenc = await this._serviceGenericProductHelper
                 .WhereFirstEntityAsync(c => c.Id == ProductId && c.IsAvailabe == true)
                 .ConfigureAwait(false);
-                if (product == null)
+                if (product_referenc == null)
                 {
                     serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotIsAvailable;
                     serviceResponse.Data = null;
@@ -1119,7 +1139,7 @@
                     return serviceResponse;
                 }
                 var all_cant_product = await this._serviceGenericProductHelper
-                .GetLoadAsync(product, cantProduct, c => c.IsAvailabe == true, c => c.Category, c => c.SubCategories)
+                .GetLoadAsync(product_referenc, cantProduct, c => c.IsAvailabe == true, c => c.Category, c => c.SubCategories)
                 .ConfigureAwait(false);
                 if (all_cant_product == null || all_cant_product.Count <= 0)
                 {
@@ -1129,6 +1149,12 @@
                     serviceResponse.Message = GetValueResourceFile
                     .GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotNew);
                     return serviceResponse;
+                }
+                //Verifica si tiene subcategorias y selecciona solamente las que están disponibles.
+                foreach (Product product in all_cant_product)
+                {
+                   if (product.SubCategories.Any())
+                   product.SubCategories = product.SubCategories.Where(c => c.IsAvailable == true).ToList();
                 }
                 serviceResponse.Data = all_cant_product.Select(c => new GetProductDto
                 {
@@ -1149,7 +1175,8 @@
                         Id = x.Id,
                         Name = x.Name,
                         Price = x.Price,
-                        ProductId = c.Id
+                        ProductId = c.Id,
+                        IsAvailable = x.IsAvailable,
                     }).ToList(),
                 }).ToList();
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
@@ -1169,6 +1196,7 @@
 
         /// <summary>
         /// Obtiene todos los productos de una categoria determinada.
+        /// (Obtiene las subcategorias que están disponibles).
         /// </summary>
         /// <param name="CategoryId"></param>
         /// <returns></returns>
@@ -1223,7 +1251,8 @@
                         Id = x.Id,
                         Name = x.Name,
                         Price = x.Price,
-                        ProductId = c.Id
+                        ProductId = c.Id,
+                        IsAvailable = x.IsAvailable,
                     }).ToList(),
                 }).ToList();
                 serviceResponse.Success = true;
@@ -1242,6 +1271,7 @@
 
         /// <summary>
         /// Obtiene todos los productos disponibles de una categoria determinada.
+        /// (Obtiene las subcategorias que están disponibles).
         /// </summary>
         /// <param name="CategoryId"></param>
         /// <returns></returns>
@@ -1276,6 +1306,12 @@
                     .GetValueResourceString(GetValueResourceFile.KeyResource.ProductsOfCategoryNotAvailable);
                     return serviceResponse;
                 }
+                //Verifica si tiene subcategorias y selecciona solamente las que están disponibles.
+                foreach (Product product in all_product)
+                {
+                   if (product.SubCategories.Any())
+                   product.SubCategories = product.SubCategories.Where(c => c.IsAvailable == true).ToList();
+                }
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = all_product.Select(c => new GetProductDto
                 {
@@ -1296,7 +1332,8 @@
                         Id = x.Id,
                         Name = x.Name,
                         Price = x.Price,
-                        ProductId = c.Id
+                        ProductId = c.Id,
+                        IsAvailable = x.IsAvailable,
                     }).ToList(),
                 }).ToList();
                 serviceResponse.Success = true;

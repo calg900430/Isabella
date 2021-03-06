@@ -11,7 +11,7 @@
     /// <summary>
     /// Productos en el carrito para pedido un futuro pedido.
     /// </summary>
-    public class GetAllProductOfMyCarShopDto
+    public class GetAllProductOfCartShopDto
     {
         /// <summary>
         /// Código de indentificación.
@@ -35,9 +35,77 @@
         }
 
         /// <summary>
+        /// Cantidad Total de Productos.
+        /// </summary>
+        public int QuantityTotalProductCombined
+        {
+            get
+            {
+                if (!GetCarShopProducts.Any())
+                return 0;
+                else
+                return this.GetCarShopProducts.Sum(c => c.Quantity);
+            }
+                
+        }
+
+        /// <summary>
+        /// Cantidad Total de Agregados.
+        /// </summary>
+        public int QuantityTotalAggregate 
+        {
+            get 
+            {
+                if (!GetCarShopProducts.Any())
+                return 0;
+                else
+                return this.GetCarShopProducts.Sum(c => c.CantAggregates.Sum(x => x.Quantity));
+            }
+        }
+
+        /// <summary>
+        /// Precio total del de productos
+        /// </summary>
+        public decimal PriceTotalOfProductCombined
+        {
+            get 
+            {
+                if (!GetCarShopProducts.Any())
+                return 0;
+                else
+                return this.GetCarShopProducts.Sum(c => c.Price);
+            }
+        }
+
+        /// <summary>
+        /// Precio total en agregados
+        /// </summary>
+        public decimal PriceTotalOfAggregates
+        {
+            get
+            {
+                if (!GetCarShopProducts.Any())
+                return 0;
+                else
+                return this.GetCarShopProducts.Sum(c => c.CantAggregates.Sum(x => x.Price));
+            }
+        }
+
+        /// <summary>
         /// Precio Total del posible pedido.
         /// </summary>
-        public decimal PriceTotal { get; set; }
+        public decimal PriceTotal
+        {
+            get
+            {
+               if(!GetCarShopProducts.Any())
+               return 0;
+               else
+               return (PriceTotalOfProductCombined * QuantityTotalProductCombined) + 
+               (PriceTotalOfAggregates * QuantityTotalAggregate);
+            }
+        }
+
     }
 
     /// <summary>
@@ -46,7 +114,13 @@
     public class GetCarShopProductDto
     {
         /// <summary>
-        /// Key
+        /// Id del producto combinado, o sea el que ya está en el carrito
+        /// personalizado al gusto del usuario.
+        /// </summary>
+        public int ProductCombinedId { get; set; }
+
+        /// <summary>
+        /// Producto
         /// </summary>
         public int ProductId { get; set; }
 
@@ -97,11 +171,6 @@
         public List<GetCantAggregateDto> CantAggregates { get; set; }
 
         /// <summary>
-        /// Queso Gouda, solo para pizzas y pastas.
-        /// </summary>
-        public bool? CheeseGouda { get; set; }
-
-        /// <summary>
         /// Cantidad de Productos.
         /// </summary>
         public int Quantity { get; set; }
@@ -109,7 +178,19 @@
         /// <summary>
         /// Precio total del producto, incluye agregados y en caso de pizzas y pastas si es con queso gouda..
         /// </summary>
-        public decimal PriceTotal { get; set; }
+        public decimal PriceTotal 
+        { 
+            get
+            {
+                return this.Price * this.Quantity;
+            }
+        }
+
+        /// <summary>
+        /// Fecha en que se agrego el producto al carrito.
+        /// </summary>
+        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime? DateCreated { get; set; }
     }
 
     public class GetCantAggregateDto
@@ -138,6 +219,12 @@
         /// Precio total del pedido de este agrego.
         /// </summary>
         [DisplayFormat(DataFormatString = "{0:C2}")]
-        public decimal PriceTotal { get; set; }
+        public decimal PriceTotal
+        {
+            get
+            {
+                return this.Price * this.Quantity;
+            }
+        }
     }
 }

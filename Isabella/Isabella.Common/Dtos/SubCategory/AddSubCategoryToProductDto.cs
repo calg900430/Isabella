@@ -28,5 +28,10 @@
         /// </summary>
         [MaxLength(1000, ErrorMessage = "Ha superado el limite máximo de caracteres permitidos para la descripción de una subcategoria.")]
         public string Description { get; set; }
+
+        /// <summary>
+        /// Enable
+        /// </summary>
+        public bool IsAvailable { get; set; }
     }
 }

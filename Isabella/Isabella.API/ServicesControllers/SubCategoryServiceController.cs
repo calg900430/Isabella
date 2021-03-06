@@ -92,6 +92,7 @@
                     Product = product,
                     Name = addSubCategoryProduct.Name,
                     Price = addSubCategoryProduct.Price,
+                    IsAvailable = addSubCategoryProduct.IsAvailable,
                 };
                 await this._serviceGenericSubCategoryHelper
                 .AddEntityAsync(new_subcategory)
@@ -171,7 +172,7 @@
         }
 
         /// <summary>
-        /// Obtiene todas las subcategorias disponibles.
+        /// Obtiene todas las subcategorias.
         /// </summary>
         public async Task<ServiceResponse<List<GetSubCategoryDto>>> GetAllSubCategoryAsync()
         {
@@ -196,7 +197,96 @@
                     Id = c.Id,
                     Name = c.Name,
                     Price = c.Price, 
-                    ProductId = c.Product.Id
+                    ProductId = c.Product.Id,
+                    IsAvailable = c.IsAvailable,
+                }).ToList();
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todas las subcategorias que están disponibles.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ServiceResponse<List<GetSubCategoryDto>>> GetAllSubCategoryIsAvailableAsync()
+        {
+            ServiceResponse<List<GetSubCategoryDto>> serviceResponse = new ServiceResponse<List<GetSubCategoryDto>>();
+            try
+            {
+                var all_subcategories = await this._serviceGenericSubCategoryHelper
+                .WhereListEntityAsync(c => c.IsAvailable == true, c => c.Product)
+                .ConfigureAwait(false);
+                if (all_subcategories == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SubCategoryNotAllFound;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryNotAllFound);
+                    return serviceResponse;
+                }
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = all_subcategories.Select(c => new GetSubCategoryDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Price = c.Price,
+                    ProductId = c.Product.Id,
+                    IsAvailable = c.IsAvailable,
+                }).ToList();
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todas las subcategorias que no están disponible
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ServiceResponse<List<GetSubCategoryDto>>> GetAllSubCategoryIsNotAvailableAsync()
+        {
+            ServiceResponse<List<GetSubCategoryDto>> serviceResponse = new ServiceResponse<List<GetSubCategoryDto>>();
+            try
+            {
+                var all_subcategories = await this._serviceGenericSubCategoryHelper
+                .WhereListEntityAsync(c => c.IsAvailable == false, c => c.Product)
+                .ConfigureAwait(false);
+                if (all_subcategories == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SubCategoryNotAllFound;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryNotAllFound);
+                    return serviceResponse;
+                }
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = all_subcategories.Select(c => new GetSubCategoryDto
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Price = c.Price,
+                    ProductId = c.Product.Id,
+                    IsAvailable = c.IsAvailable,
                 }).ToList();
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -242,6 +332,7 @@
                     Name = subcategory.Name,
                     Price = subcategory.Price,
                     ProductId = subcategory.Product.Id,
+                    IsAvailable = subcategory.IsAvailable,
                 };
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -286,7 +377,8 @@
                     Id = subcategory.Id,
                     Name = subcategory.Name,
                     Price = subcategory.Price,
-                    ProductId = subcategory.Product.Id
+                    ProductId = subcategory.Product.Id,
+                    IsAvailable = subcategory.IsAvailable,
                 };
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -296,47 +388,6 @@
             {
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
-                serviceResponse.Success = false;
-                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
-                return serviceResponse;
-            }
-        }
-
-        /// <summary>
-        /// Elimina una subcategoria de un producto.
-        /// </summary>
-        /// <param name="SubCategoryId"></param>
-        /// <returns></returns>
-        public async Task<ServiceResponse<bool>> RemoveSubCategoryAsync(int SubCategoryId)
-        {
-            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
-            try
-            {
-                //Verifica que la categoria es valida
-                var subcategory = await this._serviceGenericSubCategoryHelper
-                .WhereSingleEntityAsync(c => c.Id == SubCategoryId, c => c.Product)
-                .ConfigureAwait(false);
-                if (subcategory == null)
-                {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SubCategoryNotFound;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile
-                    .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryNotFound);
-                    return serviceResponse;
-                }
-                this._serviceGenericSubCategoryHelper.RemoveEntity(subcategory);
-                await this._serviceGenericSubCategoryHelper.SaveChangesBDAsync().ConfigureAwait(false);
-                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
-                serviceResponse.Data = true;
-                serviceResponse.Success = true;
-                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
-                return serviceResponse;
-            }
-            catch (Exception)
-            {
-                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
-                serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
@@ -355,7 +406,7 @@
             {
                 //Verifica que la categoria es valida
                 var subcategory = await this._serviceGenericSubCategoryHelper
-                .WhereSingleEntityAsync(c => c.Id == updateSubCategoryDto.Id, c => c.Product)
+                .WhereFirstEntityAsync(c => c.Id == updateSubCategoryDto.Id, c => c.Product)
                 .ConfigureAwait(false);
                 if (subcategory == null)
                 {
@@ -381,6 +432,8 @@
                 }
                 if(updateSubCategoryDto.Name != null)
                 subcategory.Name = updateSubCategoryDto.Name;
+                if(updateSubCategoryDto.IsAvailable != null)
+                subcategory.IsAvailable = (bool) updateSubCategoryDto.IsAvailable;
                 this._serviceGenericSubCategoryHelper.UpdateEntity(subcategory);
                 await this._serviceGenericSubCategoryHelper.SaveChangesBDAsync().ConfigureAwait(false);
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;

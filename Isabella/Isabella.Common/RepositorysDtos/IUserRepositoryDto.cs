@@ -46,61 +46,29 @@
         Task<ServiceResponse<List<GetUserDto>>> GetAllUserAsync();
 
         /// <summary>
-        /// Obtiene todos los usuarios clientes.
+        /// Obtiene todos los usuarios del sistema con un rol determinado.
         /// </summary>
         /// <returns></returns>
-        Task<ServiceResponse<List<GetUserDto>>> GetAllUserClientAsync();
+        Task<ServiceResponse<List<GetUserDto>>> GetAllUserWithRoleAsync(int RoleId);
 
         /// <summary>
-        /// Elimina el role owner de un usuario.
+        /// Elimina un role determinado de un usuario.
         /// </summary>
         /// <returns></returns>
-        Task<ServiceResponse<bool>> RemoveRoleOwnerAsync(int UserId);
+        Task<ServiceResponse<bool>> RemoveRoleInUserAsync(int UserId, int RoleId);
 
         /// <summary>
-        /// Elimina el role admin de un usuario.
+        /// Asigna un role a un usuario.
         /// </summary>
         /// <returns></returns>
-        Task<ServiceResponse<bool>> RemoveRoleAdminAsync(int UserId);
+        Task<ServiceResponse<bool>> AssigningRoleToUserAsync(int UserId, int RoleId);
 
         /// <summary>
-        /// Agrega el role owner a un usuario.
-        /// </summary>
-        /// <returns></returns>
-        Task<ServiceResponse<bool>> AssigningRoleOwnerToUserAsync(int UserId);
-
-        /// <summary>
-        /// Agrega el role admin a un usuario.
-        /// </summary>
-        /// <returns></returns>
-        Task<ServiceResponse<bool>> AssigningRoleAdminToUserAsync(int UserId);
-
-        /// <summary>
-        /// Agrega el role client a un usuario.
-        /// </summary>
-        /// <returns></returns>
-        Task<ServiceResponse<bool>> AssigningRoleClientToUserAsync(int UserId);
-
-        /// <summary>
-        /// Agrega un usuario admin en el sistema.
+        /// Agrega un usuario en el sistema.
         /// </summary>
         /// <param name="newuser"></param>
         /// <returns></returns>
-        Task<ServiceResponse<bool>> AddUserAdminAsync(RegisterUserDto newuser);
-
-        /// <summary>
-        /// Agrega un usuario owner en el sistema.
-        /// </summary>
-        /// <param name="newuser"></param>
-        /// <returns></returns>
-        Task<ServiceResponse<bool>> AddUserOwnerAsync(RegisterUserDto newuser);
-
-        /// <summary>
-        /// Agrega un usuario cliente en el sistema.
-        /// </summary>
-        /// <param name="newuser"></param>
-        /// <returns></returns>
-        Task<ServiceResponse<bool>> AddUserClientAsync(RegisterUserDto newuser);
+        Task<ServiceResponse<bool>> AddUserAsync(RegisterUserDto newuser);
 
         /// <summary>
         /// Obtiene el Id del último usuario en la base de datos.

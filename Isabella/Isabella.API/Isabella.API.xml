@@ -191,13 +191,13 @@
             Controlador para el carrito de compras.
             </summary>
         </member>
-        <member name="M:Isabella.API.Controllers.CarShopController.#ctor(Isabella.API.ServicesControllers.CarShopServiceController)">
+        <member name="M:Isabella.API.Controllers.CarShopController.#ctor(Isabella.API.ServicesControllers.CartShopServiceController)">
             <summary>
             Constructor.
             </summary>
             <param name="carShopServiceController"></param>
         </member>
-        <member name="M:Isabella.API.Controllers.CarShopController.AddProductStandardToCarShopAsync(Isabella.Common.Dtos.CarShop.AddProductToCarShopDto)">
+        <member name="M:Isabella.API.Controllers.CarShopController.AddProductToCarShopAsync(Isabella.Common.Dtos.CarShop.AddProductToCartShopDto)">
             <summary>
             Agregar un nuevo pedido al carrito de compras.
             </summary>
@@ -207,6 +207,80 @@
         <member name="M:Isabella.API.Controllers.CarShopController.GetMyCarShopAsync(System.Guid)">
             <summary>
             Obtiene el carrito de compras del usuario.
+            </summary>
+            <param name="CodeIdentification"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.CarShopController.AddAggregateInProductToCarShopAsync(Isabella.Common.Dtos.CarShop.AddAggregateInProductDto)">
+            <summary>
+            Agregar un nuevo agregado a un producto que está disponible en el carrito de compras.
+            </summary>
+            <param name="addAggregateInProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.CarShopController.UpdateQuantityProductInCarShopAsync(Isabella.Common.Dtos.CarShop.ModifyQuantityProductDto)">
+            <summary>
+            Actualiza la cantidad del producto.
+            </summary>
+            <param name="modifyQuantityProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.CarShopController.IncrementQuantityProductInCarShopAsync(Isabella.Common.Dtos.CarShop.ModifyQuantityProductDto)">
+            <summary>
+            Incrementa la cantidad del producto en un valor dado.
+            </summary>
+            <param name="modifyQuantityProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.CarShopController.UpdateQuantityAggregateOfProductInCarShopAsync(Isabella.Common.Dtos.CarShop.ModifyCantInAggregateProductDto)">
+            <summary>
+            Actualiza la cantidad de un agregado para un producto.
+            </summary>
+            <param name="modifyCantInAggregateProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.CarShopController.IncrementQuantityAggregateOfProductInCarShopAsync(Isabella.Common.Dtos.CarShop.ModifyCantInAggregateProductDto)">
+            <summary>
+            Incrementa la cantidad de un agregado dado un valor.
+            </summary>
+            <param name="modifyCantInAggregateProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.CarShopController.UpdateSubCategoryOfProductInCarShopAsync(Isabella.Common.Dtos.CarShop.UpdateSubCategoryProductDto)">
+            <summary>
+            Actualiza la subcategoria de un producto del carrito.
+            </summary>
+            <param name="updateSubCategoryProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.CarShopController.DeleteSubCategoryInProductInCarShopAsync(System.Guid,System.Int32)">
+            <summary>
+            Elimina la subcategoria de un producto en el carrito de compras.
+            </summary>
+            <param name="CodeIdentification"></param>
+            <param name="ProductCombinedId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.CarShopController.DeleteProductInCarShopAsync(System.Guid,System.Int32)">
+            <summary>
+            Elimina un producto del carro de compras del usuario.
+            </summary>
+            <param name="CodeIdentification"></param>
+            <param name="ProductCombinedId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.CarShopController.DeleteAggregateOfProductInCarShopAsync(System.Guid,System.Int32,System.Int32)">
+            <summary>
+            Elimina un agregado de un producto.
+            </summary>
+            <param name="CodeIdentification"></param>
+            <param name="ProductCombinedId"></param>
+            <param name="AggregateId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.CarShopController.DeleteAllProductInCarShopAsync(System.Guid)">
+            <summary>
+            Elimina todos los productos del carrito de compras.
             </summary>
             <param name="CodeIdentification"></param>
             <returns></returns>
@@ -260,6 +334,13 @@
             Elimina una categoria.
             </summary>
             <param name="CategoryId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.CategoryController.UpdateCategoryAsync(Isabella.Common.Dtos.Category.UpdateCategoryDto)">
+            <summary>
+            Actualiza una categoria.
+            </summary>
+            <param name="updateCategory"></param>
             <returns></returns>
         </member>
         <member name="T:Isabella.API.Controllers.CodeIdentificationController">
@@ -469,7 +550,19 @@
         </member>
         <member name="M:Isabella.API.Controllers.SubCategoryController.GetAllSubCategoriesAsync">
             <summary>
+            Obtiene todas las subcategorias.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.SubCategoryController.GetAllSubCategoriesIsAvailableAsync">
+            <summary>
             Obtiene todas las subcategorias disponibles.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.SubCategoryController.GetAllSubCategoriesIsNotAvailableAsync">
+            <summary>
+            Obtiene todas las subcategorias no disponibles.
             </summary>
             <returns></returns>
         </member>
@@ -498,23 +591,9 @@
             </summary>
             <param name="userRepositoryDto"></param>
         </member>
-        <member name="M:Isabella.API.Controllers.UsersController.AddUserClientAsync(Isabella.Common.Dtos.Users.RegisterUserDto)">
+        <member name="M:Isabella.API.Controllers.UsersController.AddUserAsync(Isabella.Common.Dtos.Users.RegisterUserDto)">
             <summary>
-            Agrega un nuevo usuario y inicialmente le asigna el rol cliente y le envia un correo con el código de confirmación del registro.
-            </summary>
-            <param name="newuser"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Isabella.API.Controllers.UsersController.AddUserAdminAsync(Isabella.Common.Dtos.Users.RegisterUserDto)">
-            <summary>
-            Agrega un nuevo usuario y inicialmente le asigna el role admin y le envia un correo con el código de confirmación del registro.
-            </summary>
-            <param name="newuser"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Isabella.API.Controllers.UsersController.AddUserOwnerAsync(Isabella.Common.Dtos.Users.RegisterUserDto)">
-            <summary>
-            Agrega un nuevo usuario y inicialmente le asigna el role owner y le envia un correo con el código de confirmación del registro.
+            Agrega un nuevo usuario y le envia un correo con el código de confirmación del registro.
             </summary>
             <param name="newuser"></param>
             <returns></returns>
@@ -549,6 +628,12 @@
         <member name="M:Isabella.API.Controllers.UsersController.GetAllUserAsync">
             <summary>
             Obtiene todos los usuarios del sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.UsersController.GetAllUserAsync(System.Int32)">
+            <summary>
+            Obtiene todos los usuarios del sistema con un determinado rol.
             </summary>
             <returns></returns>
         </member>
@@ -633,30 +718,12 @@
             <param name="formFile"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Controllers.UsersController.DeleteRoleAdminOfUserAsync(System.Int32)">
+        <member name="M:Isabella.API.Controllers.UsersController.RemoveRoleOfUserAsync(System.Int32,System.Int32)">
             <summary>
-            Elimina el role admin de un usuario.
+            Elimina un role determinado de un usuario dado.
             </summary>
             <param name="UserId"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Isabella.API.Controllers.UsersController.DeleteRoleOwnerOfUserAsync(System.Int32)">
-            <summary>
-            Elimina el role owner de un usuario.
-            </summary>
-            <param name="UserId"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Isabella.API.Controllers.UsersController.GetAllUserClientsAsync">
-            <summary>
-            Obtiene todos los usuarios clientes.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Isabella.API.Controllers.UsersController.GetAllUserOwnersAsync">
-            <summary>
-            Obtiene todos los usuarios dueños.
-            </summary>
+            <param name="RoleId"></param>
             <returns></returns>
         </member>
         <member name="M:Isabella.API.Controllers.UsersController.GetAllUserAllDataAsync">
@@ -672,25 +739,12 @@
             <param name="UserId"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Controllers.UsersController.AddRoleAdminAsync(System.Int32)">
+        <member name="M:Isabella.API.Controllers.UsersController.AddRoleToUserAsync(System.Int32,System.Int32)">
             <summary>
-            Asigna el role admin a un usuario.
+            Asigna un role determinado a un usuario.
             </summary>
             <param name="UserId"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Isabella.API.Controllers.UsersController.AddRoleOwnerAsync(System.Int32)">
-            <summary>
-            Asigna el role owner a un usuario.
-            </summary>
-            <param name="UserId"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Isabella.API.Controllers.UsersController.AddRoleClientAsync(System.Int32)">
-            <summary>
-            Asigna el role client a un usuario.
-            </summary>
-            <param name="UserId"></param>
+            <param name="RoleId"></param>
             <returns></returns>
         </member>
         <member name="M:Isabella.API.Controllers.UsersController.UserBannerUserAsync(System.Int32,System.Boolean)">
@@ -782,6 +836,11 @@
             SubCategorias.
             </summary>
         </member>
+        <member name="P:Isabella.API.Data.DataContext.ProductCombineds">
+            <summary>
+            Producto Combinado.
+            </summary>
+        </member>
         <member name="M:Isabella.API.Data.DataContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <summary>
             Crea el modelo para la base de datos
@@ -854,6 +913,13 @@
             <param name="email"></param>
             <returns></returns>
         </member>
+        <member name="M:Isabella.API.Helpers.RepositoryHelpers.IUserRepositoryHelper.VerifyRoleAsync(System.Int32)">
+            <summary>
+            Verifica si un role está disponible dado su Id.
+            </summary>
+            <param name="RoleId"></param>
+            <returns></returns>
+        </member>
         <member name="M:Isabella.API.Helpers.RepositoryHelpers.IUserRepositoryHelper.VerifyUserNameAsync(System.String)">
             <summary>
             Verifica si la cuenta de usuario dada está en uso.
@@ -894,6 +960,13 @@
             <summary>
             Obtiene todos los usuarios del sistema.
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Helpers.RepositoryHelpers.IUserRepositoryHelper.GetAllUserWithRoleAsync(System.Int32)">
+            <summary>
+            Obtiene todos los usuarios del sistema que tienen un role determinado.
+            </summary>
+            <param name="RoleId"></param>
             <returns></returns>
         </member>
         <member name="M:Isabella.API.Helpers.RepositoryHelpers.IUserRepositoryHelper.AddRoleForUserAsync(Isabella.API.Models.Entities.User,System.String)">
@@ -1094,11 +1167,25 @@
             <param name="parameters_filters"></param>
             <returns></returns>
         </member>
+        <member name="M:Isabella.API.Helpers.ServiceGenericHelper`1.VerifyIsContainsEntity(System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Verifica si una tabla contiene todas las entidades enviadas dado sus Id.
+            </summary>
+            <param name="ListEntityId"></param>
+            <returns></returns>
+        </member>
         <member name="M:Isabella.API.Helpers.ServiceGenericHelper`1.AddEntityAsync(`0)">
             <summary>
             Guarda una entidad en la base de datos.
             </summary>
             <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Helpers.ServiceGenericHelper`1.AddRangeEntityAsync(System.Collections.Generic.List{`0})">
+            <summary>
+            Guarda una lista de entidades en la base de datos.
+            </summary>
+            <param name="entities"></param>
             <returns></returns>
         </member>
         <member name="M:Isabella.API.Helpers.ServiceGenericHelper`1.SaveChangesBDAsync">
@@ -1108,6 +1195,13 @@
             <returns></returns>
         </member>
         <member name="M:Isabella.API.Helpers.ServiceGenericHelper`1.UpdateEntity(`0)">
+            <summary>
+            Actualiza una lista de entidades.
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Helpers.ServiceGenericHelper`1.UpdateRangeEntity(System.Collections.Generic.List{`0})">
             <summary>
             Actualiza una entidad.
             </summary>
@@ -1119,6 +1213,12 @@
             Elimina una entidad.
             </summary>
             <param name="entity"></param>
+        </member>
+        <member name="M:Isabella.API.Helpers.ServiceGenericHelper`1.RemoveRangeEntity(System.Collections.Generic.List{`0})">
+            <summary>
+            Elimina una entidad.
+            </summary>
+            <param name="entities"></param>
         </member>
         <member name="T:Isabella.API.Helpers.ServiceGenericHelper`1.NullEntityException">
             <summary>
@@ -1227,6 +1327,13 @@
             <param name="role"></param>
             <returns></returns>
         </member>
+        <member name="M:Isabella.API.Helpers.UserHelper.VerifyRoleAsync(System.Int32)">
+            <summary>
+            Verifica si el role está definido en la app.
+            </summary>
+            <param name="RoleId"></param>
+            <returns></returns>
+        </member>
         <member name="M:Isabella.API.Helpers.UserHelper.GetIdOfLastUserAsync">
             <summary>
             Obtiene el Id del último usuario registrado en el sistema.
@@ -1287,6 +1394,12 @@
         <member name="M:Isabella.API.Helpers.UserHelper.GetAllUserAsync">
             <summary>
             Obtiene todos los usuarios del sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Helpers.UserHelper.GetAllUserWithRoleAsync(System.Int32)">
+            <summary>
+            Obtiene todos los usuarios del sistema que tienen un role determinado.
             </summary>
             <returns></returns>
         </member>
@@ -1397,6 +1510,11 @@
             </summary>
             <param name="exception"></param>
             <returns></returns>
+        </member>
+        <member name="T:Isabella.API.Models.CantAggregateComparer">
+            <summary>
+            Comparador para la cantidad de agregados
+            </summary>
         </member>
         <member name="T:Isabella.API.Models.Entities.Aggregate">
             <summary>
@@ -1528,9 +1646,9 @@
             Key
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.Entities.CantAggregate.CarShop">
+        <member name="P:Isabella.API.Models.Entities.CantAggregate.ProductCombined">
             <summary>
-            Carrito de Compras
+            Producto Combinado
             </summary>
         </member>
         <member name="P:Isabella.API.Models.Entities.CantAggregate.Aggregate">
@@ -1553,55 +1671,37 @@
             Precio total del Producto.
             </summary>
         </member>
-        <member name="T:Isabella.API.Models.Entities.CarShop">
+        <member name="T:Isabella.API.Models.Entities.CartShop">
             <summary>
             Carro de compras Fast(Para pedidos informales, o sea usuarios que no desean ser clientes oficiales)
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.Entities.CarShop.Id">
+        <member name="P:Isabella.API.Models.Entities.CartShop.Id">
             <summary>
             Key
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.Entities.CarShop.CodeIdentification">
+        <member name="P:Isabella.API.Models.Entities.CartShop.CodeIdentification">
             <summary>
             Código de identificación.
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.Entities.CarShop.Product">
+        <member name="P:Isabella.API.Models.Entities.CartShop.ProductCombined">
             <summary>
-            Producto Standard
+            ProductCarShop
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.Entities.CarShop.SubCategory">
+        <member name="P:Isabella.API.Models.Entities.CartShop.DateCreated">
             <summary>
-            SubCategoria del Producto.
+            Fecha en que se agrego el producto al carrito.
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.Entities.CarShop.CantAggregates">
+        <member name="M:Isabella.API.Models.Entities.CartShop.MyEqualTo(Isabella.API.Models.Entities.CartShop)">
             <summary>
-            Cantidad de agregos.
+            Compara un CarShop
             </summary>
-        </member>
-        <member name="P:Isabella.API.Models.Entities.CarShop.CheeseGouda">
-            <summary>
-            Queso Gouda.
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.Entities.CarShop.Price">
-            <summary>
-            Precio actual del Producto.
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.Entities.CarShop.Quantity">
-            <summary>
-            Cantidad de Productos.
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.Entities.CarShop.PriceTotal">
-            <summary>
-            Precio total del Producto.
-            </summary>
+            <param name="other"></param>
+            <returns></returns>
         </member>
         <member name="T:Isabella.API.Models.Entities.Category">
             <summary>
@@ -1863,6 +1963,46 @@
             Indica si el producto se le puede incluir agregados.
             </summary>
         </member>
+        <member name="T:Isabella.API.Models.Entities.ProductCombined">
+            <summary>
+            ProductCarShop
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.ProductCombined.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.ProductCombined.Product">
+            <summary>
+            Producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.ProductCombined.SubCategory">
+            <summary>
+            SubCategoria del Producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.ProductCombined.CantAggregates">
+            <summary>
+            Cantidad de agregos.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.ProductCombined.Price">
+            <summary>
+            Precio Producto, el mismo se define si el usuario elige el producto con subcategoria o no.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.ProductCombined.Quantity">
+            <summary>
+            Cantidad de Productos.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.ProductCombined.PriceTotal">
+            <summary>
+            Precio total del Producto.
+            </summary>
+        </member>
         <member name="T:Isabella.API.Models.Entities.Restaurant">
             <summary>
             Restaurante
@@ -1901,6 +2041,11 @@
         <member name="P:Isabella.API.Models.Entities.SubCategory.Description">
             <summary>
             Descripción
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.SubCategory.IsAvailable">
+            <summary>
+            Enable
             </summary>
         </member>
         <member name="T:Isabella.API.Models.Entities.User">
@@ -1963,36 +2108,6 @@
             Imagen de perfil del usuario.
             </summary>
         </member>
-        <member name="T:Isabella.API.Models.Entities.UserClient">
-            <summary>
-            Usuario Cliente
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.Entities.UserClient.Id">
-            <summary>
-            Id
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.Entities.UserClient.User">
-            <summary>
-            Usuario
-            </summary>
-        </member>
-        <member name="T:Isabella.API.Models.Entities.UserOwner">
-            <summary>
-            Usuario Cliente
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.Entities.UserOwner.Id">
-            <summary>
-            Id
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.Entities.UserOwner.User">
-            <summary>
-            Usuario
-            </summary>
-        </member>
         <member name="T:Isabella.API.Models.IEntity">
             <summary>
             Interfaz para implementar Id.
@@ -2047,17 +2162,187 @@
             Representa los Key de los recursos.
             </summary>
         </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.ImageUserNotValide">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.CategoryExist">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.CategoryNotAllFound">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.ProductNotNew">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.SubCategoryExist">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.SubCategoryNotFound">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.SubCategoryNotAllFound">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.ImageAggregateNotValide">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.AggregateNotFound">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.AggregateAllNotFound">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.AggregateNotNew">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.BadRole">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.BadEmail">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.UserConfirmRegister">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.TokeConfirmRegisterBad">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.RequiredEmailOfUser">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.NotConfirmRegister">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.VerifyPasswordAndEmail">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.ErrorGenerateToken">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.LoginUserSuccess">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.UserNotNew">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.EmailNotSend">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.EmailRegisterConfirmation">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.ImageErrorValue">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.PasswordNotCorrect">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.CodeRecoverPassword">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.ErrorGetCredentialsUser">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.ProductExist">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.AggregateExist">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.ImagesNoExist">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.NotCodeIdentification">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.CarShopNotProducts">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.ProductNotIsAvailable">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.NotFoundFileEmbedded">
             <summary>
             No se encuentra el archivo incrustado.
             </summary>
         </member>
-        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.NotUsersClient">
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.UserAllNotFoundWithRole">
             <summary>
             
             </summary>
         </member>
-        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.NotUsersOwner">
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.ProductNotHaveAggregate">
             <summary>
             
             </summary>
@@ -2127,9 +2412,64 @@
             La subcategoria no pertence al producto.
             </summary>
         </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.ProductNotExistInCarShop">
+            <summary>
+            El producto no existe en el carrito de compras del usuario.
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.ProductInCartHaveSubCategory">
+            <summary>
+            El producto no se encuentra en el carrito o ya tiene asignada esa subcategoria.
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.ProductInCartNotHaveSubCategory">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.ProductCombinedNotHaveSubCategory">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.SubCategoryNotIsAvailable">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:Isabella.API.Resources.GetValueResourceFile.KeyResourceImage">
             <summary>
             Recursos de Imagenes de la aplicación
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResourceImage.ImageAceitunas">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResourceImage.ImageAtun">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResourceImage.ImageSetas">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResourceImage.ImageCamarones">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResourceImage.ImageChorizo">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResourceImage.ImageJamon">
+            <summary>
+            
             </summary>
         </member>
         <member name="M:Isabella.API.Resources.GetValueResourceFile.GetValueResourceString(Isabella.API.Resources.GetValueResourceFile.KeyResource)">
@@ -2335,12 +2675,12 @@
             <param name="AggregateId"></param>
             <returns></returns>
         </member>
-        <member name="T:Isabella.API.ServicesControllers.CarShopServiceController">
+        <member name="T:Isabella.API.ServicesControllers.CartShopServiceController">
             <summary>
             Servicio para el controlador del carrito de compras.
             </summary>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.CarShopServiceController.#ctor(Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CarShop},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Product},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Aggregate},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CodeIdentification},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CantAggregate},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.SubCategory},AutoMapper.IMapper)">
+        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.#ctor(Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CartShop},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Product},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Aggregate},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CodeIdentification},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CantAggregate},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.SubCategory},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.ProductCombined},AutoMapper.IMapper)">
             <summary>
             Constructor.
             </summary>
@@ -2350,20 +2690,95 @@
             <param name="serviceGenericCodeIdentificationHelper"></param>
             <param name="serviceGenericCantAggregateHelper"></param>
             <param name="serviceGenericSubCategoryHelper"></param>
+            <param name="serviceGenericProductCombinedHelper"></param>
             <param name="mapper"></param>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.CarShopServiceController.AddProductsToCarShop(Isabella.Common.Dtos.CarShop.AddProductToCarShopDto)">
+        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.AddProductsToCartShopAsync(Isabella.Common.Dtos.CarShop.AddProductToCartShopDto)">
             <summary>
             Agrega productos al carrito de compras.
             </summary>
             <param name="addProductsToCarShop"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.CarShopServiceController.GetMyCarShop(System.Guid)">
+        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.GetMyCartShopAsync(System.Guid)">
             <summary>
             Obtiene el carrito de compras de un usuario.
             </summary>
             <param name="codeIdentification"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.RemoveProductOfCartShopAsync(System.Guid,System.Int32)">
+            <summary>
+            Elimina un producto del carrito de compras
+            </summary>
+            <param name="CodeVerification"></param>
+            <param name="ProductCombinedId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.UpdateSubCategoryAsync(Isabella.Common.Dtos.CarShop.UpdateSubCategoryProductDto)">
+            <summary>
+            Actualiza la subcategoria de un producto.
+            </summary>
+            <param name="updateSubCategoryProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.RemoveSubCategoryAsync(System.Guid,System.Int32)">
+            <summary>
+            Elimina la subcategoria de un producto combinado que está en el carrito.
+            </summary>
+            <param name="codeIdentification"></param>
+            <param name="ProductCombinedId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.UpdateQuantityProductAsync(Isabella.Common.Dtos.CarShop.ModifyQuantityProductDto)">
+            <summary>
+            Actualiza la cantidad de un producto.
+            </summary>
+            <param name="modifyQuantityProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.IncrementQuantityProductAsync(Isabella.Common.Dtos.CarShop.ModifyQuantityProductDto)">
+            <summary>
+            Incrementa la cantidad de un producto en un valor dado.
+            </summary>
+            <param name="modifyQuantityProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.UpdateQuantityInAggregateProductAsync(Isabella.Common.Dtos.CarShop.ModifyCantInAggregateProductDto)">
+            <summary>
+            Actualiza la cantidad de un agregado en un producto que está en el carrito.
+            </summary>
+            <param name="modifyAggregateProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.IncrementQuantityInAggregateProductAsync(Isabella.Common.Dtos.CarShop.ModifyCantInAggregateProductDto)">
+            <summary>
+            Incrementa la cantidad de un agregado en un producto en un valor dado.
+            </summary>
+            <param name="modifyAggregateProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.AddAggregateInProductAsync(Isabella.Common.Dtos.CarShop.AddAggregateInProductDto)">
+            <summary>
+            Agrega un nuevo agregado a un producto que está en el carrito de compras.
+            </summary>
+            <param name="addAggregateInProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.RemoveAggregateInProductOfCartShopAsync(System.Guid,System.Int32,System.Int32)">
+            <summary>
+            Elimina un agregado de un producto del carrito de compras.
+            </summary>
+            <param name="codeIdentification"></param>
+            <param name="ProductCombinedId"></param>
+            <param name="AggregateId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.RemoveAllCarShopAsync(System.Guid)">
+            <summary>
+            Elimina todos los productos del carrito de compras del usuario.
+            </summary>
+            <param name="codeIdentifaction"></param>
             <returns></returns>
         </member>
         <member name="T:Isabella.API.ServicesControllers.CategoryServiceController">
@@ -2418,6 +2833,13 @@
             <param name="Name"></param>
             <returns></returns>
         </member>
+        <member name="M:Isabella.API.ServicesControllers.CategoryServiceController.UpdateCategoryAsync(Isabella.Common.Dtos.Category.UpdateCategoryDto)">
+            <summary>
+            Actualiza una categoria.
+            </summary>
+            <param name="updateCategory"></param>
+            <returns></returns>
+        </member>
         <member name="T:Isabella.API.ServicesControllers.CodeIdentificationServiceController">
             <summary>
             Servicio para el controlador de los códigos de identificación.
@@ -2447,13 +2869,14 @@
             Servicio para el controlador de los productos.
             </summary>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.ProductServiceController.#ctor(Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Product},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Category},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.ImageProduct})">
+        <member name="M:Isabella.API.ServicesControllers.ProductServiceController.#ctor(Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Product},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Category},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.ImageProduct},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.SubCategory})">
             <summary>
             Constructor
             </summary>
             <param name="serviceProductGenericHelper"></param>
             <param name="serviceCategoryGenericHelper"></param>
             <param name="serviceGenericImageProductHelper"></param>
+            <param name="serviceGenericSubCategoryHelper"></param>
         </member>
         <member name="M:Isabella.API.ServicesControllers.ProductServiceController.AddProductAsync(Isabella.Common.Dtos.Product.AddProductDto)">
             <summary>
@@ -2560,20 +2983,21 @@
         </member>
         <member name="M:Isabella.API.ServicesControllers.ProductServiceController.GetProductIsAvailableForIdAsync(System.Int32)">
             <summary>
-            Obtiene un producto dado su Id si el mismo está disponible.
+            Obtiene un producto dado su Id si el mismo está disponible(Obtiene las subcategorias que están disponibles).
             </summary>
             <param name="ProductId"></param>
             <returns></returns>
         </member>
         <member name="M:Isabella.API.ServicesControllers.ProductServiceController.GetAllProductIsAvailableAsync">
             <summary>
-            Obtiene todos los productos que esten disponibles para la venta.
+            Obtiene todos los productos que esten disponibles para la venta(Obtiene las subcategorias que están disponibles).
             </summary>
             <returns></returns>
         </member>
         <member name="M:Isabella.API.ServicesControllers.ProductServiceController.GetCantProductIsAvailableAsync(System.Int32,System.Int32)">
             <summary>
             Obtiene una cantidad determinada de productos disponibles dado un producto de referencia y la cantidad.
+            (Obtiene las subcategorias que están disponibles).
             </summary>
             <param name="ProductId"></param>
             <param name="cantProduct"></param>
@@ -2582,6 +3006,7 @@
         <member name="M:Isabella.API.ServicesControllers.ProductServiceController.GetAllProductOfCategory(System.Int32)">
             <summary>
             Obtiene todos los productos de una categoria determinada.
+            (Obtiene las subcategorias que están disponibles).
             </summary>
             <param name="CategoryId"></param>
             <returns></returns>
@@ -2589,6 +3014,7 @@
         <member name="M:Isabella.API.ServicesControllers.ProductServiceController.GetAllProductIsAvailableOfCategory(System.Int32)">
             <summary>
             Obtiene todos los productos disponibles de una categoria determinada.
+            (Obtiene las subcategorias que están disponibles).
             </summary>
             <param name="CategoryId"></param>
             <returns></returns>
@@ -2628,8 +3054,20 @@
         </member>
         <member name="M:Isabella.API.ServicesControllers.SubCategoryServiceController.GetAllSubCategoryAsync">
             <summary>
-            Obtiene todas las subcategorias disponibles.
+            Obtiene todas las subcategorias.
             </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.SubCategoryServiceController.GetAllSubCategoryIsAvailableAsync">
+            <summary>
+            Obtiene todas las subcategorias que están disponibles.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.SubCategoryServiceController.GetAllSubCategoryIsNotAvailableAsync">
+            <summary>
+            Obtiene todas las subcategorias que no están disponible
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Isabella.API.ServicesControllers.SubCategoryServiceController.GetSubCategoryForIdAsync(System.Int32)">
             <summary>
@@ -2643,13 +3081,6 @@
             Obtiene una subcategoria por su nombre.
             </summary>
             <param name="Name"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Isabella.API.ServicesControllers.SubCategoryServiceController.RemoveSubCategoryAsync(System.Int32)">
-            <summary>
-            Elimina una subcategoria de un producto.
-            </summary>
-            <param name="SubCategoryId"></param>
             <returns></returns>
         </member>
         <member name="M:Isabella.API.ServicesControllers.SubCategoryServiceController.UpdateSubCategoryAsync(Isabella.Common.Dtos.SubCategory.UpdateSubCategoryDto)">
@@ -2679,33 +3110,17 @@
             Solicitud Http
             </summary>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.UserServiceController.#ctor(Isabella.API.Helpers.RepositoryHelpers.IUserRepositoryHelper,Isabella.API.Helpers.MailHelper,Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.User},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.UserClient},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.UserOwner})">
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.#ctor(Isabella.API.Helpers.RepositoryHelpers.IUserRepositoryHelper,Isabella.API.Helpers.MailHelper,Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.User})">
             <summary>
             Constructor
             </summary>
             <param name="userRepository"></param>
             <param name="mailHelper"></param>
             <param name="serviceGenericUserHelper"></param>
-            <param name="serviceGenericUserClientHelper"></param>
-            <param name="serviceGenericUserOwnerHelper"></param>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.UserServiceController.AddUserAdminAsync(Isabella.Common.Dtos.Users.RegisterUserDto)">
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.AddUserAsync(Isabella.Common.Dtos.Users.RegisterUserDto)">
             <summary>
-            Agrega un nuevo usuario admin a la base de datos.
-            </summary>
-            <param name="newuser"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Isabella.API.ServicesControllers.UserServiceController.AddUserOwnerAsync(Isabella.Common.Dtos.Users.RegisterUserDto)">
-            <summary>
-            Agrega un nuevo usuario dueño a la base de datos.
-            </summary>
-            <param name="newuser"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Isabella.API.ServicesControllers.UserServiceController.AddUserClientAsync(Isabella.Common.Dtos.Users.RegisterUserDto)">
-            <summary>
-            Agrega un nuevo usuario cliente a la base de datos.
+            Agrega un usuario al sistema y le asigna un role
             </summary>
             <param name="newuser"></param>
             <returns></returns>
@@ -2808,14 +3223,6 @@
             <param name="changePassword"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.UserServiceController.AddUserWithRole(Isabella.Common.Dtos.Users.RegisterUserDto,System.String)">
-            <summary>
-            Agrega un usuario al sistema y le asigna un role
-            </summary>
-            <param name="newuser"></param>
-            <param name="role_user"></param>
-            <returns></returns>
-        </member>
         <member name="M:Isabella.API.ServicesControllers.UserServiceController.ExecuteDeleteImageProfileUserAsync(System.Security.Claims.ClaimsPrincipal)">
             <summary>
             Borra la imagen de perfil del usuario.
@@ -2855,67 +3262,20 @@
             <param name="scheme"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.UserServiceController.GetAllUserClientAsync">
-            <summary>
-            Obtiene todos los usuarios clientes.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Isabella.API.ServicesControllers.UserServiceController.GetAllUserOwnerAsync">
-            <summary>
-            Obtiene todos los usuarios dueños de negocio.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Isabella.API.ServicesControllers.UserServiceController.RemoveRoleOwnerAsync(System.Int32)">
-            <summary>
-            Manda a eliminar el role owner de un usuario
-            </summary>
-            <param name="UserId"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Isabella.API.ServicesControllers.UserServiceController.RemoveRoleAdminAsync(System.Int32)">
-            <summary>
-            Manda a eliminar el role admin de un usuario
-            </summary>
-            <param name="UserId"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Isabella.API.ServicesControllers.UserServiceController.AssigningRoleOwnerToUserAsync(System.Int32)">
-            <summary>
-            Manda a asignar el role owner a un usuario.
-            </summary>
-            <param name="UserId"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Isabella.API.ServicesControllers.UserServiceController.AssigningRoleAdminToUserAsync(System.Int32)">
-            <summary>
-            Manda a asignar el role admin a un usuario.
-            </summary>
-            <param name="UserId"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Isabella.API.ServicesControllers.UserServiceController.AssigningRoleClientToUserAsync(System.Int32)">
-            <summary>
-            Manda a asignar el role cliente a un usuario.
-            </summary>
-            <param name="UserId"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Isabella.API.ServicesControllers.UserServiceController.RemoveRoleUserAsync(System.Int32,System.String)">
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.RemoveRoleInUserAsync(System.Int32,System.Int32)">
             <summary>
             Elimina un role a un usuario.
             </summary>
             <param name="UserId"></param>
-            <param name="role"></param>
+            <param name="RoleId"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.UserServiceController.AssigningAnyRoleToUserAsync(System.Int32,System.String)">
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.AssigningRoleToUserAsync(System.Int32,System.Int32)">
             <summary>
             Asigna un nuevo role a un usuario.
             </summary>
             <param name="UserId"></param>
-            <param name="role"></param>
+            <param name="RoleId"></param>
             <returns></returns>
         </member>
         <member name="M:Isabella.API.ServicesControllers.UserServiceController.GetAllDataOfUserAsync">
@@ -2944,6 +3304,13 @@
             </summary>
             <param name="UserId"></param>
             <param name="banner"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.GetAllUserWithRoleAsync(System.Int32)">
+            <summary>
+            Obtiene los usuarios de un determinado role.
+            </summary>
+            <param name="RoleId"></param>
             <returns></returns>
         </member>
         <member name="T:Isabella.API.Startup">

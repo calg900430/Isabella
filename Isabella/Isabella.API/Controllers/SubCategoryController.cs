@@ -134,7 +134,7 @@
         }
 
         /// <summary>
-        /// Obtiene todas las subcategorias disponibles.
+        /// Obtiene todas las subcategorias.
         /// </summary>
         /// <returns></returns>
         [HttpGet("get/all_subcategory")]
@@ -150,6 +150,70 @@
                     var result = await this
                     ._subCategoryService
                     .GetAllSubCategoryAsync()
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todas las subcategorias disponibles.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("get/all_subcategory_available")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> GetAllSubCategoriesIsAvailableAsync()
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this
+                    ._subCategoryService
+                    .GetAllSubCategoryIsAvailableAsync()
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todas las subcategorias no disponibles.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("get/all_subcategory_notavailable")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> GetAllSubCategoriesIsNotAvailableAsync()
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this
+                    ._subCategoryService
+                    .GetAllSubCategoryIsNotAvailableAsync()
                     .ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);

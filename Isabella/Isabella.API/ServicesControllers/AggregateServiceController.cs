@@ -419,7 +419,7 @@
                     return serviceResponse;
                 }
                 //Verifica si el producto tiene imagenes.
-                if (aggregate.Images == null || aggregate.Images.Count <= 0)
+                if (!aggregate.Images.Any())
                 {
                     serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImagesNoExist;
                     serviceResponse.Data = null;
@@ -462,7 +462,7 @@
                 var all_aggregate = await this._serviceGenericAggregateHelper
                 .GetLoadAsync()
                 .ConfigureAwait(false);
-                if (all_aggregate == null || all_aggregate.Count <= 0)
+                if (!all_aggregate.Any())
                 {
                     serviceResponse.Code = (int)GetValueResourceFile.KeyResource.AggregateAllNotFound;
                     serviceResponse.Data = null;
@@ -530,7 +530,7 @@
                     return serviceResponse;
                 }
                 //Verifica si el producto tiene imagenes.
-                if (aggregate.Images == null || aggregate.Images.Count <= 0)
+                if (!aggregate.Images.Any())
                 {
                     serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImagesNoExist;
                     serviceResponse.Data = null;
@@ -542,7 +542,7 @@
                 //Solicita la cantidad de imagenes deseadas del producto.
                 var list_images = this._serviceGenericImageAggregateHelper
                 .GetLoadAsync(ImageId, aggregate.Images, CantImages);
-                if (list_images == null)
+                if (!list_images.Any())
                 {
                     serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImageNotExist;
                     serviceResponse.Data = null;
@@ -616,7 +616,7 @@
                 var all_cant_aggregate = await this._serviceGenericAggregateHelper
                 .GetLoadAsync(aggregate, cantAggregate)
                 .ConfigureAwait(false);
-                if (all_cant_aggregate == null || all_cant_aggregate.Count <= 0)
+                if (!all_cant_aggregate.Any())
                 {
                     serviceResponse.Code = (int)GetValueResourceFile.KeyResource.AggregateAllNotFound;
                     serviceResponse.Data = null;
@@ -972,7 +972,7 @@
                 var all_aggregate = await this._serviceGenericAggregateHelper
                 .WhereListEntityAsync(c => c.IsAvailabe == true)
                 .ConfigureAwait(false);
-                if (all_aggregate == null || all_aggregate.Count <= 0)
+                if (!all_aggregate.Any())
                 {
                     serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductAllNotIsAvailable;
                     serviceResponse.Data = null;
@@ -1040,7 +1040,7 @@
                 var all_cant_aggregate = await this._serviceGenericAggregateHelper
                 .GetLoadAsync(aggregate, cantAggregate, c => c.IsAvailabe == true)
                 .ConfigureAwait(false);
-                if (all_cant_aggregate == null || all_cant_aggregate.Count <= 0)
+                if (!all_cant_aggregate.Any())
                 {
                     serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotNew;
                     serviceResponse.Data = null;

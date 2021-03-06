@@ -173,27 +173,24 @@
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> GetAllCategoriesIsAvailableAsync()
+        public IActionResult GetAllCategoriesIsAvailableAsync()
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var result = await this
-                    ._categoryService
-                    .GetAllCategoryIsProductIsAvailable()
-                    .ConfigureAwait(false);
+                    var result = this._categoryService.GetAllCategoryIsProductIsAvailable();
                     if (result.Success)
                     return Ok(result);
                     else
                     return BadRequest(result);
                 }
                 else
-                 return BadRequest(); //400
+                return BadRequest(); //400
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+               return BadRequest(ex.Message);
             }
         }
 
@@ -231,6 +228,42 @@
             catch (Exception ex)
             {
                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Actualiza una categoria.
+        /// </summary>
+        /// <param name="updateCategory"></param>
+        /// <returns></returns>
+        [HttpPut("update/category")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        public async Task<IActionResult> UpdateCategoryAsync(UpdateCategoryDto updateCategory)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this
+                    ._categoryService
+                    .UpdateCategoryAsync(updateCategory)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                    return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
         }
     }

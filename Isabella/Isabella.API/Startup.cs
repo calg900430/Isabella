@@ -190,9 +190,7 @@ namespace Isabella.API
             services.AddScoped<UserServiceController>();
             services.AddScoped<IUserRepositoryHelper, UserHelper>();
             services.AddScoped<ServiceGenericHelper<User>>();
-            services.AddScoped<ServiceGenericHelper<UserOwner>>();
-            services.AddScoped<ServiceGenericHelper<UserClient>>();
-
+          
             //Agrega los servicios para el manejo de los productos.
             services.AddScoped<ServiceGenericHelper<Product>>();
             services.AddScoped<ServiceGenericHelper<ImageProduct>>();
@@ -212,9 +210,10 @@ namespace Isabella.API
             services.AddScoped<ServiceGenericHelper<Category>>();
 
             //Agrega los servicios para el manejo del carrito de compras
-            services.AddScoped<CarShopServiceController>();
-            services.AddScoped<ServiceGenericHelper<CarShop>>();
+            services.AddScoped<CartShopServiceController>();
+            services.AddScoped<ServiceGenericHelper<CartShop>>();
             services.AddScoped<ServiceGenericHelper<CantAggregate>>();
+            services.AddScoped<ServiceGenericHelper<ProductCombined>>();
 
             //Agrega los servicios para el manejo de los códigos de verificación
             services.AddScoped<CodeIdentificationServiceController>();

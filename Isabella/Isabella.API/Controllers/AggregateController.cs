@@ -53,7 +53,8 @@
             {
                 if (ModelState.IsValid)
                 {
-                    var result = await this._aggregateRepository.AddAggregateAsync(aggregate).ConfigureAwait(false);
+                    var result = await this._aggregateRepository
+                    .AddAggregateAsync(aggregate).ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
                     else

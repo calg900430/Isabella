@@ -14,7 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Isabella.Common\Isabella.Common.csproj" />
+    <Folder Include="UsersTests\TestUserController\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Isabella.API\Isabella.API.csproj" />
   </ItemGroup>
 
 </Project>

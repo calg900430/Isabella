@@ -57,7 +57,7 @@
         /// <summary>
         /// Carrito de compra de productos standards
         /// </summary>
-        public DbSet<CarShop> CarShops { get; set; }
+        public DbSet<CartShop> CarShops { get; set; }
 
         /// <summary>
         /// Productos de agregos.
@@ -93,6 +93,11 @@
         /// SubCategorias.
         /// </summary>
         public DbSet<SubCategory> SubCategories { get; set; }
+
+        /// <summary>
+        /// Producto Combinado.
+        /// </summary>
+        public DbSet<ProductCombined> ProductCombineds { get; set; }
 
         /// <summary>
         /// Crea el modelo para la base de datos

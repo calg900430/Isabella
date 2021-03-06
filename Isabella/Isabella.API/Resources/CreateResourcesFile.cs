@@ -26,6 +26,7 @@
                 rw.AddResource("Exception", "Se ha generado un error en la aplicación");
                 rw.AddResource("UserNotFound", "El usuario no está registrado en la aplicación.");
                 rw.AddResource("UserAllNotFound", "No hay usuarios registrados en la aplicación.");
+                rw.AddResource("UserAllNotFoundWithRole", "No hay usuarios registrados en la aplicación con ese rol.");
                 rw.AddResource("UserBadUserName", "La cuenta de usuario seleccionada está en uso.Seleccione otra.");
                 rw.AddResource("EntityIsNull", "La entidad pasada como parametro es nula.");
                 rw.AddResource("CantIsNegative", "El valor pasado como cantidad es igual o menor que 0.");
@@ -46,12 +47,17 @@
                 rw.AddResource("CategoryNotAllFound", "No hay categorias disponibles.");
                 rw.AddResource("ProductNotNew", "No se han agregado nuevos productos.");
                 rw.AddResource("SubCategoryNotIsProduct", "La subcategoria no existe o no pertenece a este producto.");
+                rw.AddResource("ProductCombinedNotHaveSubCategory", "El producto combinado no tiene ninguna subcategoria.");
                 rw.AddResource("SubCategoryExist", "La subcategoria ya existe.Seleccione otro nombre.");
                 rw.AddResource("SubCategoryNotFound", "La subcategoria no existe.");
+                rw.AddResource("SubCategoryNotIsAvailable", "La subcategoria no existe o no está disponible.");
                 rw.AddResource("SubCategoryNotAllFound", "No hay subcategorias disponibles.");
                 rw.AddResource("ImageAggregateNotValide",
                 $"La imagen de un agregado no puede ser mayor de {Constants.MAX_LENTHG_IMAGE_AGGREGATE} bytes.");
                 rw.AddResource("FormatAggregateNotSupport", "El Id del agregado debe ser un número entero.");
+                rw.AddResource("ProductInCartHaveSubCategory", "El producto no se encuentra en el carrito o ya tiene asignada la subcategoria.");
+                rw.AddResource("ProductInCartNotHaveSubCategory", "El producto no se encuentra en el carrito o no tiene asignada la subcategoria.");
+                rw.AddResource("ProductNotHaveAggregate", "El producto no existe o no tiene el agregado.");
                 rw.AddResource("AggregateNotFound", "El agregado no existe.");
                 rw.AddResource("AggregateAllNotFound", "No hay agregados disponibles.");
                 rw.AddResource("AggregateNotNew", "No se han añadido nuevos agregados.");
@@ -81,9 +87,8 @@
                 rw.AddResource("ImagesNoExist", "La entidad no tiene imágenes disponibles.");
                 rw.AddResource("NotCodeIdentification", "El código de identificación de usuario no es válido.");
                 rw.AddResource("ProductNotSupportAggregate", "El producto seleccionado no admite agregados.");
+                rw.AddResource("ProductNotExistInCarShop", "El producto no existe o no se encuentra en el carrito del usuario.");
                 rw.AddResource("CarShopNotProducts", "El usuario no ha agregado productos a su carrito de compras.");
-                rw.AddResource("NotUsersClient", "No hay usuarios clientes registrados en la aplicación.");
-                rw.AddResource("NotUsersOwner", "No hay dueños de negocios registrados en la aplicación.");
                 rw.AddResource("IsNotRoleOfUser", "El usuario no tiene el rol especificado.");
                 rw.AddResource("IsUserHaveRole", "El usuario ya tiene asignado el role especificado.");
                 rw.AddResource("IsNotAssignRoleOfUser", "No se pudo asignar el rol especificado al usuario.");

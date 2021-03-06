@@ -93,20 +93,21 @@
         /// Devuelve las categorias de los productos que esten disponibles. 
         /// </summary>
         /// <returns></returns>
-        public async Task<ServiceResponse<List<GetCategoryDto>>> GetAllCategoryIsProductIsAvailable()
+        public ServiceResponse<List<GetCategoryDto>> GetAllCategoryIsProductIsAvailable()
         {
             ServiceResponse<List<GetCategoryDto>> serviceResponse = new ServiceResponse<List<GetCategoryDto>>();
             try
             {
                 //Obtiene el contexto de datos.
                 var _context = this._serviceGenericProductHelper._context;
+                IQueryable<Product> query = _context.AsQueryable();
                 //Obtiene todas las categorias disponibles 
-                var all_categories_availables = _context
+                var all_categories_availables = query
                 .Include(c => c.Category)
                 .Where(c => c.IsAvailabe == true)
                 .Select(c => c.Category)
                 .ToHashSet();
-                if (all_categories_availables == null || all_categories_availables.Count <= 0)
+                if (!all_categories_availables.Any())
                 {
                     serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductAllNotIsAvailable;
                     serviceResponse.Data = null;
@@ -116,11 +117,12 @@
                     return serviceResponse;
                 }
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                //Ordena las categorias por Id
                 serviceResponse.Data = all_categories_availables.Select(c => new GetCategoryDto
                 {
                     Id = c.Id,
                     Name = c.Name
-                }).ToList();
+                }).OrderBy(c => c.Id).ToList();
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile
                 .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -315,6 +317,49 @@
             {
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Actualiza una categoria.
+        /// </summary>
+        /// <param name="updateCategory"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<bool>> UpdateCategoryAsync(UpdateCategoryDto updateCategory)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            try
+            {
+                //Verifica que la categoria es valida
+                var category = await this._serviceGenericCategoryHelper
+                .WhereSingleEntityAsync(c => c.Id == updateCategory.Id)
+                .ConfigureAwait(false);
+                if (category == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CategoryNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.CategoryNotFound);
+                    return serviceResponse;
+                }
+                if (updateCategory.Name != null)
+                category.Name = updateCategory.Name;
+                this._serviceGenericCategoryHelper.UpdateEntity(category);
+                await this._serviceGenericCategoryHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = true;
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;

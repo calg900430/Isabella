@@ -180,7 +180,7 @@
                     {
                         new Aggregate
                         {
-                            Name = "Queso",
+                            Name = "Queso Blanco",
                             DateCreated = DateTime.UtcNow,
                             DateUpdate = DateTime.UtcNow,
                             Description = "Queso blanco de excelente calidad",
@@ -350,7 +350,7 @@
                            SupportAggregate = false,
                         },
                         new Product
-                         {
+                        {
                            Name = "Coco Glasé",
                            Category = categorys[3],
                            Description = "Excelente postre de coco.",
@@ -367,7 +367,8 @@
                                {
                                   Name = "Ración Doble",
                                   Price = 240,
-                                  Description = "El postre coco glasé, en una variante doble."
+                                  Description = "El postre coco glasé, en una variante doble.",
+                                  IsAvailable = true,
                                }
                            }
                          },
@@ -389,7 +390,8 @@
                                {
                                   Name = "Ración Doble",
                                   Price = 400,
-                                  Description = "El bistec de cerdo, en mayor proporción."
+                                  Description = "El bistec de cerdo, en mayor proporción.",
+                                  IsAvailable = true,
                                }
                            }
                         },
@@ -444,6 +446,16 @@
                            DateUpdate = DateTime.UtcNow,
                            LastBuy = DateTime.UtcNow,
                            SupportAggregate = true,
+                           SubCategories = new List<SubCategory>
+                           {
+                               new SubCategory
+                               {
+                                  Name = "Queso Gouda",
+                                  Price = 165,
+                                  Description = "Espaguettis elaborados con queso gouda.",
+                                  IsAvailable = true,
+                               }
+                           }
                         },
                         new Product
                         {
@@ -463,7 +475,22 @@
                                {
                                   Name = "Ración Familiar",
                                   Price = 310,
-                                  Description = "Pizza para la familia."
+                                  Description = "Pizza para la familia.",
+                                  IsAvailable = true,
+                               },
+                               new SubCategory
+                               {
+                                  Name = "Ración Familiar con Queso Gouda",
+                                  Price = 350,
+                                  Description = "Pizza para la familia elaborada con queso gouda.",
+                                  IsAvailable = true,
+                               },
+                               new SubCategory
+                               {
+                                  Name = "Queso Gouda",
+                                  Price = 190,
+                                  Description = "Pizza de camarones elaborados con queso gouda.",
+                                  IsAvailable = false,
                                }
                            }
                         },

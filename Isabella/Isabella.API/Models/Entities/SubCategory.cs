@@ -35,5 +35,10 @@
         /// Descripción
         /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// Enable
+        /// </summary>
+        public bool IsAvailable { get; set; }
     }
 }

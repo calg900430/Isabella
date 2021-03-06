@@ -16,7 +16,6 @@
     using Common.RepositorysDtos;
     using Helpers;
     using Helpers.RepositoryHelpers;
-    using Isabella.API.Resources;
     using Resources;
 
     /// <summary>
@@ -27,9 +26,7 @@
         private readonly IUserRepositoryHelper _userService;
         private readonly MailHelper _mailHelper;
         private readonly ServiceGenericHelper<User> _serviceGenericUserHelper;
-        private readonly ServiceGenericHelper<UserClient> _serviceGenericUserClientHelper;
-        private readonly ServiceGenericHelper<UserOwner> _serviceGenericUserOwnerHelper;
-
+      
         /// <summary>
         /// Claims del usuario.
         /// </summary>
@@ -52,153 +49,107 @@
         /// <param name="userRepository"></param>
         /// <param name="mailHelper"></param>
         /// <param name="serviceGenericUserHelper"></param>
-        /// <param name="serviceGenericUserClientHelper"></param>
-        /// <param name="serviceGenericUserOwnerHelper"></param>
         public UserServiceController(IUserRepositoryHelper userRepository, MailHelper mailHelper,
-        ServiceGenericHelper<User> serviceGenericUserHelper, 
-        ServiceGenericHelper<UserClient> serviceGenericUserClientHelper, 
-        ServiceGenericHelper<UserOwner> serviceGenericUserOwnerHelper)
+        ServiceGenericHelper<User> serviceGenericUserHelper)
         {
             this._userService = userRepository;
             this._mailHelper = mailHelper;
             this._serviceGenericUserHelper = serviceGenericUserHelper;
-            this._serviceGenericUserClientHelper = serviceGenericUserClientHelper;
-            this._serviceGenericUserOwnerHelper = serviceGenericUserOwnerHelper;
         }
 
         /// <summary>
-        /// Agrega un nuevo usuario admin a la base de datos.
+        /// Agrega un usuario al sistema y le asigna un role
         /// </summary>
         /// <param name="newuser"></param>
         /// <returns></returns>
-        public async Task<ServiceResponse<bool>> AddUserAdminAsync(RegisterUserDto newuser)
+        public async Task<ServiceResponse<bool>> AddUserAsync(RegisterUserDto newuser)
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
-                var result = await AddUserWithRole(newuser, Constants.RolesOfSystem[0]).ConfigureAwait(false);
-                if (result.Success)
+                //Verifica que los datos enviados por el usuario sean correctos.
+                if (newuser == null)
                 {
-                    serviceResponse.Code = result.Code;
-                    serviceResponse.Data = true;
-                    serviceResponse.Success = true;
-                    serviceResponse.Message = result.Message;
-                    return serviceResponse;
-                }
-                else
-                {
-                    serviceResponse.Code = result.Code;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
-                    serviceResponse.Message = result.Message;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
                     return serviceResponse;
                 }
-            }
-            catch
-            {
-                serviceResponse.Code = (int) GetValueResourceFile.KeyResource.Exception;
-                serviceResponse.Data = false;
-                serviceResponse.Success = false;
-                serviceResponse.Message = GetValueResourceFile
-                .GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                //Verifica que el email dado no este en uso.
+                var email_existing = await this._userService.VerifyEmailAsync(newuser.Email).ConfigureAwait(false);
+                if (email_existing)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.BadEmail;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.BadEmail);
+                    return serviceResponse;
+                }
+                //Verifica que la cuenta de usuario dada no este disponible, que es lo mismo que el email.
+                var username_existing = await this._userService.VerifyUserNameAsync(newuser.Email).ConfigureAwait(false);
+                if (username_existing)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.BadEmail;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.BadEmail);
+                    return serviceResponse;
+                }
+                //Crea el nuevo usuario con los parametros especificados por el usuario(Mapea de RegisterUserDto a User)
+                var new_registeruser = new User
+                {
+                    Email = newuser.Email,
+                    UserName = newuser.Email,
+                    DateCreated = DateTime.UtcNow,
+                    DateUpdated = DateTime.UtcNow,
+                    LastDateConnected = DateTime.UtcNow,
+                    IdForClaim = Guid.NewGuid(),
+                    EmailConfirmed = false,
+                };
+                //Guarda el usuario con una contraseña definida.
+                var user = await this._userService.AddUserAsync(new_registeruser, newuser.Password).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity);
+                    return serviceResponse;
+                }
+                //Obtiene el Token de confirmación de registro del usuario.
+                var token = await this._userService.GenerateTokenForConfirmRegisterAsync(user).ConfigureAwait(false);
+                //Crea un Link que contiene el Token de confirmación.
+                var tokenLink = this.Url.Action("ConfirmRegisterUserAsync", "Users", new
+                {
+                    userid = user.Id,
+                    token = token,
+                }, protocol: HttpRequest.Scheme);
+                var body_message = $"<h1>Email Confirmation</h1>" +
+                 "Hello you have registered in the Isabella application," +
+                 $"to allow the user, plase click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>";
+                //Envia un correo al usuario con el código de verificación.
+                var send_mail = this._mailHelper.SendMail(user.Email, "Email confirmation", body_message);
+                if (!send_mail)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EmailNotSend;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EmailNotSend);
+                    return serviceResponse;
+                }
+                serviceResponse.Data = true;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EmailRegisterConfirmation;
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EmailRegisterConfirmation);
                 return serviceResponse;
-            }
-        }
-
-        /// <summary>
-        /// Agrega un nuevo usuario dueño a la base de datos.
-        /// </summary>
-        /// <param name="newuser"></param>
-        /// <returns></returns>
-        public async Task<ServiceResponse<bool>> AddUserOwnerAsync(RegisterUserDto newuser)
-        {
-            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
-            try
-            {
-                var result = await AddUserWithRole(newuser, Constants.RolesOfSystem[1]).ConfigureAwait(false);
-                if (result.Success == true && result.Data != null)
-                {
-                    //Agrega el usuario al grupo de usuarios owner
-                    var user_owner = new UserOwner
-                    {
-                        User = result.Data
-                    };
-                    await this._serviceGenericUserOwnerHelper
-                    .AddEntityAsync(user_owner)
-                    .ConfigureAwait(false);
-                    await this._serviceGenericUserOwnerHelper
-                    .SaveChangesBDAsync().ConfigureAwait(false);
-                    serviceResponse.Code = result.Code;
-                    serviceResponse.Data = true;
-                    serviceResponse.Success = true;
-                    serviceResponse.Message = result.Message;
-                    return serviceResponse;
-                }
-                else
-                {
-                    serviceResponse.Code = result.Code;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = result.Message;
-                    return serviceResponse;
-                }
             }
             catch
             {
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
-                serviceResponse.Message = GetValueResourceFile
-                .GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
-                return serviceResponse;
-            }
-        }
-
-        /// <summary>
-        /// Agrega un nuevo usuario cliente a la base de datos.
-        /// </summary>
-        /// <param name="newuser"></param>
-        /// <returns></returns>
-        public async Task<ServiceResponse<bool>> AddUserClientAsync(RegisterUserDto newuser)
-        {
-            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
-            try
-            {
-                var result = await AddUserWithRole(newuser, Constants.RolesOfSystem[2]).ConfigureAwait(false);
-                if (result.Success == true && result.Data != null)
-                {
-                    //Agrega el usuario al grupo de usuarios clients
-                    var user_client = new UserClient
-                    {
-                        User = result.Data
-                    };
-                    await this._serviceGenericUserClientHelper
-                    .AddEntityAsync(user_client)
-                    .ConfigureAwait(false);
-                    await this._serviceGenericUserClientHelper
-                    .SaveChangesBDAsync().ConfigureAwait(false);
-                    serviceResponse.Code = result.Code;
-                    serviceResponse.Data = true;
-                    serviceResponse.Success = true;
-                    serviceResponse.Message = result.Message;
-                    return serviceResponse;
-                }
-                else
-                {
-                    serviceResponse.Code = result.Code;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = result.Message;
-                    return serviceResponse;
-                }
-            }
-            catch
-            {
-                serviceResponse.Code =(int)GetValueResourceFile.KeyResource.Exception;
-                serviceResponse.Data = false;
-                serviceResponse.Success = false;
-                serviceResponse.Message = GetValueResourceFile
-                .GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
             }
         }
@@ -847,125 +798,6 @@
         => await ExecuteUpdatePasswordAsync(changePassword, ClaimsPrincipal).ConfigureAwait(false);
 
         /// <summary>
-        /// Agrega un usuario al sistema y le asigna un role
-        /// </summary>
-        /// <param name="newuser"></param>
-        /// <param name="role_user"></param>
-        /// <returns></returns>
-        private async Task<ServiceResponse<User>> AddUserWithRole(RegisterUserDto newuser, string role_user)
-        {
-            ServiceResponse<User> serviceResponse = new ServiceResponse<User>();
-            try
-            {
-                //Verifica que los datos enviados por el usuario sean correctos.
-                if (newuser == null)
-                {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
-                    serviceResponse.Data = null;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
-                    return serviceResponse;
-                }
-                //Verifica si el role(admin en este caso) que se desea dar al usuario está disponible en la base de datos.
-                var role_existing = await this._userService.VerifyRoleAsync(role_user).ConfigureAwait(false);
-                if (role_existing == false)
-                {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.BadRole;
-                    serviceResponse.Data = null;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile
-                    .GetValueResourceString(GetValueResourceFile.KeyResource.BadRole);
-                    return serviceResponse;
-                }
-                //Verifica que el email dado no este en uso.
-                var email_existing = await this._userService.VerifyEmailAsync(newuser.Email).ConfigureAwait(false);
-                if (email_existing)
-                {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.BadEmail;
-                    serviceResponse.Data = null;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.BadEmail);
-                    return serviceResponse;
-                }
-                //Verifica que la cuenta de usuario dada no este disponible, que es lo mismo que el email.
-                var username_existing = await this._userService.VerifyUserNameAsync(newuser.Email).ConfigureAwait(false);
-                if (username_existing)
-                {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.BadEmail;
-                    serviceResponse.Data = null;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.BadEmail);
-                    return serviceResponse;
-                }
-                //Crea el nuevo usuario con los parametros especificados por el usuario(Mapea de RegisterUserDto a User)
-                var new_registeruser = new User
-                {
-                    Email = newuser.Email,
-                    UserName = newuser.Email,
-                    DateCreated = DateTime.UtcNow,
-                    DateUpdated = DateTime.UtcNow,
-                    LastDateConnected = DateTime.UtcNow,
-                    IdForClaim = Guid.NewGuid(),
-                    EmailConfirmed = false,
-                };
-                //Guarda el usuario con una contraseña definida.
-                var user = await this._userService.AddUserAsync(new_registeruser, newuser.Password).ConfigureAwait(false);
-                if (user == null)
-                {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity;
-                    serviceResponse.Data = null;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity);
-                    return serviceResponse;
-                }
-                //Asigna el role al usuario
-                var role = await this._userService.AddRoleForUserAsync(user, role_user).ConfigureAwait(false);
-                if (!role)
-                {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity;
-                    serviceResponse.Data = null;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity);
-                    return serviceResponse;
-                }
-                //Obtiene el Token de confirmación de registro del usuario.
-                var token = await this._userService.GenerateTokenForConfirmRegisterAsync(user).ConfigureAwait(false);
-                //Crea un Link que contiene el Token de confirmación.
-                var tokenLink = this.Url.Action("ConfirmRegisterUserAsync", "Users", new
-                {
-                    userid = user.Id,
-                    token = token,
-                }, protocol: HttpRequest.Scheme);
-                var body_message = $"<h1>Email Confirmation</h1>" +
-                 "Hello you have registered in the Isabella application," +
-                 $"to allow the user, plase click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>";
-                //Envia un correo al usuario con el código de verificación.
-                var send_mail = this._mailHelper.SendMail(user.Email, "Email confirmation", body_message);
-                if (!send_mail)
-                {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EmailNotSend;
-                    serviceResponse.Data = null;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EmailNotSend);
-                    return serviceResponse;
-                }
-                serviceResponse.Data = user;
-                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EmailRegisterConfirmation;
-                serviceResponse.Success = true;
-                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EmailRegisterConfirmation);
-                return serviceResponse;
-            }
-            catch
-            {
-                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
-                serviceResponse.Data = null;
-                serviceResponse.Success = false;
-                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
-                return serviceResponse;
-            }
-        }
-
-        /// <summary>
         /// Borra la imagen de perfil del usuario.
         /// </summary>
         /// <param name="claimsPrincipal"></param>
@@ -1402,144 +1234,12 @@
         }
 
         /// <summary>
-        /// Obtiene todos los usuarios clientes.
-        /// </summary>
-        /// <returns></returns>
-        public async Task<ServiceResponse<List<GetUserDto>>> GetAllUserClientAsync()
-        {
-            ServiceResponse<List<GetUserDto>> serviceResponse = new ServiceResponse<List<GetUserDto>>();
-            try
-            {
-                var all_users_clients = await this._serviceGenericUserClientHelper
-                .GetLoadAsync(c => c.User)
-                .ConfigureAwait(false);
-                if(all_users_clients == null)
-                {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.NotUsersClient;
-                    serviceResponse.Data = null;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile
-                    .GetValueResourceString(GetValueResourceFile.KeyResource.NotUsersClient);
-                    return serviceResponse;
-                }
-                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
-                serviceResponse.Data = all_users_clients.Select(c => new GetUserDto
-                {
-                    Address = c.User.Address,
-                    FirstName = c.User.FirstName,
-                    Id = c.Id,
-                    ImageUserProfile = c.User.ImageUserProfile,
-                    LastName = c.User.LastName,
-                    PhoneNumber = c.User.PhoneNumber,
-                }).ToList();
-                serviceResponse.Message = GetValueResourceFile
-                .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
-                serviceResponse.Success = true;
-                return serviceResponse;
-            }
-            catch
-            {
-                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
-                serviceResponse.Data = null;
-                serviceResponse.Success = false;
-                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
-                return serviceResponse;
-            }
-        }
-
-        /// <summary>
-        /// Obtiene todos los usuarios dueños de negocio.
-        /// </summary>
-        /// <returns></returns>
-        public async Task<ServiceResponse<List<GetUserDto>>> GetAllUserOwnerAsync()
-        {
-            ServiceResponse<List<GetUserDto>> serviceResponse = new ServiceResponse<List<GetUserDto>>();
-            try
-            {
-                var all_users_owners = await this._serviceGenericUserOwnerHelper
-                .GetLoadAsync(c => c.User)
-                .ConfigureAwait(false);
-                if (all_users_owners == null)
-                {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.NotUsersOwner;
-                    serviceResponse.Data = null;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile
-                    .GetValueResourceString(GetValueResourceFile.KeyResource.NotUsersOwner);
-                    return serviceResponse;
-                }
-                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
-                serviceResponse.Data = all_users_owners.Select(c => new GetUserDto
-                {
-                    Address = c.User.Address,
-                    FirstName = c.User.FirstName,
-                    Id = c.Id,
-                    ImageUserProfile = c.User.ImageUserProfile,
-                    LastName = c.User.LastName,
-                    PhoneNumber = c.User.PhoneNumber,
-                }).ToList();
-                serviceResponse.Success = true;
-                serviceResponse.Message = GetValueResourceFile
-                .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
-                return serviceResponse;
-            }
-            catch
-            {
-                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
-                serviceResponse.Data = null;
-                serviceResponse.Success = false;
-                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
-                return serviceResponse;
-            }
-        }
-
-        /// <summary>
-        /// Manda a eliminar el role owner de un usuario
-        /// </summary>
-        /// <param name="UserId"></param>
-        /// <returns></returns>
-        public async Task<ServiceResponse<bool>> RemoveRoleOwnerAsync(int UserId)
-        => await RemoveRoleUserAsync(UserId, Constants.RolesOfSystem[1]).ConfigureAwait(false);
-
-        /// <summary>
-        /// Manda a eliminar el role admin de un usuario
-        /// </summary>
-        /// <param name="UserId"></param>
-        /// <returns></returns>
-        public async Task<ServiceResponse<bool>> RemoveRoleAdminAsync(int UserId)
-         => await RemoveRoleUserAsync(UserId, Constants.RolesOfSystem[0]).ConfigureAwait(false);
-
-        /// <summary>
-        /// Manda a asignar el role owner a un usuario.
-        /// </summary>
-        /// <param name="UserId"></param>
-        /// <returns></returns>
-        public async Task<ServiceResponse<bool>> AssigningRoleOwnerToUserAsync(int UserId)
-        => await AssigningAnyRoleToUserAsync(UserId, Constants.RolesOfSystem[1]).ConfigureAwait(false);
-
-        /// <summary>
-        /// Manda a asignar el role admin a un usuario.
-        /// </summary>
-        /// <param name="UserId"></param>
-        /// <returns></returns>
-        public async Task<ServiceResponse<bool>> AssigningRoleAdminToUserAsync(int UserId)
-        => await AssigningAnyRoleToUserAsync(UserId, Constants.RolesOfSystem[0]).ConfigureAwait(false);
-
-        /// <summary>
-        /// Manda a asignar el role cliente a un usuario.
-        /// </summary>
-        /// <param name="UserId"></param>
-        /// <returns></returns>
-        public async Task<ServiceResponse<bool>> AssigningRoleClientToUserAsync(int UserId)
-        => await AssigningAnyRoleToUserAsync(UserId, Constants.RolesOfSystem[2]).ConfigureAwait(false);
-
-        /// <summary>
         /// Elimina un role a un usuario.
         /// </summary>
         /// <param name="UserId"></param>
-        /// <param name="role"></param>
+        /// <param name="RoleId"></param>
         /// <returns></returns>
-        private async Task<ServiceResponse<bool>> RemoveRoleUserAsync(int UserId, string role)
+        public async Task<ServiceResponse<bool>> RemoveRoleInUserAsync(int UserId, int RoleId)
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
@@ -1553,6 +1253,16 @@
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
                     .GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
+                    return serviceResponse;
+                }
+                //Verfica si el role está disponible
+                var role = await this._userService.VerifyRoleAsync(RoleId).ConfigureAwait(false);
+                if(role == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.BadRole;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.BadRole);
                     return serviceResponse;
                 }
                 //Verifica si el usuario tiene el role
@@ -1602,9 +1312,9 @@
         /// Asigna un nuevo role a un usuario.
         /// </summary>
         /// <param name="UserId"></param>
-        /// <param name="role"></param>
+        /// <param name="RoleId"></param>
         /// <returns></returns>
-        private async Task<ServiceResponse<bool>> AssigningAnyRoleToUserAsync(int UserId, string role)
+        public async Task<ServiceResponse<bool>> AssigningRoleToUserAsync(int UserId, int RoleId)
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
@@ -1620,11 +1330,21 @@
                     .GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
                     return serviceResponse;
                 }
+                //Verfica si el role está disponible
+                var role = await this._userService.VerifyRoleAsync(RoleId).ConfigureAwait(false);
+                if (role == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.BadRole;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.BadRole);
+                    return serviceResponse;
+                }
                 //Verifica si el usuario tiene el role
-                var owner_role = await this._userService
+                var verify_role = await this._userService
                 .VerifyRoleInUserAsync(user, role)
                 .ConfigureAwait(false);
-                if (owner_role)
+                if(verify_role)
                 {
                     serviceResponse.Code = (int)GetValueResourceFile.KeyResource.IsUserHaveRole;
                     serviceResponse.Data = false;
@@ -1815,5 +1535,50 @@
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Obtiene los usuarios de un determinado role.
+        /// </summary>
+        /// <param name="RoleId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<List<GetUserDto>>> GetAllUserWithRoleAsync(int RoleId)
+        {
+            ServiceResponse<List<GetUserDto>> serviceResponse = new ServiceResponse<List<GetUserDto>>();
+            try
+            {
+                var list_users = await this._userService.GetAllUserWithRoleAsync(RoleId).ConfigureAwait(false);
+                if (list_users == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserAllNotFoundWithRole;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.UserAllNotFoundWithRole);
+                    return serviceResponse;
+                }
+                //Mapea de una lista de User a una lista de GetUserDto.
+                serviceResponse.Data = list_users.Select(c => new GetUserDto
+                {
+                    Address = c.Address,
+                    FirstName = c.FirstName,
+                    Id = c.Id,
+                    LastName = c.LastName,
+                    PhoneNumber = c.PhoneNumber,
+                    ImageUserProfile = c.ImageUserProfile,
+                }).ToList();
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        } 
     }
 }

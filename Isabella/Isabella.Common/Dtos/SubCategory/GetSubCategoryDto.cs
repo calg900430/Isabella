@@ -21,5 +21,10 @@
         /// Precio del Produto.
         /// </summary>
         public decimal Price { get; set; }
+
+        /// <summary>
+        /// Enable
+        /// </summary>
+        public bool IsAvailable { get; set; }
     }
 }

@@ -33,39 +33,175 @@
             ProductAllNotFound = 11,
             ImageNotExist = 12,
             ImageProductNotValide = 13,
+
+            /// <summary>
+            /// 
+            /// </summary>
             ImageUserNotValide = 14,
+
+            /// <summary>
+            /// 
+            /// </summary>
             CategoryExist = 15,
+
+            /// <summary>
+            /// 
+            /// </summary>
             CategoryNotAllFound = 16,
+
+            /// <summary>
+            /// 
+            /// </summary>
             ProductNotNew = 17,
+
+            /// <summary>
+            /// 
+            /// </summary>
             SubCategoryExist = 18,
+
+            /// <summary>
+            /// 
+            /// </summary>
             SubCategoryNotFound = 19,
+
+            /// <summary>
+            /// 
+            /// </summary>
             SubCategoryNotAllFound = 20,
+
+            /// <summary>
+            /// 
+            /// </summary>
             ImageAggregateNotValide = 21,
+
+            /// <summary>
+            /// 
+            /// </summary>
             AggregateNotFound = 22,
+
+            /// <summary>
+            /// 
+            /// </summary>
             AggregateAllNotFound = 23,
+
+            /// <summary>
+            /// 
+            /// </summary>
             AggregateNotNew = 24,
+
+            /// <summary>
+            /// 
+            /// </summary>
             BadRole = 25,
+
+            /// <summary>
+            /// 
+            /// </summary>
             BadEmail = 26,
+
+            /// <summary>
+            /// 
+            /// </summary>
             ErrorDataBaseUserIdentity = 27,
+
+            /// <summary>
+            /// 
+            /// </summary>
             UserConfirmRegister = 28,
+
+            /// <summary>
+            /// 
+            /// </summary>
             TokeConfirmRegisterBad = 29,
+
+            /// <summary>
+            /// 
+            /// </summary>
             RequiredEmailOfUser = 30,
+
+            /// <summary>
+            /// 
+            /// </summary>
             NotConfirmRegister = 31,
+
+            /// <summary>
+            /// 
+            /// </summary>
             VerifyPasswordAndEmail = 32,
+
+            /// <summary>
+            /// 
+            /// </summary>
             ErrorGenerateToken = 33,
+
+            /// <summary>
+            /// 
+            /// </summary>
             LoginUserSuccess = 34,
+
+            /// <summary>
+            /// 
+            /// </summary>
             UserNotNew = 35,
+
+            /// <summary>
+            /// 
+            /// </summary>
             EmailNotSend = 36,
+
+            /// <summary>
+            /// 
+            /// </summary>
             EmailRegisterConfirmation = 37,
+
+            /// <summary>
+            /// 
+            /// </summary>
             ImageErrorValue = 38,
+
+            /// <summary>
+            /// 
+            /// </summary>
             PasswordNotCorrect = 39,
+
+            /// <summary>
+            /// 
+            /// </summary>
             CodeRecoverPassword = 40,
+
+            /// <summary>
+            /// 
+            /// </summary>
             ErrorGetCredentialsUser = 41,
+
+            /// <summary>
+            /// 
+            /// </summary>
             ProductExist = 42,
+
+            /// <summary>
+            /// 
+            /// </summary>
             AggregateExist = 43,
+
+            /// <summary>
+            /// 
+            /// </summary>
             ImagesNoExist = 44,
+
+            /// <summary>
+            /// 
+            /// </summary>
             NotCodeIdentification = 45,
+
+            /// <summary>
+            /// 
+            /// </summary>
             CarShopNotProducts = 46,
+
+            /// <summary>
+            /// 
+            /// </summary>
             ProductNotIsAvailable = 47,
 
             /// <summary>
@@ -76,12 +212,12 @@
             /// <summary>
             /// 
             /// </summary>
-            NotUsersClient = 49,
+            UserAllNotFoundWithRole = 49,
 
             /// <summary>
             /// 
             /// </summary>
-            NotUsersOwner = 50,
+            ProductNotHaveAggregate = 50,
 
             /// <summary>
             /// 
@@ -147,6 +283,31 @@
             /// La subcategoria no pertence al producto.
             /// </summary>
             SubCategoryNotIsProduct = 63,
+
+            /// <summary>
+            /// El producto no existe en el carrito de compras del usuario.
+            /// </summary>
+            ProductNotExistInCarShop = 64,
+
+            /// <summary>
+            /// El producto no se encuentra en el carrito o ya tiene asignada esa subcategoria.
+            /// </summary>
+            ProductInCartHaveSubCategory = 65,
+
+            /// <summary>
+            /// 
+            /// </summary>
+            ProductInCartNotHaveSubCategory = 66,
+
+            /// <summary>
+            /// 
+            /// </summary>
+            ProductCombinedNotHaveSubCategory = 67,
+
+            /// <summary>
+            /// 
+            /// </summary>
+            SubCategoryNotIsAvailable = 68,
         }
 
         /// <summary>
@@ -155,12 +316,37 @@
         public enum KeyResourceImage
         {
             //Recursos de Imagenes
+
+            /// <summary>
+            /// 
+            /// </summary>
             ImageAceitunas = 1,
+
+            /// <summary>
+            /// 
+            /// </summary>
             ImageAtun = 2,
+
+            /// <summary>
+            /// 
+            /// </summary>
             ImageSetas = 3,
+
+            /// <summary>
+            /// 
+            /// </summary>
             ImageCamarones = 4,
+
+            /// <summary>
+            /// 
+            /// </summary>
             ImageChorizo = 5,
+
+            /// <summary>
+            /// 
+            /// </summary>
             ImageJamon = 6,
+
             ImageQuesoGouda = 7,
             ImageBistecCerdo1 = 8,
             ImageBistecCerdo2 = 9,

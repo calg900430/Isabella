@@ -1,8 +1,9 @@
 ﻿namespace Isabella.API.Models.Entities
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-
+    using System.Diagnostics.CodeAnalysis;
     using Models;
 
     /// <summary>
@@ -17,9 +18,9 @@
         public int Id { get; set; }
 
         /// <summary>
-        /// Carrito de Compras
+        /// Producto Combinado
         /// </summary>
-        public CarShop CarShop { get; set; }
+        public ProductCombined ProductCombined  { get; set; }
 
         /// <summary>
         /// Producto de agrego
@@ -43,5 +44,6 @@
         /// </summary>
         [DisplayFormat(DataFormatString = "{0:C2}")]
         public decimal PriceTotal { get { return this.Price * (decimal)this.Quantity; } }
+        
     }
 }
