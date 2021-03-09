@@ -20,7 +20,8 @@
             using (ResourceWriter rw = new ResourceWriter(path))
             {
                 //Agrega los mensajes de la aplicación
-                #region Mensajes
+                #region Mensajes de la aplicación
+                rw.AddResource("UserNotAnyOrder", "El usuario no tiene ordenes disponibles.");
                 rw.AddResource("ExceptionDeleteEntity", "No se puede eliminar la entidad, ya que la misma actualmente tiene relaciones con otras entidades en la base de datos.");
                 rw.AddResource("SuccessOk", "Se ha ejecutado la operación correctamente.");
                 rw.AddResource("Exception", "Se ha generado un error en la aplicación");

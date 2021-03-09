@@ -3,7 +3,7 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
-    public class UpdateSubCategoryProductDto
+    public class UpdateCarShopDto
     {
         /// <summary>
         /// Código de identificación.
@@ -18,14 +18,8 @@
         public int ProductCombinedId { get; set; }
 
         /// <summary>
-        /// Asigna una subcategoria.
+        /// Asigna una subcategoria o la elimina.
         /// </summary>
-        public int? SubCategoryId { get; set; }
-
-        /// <summary>
-        /// Cantidad deseada.
-        /// </summary>
-        [Required(ErrorMessage = "Debe introducir la cantidad deseada.")]
-        public int? QuantityProduct { get; set; }
+        public int SubCategoryId { get; set; }
     }
 }

@@ -277,7 +277,7 @@
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        public async Task<IActionResult> UpdateSubCategoryAsync(UpdateSubCategoryDto updateSubCategory)
+        public async Task<IActionResult> UpdateSubCategoryAsync([FromBody] UpdateSubCategoryDto updateSubCategory)
         {
             try
             {

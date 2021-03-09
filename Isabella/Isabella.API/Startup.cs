@@ -215,6 +215,11 @@ namespace Isabella.API
             services.AddScoped<ServiceGenericHelper<CantAggregate>>();
             services.AddScoped<ServiceGenericHelper<ProductCombined>>();
 
+            //Agrega el servicio para el manejo de las ordenes
+            services.AddScoped<OrderServiceController>();
+            services.AddScoped<ServiceGenericHelper<Order>>();
+            services.AddScoped<ServiceGenericHelper<OrderDetail>>();
+
             //Agrega los servicios para el manejo de los códigos de verificación
             services.AddScoped<CodeIdentificationServiceController>();
             services.AddScoped<ServiceGenericHelper<CodeIdentification>>();

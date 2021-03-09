@@ -8,7 +8,7 @@
     /// <summary>
     /// Ordenes del tipo fast(Para pedidos informales, o sea usuarios que no desean ser clientes oficiales)
     /// </summary>
-    public class Order
+    public class Order : IEntity
     {
         /// <summary>
         /// Key
@@ -16,11 +16,20 @@
         [Key]
         public int Id { get; set; }
 
-
         /// <summary>
         /// Código de identificación.
         /// </summary>
         public CodeIdentification CodeVerification { get; set; }
+
+        /// <summary>
+        /// Detalle de ordenes.
+        /// </summary>
+        public ICollection<OrderDetail> OrderDetails { get; set; }
+
+        /// <summary>
+        /// Gps
+        /// </summary>
+        public Gps Gps { get; set; }
 
         /// <summary>
         /// Gps
@@ -29,68 +38,16 @@
         public string PhoneNumber { get; set; }
 
         /// <summary>
-        /// Gps
+        /// Dirección donde entregar la orden
         /// </summary>
-        public Gps Gps { get; set; }
+        [Required(ErrorMessage = "Debe definir la dirección de entrega del pedido.")]
+        public string Address { get; set; }
 
         /// <summary>
         /// Dirección donde entregar la orden
         /// </summary>
-        [Required]
-        public string Address { get; set; }
-
-        /// <summary>
-        /// Detalles de cada producto que tiene la orden.
-        /// </summary>
-        public ICollection<OrderDetail> Items { get; set; }
-
-        /// <summary>
-        /// Cantidad de productos sin repetir(o sea productos diferentes) que tiene nuestro pedido.
-        /// </summary>
-        [DisplayFormat(DataFormatString = "{0:N0}")]
-        public int Lines 
-        {  
-           get
-           {
-                /*int cantProductSpecial = 0;
-                int cantProductStandard = 0;
-                var AllProductSpecial = this.Items.Select(c => c.Requested_ProductSpecial).ToList();
-                if(AllProductSpecial != null)
-                cantProductSpecial = AllProductSpecial.Count;
-                var AllProductStandard = this.Items.Select(c => c.RequestedProductStandard).ToList();
-                if(AllProductStandard != null)
-                cantProductStandard = AllProductStandard.Count;
-                return cantProductSpecial + cantProductStandard;*/
-                return -1;
-           } 
-        }
-
-        /// <summary>
-        /// Cantidad Total de todos los productos de la orden
-        /// </summary>
-        [DisplayFormat(DataFormatString = "{0:N2}")]
-        public double Quantity 
-        { 
-            get 
-            {
-
-                //return this.Items == null ? 0 : this.Items.Sum(i => i.Quantity); 
-                return 0;
-            } 
-        }
-
-        /// <summary>
-        /// Precio Total de la Orden
-        /// </summary>
-        [DisplayFormat(DataFormatString = "{0:C2}")]
-        public decimal Value 
-        { 
-            get
-            {
-                //return this.Items == null ? 0 : this.Items.Sum(i => i.Value); 
-                return 0;
-            }
-        }
+        [Required(ErrorMessage = "Debe definir un nombre o un alias de quién solicitó el pedido.")]
+        public string AskForWho { get; set; }
 
         /// <summary>
         /// Fecha en que se realizó el pedido.
@@ -104,5 +61,87 @@
         /// </summary>
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm tt}", ApplyFormatInEditMode = false)]
         public DateTime? DeliveryDate { get; set; }
+
+        /// <summary>
+        /// Cantidad de productos sin repetir(o sea productos diferentes) que tiene nuestro carrito.
+        /// </summary>
+        [DisplayFormat(DataFormatString = "{0:N2}")]
+        public int Lines
+        {
+            get
+            {
+                return OrderDetails.Count;
+            }
+        }
+
+        /// <summary>
+        /// Cantidad Total de Productos.
+        /// </summary>
+        public int QuantityTotalProductCombined
+        {
+            get
+            {
+                if (!OrderDetails.Any())
+                return 0;
+                else
+                return this.OrderDetails.Sum(c => c.ProductCombined.Quantity);
+            }
+        }
+
+        /// <summary>
+        /// Cantidad Total de Agregados.
+        /// </summary>
+        public int QuantityTotalAggregate
+        {
+            get
+            {
+                if (!OrderDetails.Any())
+                return 0;
+                else
+                return this.OrderDetails.Sum(c => c.ProductCombined.CantAggregates.Sum(x => x.Quantity));
+            }
+        }
+
+        /// <summary>
+        /// Precio total del de productos
+        /// </summary>
+        public decimal PriceTotalOfProductCombined
+        {
+            get
+            {
+                if (!OrderDetails.Any())
+                return 0;
+                else
+                return this.OrderDetails.Sum(c => c.ProductCombined.PriceTotal);
+            }
+        }
+
+        /// <summary>
+        /// Precio total en agregados
+        /// </summary>
+        public decimal PriceTotalOfAggregates
+        {
+            get
+            {
+                if (!OrderDetails.Any())
+                return 0;
+                else
+                return this.OrderDetails.Sum(c => c.ProductCombined.CantAggregates.Sum(x => x.PriceTotal));
+            }
+        }
+
+        /// <summary>
+        /// Precio Total del posible pedido.
+        /// </summary>
+        public decimal PriceTotal
+        {
+            get
+            {
+                if (!OrderDetails.Any())
+                return 0;
+                else
+                return PriceTotalOfProductCombined + PriceTotalOfAggregates;
+            }
+        }
     }
 }

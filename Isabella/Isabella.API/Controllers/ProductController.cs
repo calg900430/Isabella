@@ -81,7 +81,7 @@
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        public async Task<IActionResult> UpdateProductAsync(UpdateProductDto updateProductStandard)
+        public async Task<IActionResult> UpdateProductAsync([FromBody] UpdateProductDto updateProductStandard)
         {
             try
             {
@@ -285,7 +285,7 @@
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        public async Task<IActionResult> AddImageProductAsync(AddImageProductDto addImageProductStandard)
+        public async Task<IActionResult> AddImageProductAsync([FromBody] AddImageProductDto addImageProductStandard)
         {
             try
             {

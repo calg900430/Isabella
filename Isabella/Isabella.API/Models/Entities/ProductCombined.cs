@@ -59,10 +59,7 @@
         {
             get
             {
-               decimal price_all_aggregate = 0;
-               if(CantAggregates.Any())
-               price_all_aggregate = this.CantAggregates.Sum(c => c.PriceTotal);
-               return (this.Price * (decimal)this.Quantity) + price_all_aggregate;
+               return (this.Price * (decimal)this.Quantity);
             }
         }
     }

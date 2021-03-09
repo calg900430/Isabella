@@ -33,20 +33,72 @@
         public DateTime? DateCreated { get; set; }
 
         /// <summary>
-        /// Compara un CarShop
+        /// Precio Producto, el mismo se define si el usuario elige el producto con subcategoria o no.
         /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool MyEqualTo(CartShop other)
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        public decimal PriceProductCombined
         {
-            if(this.CodeIdentification != other.CodeIdentification)
-            return false;
-            if (this.ProductCombined.Product.Id != other.ProductCombined.Product.Id)
-            return false;
-            if (this.ProductCombined.SubCategory.Id != other.ProductCombined.SubCategory.Id)
-            return false;
-            return this.ProductCombined.CantAggregates.Select(c => c.Aggregate.Id).ToList() 
-            .SequenceEqual(other.ProductCombined.CantAggregates.Select(c => c.Aggregate.Id));
+            get
+            {
+                return ProductCombined.Price;
+            }
+        }
+
+        /// <summary>
+        /// Cantidad de Productos.
+        /// </summary>
+        [DisplayFormat(DataFormatString = "{0:N2}")]
+        public int QuantityProductCombined { get { return this.ProductCombined.Quantity; } }
+
+        /// <summary>
+        /// Precio total del Producto.
+        /// </summary>
+        [DisplayFormat(DataFormatString = "{0:C2}")]
+        public decimal PriceTotalProductCombined
+        {
+            get
+            {
+                return (this.PriceProductCombined * (decimal)this.QuantityProductCombined);
+            }
+        }
+
+        /// <summary>
+        /// Cantidad Total de Agregados.
+        /// </summary>
+        public int QuantityTotalAggregate
+        {
+            get
+            {
+                if (!ProductCombined.CantAggregates.Any())
+                    return 0;
+                else
+                    return this.ProductCombined.CantAggregates.Sum(x => x.Quantity);
+            }
+        }
+
+        /// <summary>
+        /// Precio total en agregados
+        /// </summary>
+        public decimal PriceTotalOfAggregates
+        {
+            get
+            {
+                if (!ProductCombined.CantAggregates.Any())
+                return 0;
+                else
+                return this.ProductCombined.CantAggregates.Sum(x => x.PriceTotal);
+            }
+        }
+
+        /// <summary>
+        /// Precio Total del posible pedido.
+        /// </summary>
+        public decimal PriceTotal
+        {
+            get
+            {
+                return PriceTotalProductCombined + PriceTotalOfAggregates;
+            }
         }
     }
 }

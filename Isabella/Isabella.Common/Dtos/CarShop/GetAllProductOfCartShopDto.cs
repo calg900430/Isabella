@@ -73,7 +73,7 @@
                 if (!GetCarShopProducts.Any())
                 return 0;
                 else
-                return this.GetCarShopProducts.Sum(c => c.Price);
+                return this.GetCarShopProducts.Sum(c => c.PriceTotal);
             }
         }
 
@@ -87,7 +87,7 @@
                 if (!GetCarShopProducts.Any())
                 return 0;
                 else
-                return this.GetCarShopProducts.Sum(c => c.CantAggregates.Sum(x => x.Price));
+                return this.GetCarShopProducts.Sum(c => c.CantAggregates.Sum(x => x.PriceTotal));
             }
         }
 
@@ -98,11 +98,10 @@
         {
             get
             {
-               if(!GetCarShopProducts.Any())
-               return 0;
-               else
-               return (PriceTotalOfProductCombined * QuantityTotalProductCombined) + 
-               (PriceTotalOfAggregates * QuantityTotalAggregate);
+                if (!GetCarShopProducts.Any())
+                return 0;
+                else
+                return PriceTotalOfProductCombined + PriceTotalOfAggregates;
             }
         }
 

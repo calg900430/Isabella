@@ -14,6 +14,8 @@
     using Helpers.RepositoryHelpers;
     using Models.Entities;
     using Resources;
+    using Castle.Core.Logging;
+    using Microsoft.Extensions.Logging;
 
     /// <summary>
     /// Servicio para el controlador de los productos.
@@ -24,6 +26,8 @@
         private readonly ServiceGenericHelper<Category> _serviceGenericCategoryHelper;
         private readonly ServiceGenericHelper<ImageProduct> _serviceGenericImageProductHelper;
         private readonly ServiceGenericHelper<SubCategory> _serviceGenericSubCategoryHelper;
+        private readonly ILogger<ProductServiceController> _logger;
+
 
         /// <summary>
         /// Constructor
@@ -32,15 +36,18 @@
         /// <param name="serviceCategoryGenericHelper"></param>
         /// <param name="serviceGenericImageProductHelper"></param>
         /// <param name="serviceGenericSubCategoryHelper"></param>
+        /// <param name="logger"></param>
         public ProductServiceController(ServiceGenericHelper<Product> serviceProductGenericHelper, 
         ServiceGenericHelper<Category> serviceCategoryGenericHelper, 
         ServiceGenericHelper<ImageProduct> serviceGenericImageProductHelper,
-        ServiceGenericHelper<SubCategory> serviceGenericSubCategoryHelper)
+        ServiceGenericHelper<SubCategory> serviceGenericSubCategoryHelper,
+        ILogger<ProductServiceController> logger)
         {
             this._serviceGenericProductHelper = serviceProductGenericHelper;
             this._serviceGenericCategoryHelper = serviceCategoryGenericHelper;
             this._serviceGenericImageProductHelper = serviceGenericImageProductHelper;
             this._serviceGenericSubCategoryHelper = serviceGenericSubCategoryHelper;
+            this._logger = logger;
         }
 
         /// <summary>
@@ -59,6 +66,7 @@
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
+                    _logger.LogWarning(1, GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
                     return serviceResponse;
                 }
                 if (addProduct.Stock < 1 || addProduct.Price < 1)
@@ -68,6 +76,7 @@
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
                     .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
+                    _logger.LogWarning(2, GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative));
                     return serviceResponse;
                 }
                 //Verifica que la categoria exista.

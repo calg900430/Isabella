@@ -366,6 +366,31 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:Isabella.API.Controllers.OrderController">
+            <summary>
+            Ordenes
+            </summary>
+        </member>
+        <member name="M:Isabella.API.Controllers.OrderController.#ctor(Isabella.API.ServicesControllers.OrderServiceController)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="orderServiceController"></param>
+        </member>
+        <member name="M:Isabella.API.Controllers.OrderController.ConfirmOrderAsync(Isabella.Common.Dtos.Order.ConfirmOrderDto)">
+            <summary>
+            Confirma el pedido del usuario.
+            </summary>
+            <param name="confirmOrder"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.OrderController.GetAggregateForIdAsync(System.Guid)">
+            <summary>
+            Obtiene todas las ordenes de un usuario.
+            </summary>
+            <param name="codeIdentification"></param>
+            <returns></returns>
+        </member>
         <member name="T:Isabella.API.Controllers.ProductController">
             <summary>
             Controlador para los productos standard.
@@ -1696,12 +1721,35 @@
             Fecha en que se agrego el producto al carrito.
             </summary>
         </member>
-        <member name="M:Isabella.API.Models.Entities.CartShop.MyEqualTo(Isabella.API.Models.Entities.CartShop)">
+        <member name="P:Isabella.API.Models.Entities.CartShop.PriceProductCombined">
             <summary>
-            Compara un CarShop
+            Precio Producto, el mismo se define si el usuario elige el producto con subcategoria o no.
             </summary>
-            <param name="other"></param>
-            <returns></returns>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.CartShop.QuantityProductCombined">
+            <summary>
+            Cantidad de Productos.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.CartShop.PriceTotalProductCombined">
+            <summary>
+            Precio total del Producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.CartShop.QuantityTotalAggregate">
+            <summary>
+            Cantidad Total de Agregados.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.CartShop.PriceTotalOfAggregates">
+            <summary>
+            Precio total en agregados
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.CartShop.PriceTotal">
+            <summary>
+            Precio Total del posible pedido.
+            </summary>
         </member>
         <member name="T:Isabella.API.Models.Entities.Category">
             <summary>
@@ -1818,12 +1866,17 @@
             Código de identificación.
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.Entities.Order.PhoneNumber">
+        <member name="P:Isabella.API.Models.Entities.Order.OrderDetails">
+            <summary>
+            Detalle de ordenes.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.Order.Gps">
             <summary>
             Gps
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.Entities.Order.Gps">
+        <member name="P:Isabella.API.Models.Entities.Order.PhoneNumber">
             <summary>
             Gps
             </summary>
@@ -1833,24 +1886,9 @@
             Dirección donde entregar la orden
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.Entities.Order.Items">
+        <member name="P:Isabella.API.Models.Entities.Order.AskForWho">
             <summary>
-            Detalles de cada producto que tiene la orden.
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.Entities.Order.Lines">
-            <summary>
-            Cantidad de productos sin repetir(o sea productos diferentes) que tiene nuestro pedido.
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.Entities.Order.Quantity">
-            <summary>
-            Cantidad Total de todos los productos de la orden
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.Entities.Order.Value">
-            <summary>
-            Precio Total de la Orden
+            Dirección donde entregar la orden
             </summary>
         </member>
         <member name="P:Isabella.API.Models.Entities.Order.OrderDate">
@@ -1863,6 +1901,36 @@
             Tiempo en el que se debe entregar el pedido.
             </summary>
         </member>
+        <member name="P:Isabella.API.Models.Entities.Order.Lines">
+            <summary>
+            Cantidad de productos sin repetir(o sea productos diferentes) que tiene nuestro carrito.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.Order.QuantityTotalProductCombined">
+            <summary>
+            Cantidad Total de Productos.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.Order.QuantityTotalAggregate">
+            <summary>
+            Cantidad Total de Agregados.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.Order.PriceTotalOfProductCombined">
+            <summary>
+            Precio total del de productos
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.Order.PriceTotalOfAggregates">
+            <summary>
+            Precio total en agregados
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.Order.PriceTotal">
+            <summary>
+            Precio Total del posible pedido.
+            </summary>
+        </member>
         <member name="T:Isabella.API.Models.Entities.OrderDetail">
             <summary>
             Detalles de un pedido de tipo Fast
@@ -1873,19 +1941,44 @@
             Key
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.Entities.OrderDetail.Order">
+        <member name="P:Isabella.API.Models.Entities.OrderDetail.ProductCombined">
             <summary>
-            Orden
+            ProductCarShop
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.OrderDetail.PriceProductCombined">
+            <summary>
+            Precio Producto, el mismo se define si el usuario elige el producto con subcategoria o no.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.OrderDetail.QuantityProductCombined">
+            <summary>
+            Cantidad de Productos.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.OrderDetail.PriceTotalProductCombined">
+            <summary>
+            Precio total del Producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.OrderDetail.QuantityTotalAggregate">
+            <summary>
+            Cantidad Total de Agregados.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.OrderDetail.PriceTotalOfAggregates">
+            <summary>
+            Precio total en agregados
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.OrderDetail.PriceTotal">
+            <summary>
+            Precio Total del posible pedido.
             </summary>
         </member>
         <member name="P:Isabella.API.Models.Entities.OrderDetail.DateCreated">
             <summary>
-            Fecha en que se agregó el producto al carrito de compras
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.Entities.OrderDetail.DateUpdate">
-            <summary>
-            Fecha en que se actualizo el producto.
+            Fecha en que se agrego el producto al carrito.
             </summary>
         </member>
         <member name="T:Isabella.API.Models.Entities.Product">
@@ -2437,6 +2530,11 @@
             
             </summary>
         </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.UserNotAnyOrder">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="T:Isabella.API.Resources.GetValueResourceFile.KeyResourceImage">
             <summary>
             Recursos de Imagenes de la aplicación
@@ -2864,12 +2962,41 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:Isabella.API.ServicesControllers.OrderServiceController">
+            <summary>
+            Servicio para las ordenes
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.OrderServiceController.#ctor(Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Order},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.OrderDetail},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CodeIdentification},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CartShop},AutoMapper.IMapper)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="serviceGenericOrderHelper"></param>
+            <param name="serviceGenericOrderDetailHelper"></param>
+            <param name="serviceGenericCodeIdentificationHelper"></param>
+            <param name="serviceGenericCartShopHelper"></param>
+            <param name="mapper"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.OrderServiceController.ConfirmOrderAsync(Isabella.Common.Dtos.Order.ConfirmOrderDto)">
+            <summary>
+            Obtiene todas las ordenes del usuario.
+            </summary>
+            <param name="confirmOrder"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.OrderServiceController.GetAllOrderAsync(System.Guid)">
+            <summary>
+            Confirma las ordenes de un usuario.
+            </summary>
+            <param name="codeIdentification"></param>
+            <returns></returns>
+        </member>
         <member name="T:Isabella.API.ServicesControllers.ProductServiceController">
             <summary>
             Servicio para el controlador de los productos.
             </summary>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.ProductServiceController.#ctor(Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Product},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Category},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.ImageProduct},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.SubCategory})">
+        <member name="M:Isabella.API.ServicesControllers.ProductServiceController.#ctor(Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Product},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Category},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.ImageProduct},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.SubCategory},Microsoft.Extensions.Logging.ILogger{Isabella.API.ServicesControllers.ProductServiceController})">
             <summary>
             Constructor
             </summary>
@@ -2877,6 +3004,7 @@
             <param name="serviceCategoryGenericHelper"></param>
             <param name="serviceGenericImageProductHelper"></param>
             <param name="serviceGenericSubCategoryHelper"></param>
+            <param name="logger"></param>
         </member>
         <member name="M:Isabella.API.ServicesControllers.ProductServiceController.AddProductAsync(Isabella.Common.Dtos.Product.AddProductDto)">
             <summary>

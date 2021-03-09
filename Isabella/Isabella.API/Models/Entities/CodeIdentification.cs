@@ -16,6 +16,6 @@
         /// <summary>
         /// Código para el pedido en modo Fast.
         /// </summary>
-        public Guid Code { get; set; }   
+        public Guid Code { get; set; }  
     }
 }

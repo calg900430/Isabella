@@ -82,7 +82,7 @@
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        public async Task<IActionResult> UpdateAggregateAsync(UpdateAggregateDto updateAggregate)
+        public async Task<IActionResult> UpdateAggregateAsync([FromBody] UpdateAggregateDto updateAggregate)
         {
             try
             {
@@ -286,7 +286,7 @@
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        public async Task<IActionResult> AddImageAggregateAsync(AddImageAggregateDto addImageAggregate)
+        public async Task<IActionResult> AddImageAggregateAsync([FromBody] AddImageAggregateDto addImageAggregate)
         {
             try
             {

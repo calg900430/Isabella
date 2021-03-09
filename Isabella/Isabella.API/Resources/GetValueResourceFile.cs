@@ -308,6 +308,13 @@
             /// 
             /// </summary>
             SubCategoryNotIsAvailable = 68,
+
+            /// <summary>
+            /// 
+            /// </summary>
+            UserNotAnyOrder = 70,
+
+
         }
 
         /// <summary>

@@ -24,7 +24,7 @@
     public class CartShopServiceController : ICartShopDto
     {
 
-        private readonly ServiceGenericHelper<CartShop> _serviceGenericCarShopHelper;
+        private readonly ServiceGenericHelper<CartShop> _serviceGenericCartShopHelper;
         private readonly ServiceGenericHelper<Product> _serviceGenericProductHelper;
         private readonly ServiceGenericHelper<Aggregate> _serviceGenericAggregateHelper;
         private readonly ServiceGenericHelper<CodeIdentification> _serviceGenericCodeIdentificationHelper;
@@ -53,7 +53,7 @@
         ServiceGenericHelper<ProductCombined> serviceGenericProductCombinedHelper,
         IMapper mapper)
         {
-            this._serviceGenericCarShopHelper = serviceGenericCarShopHelper;
+            this._serviceGenericCartShopHelper = serviceGenericCarShopHelper;
             this._serviceGenericProductHelper = serviceGenericProductHelper;
             this._serviceGenericAggregateHelper = serviceGenericAggregateHelper;
             this._serviceGenericCodeIdentificationHelper = serviceGenericCodeIdentificationHelper;
@@ -206,7 +206,7 @@
                     }
                 }
                 //Obtiene el contexto
-                var context_cart_shop = this._serviceGenericCarShopHelper._context;
+                var context_cart_shop = this._serviceGenericCartShopHelper._context;
                 //Define una entidad consultable
                 IQueryable<CartShop> entity_carshop = context_cart_shop.AsQueryable();
                 //Agrega los Include y ThenInclude necesarios
@@ -255,11 +255,11 @@
                         DateCreated = DateTime.UtcNow,
                     };
                     //Agrega un nuevo producto al carrito de compras
-                    await this._serviceGenericCarShopHelper
+                    await this._serviceGenericCartShopHelper
                     .AddEntityAsync(product_is_cartshop)
                     .ConfigureAwait(false);
                     //Actualiza la base de datos.
-                    await this._serviceGenericCarShopHelper
+                    await this._serviceGenericCartShopHelper
                     .SaveChangesBDAsync().ConfigureAwait(false);
                 }
                 //Si el usuario tiene ese producto combinado solo se actualizan las cantidades.
@@ -278,7 +278,7 @@
                    //Actualiza la cantidad del producto
                    product_in_carshop.ProductCombined.Quantity += addProductsToCarShop.Quantity;
                    //Guarda los cambios en la base de datos
-                   await this._serviceGenericCarShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                   await this._serviceGenericCartShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
                 }
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
@@ -323,7 +323,7 @@
                     return serviceResponse;
                 }
                 //Verifica si hay productos en el carrito
-                var all_products_in_carshop = await this._serviceGenericCarShopHelper._context
+                var all_products_in_carshop = await this._serviceGenericCartShopHelper._context
                 .Include(c => c.CodeIdentification)
                 .Include(c => c.ProductCombined.Product.Category)
                 .Include(c => c.ProductCombined.Product.SubCategories)
@@ -399,7 +399,7 @@
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
-                var carshop = await this._serviceGenericCarShopHelper
+                var carshop = await this._serviceGenericCartShopHelper
                 .WhereFirstEntityAsync(c => c.CodeIdentification.Code == CodeVerification
                 && c.ProductCombined.Id == ProductCombinedId,
                 c => c.ProductCombined.CantAggregates, c => c.CodeIdentification)
@@ -428,8 +428,8 @@
                 .SaveChangesBDAsync().ConfigureAwait(false);
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 //Elimina la relación del producto combinado con el carrito
-                this._serviceGenericCarShopHelper.RemoveEntity(carshop);
-                await this._serviceGenericCarShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                this._serviceGenericCartShopHelper.RemoveEntity(carshop);
+                await this._serviceGenericCartShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile
@@ -503,7 +503,7 @@
                 }
                 //Verifica si el producto está en el carrito del usuario y 
                 //si el mismo no tiene asignada la subcategoria que se quiere actualizar. 
-                var context_cart_shop = this._serviceGenericCarShopHelper._context;
+                var context_cart_shop = this._serviceGenericCartShopHelper._context;
                 //Define una entidad consultable
                 IQueryable<CartShop> entity_carshop = context_cart_shop.AsQueryable();
                 //Agrega los Include y ThenInclude necesarios
@@ -569,8 +569,8 @@
                 //El producto no existe por lo que solo actualiza el actual
                 if (exist_product_in_carshop == null)
                 {
-                    this._serviceGenericCarShopHelper.UpdateEntity(product_in_carshop);
-                    await this._serviceGenericCarShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                    this._serviceGenericCartShopHelper.UpdateEntity(product_in_carshop);
+                    await this._serviceGenericCartShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
                 }
                 //El producto existe por lo que solo actualiza las cantidades y elimina el actual.
                 else
@@ -604,13 +604,13 @@
                     //Guarda los cambios en la base de datos.
                     .SaveChangesBDAsync().ConfigureAwait(false);
                     //Elimina la relación del producto combinado con el carrito
-                    this._serviceGenericCarShopHelper.RemoveEntity(product_in_carshop);
+                    this._serviceGenericCartShopHelper.RemoveEntity(product_in_carshop);
                     //Guarda los cambios en la base de datos
-                    await this._serviceGenericCarShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                    await this._serviceGenericCartShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
                     //Actualiza el producto existente
-                    this._serviceGenericCarShopHelper.UpdateEntity(exist_product_in_carshop);
+                    this._serviceGenericCartShopHelper.UpdateEntity(exist_product_in_carshop);
                     //Guarda los cambios en la base de datos
-                    await this._serviceGenericCarShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                    await this._serviceGenericCartShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
                 }
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
@@ -656,7 +656,7 @@
                 }
                 //Verifica si el producto está en el carrito del usuario y 
                 //si el mismo tiene asignada alguna subcategoria. 
-                var context_cart_shop = this._serviceGenericCarShopHelper._context;
+                var context_cart_shop = this._serviceGenericCartShopHelper._context;
                 //Define una entidad consultable
                 IQueryable<CartShop> entity_carshop = context_cart_shop.AsQueryable();
                 //Agrega los Include y ThenInclude necesarios
@@ -721,8 +721,8 @@
                 {
                     //Asigna la subcategoria
                     product_in_carshop.ProductCombined.SubCategory = null;
-                    this._serviceGenericCarShopHelper.UpdateEntity(product_in_carshop);
-                    await this._serviceGenericCarShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                    this._serviceGenericCartShopHelper.UpdateEntity(product_in_carshop);
+                    await this._serviceGenericCartShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
                 }
                 //El producto existe por lo que solo actualiza las cantidades y elimina el actual.
                 else
@@ -756,13 +756,13 @@
                     await this._serviceGenericProductCombinedHelper
                     .SaveChangesBDAsync().ConfigureAwait(false);
                     //Elimina la relación del producto combinado con el carrito
-                    this._serviceGenericCarShopHelper.RemoveEntity(product_in_carshop);
+                    this._serviceGenericCartShopHelper.RemoveEntity(product_in_carshop);
                     //Guarda los cambios en la base de datos
-                    await this._serviceGenericCarShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                    await this._serviceGenericCartShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
                     //Actualiza el producto existente
-                    this._serviceGenericCarShopHelper.UpdateEntity(exist_product_in_carshop);
+                    this._serviceGenericCartShopHelper.UpdateEntity(exist_product_in_carshop);
                     //Guarda los cambios en la base de datos
-                    await this._serviceGenericCarShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                    await this._serviceGenericCartShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
                 }
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
@@ -825,7 +825,7 @@
                     return serviceResponse;
                 }
                 //Verifica si el producto está en el carrito del usuario.
-                var product_in_carshop = await this._serviceGenericCarShopHelper
+                var product_in_carshop = await this._serviceGenericCartShopHelper
                 .WhereFirstEntityAsync(c => c.ProductCombined.Id == modifyQuantityProduct.ProductCombinedId && 
                 c.CodeIdentification == codeidentification, c => c.ProductCombined)
                 .ConfigureAwait(false);
@@ -840,9 +840,9 @@
                 }
                 //Actualiza la cantidad del producto con un nuevo valor.
                 product_in_carshop.ProductCombined.Quantity = modifyQuantityProduct.Quantity;
-                this._serviceGenericCarShopHelper.UpdateEntity(product_in_carshop);
+                this._serviceGenericCartShopHelper.UpdateEntity(product_in_carshop);
                 //Guarda los cambios en la base de datos.
-                await this._serviceGenericCarShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                await this._serviceGenericCartShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
@@ -905,7 +905,7 @@
                 }
                 //Verifica si el producto está en el carrito del usuario.
                 //Verifica si el producto está en el carrito del usuario.
-                var product_in_carshop = await this._serviceGenericCarShopHelper
+                var product_in_carshop = await this._serviceGenericCartShopHelper
                 .WhereFirstEntityAsync(c => c.ProductCombined.Id == modifyQuantityProduct.ProductCombinedId &&
                 c.CodeIdentification == codeidentification, c => c.ProductCombined)
                 .ConfigureAwait(false);
@@ -920,9 +920,9 @@
                 }
                 //Incrementa la cantidad del producto.
                 product_in_carshop.ProductCombined.Quantity += modifyQuantityProduct.Quantity;
-                this._serviceGenericCarShopHelper.UpdateEntity(product_in_carshop);
+                this._serviceGenericCartShopHelper.UpdateEntity(product_in_carshop);
                 //Guarda los cambios en la base de datos.
-                await this._serviceGenericCarShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                await this._serviceGenericCartShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;
@@ -985,7 +985,7 @@
                 }
                 //Verifica si el producto está en el carrito del usuario y si el mismo tiene el agregado que se quiere actualizar.
                 //Obtiene el contexto
-                var context_cart_shop = this._serviceGenericCarShopHelper._context;
+                var context_cart_shop = this._serviceGenericCartShopHelper._context;
                 //Define una entidad consultable
                 IQueryable<CartShop> entity_carshop = context_cart_shop.AsQueryable();
                 //Agrega los Include y ThenInclude necesarios
@@ -1080,7 +1080,7 @@
                 }
                 //Verifica si el producto está en el carrito del usuario y si el mismo tiene el agregado que se quiere actualizar.
                 //Obtiene el contexto
-                var context_cart_shop = this._serviceGenericCarShopHelper._context;
+                var context_cart_shop = this._serviceGenericCartShopHelper._context;
                 //Define una entidad consultable
                 IQueryable<CartShop> entity_carshop = context_cart_shop.AsQueryable();
                 //Agrega los Include y ThenInclude necesarios
@@ -1176,7 +1176,7 @@
                     return serviceResponse;
                 }
                 //Verifica si el producto está en el carrito del usuario
-                var context_cart_shop = this._serviceGenericCarShopHelper._context;
+                var context_cart_shop = this._serviceGenericCartShopHelper._context;
                 //Define una entidad consultable
                 IQueryable<CartShop> entity_carshop = context_cart_shop.AsQueryable();
                 //Agrega los Include y ThenInclude necesarios
@@ -1254,9 +1254,9 @@
                         //Guarda los cambios en la base de datos.
                         await this._serviceGenericCantAggregateHelper.SaveChangesBDAsync().ConfigureAwait(false);
                         //Actualiza el carrito, agrega el nuevo agregado.
-                        this._serviceGenericCarShopHelper.UpdateEntity(product_in_carshop);
+                        this._serviceGenericCartShopHelper.UpdateEntity(product_in_carshop);
                         //Guarda los cambios en la base de datos.
-                        await this._serviceGenericCarShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                        await this._serviceGenericCartShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
                     }
                     //El producto existe por lo que solo actualiza las cantidades y elimina el actual.
                     else
@@ -1295,13 +1295,13 @@
                         await this._serviceGenericProductCombinedHelper
                         .SaveChangesBDAsync().ConfigureAwait(false);
                         //Elimina la relación del producto combinado con el carrito
-                        this._serviceGenericCarShopHelper.RemoveEntity(product_in_carshop);
+                        this._serviceGenericCartShopHelper.RemoveEntity(product_in_carshop);
                         //Guarda los cambios en la base de datos
-                        await this._serviceGenericCarShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                        await this._serviceGenericCartShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
                         //Actualiza el producto existente
-                        this._serviceGenericCarShopHelper.UpdateEntity(exist_product_in_carshop);
+                        this._serviceGenericCartShopHelper.UpdateEntity(exist_product_in_carshop);
                         //Guarda los cambios en la base de datos
-                        await this._serviceGenericCarShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                        await this._serviceGenericCartShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
                     }
                 }
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
@@ -1361,7 +1361,7 @@
                     return serviceResponse;
                 }
                 //Verifica si el producto está en el carrito.
-                var context_cart_shop = this._serviceGenericCarShopHelper._context;
+                var context_cart_shop = this._serviceGenericCartShopHelper._context;
                 //Define una entidad consultable
                 IQueryable<CartShop> entity_carshop = context_cart_shop.AsQueryable();
                 //Agrega los Include y ThenInclude necesarios
@@ -1468,13 +1468,13 @@
                         await this._serviceGenericProductCombinedHelper
                         .SaveChangesBDAsync().ConfigureAwait(false);
                         //Elimina la relación del producto combinado con el carrito
-                        this._serviceGenericCarShopHelper.RemoveEntity(product_in_carshop);
+                        this._serviceGenericCartShopHelper.RemoveEntity(product_in_carshop);
                         //Guarda los cambios en la base de datos
-                        await this._serviceGenericCarShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                        await this._serviceGenericCartShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
                         //Actualiza el producto existente
-                        this._serviceGenericCarShopHelper.UpdateEntity(exist_product_in_carshop);
+                        this._serviceGenericCartShopHelper.UpdateEntity(exist_product_in_carshop);
                         //Guarda los cambios en la base de datos
-                        await this._serviceGenericCarShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                        await this._serviceGenericCartShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
                     }
                 }
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
@@ -1505,7 +1505,7 @@
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
-                var all_carshop = await this._serviceGenericCarShopHelper
+                var all_carshop = await this._serviceGenericCartShopHelper
                 .WhereListEntityAsync(c => c.CodeIdentification.Code == codeIdentifaction,
                 c => c.ProductCombined.CantAggregates, c => c.CodeIdentification, c => c.ProductCombined)
                 .ConfigureAwait(false);
@@ -1535,8 +1535,8 @@
                     await this._serviceGenericProductCombinedHelper
                     .SaveChangesBDAsync().ConfigureAwait(false);
                     //Elimina la relación del producto combinado con el carrito
-                    this._serviceGenericCarShopHelper.RemoveEntity(carshop);
-                    await this._serviceGenericCarShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                    this._serviceGenericCartShopHelper.RemoveEntity(carshop);
+                    await this._serviceGenericCartShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
                 }
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
