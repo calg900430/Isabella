@@ -8,14 +8,13 @@
     /// <summary>
     /// Repositorio para el manejo de las ordenes(Pedidos)
     /// </summary>
-    public interface IRepositoryOrderDto
+    public interface IOrderRepositoryDto
     {
         /// <summary>
         /// Obtiene todas las ordenes del usuario.
         /// </summary>
-        /// <param name="codeIdentification"></param>
         /// <returns></returns>
-        Task<ServiceResponse<GetAllOrderDto>> GetAllOrderAsync(Guid codeIdentification);
+        Task<ServiceResponse<GetAllOrderDto>> GetAllOrderAsync();
 
         /// <summary>
         /// Confirma las ordenes de un usuario.

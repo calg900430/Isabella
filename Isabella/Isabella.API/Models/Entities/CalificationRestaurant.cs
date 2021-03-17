@@ -21,7 +21,7 @@
         /// <summary>
         /// Código de identificación.
         /// </summary>
-        public CodeIdentification CodeIdentification { get; set; }
+        public User User { get; set; }
 
         /// <summary>
         /// Fecha en la que el usuario dió la calificación del producto

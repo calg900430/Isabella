@@ -2,23 +2,24 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
+    <UserSecretsId>b3183087-6eff-4899-8b4e-cd349bafbd1d</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>D:\Carlitos\Informacion\ProyectosGitHub\Isabella\Isabella\Isabella.API\Isabella.API.xml</DocumentationFile>
   </PropertyGroup>
+  
+  <PropertyGroup>
+   <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+  </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Isabella.API.xml" />
     <None Remove="Resources\ResourceFile.resources" />
+    <None Remove="Resources\ResourcesFile.resources" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Isabella.API.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\ResourceFile.resources" />
+    <EmbeddedResource Include="Resources\ResourcesFile.resources" />
   </ItemGroup>
 
   <ItemGroup>
@@ -50,6 +51,10 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="5.5.0" />
+    <PackageReference Include="Microsoft.NetCore.Analyzers" Version="3.3.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.4.1" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.1" />

@@ -17,9 +17,9 @@
         public int Id { get; set; }
 
         /// <summary>
-        /// Código de identificación.
+        /// User.
         /// </summary>
-        public CodeIdentification CodeVerification { get; set; }
+        public User User { get; set; }
 
         /// <summary>
         /// Detalle de ordenes.

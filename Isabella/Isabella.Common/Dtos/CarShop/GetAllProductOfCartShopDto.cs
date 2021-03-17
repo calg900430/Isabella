@@ -7,6 +7,7 @@
 
     using Category;
     using SubCategory;
+    using Isabella.Common.Dtos.Users;
 
     /// <summary>
     /// Productos en el carrito para pedido un futuro pedido.
@@ -14,9 +15,9 @@
     public class GetAllProductOfCartShopDto
     {
         /// <summary>
-        /// Código de indentificación.
+        /// User
         /// </summary>
-        public Guid Identification { get; set; }
+        public GetUserDto GetUserDto { get; set; }
 
         /// <summary>
         /// Productos

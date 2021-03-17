@@ -204,11 +204,10 @@
             <param name="addProductStandardToCarShop"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Controllers.CarShopController.GetMyCarShopAsync(System.Guid)">
+        <member name="M:Isabella.API.Controllers.CarShopController.GetMyCarShopAsync">
             <summary>
             Obtiene el carrito de compras del usuario.
             </summary>
-            <param name="CodeIdentification"></param>
             <returns></returns>
         </member>
         <member name="M:Isabella.API.Controllers.CarShopController.AddAggregateInProductToCarShopAsync(Isabella.Common.Dtos.CarShop.AddAggregateInProductDto)">
@@ -253,36 +252,32 @@
             <param name="updateSubCategoryProduct"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Controllers.CarShopController.DeleteSubCategoryInProductInCarShopAsync(System.Guid,System.Int32)">
+        <member name="M:Isabella.API.Controllers.CarShopController.DeleteSubCategoryInProductInCarShopAsync(System.Int32)">
             <summary>
             Elimina la subcategoria de un producto en el carrito de compras.
             </summary>
-            <param name="CodeIdentification"></param>
             <param name="ProductCombinedId"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Controllers.CarShopController.DeleteProductInCarShopAsync(System.Guid,System.Int32)">
+        <member name="M:Isabella.API.Controllers.CarShopController.DeleteProductInCarShopAsync(System.Int32)">
             <summary>
             Elimina un producto del carro de compras del usuario.
             </summary>
-            <param name="CodeIdentification"></param>
             <param name="ProductCombinedId"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Controllers.CarShopController.DeleteAggregateOfProductInCarShopAsync(System.Guid,System.Int32,System.Int32)">
+        <member name="M:Isabella.API.Controllers.CarShopController.DeleteAggregateOfProductInCarShopAsync(System.Int32,System.Int32)">
             <summary>
             Elimina un agregado de un producto.
             </summary>
-            <param name="CodeIdentification"></param>
             <param name="ProductCombinedId"></param>
             <param name="AggregateId"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Controllers.CarShopController.DeleteAllProductInCarShopAsync(System.Guid)">
+        <member name="M:Isabella.API.Controllers.CarShopController.DeleteAllProductInCarShopAsync">
             <summary>
             Elimina todos los productos del carrito de compras.
             </summary>
-            <param name="CodeIdentification"></param>
             <returns></returns>
         </member>
         <member name="T:Isabella.API.Controllers.CategoryController">
@@ -343,29 +338,6 @@
             <param name="updateCategory"></param>
             <returns></returns>
         </member>
-        <member name="T:Isabella.API.Controllers.CodeIdentificationController">
-            <summary>
-            Controlador para los códigos de verificación.
-            </summary>
-        </member>
-        <member name="M:Isabella.API.Controllers.CodeIdentificationController.#ctor(Isabella.API.ServicesControllers.CodeIdentificationServiceController)">
-            <summary>
-            Constructor.
-            </summary>
-            <param name="codeVerificationRepository"></param>
-        </member>
-        <member name="M:Isabella.API.Controllers.CodeIdentificationController.CheckCodeVerificationAsync(System.Guid)">
-            <summary>
-            Verifica si el código de identificación es correcto.
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="M:Isabella.API.Controllers.CodeIdentificationController.GeCodeVerificationAsync">
-            <summary>
-            Solicita un código de identificación para registrarse e iniciar sesión en la aplicación.
-            </summary>
-            <returns></returns>
-        </member>
         <member name="T:Isabella.API.Controllers.OrderController">
             <summary>
             Ordenes
@@ -384,11 +356,10 @@
             <param name="confirmOrder"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Controllers.OrderController.GetAggregateForIdAsync(System.Guid)">
+        <member name="M:Isabella.API.Controllers.OrderController.GetAggregateForIdAsync">
             <summary>
             Obtiene todas las ordenes de un usuario.
             </summary>
-            <param name="codeIdentification"></param>
             <returns></returns>
         </member>
         <member name="T:Isabella.API.Controllers.ProductController">
@@ -616,6 +587,14 @@
             </summary>
             <param name="userRepositoryDto"></param>
         </member>
+        <member name="M:Isabella.API.Controllers.UsersController.AddUserModeFastAsync">
+            <summary>
+            Registro rapido de usuario(Solicita el código de identificación para registrarse e iniciar sesión en la aplicación)
+            Le crea un correo y un password al usuario, que se le devuelve para que el mismo haga el login.
+            En este modo no tiene que confirmar el registro a través del correo.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Isabella.API.Controllers.UsersController.AddUserAsync(Isabella.Common.Dtos.Users.RegisterUserDto)">
             <summary>
             Agrega un nuevo usuario y le envia un correo con el código de confirmación del registro.
@@ -676,7 +655,7 @@
             <param name="Email"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Controllers.UsersController.LoginUserAsync(Isabella.Common.Dtos.Users.LoginUserWithUserNameDto)">
+        <member name="M:Isabella.API.Controllers.UsersController.LoginUserAsync(Isabella.Common.Dtos.Users.LoginUserDto)">
             <summary>
             Login del usuario y obtiene el token de acceso,el tiempo de expiración y otros datos del usuario.
             </summary>
@@ -780,6 +759,20 @@
             <param name="banner"></param>
             <returns></returns>
         </member>
+        <member name="M:Isabella.API.Controllers.UsersController.RemoveUserAdminForNotifications(System.Int32)">
+            <summary>
+            Elimina el usuario admin de la lista de los que reciben las notificaciones de las ordenes.
+            </summary>
+            <param name="UserId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.Controllers.UsersController.AddUserAdminForNotifications(System.Int32)">
+            <summary>
+            Agrega un usuario admin a la lista de los que reciben las notificaciones de las ordenes.
+            </summary>
+            <param name="UserId"></param>
+            <returns></returns>
+        </member>
         <member name="T:Isabella.API.Data.DataContext">
             <summary>
             DataContext
@@ -791,11 +784,6 @@
             </summary>
             <param name="dbContextOptions"></param>
         </member>
-        <member name="P:Isabella.API.Data.DataContext.CodeIdentifications">
-            <summary>
-            Códigos de Verificación.
-            </summary>
-        </member>
         <member name="P:Isabella.API.Data.DataContext.Gps">
             <summary>
             Coordenadas Gps.
@@ -806,6 +794,16 @@
             Pedidos de los usuarios.
             </summary>
         </member>
+        <member name="P:Isabella.API.Data.DataContext.UserAdminsNotifications">
+            <summary>
+            Notificaciones para los usuarios admins.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Data.DataContext.NotificationPendients">
+            <summary>
+            Notificaciones Pendientes.
+            </summary>
+        </member>
         <member name="P:Isabella.API.Data.DataContext.OrderDetails">
             <summary>
             Detalles de los pedidos.
@@ -813,7 +811,7 @@
         </member>
         <member name="P:Isabella.API.Data.DataContext.CalificationProduct">
             <summary>
-            Calificación de Productos Standards.
+            Calificación de Productos.
             </summary>
         </member>
         <member name="P:Isabella.API.Data.DataContext.CalificationRestaurants">
@@ -838,7 +836,7 @@
         </member>
         <member name="P:Isabella.API.Data.DataContext.ImagesProducts">
             <summary>
-            Imagenes de productos standards.
+            Imagenes de productos.
             </summary>
         </member>
         <member name="P:Isabella.API.Data.DataContext.ImageAggregates">
@@ -848,12 +846,12 @@
         </member>
         <member name="P:Isabella.API.Data.DataContext.CantAggregate">
             <summary>
-            Pedidos de productos de agrego para un producto special.
+            Pedidos de productos de agrego para un producto.
             </summary>
         </member>
         <member name="P:Isabella.API.Data.DataContext.Categories">
             <summary>
-            Categoria de los productos standards.
+            Categoria de los productos.
             </summary>
         </member>
         <member name="P:Isabella.API.Data.DataContext.SubCategories">
@@ -1264,12 +1262,12 @@
             <param name="fileName"></param>
             <returns></returns>
         </member>
-        <member name="T:Isabella.API.Helpers.UserHelper">
+        <member name="T:Isabella.API.Helpers.IUserHelper">
             <summary>
             Servicio para la entidad que representa los usuarios.
             </summary>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.#ctor(Isabella.API.Data.DataContext,Microsoft.AspNetCore.Identity.UserManager{Isabella.API.Models.Entities.User},Microsoft.AspNetCore.Identity.RoleManager{Microsoft.AspNetCore.Identity.IdentityRole{System.Int32}},Microsoft.Extensions.Configuration.IConfiguration)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.#ctor(Isabella.API.Data.DataContext,Microsoft.AspNetCore.Identity.UserManager{Isabella.API.Models.Entities.User},Microsoft.AspNetCore.Identity.RoleManager{Microsoft.AspNetCore.Identity.IdentityRole{System.Int32}},Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
             Constructor.
             </summary>
@@ -1278,7 +1276,7 @@
             <param name="roleManager"></param>
             <param name="configuration"></param>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.AddUserAsync(Isabella.API.Models.Entities.User,System.String)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.AddUserAsync(Isabella.API.Models.Entities.User,System.String)">
             <summary>
             Agrega un usuario con contraseña definida.
             </summary>
@@ -1286,14 +1284,14 @@
             <param name="password"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.AddUserAsync(Isabella.API.Models.Entities.User)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.AddUserAsync(Isabella.API.Models.Entities.User)">
             <summary>
             Agrega un usuario sin contraseña definida(Esto es para login con proveedor externo).
             </summary>
             <param name="user"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.AddRoleForUserAsync(Isabella.API.Models.Entities.User,System.String)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.AddRoleForUserAsync(Isabella.API.Models.Entities.User,System.String)">
             <summary>
             Agrega un role determinado a un usuario.
             </summary>
@@ -1301,7 +1299,7 @@
             <param name="role"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.VerifyRoleInUserAsync(Isabella.API.Models.Entities.User,System.String)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.VerifyRoleInUserAsync(Isabella.API.Models.Entities.User,System.String)">
             <summary>
             Verifica si un usuario tiene un role asignado
             </summary>
@@ -1309,14 +1307,14 @@
             <param name="role"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.GetAllRoleOfUserAsync(Isabella.API.Models.Entities.User)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.GetAllRoleOfUserAsync(Isabella.API.Models.Entities.User)">
             <summary>
             Obtiene todos los roles que posee un usuario.
             </summary>
             <param name="user"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.RemoveRoleOfUserAsync(Isabella.API.Models.Entities.User,System.String)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.RemoveRoleOfUserAsync(Isabella.API.Models.Entities.User,System.String)">
             <summary>
             Elimina un role especifico de un usuario.
             </summary>
@@ -1324,76 +1322,76 @@
             <param name="role"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.VerifyEmailAsync(System.String)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.VerifyEmailAsync(System.String)">
             <summary>
             Verifica si un email está en uso.
             </summary>
             <param name="email"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.VerifyUserNameAsync(System.String)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.VerifyUserNameAsync(System.String)">
             <summary>
             Verifica si una cuenta de usuario está en uso.
             </summary>
             <param name="username"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.GenerateTokenForConfirmRegisterAsync(Isabella.API.Models.Entities.User)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.GenerateTokenForConfirmRegisterAsync(Isabella.API.Models.Entities.User)">
             <summary>
             Genera el Token del usuario para la confirmación del registro.
             </summary>
             <param name="user"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.VerifyRoleAsync(System.String)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.VerifyRoleAsync(System.String)">
             <summary>
             Verifica si el role está definido en la app.
             </summary>
             <param name="role"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.VerifyRoleAsync(System.Int32)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.VerifyRoleAsync(System.Int32)">
             <summary>
             Verifica si el role está definido en la app.
             </summary>
             <param name="RoleId"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.GetIdOfLastUserAsync">
+        <member name="M:Isabella.API.Helpers.IUserHelper.GetIdOfLastUserAsync">
             <summary>
             Obtiene el Id del último usuario registrado en el sistema.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.GetUserByUserNameAsync(System.String)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.GetUserByUserNameAsync(System.String)">
             <summary>
             Obtiene un usuario dada su cuenta de usuario.
             </summary>
             <param name="userName"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.GetUserByIdAsync(System.Int32)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.GetUserByIdAsync(System.Int32)">
             <summary>
             Obtiene un Usuario dado su Id.
             </summary>
             <param name="userId"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.GetUserByEmailAsync(System.String)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.GetUserByEmailAsync(System.String)">
             <summary>
             Obtiene un usuario dado su correo electrónico.
             </summary>
             <param name="email"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.VerifyConfirmRegisterUserAsync(Isabella.API.Models.Entities.User)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.VerifyConfirmRegisterUserAsync(Isabella.API.Models.Entities.User)">
             <summary>
             Verifica si el usuario confirmó su registro.
             </summary>
             <param name="user"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.ConfirmRegisterUserAsync(Isabella.API.Models.Entities.User,System.String)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.ConfirmRegisterUserAsync(Isabella.API.Models.Entities.User,System.String)">
             <summary>
             Verifica si el usuario confirmó su registro.
             </summary>
@@ -1401,7 +1399,7 @@
             <param name="Token"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.VerifyPasswordUserAsync(Isabella.API.Models.Entities.User,System.String)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.VerifyPasswordUserAsync(Isabella.API.Models.Entities.User,System.String)">
             <summary>
             Verifica que la contraseña del usuario es correcta.
             </summary>
@@ -1409,26 +1407,26 @@
             <param name="password"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.CreateTokenAsync(Isabella.API.Models.Entities.User)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.CreateTokenAsync(Isabella.API.Models.Entities.User)">
             <summary>
             Crea un Token Web Json para el usuario.
             </summary>
             <param name="user"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.GetAllUserAsync">
+        <member name="M:Isabella.API.Helpers.IUserHelper.GetAllUserAsync">
             <summary>
             Obtiene todos los usuarios del sistema.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.GetAllUserWithRoleAsync(System.Int32)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.GetAllUserWithRoleAsync(System.Int32)">
             <summary>
             Obtiene todos los usuarios del sistema que tienen un role determinado.
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.UpdatePasswordAsync(Isabella.API.Models.Entities.User,System.String,System.String)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.UpdatePasswordAsync(Isabella.API.Models.Entities.User,System.String,System.String)">
             <summary>
             Cambia la contraseña de un usuario.
             </summary>
@@ -1437,28 +1435,28 @@
             <param name="newPassword"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.DeleteImageProfileUserAsync(Isabella.API.Models.Entities.User)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.DeleteImageProfileUserAsync(Isabella.API.Models.Entities.User)">
             <summary>
             Borra la imagen de perfil de un usuario determinado.
             </summary>
             <param name="user"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.UpdateUserAsync(Isabella.API.Models.Entities.User)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.UpdateUserAsync(Isabella.API.Models.Entities.User)">
             <summary>
             Actualiza un usuario.
             </summary>
             <param name="user"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.GenerateTokenForRecoverPasswordAsync(Isabella.API.Models.Entities.User)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.GenerateTokenForRecoverPasswordAsync(Isabella.API.Models.Entities.User)">
             <summary>
             Envia un correo al usuario con un código para la recuperaión de su contraseña.
             </summary>
             <param name="user"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.Helpers.UserHelper.RecoverPasswwordUserAsync(Isabella.API.Models.Entities.User,System.String,System.String)">
+        <member name="M:Isabella.API.Helpers.IUserHelper.RecoverPasswwordUserAsync(Isabella.API.Models.Entities.User,System.String,System.String)">
             <summary>
             Recupera la contraseña del usuario. 
             </summary>
@@ -1498,7 +1496,7 @@
             <summary>
             Agrega un nuevo dispositivo que se conectó al Hub al diccionario.
             </summary>
-            <param name="key"></param>
+            <param name="key_userName"></param>
             <param name="connectionID"></param>
         </member>
         <member name="M:Isabella.API.Hubs.Services.DicctionaryConnectedHub.RemoveDevice(System.String,System.String)">
@@ -1512,15 +1510,25 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Isabella.API.Hubs.Services.DicctionaryConnectedHub.VerifyIsUserConnected(System.String)">
+            <summary>
+            Verifica si un usuario determinado está conectado.
+            </summary>
+            <param name="key_userName"></param>
+            <returns></returns>
+        </member>
         <member name="T:Isabella.API.Hubs.NotificationsHub">
             <summary>
             Hub para las notificaciones que usa Isabellsa 
             </summary>
         </member>
-        <member name="M:Isabella.API.Hubs.NotificationsHub.#ctor(Isabella.API.Hubs.Services.DicctionaryConnectedHub,Isabella.API.Data.DataContext)">
+        <member name="M:Isabella.API.Hubs.NotificationsHub.#ctor(Isabella.API.Hubs.Services.DicctionaryConnectedHub,Isabella.API.Data.DataContext,AutoMapper.IMapper)">
             <summary>
-            Constructor
+            
             </summary>
+            <param name="dicctionaryConnectedHubService"></param>
+            <param name="dataContext"></param>
+            <param name="mapper"></param>
         </member>
         <member name="M:Isabella.API.Hubs.NotificationsHub.OnConnectedAsync">
             <summary>
@@ -1606,9 +1614,9 @@
             Key
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.Entities.CalificationProduct.CodeIdentification">
+        <member name="P:Isabella.API.Models.Entities.CalificationProduct.User">
             <summary>
-            Código de identificación.
+            User.
             </summary>
         </member>
         <member name="P:Isabella.API.Models.Entities.CalificationProduct.Product">
@@ -1641,7 +1649,7 @@
             Key
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.Entities.CalificationRestaurant.CodeIdentification">
+        <member name="P:Isabella.API.Models.Entities.CalificationRestaurant.User">
             <summary>
             Código de identificación.
             </summary>
@@ -1706,7 +1714,7 @@
             Key
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.Entities.CartShop.CodeIdentification">
+        <member name="P:Isabella.API.Models.Entities.CartShop.User">
             <summary>
             Código de identificación.
             </summary>
@@ -1764,21 +1772,6 @@
         <member name="P:Isabella.API.Models.Entities.Category.Name">
             <summary>
             Nombre de la categoría del producto.
-            </summary>
-        </member>
-        <member name="T:Isabella.API.Models.Entities.CodeIdentification">
-            <summary>
-            Código para indentificar el pedido.(No hay usuarios)
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.Entities.CodeIdentification.Id">
-            <summary>
-            
-            </summary>
-        </member>
-        <member name="P:Isabella.API.Models.Entities.CodeIdentification.Code">
-            <summary>
-            Código para el pedido en modo Fast.
             </summary>
         </member>
         <member name="T:Isabella.API.Models.Entities.Gps">
@@ -1851,6 +1844,26 @@
             Imagen del producto.
             </summary>
         </member>
+        <member name="T:Isabella.API.Models.Entities.NotificationPendients">
+            <summary>
+            Notificaciones Pendientes para el admin.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.NotificationPendients.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.NotificationPendients.UserAdmin">
+            <summary>
+            Usuario admin a los que se le debe notificar.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.NotificationPendients.Order">
+            <summary>
+            Ordenes.
+            </summary>
+        </member>
         <member name="T:Isabella.API.Models.Entities.Order">
             <summary>
             Ordenes del tipo fast(Para pedidos informales, o sea usuarios que no desean ser clientes oficiales)
@@ -1861,9 +1874,9 @@
             Key
             </summary>
         </member>
-        <member name="P:Isabella.API.Models.Entities.Order.CodeVerification">
+        <member name="P:Isabella.API.Models.Entities.Order.User">
             <summary>
-            Código de identificación.
+            User.
             </summary>
         </member>
         <member name="P:Isabella.API.Models.Entities.Order.OrderDetails">
@@ -2201,6 +2214,21 @@
             Imagen de perfil del usuario.
             </summary>
         </member>
+        <member name="T:Isabella.API.Models.Entities.UserAdminsNotifications">
+            <summary>
+            Usuarios admins que deben recibir las notificaciones.
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.UserAdminsNotifications.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Isabella.API.Models.Entities.UserAdminsNotifications.User">
+            <summary>
+            Usuario admin a los que se le debe notificar.
+            </summary>
+        </member>
         <member name="T:Isabella.API.Models.IEntity">
             <summary>
             Interfaz para implementar Id.
@@ -2535,6 +2563,21 @@
             
             </summary>
         </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.NotUserAdminsNotifications">
+            <summary>
+            No hay definidos usuarios admins para que reciban las notificaciones
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.UserAdminNotExistForNotifications">
+            <summary>
+            El usuario no está definido como un usuario que puede recibir notificaciones.
+            </summary>
+        </member>
+        <member name="F:Isabella.API.Resources.GetValueResourceFile.KeyResource.UserAdminExistForNotifications">
+            <summary>
+            El usuario está definido como un usuario que puede recibir notificaciones.
+            </summary>
+        </member>
         <member name="T:Isabella.API.Resources.GetValueResourceFile.KeyResourceImage">
             <summary>
             Recursos de Imagenes de la aplicación
@@ -2616,13 +2659,14 @@
             Seeder
             </summary>
         </member>
-        <member name="M:Isabella.API.SeederDb.SeedDb.#ctor(Isabella.API.Data.DataContext,Microsoft.AspNetCore.Identity.RoleManager{Microsoft.AspNetCore.Identity.IdentityRole{System.Int32}},Microsoft.AspNetCore.Identity.UserManager{Isabella.API.Models.Entities.User})">
+        <member name="M:Isabella.API.SeederDb.SeedDb.#ctor(Isabella.API.Data.DataContext,Microsoft.AspNetCore.Identity.RoleManager{Microsoft.AspNetCore.Identity.IdentityRole{System.Int32}},Microsoft.AspNetCore.Identity.UserManager{Isabella.API.Models.Entities.User},Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
             Constructor del Seeder
             </summary>
             <param name="dataContext"></param>
             <param name="roleManager"></param>
             <param name="userManager"></param>
+            <param name="configuration"></param>
         </member>
         <member name="M:Isabella.API.SeederDb.SeedDb.SeedAsync">
             <summary>
@@ -2778,17 +2822,22 @@
             Servicio para el controlador del carrito de compras.
             </summary>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.#ctor(Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CartShop},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Product},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Aggregate},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CodeIdentification},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CantAggregate},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.SubCategory},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.ProductCombined},AutoMapper.IMapper)">
+        <member name="P:Isabella.API.ServicesControllers.CartShopServiceController.ClaimsPrincipal">
+            <summary>
+            Claims del usuario.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.#ctor(Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CartShop},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Product},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Aggregate},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CantAggregate},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.SubCategory},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.ProductCombined},Isabella.API.Helpers.RepositoryHelpers.IUserRepositoryHelper,AutoMapper.IMapper)">
             <summary>
             Constructor.
             </summary>
             <param name="serviceGenericCarShopHelper"></param>
             <param name="serviceGenericProductHelper"></param>
             <param name="serviceGenericAggregateHelper"></param>
-            <param name="serviceGenericCodeIdentificationHelper"></param>
             <param name="serviceGenericCantAggregateHelper"></param>
             <param name="serviceGenericSubCategoryHelper"></param>
             <param name="serviceGenericProductCombinedHelper"></param>
+            <param name="userrepositoryHelper"></param>
             <param name="mapper"></param>
         </member>
         <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.AddProductsToCartShopAsync(Isabella.Common.Dtos.CarShop.AddProductToCartShopDto)">
@@ -2798,18 +2847,16 @@
             <param name="addProductsToCarShop"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.GetMyCartShopAsync(System.Guid)">
+        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.GetMyCartShopAsync">
             <summary>
             Obtiene el carrito de compras de un usuario.
             </summary>
-            <param name="codeIdentification"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.RemoveProductOfCartShopAsync(System.Guid,System.Int32)">
+        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.RemoveProductOfCartShopAsync(System.Int32)">
             <summary>
             Elimina un producto del carrito de compras
             </summary>
-            <param name="CodeVerification"></param>
             <param name="ProductCombinedId"></param>
             <returns></returns>
         </member>
@@ -2820,11 +2867,10 @@
             <param name="updateSubCategoryProduct"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.RemoveSubCategoryAsync(System.Guid,System.Int32)">
+        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.RemoveSubCategoryAsync(System.Int32)">
             <summary>
             Elimina la subcategoria de un producto combinado que está en el carrito.
             </summary>
-            <param name="codeIdentification"></param>
             <param name="ProductCombinedId"></param>
             <returns></returns>
         </member>
@@ -2863,20 +2909,25 @@
             <param name="addAggregateInProduct"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.RemoveAggregateInProductOfCartShopAsync(System.Guid,System.Int32,System.Int32)">
+        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.RemoveAggregateInProductOfCartShopAsync(System.Int32,System.Int32)">
             <summary>
             Elimina un agregado de un producto del carrito de compras.
             </summary>
-            <param name="codeIdentification"></param>
             <param name="ProductCombinedId"></param>
             <param name="AggregateId"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.RemoveAllCarShopAsync(System.Guid)">
+        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.RemoveAllCarShopAsync">
             <summary>
             Elimina todos los productos del carrito de compras del usuario.
             </summary>
-            <param name="codeIdentifaction"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.CartShopServiceController.UpdateCartShopAsync(Isabella.Common.Dtos.CarShop.UpdateCartShopDto)">
+            <summary>
+            Actualiza el carrito del usuario de forma general.
+            </summary>
+            <param name="updateCartShop"></param>
             <returns></returns>
         </member>
         <member name="T:Isabella.API.ServicesControllers.CategoryServiceController">
@@ -2938,43 +2989,28 @@
             <param name="updateCategory"></param>
             <returns></returns>
         </member>
-        <member name="T:Isabella.API.ServicesControllers.CodeIdentificationServiceController">
-            <summary>
-            Servicio para el controlador de los códigos de identificación.
-            </summary>
-        </member>
-        <member name="M:Isabella.API.ServicesControllers.CodeIdentificationServiceController.#ctor(Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CodeIdentification})">
-            <summary>
-            Constructor
-            </summary>
-            <param name="serviceGenericCodeIdentificationHelper"></param>
-        </member>
-        <member name="M:Isabella.API.ServicesControllers.CodeIdentificationServiceController.CheckCodeIdentificationAsync(System.Guid)">
-            <summary>
-            Verifica si el código de identificación está registrado.
-            </summary>
-            <param name="CodeVerification"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Isabella.API.ServicesControllers.CodeIdentificationServiceController.GetCodeIdentificationAsync">
-            <summary>
-            Solicita el código de identificación para registrarse e iniciar sesión en la aplicación
-            </summary>
-            <returns></returns>
-        </member>
         <member name="T:Isabella.API.ServicesControllers.OrderServiceController">
             <summary>
             Servicio para las ordenes
             </summary>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.OrderServiceController.#ctor(Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Order},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.OrderDetail},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CodeIdentification},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CartShop},AutoMapper.IMapper)">
+        <member name="P:Isabella.API.ServicesControllers.OrderServiceController.ClaimsPrincipal">
+            <summary>
+            Claims del usuario.
+            </summary>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.OrderServiceController.#ctor(Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.Order},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.OrderDetail},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.CartShop},Isabella.API.Helpers.RepositoryHelpers.IUserRepositoryHelper,Microsoft.AspNetCore.SignalR.IHubContext{Isabella.API.Hubs.NotificationsHub},Isabella.API.Hubs.Services.DicctionaryConnectedHub,Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.NotificationPendients},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.UserAdminsNotifications},AutoMapper.IMapper)">
             <summary>
             Constructor
             </summary>
             <param name="serviceGenericOrderHelper"></param>
             <param name="serviceGenericOrderDetailHelper"></param>
-            <param name="serviceGenericCodeIdentificationHelper"></param>
             <param name="serviceGenericCartShopHelper"></param>
+            <param name="userServiceHelper"></param>
+            <param name="hubContext"></param>
+            <param name="dicctionaryConnectedHubService"></param>
+            <param name="serviceGenericNotificationsPendientsHelper"></param>
+            <param name="serviceGenericUserAdminsNotificationsHelper"></param>
             <param name="mapper"></param>
         </member>
         <member name="M:Isabella.API.ServicesControllers.OrderServiceController.ConfirmOrderAsync(Isabella.Common.Dtos.Order.ConfirmOrderDto)">
@@ -2984,11 +3020,17 @@
             <param name="confirmOrder"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.OrderServiceController.GetAllOrderAsync(System.Guid)">
+        <member name="M:Isabella.API.ServicesControllers.OrderServiceController.GetAllOrderAsync">
             <summary>
             Confirma las ordenes de un usuario.
             </summary>
-            <param name="codeIdentification"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.OrderServiceController.ConfirmOrderNotificationAsync(Isabella.API.Models.Entities.Order)">
+            <summary>
+            Notifica a los usuarios admin que un usuario ha realizado un pedido.
+            </summary>
+            <param name="order"></param>
             <returns></returns>
         </member>
         <member name="T:Isabella.API.ServicesControllers.ProductServiceController">
@@ -3238,13 +3280,22 @@
             Solicitud Http
             </summary>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.UserServiceController.#ctor(Isabella.API.Helpers.RepositoryHelpers.IUserRepositoryHelper,Isabella.API.Helpers.MailHelper,Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.User})">
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.#ctor(Isabella.API.Helpers.RepositoryHelpers.IUserRepositoryHelper,Isabella.API.Helpers.MailHelper,Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.User},Isabella.API.Helpers.ServiceGenericHelper{Isabella.API.Models.Entities.UserAdminsNotifications})">
             <summary>
             Constructor
             </summary>
             <param name="userRepository"></param>
             <param name="mailHelper"></param>
             <param name="serviceGenericUserHelper"></param>
+            <param name="serviceGenericUserAdminsNotificationsHelper"></param>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.RegisterUserModeFastAsync">
+            <summary>
+            Registro rapido de usuario(Solicita el código de identificación para registrarse e iniciar sesión en la aplicación)
+            Le crea un correo y un password al usuario, que se le devuelve para que el mismo haga el login.
+            En este modo no tiene que confirmar el registro a través del correo.
+            </summary>
+            <returns></returns>
         </member>
         <member name="M:Isabella.API.ServicesControllers.UserServiceController.AddUserAsync(Isabella.Common.Dtos.Users.RegisterUserDto)">
             <summary>
@@ -3294,7 +3345,7 @@
             <param name="Email"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.API.ServicesControllers.UserServiceController.LoginUserAsync(Isabella.Common.Dtos.Users.LoginUserWithUserNameDto)">
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.LoginUserAsync(Isabella.Common.Dtos.Users.LoginUserDto)">
             <summary>
             Realiza el login del usuario y obtiene el token de acceso,el tiempo de expiración y otros datos del usuario.
             </summary>
@@ -3439,6 +3490,18 @@
             Obtiene los usuarios de un determinado role.
             </summary>
             <param name="RoleId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.RemoveUserAdminForNotifications(System.Int32)">
+            <summary>
+            Elimina un usuario admin a la lista de los que deben recibir notificaciones.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.API.ServicesControllers.UserServiceController.AddUserAdminForNotifications(System.Int32)">
+            <summary>
+            Agrega un usuario admin a la lista de los que deben recibir notificaciones.
+            </summary>
             <returns></returns>
         </member>
         <member name="T:Isabella.API.Startup">

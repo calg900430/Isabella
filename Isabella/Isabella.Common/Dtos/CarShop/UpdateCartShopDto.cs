@@ -1,16 +1,12 @@
 ﻿namespace Isabella.Common.Dtos.CarShop
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    public class UpdateCarShopDto
+    public class UpdateCartShopDto
     {
-        /// <summary>
-        /// Código de identificación.
-        /// </summary>
-        [Required(ErrorMessage = "Debe introducir el código de identificación.")]
-        public Guid CodeIdentification { get; set; }
-
+       
         /// <summary>
         /// ProductoStandard.
         /// </summary>
@@ -18,8 +14,18 @@
         public int ProductCombinedId { get; set; }
 
         /// <summary>
+        /// Cantidad de agregos que desea incluirle al producto.
+        /// </summary>
+        public Dictionary<string, int> CantAggregates { get; set; }
+
+        /// <summary>
+        /// Cantidad deseada.
+        /// </summary>
+        public int? QuantityProduct { get; set; }
+
+        /// <summary>
         /// Asigna una subcategoria o la elimina.
         /// </summary>
-        public int SubCategoryId { get; set; }
+        public int? SubCategoryId { get; set; }
     }
 }

@@ -44,19 +44,19 @@
         /// <summary>
         /// Agrega un nuevo dispositivo que se conectó al Hub al diccionario.
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="key_userName"></param>
         /// <param name="connectionID"></param>
-        public void AddNewDevice(string key, string connectionID)
+        public void AddNewDevice(string key_userName, string connectionID)
         {
             lock(_devicesconnecteds)
             {
                 HashSet<string> connections;
-                if (!_devicesconnecteds.TryGetValue(key, out connections))
+                if (!_devicesconnecteds.TryGetValue(key_userName, out connections))
                 {
                     connections = new HashSet<string>();
-                    _devicesconnecteds.Add(key, connections);
+                    _devicesconnecteds.Add(key_userName, connections);
                 }
-                lock (connections)
+                lock(connections)
                 {
                     connections.Add(connectionID);
                 }
@@ -66,21 +66,21 @@
         /// <summary>
         /// Elimina un dispositivo del diccionario(Cuando se desconecta del Hub)
         /// </summary>
-        public void RemoveDevice(string key, string connectionID)
+        public void RemoveDevice(string key_userName, string connectionID)
         {
             lock (_devicesconnecteds)
             {
                 HashSet<string> connections;
-                if (!_devicesconnecteds.TryGetValue(key, out connections))
+                if (!_devicesconnecteds.TryGetValue(key_userName, out connections))
                 {
                     return;
                 }
-                lock (connections)
+                lock(connections)
                 {
                     connections.Remove(connectionID);
                     if (connections.Count == 0)
                     {
-                        _devicesconnecteds.Remove(key);
+                        _devicesconnecteds.Remove(key_userName);
                     }
                 }
             }
@@ -90,14 +90,30 @@
         /// Devuelve todos los dispositivos que están conectados actualmente de un usuario.
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<string> GetAllDeviceConnectedOfUser(string key)
+        public IEnumerable<string> GetAllDeviceConnectedOfUser(string key_UserName)
         {
             HashSet<string> connections;
-            if (_devicesconnecteds.TryGetValue(key, out connections))
+            if (_devicesconnecteds.TryGetValue(key_UserName, out connections))
             {
                 return connections;
             }
             return Enumerable.Empty<string>();
         }      
+
+        /// <summary>
+        /// Verifica si un usuario determinado está conectado.
+        /// </summary>
+        /// <param name="key_userName"></param>
+        /// <returns></returns>
+        public bool VerifyIsUserConnected(string key_userName)
+        {
+            HashSet<string> connections = null;
+            //Verifica si el usuario está conectado.
+            var connected = _devicesconnecteds.TryGetValue(key_userName, out connections);
+            if(connected)
+            return true;
+            else
+            return false;
+        }
     }
 }

@@ -26,7 +26,8 @@
         private readonly IUserRepositoryHelper _userService;
         private readonly MailHelper _mailHelper;
         private readonly ServiceGenericHelper<User> _serviceGenericUserHelper;
-      
+        private readonly ServiceGenericHelper<UserAdminsNotifications> _serviceGenericUserAdminsNotificationsHelper;
+
         /// <summary>
         /// Claims del usuario.
         /// </summary>
@@ -42,19 +43,70 @@
         /// </summary>
         public HttpRequest HttpRequest { get; set; }
 
-     
+
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="userRepository"></param>
         /// <param name="mailHelper"></param>
         /// <param name="serviceGenericUserHelper"></param>
+        /// <param name="serviceGenericUserAdminsNotificationsHelper"></param>
         public UserServiceController(IUserRepositoryHelper userRepository, MailHelper mailHelper,
-        ServiceGenericHelper<User> serviceGenericUserHelper)
+        ServiceGenericHelper<User> serviceGenericUserHelper,
+        ServiceGenericHelper<UserAdminsNotifications> serviceGenericUserAdminsNotificationsHelper)
         {
             this._userService = userRepository;
             this._mailHelper = mailHelper;
             this._serviceGenericUserHelper = serviceGenericUserHelper;
+            this._serviceGenericUserAdminsNotificationsHelper = serviceGenericUserAdminsNotificationsHelper;
+        }
+
+        /// <summary>
+        /// Registro rapido de usuario(Solicita el código de identificación para registrarse e iniciar sesión en la aplicación)
+        /// Le crea un correo y un password al usuario, que se le devuelve para que el mismo haga el login.
+        /// En este modo no tiene que confirmar el registro a través del correo.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ServiceResponse<GetRegisterUserModeFastDto>> RegisterUserModeFastAsync()
+        {
+            ServiceResponse<GetRegisterUserModeFastDto> serviceResponse = new ServiceResponse<GetRegisterUserModeFastDto>();
+            try
+            {
+                var code = Guid.NewGuid();
+                //Crea el usuario y le asigna como password el codigo de verificacion
+                var Email_UserName = $"{code.ToString()}@isabella.com";
+                var registeruser = new User
+                {
+                    IdForClaim = code,
+                    UserName = Email_UserName,
+                    Email = Email_UserName,
+                    DateCreated = DateTime.UtcNow,
+                    DateUpdated = DateTime.UtcNow,
+                    LastDateConnected = DateTime.UtcNow,
+                };
+                //Guarda el usuario con un password.
+                var user = await this._userService.AddUserAsync(registeruser, registeruser.IdForClaim.ToString()).ConfigureAwait(false);
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = new GetRegisterUserModeFastDto 
+                { 
+                   Email = user.Email,
+                   PasswordGuid = user.IdForClaim.ToString(),
+                };
+                //Obtiene el token para la confirmación del registro
+                var token = await this._userService.GenerateTokenForConfirmRegisterAsync(user).ConfigureAwait(false);
+                await this._userService.ConfirmRegisterUserAsync(user, token).ConfigureAwait(false);
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
         }
 
         /// <summary>
@@ -426,7 +478,7 @@
         /// </summary>
         /// <param name="loginUser"></param>
         /// <returns></returns>
-        public async Task<ServiceResponse<GetDataUserForLoginDto>> LoginUserAsync(LoginUserWithUserNameDto loginUser)
+        public async Task<ServiceResponse<GetDataUserForLoginDto>> LoginUserAsync(LoginUserDto loginUser)
         {
             ServiceResponse<GetDataUserForLoginDto> serviceResponse = new ServiceResponse<GetDataUserForLoginDto>();
             try
@@ -508,7 +560,7 @@
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.LoginUserSuccess);
                 return serviceResponse;
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
@@ -1298,7 +1350,7 @@
                 .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
@@ -1579,6 +1631,133 @@
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
             }
-        } 
+        }
+
+        /// <summary>
+        /// Elimina un usuario admin a la lista de los que deben recibir notificaciones.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ServiceResponse<bool>> RemoveUserAdminForNotifications(int UserId)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            try
+            {
+                var user_notifications = await this._serviceGenericUserAdminsNotificationsHelper
+                .WhereFirstEntityAsync(c => c.User.Id == UserId, c => c.User)
+                .ConfigureAwait(false);
+                if (user_notifications == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserAdminNotExistForNotifications;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.UserAdminNotExistForNotifications);
+                    return serviceResponse;
+                }
+                //Elimina la relación.
+                this._serviceGenericUserAdminsNotificationsHelper.RemoveEntity(user_notifications);
+                await this._serviceGenericUserAdminsNotificationsHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = true;
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = true;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Agrega un usuario admin a la lista de los que deben recibir notificaciones.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ServiceResponse<bool>> AddUserAdminForNotifications(int UserId)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            try
+            {
+                var user = await this._userService.GetUserByIdAsync(UserId).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
+                    return serviceResponse;
+                }
+                //Verifica que el usuario no se encuentre en la lista ya.
+                var user_existing = await this._serviceGenericUserAdminsNotificationsHelper
+                .WhereFirstEntityAsync(c => c.User == user, c => c.User).ConfigureAwait(false);
+                if(user_existing != null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserAdminExistForNotifications;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.UserAdminExistForNotifications);
+                    return serviceResponse;
+                }
+                //Verifica que el role admin este disponible
+                var exist_role = await this._userService.VerifyRoleAsync(Constants.RolesOfSystem[0]).ConfigureAwait(false);
+                if(!exist_role)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.BadRole;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.BadRole);
+                    return serviceResponse;
+                }
+                //Verfica si el usuario tiene el role admin.
+                var have_role_admin = await this._userService.VerifyRoleInUserAsync(user, Constants.RolesOfSystem[0]).ConfigureAwait(false);
+                if(!have_role_admin)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.IsNotRoleOfUser;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.IsNotRoleOfUser);
+                    return serviceResponse;
+                }
+                //Verifica si el usuario tiene el role
+                var isrole = await this._userService
+                .VerifyRoleInUserAsync(user, Constants.RolesOfSystem[0])
+                .ConfigureAwait(false);
+                if (!isrole)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.IsNotRoleOfUser;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.IsNotRoleOfUser);
+                    return serviceResponse;
+                }
+                var user_admins_notifications = new UserAdminsNotifications
+                {
+                    User = user
+                };
+                await this._serviceGenericUserAdminsNotificationsHelper.AddEntityAsync(user_admins_notifications).ConfigureAwait(false);
+                await this._serviceGenericUserAdminsNotificationsHelper.SaveChangesBDAsync();
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = true;
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = false;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
     }
 }

@@ -33,11 +33,42 @@
         }
 
         /// <summary>
+        /// Registro rapido de usuario(Solicita el código de identificación para registrarse e iniciar sesión en la aplicación)
+        /// Le crea un correo y un password al usuario, que se le devuelve para que el mismo haga el login.
+        /// En este modo no tiene que confirmar el registro a través del correo.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("add_mode_fast/new_user")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        public async Task<IActionResult> AddUserModeFastAsync()
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._userRepository.RegisterUserModeFastAsync().ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                    return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Agrega un nuevo usuario y le envia un correo con el código de confirmación del registro.
         /// </summary>
         /// <param name="newuser"></param>
         /// <returns></returns>
-        [HttpPost("add/new_user_client")]
+        [HttpPost("add/new_user")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
@@ -105,7 +136,6 @@
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        [ProducesResponseType(403)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DeleteImageProfileUserAsync()
         {
@@ -138,6 +168,8 @@
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetIdOfLastUserAsync()
         {
             try
@@ -169,7 +201,6 @@
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        [ProducesResponseType(403)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetUserForUserIdAsync(int userId)
         {
@@ -201,7 +232,6 @@
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        [ProducesResponseType(403)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetAllUserAsync()
         {
@@ -266,7 +296,6 @@
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        [ProducesResponseType(403)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetUserForUserNameAsync(string UserName)
         {
@@ -299,7 +328,6 @@
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        [ProducesResponseType(403)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetUserForUserEmailAsync(string Email)
         {
@@ -331,7 +359,7 @@
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> LoginUserAsync([FromBody] LoginUserWithUserNameDto loginUser)
+        public async Task<IActionResult> LoginUserAsync([FromBody] LoginUserDto loginUser)
         {
             try
             {
@@ -426,7 +454,6 @@
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        [ProducesResponseType(403)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetUsersForIdAndCantAsync(int UserId, int CantUsers)
         {
@@ -459,7 +486,6 @@
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        [ProducesResponseType(403)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> UpdateUserAsync([FromBody] UpdateUserDto updateUser)
         {
@@ -493,7 +519,6 @@
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        [ProducesResponseType(403)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> ChangePasswordUserAsync([FromBody] ChangePasswordUserDto changePassword)
         {
@@ -593,7 +618,6 @@
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
-        [ProducesResponseType(403)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> AddImageProfileUserAsync(IFormFile formFile)
         {
@@ -791,6 +815,76 @@
                 }
                 else
                 return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Elimina el usuario admin de la lista de los que reciben las notificaciones de las ordenes.
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        [HttpDelete("delete/user_for_recive_notifications")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        public async Task<IActionResult> RemoveUserAdminForNotifications(int UserId)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._userRepository
+                    .RemoveUserAdminForNotifications(UserId)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Agrega un usuario admin a la lista de los que reciben las notificaciones de las ordenes.
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        [HttpPost("add/user_for_recive_notifications")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(403)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        public async Task<IActionResult> AddUserAdminForNotifications(int UserId)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._userRepository
+                    .AddUserAdminForNotifications(UserId)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return Ok(result);
+                    else
+                    return BadRequest(result);
+                }
+                else
+                    return BadRequest(); //400
             }
             catch (Exception ex)
             {

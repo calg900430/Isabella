@@ -5,7 +5,7 @@
     /// <summary>
     /// Dto para el login del usuario.
     /// </summary>
-    public class LoginUserWithUserNameDto
+    public class LoginUserDto
     {
         //Contraseña
         [Required(ErrorMessage = "Introduzca la contraseña.")]

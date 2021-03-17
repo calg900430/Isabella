@@ -17,9 +17,9 @@
         public int Id { get; set; }
 
         /// <summary>
-        /// Código de identificación.
+        /// User.
         /// </summary>
-        public CodeIdentification CodeIdentification { get; set; }
+        public User User { get; set; }
 
         /// <summary>
         /// Producto 

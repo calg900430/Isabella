@@ -21,9 +21,8 @@
         /// <summary>
         /// Obtiene el carrito de compras para la posible compra de un usuario
         /// </summary>
-        /// <param name="CodeIdentifaction"></param>
         /// <returns></returns>
-        Task<ServiceResponse<GetAllProductOfCartShopDto>> GetMyCartShopAsync(Guid CodeIdentifaction);
+        Task<ServiceResponse<GetAllProductOfCartShopDto>> GetMyCartShopAsync();
 
         /// <summary>
         /// Actualiza la cantidad de un producto.
@@ -63,19 +62,17 @@
         /// <summary>
         /// Elimina un producto del carrito de compras
         /// </summary>
-        /// <param name="CodeIdentifaction"></param>
         /// <param name="ProductCombinedId"></param>
         /// <returns></returns>
-        Task<ServiceResponse<bool>> RemoveProductOfCartShopAsync(Guid CodeIdentifaction, int ProductCombinedId);
+        Task<ServiceResponse<bool>> RemoveProductOfCartShopAsync(int ProductCombinedId);
 
         /// <summary>
         /// Elimina un agregado de un producto del carrito de compras.
         /// </summary>
-        /// <param name="CodeIdentifaction"></param>
         /// <param name="ProductCombinedId"></param>
         /// <param name="AggregateId"></param>
         /// <returns></returns>
-        Task<ServiceResponse<bool>> RemoveAggregateInProductOfCartShopAsync(Guid CodeIdentifaction, int ProductCombinedId, int AggregateId);
+        Task<ServiceResponse<bool>> RemoveAggregateInProductOfCartShopAsync(int ProductCombinedId, int AggregateId);
 
         /// <summary>
         /// Actualiza la subcategoria de un producto.
@@ -89,13 +86,21 @@
         /// </summary>
         /// <param name="updateSubCategoryProduct"></param>
         /// <returns></returns>
-        Task<ServiceResponse<bool>> RemoveSubCategoryAsync(Guid CodeIdentifaction, int ProductCombinedId);
+        Task<ServiceResponse<bool>> RemoveSubCategoryAsync(int ProductCombinedId);
 
         /// <summary>
         /// Elimina todos los productos del carrito de compras del usuario.
         /// </summary>
         /// <param name="CodeIdentifaction"></param>
         /// <returns></returns>
-        Task<ServiceResponse<bool>> RemoveAllCarShopAsync(Guid CodeIdentifaction);
+        Task<ServiceResponse<bool>> RemoveAllCarShopAsync();
+
+        /// <summary>
+        /// Actualiza la carrito del usuario.
+        /// </summary>
+        /// <param name="updateCartShop"></param>
+        /// <returns></returns>
+        Task<ServiceResponse<bool>> UpdateCartShopAsync(UpdateCartShopDto updateCartShop);
+
     }
 }

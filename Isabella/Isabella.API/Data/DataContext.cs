@@ -25,11 +25,6 @@
         }
 
         /// <summary>
-        /// Códigos de Verificación.
-        /// </summary>
-        public DbSet<CodeIdentification> CodeIdentifications { get; set; }
-
-        /// <summary>
         /// Coordenadas Gps.
         /// </summary>
         public DbSet<Gps> Gps { get; set; }
@@ -40,12 +35,22 @@
         public DbSet<Order> Orders { get; set; }
 
         /// <summary>
+        /// Notificaciones para los usuarios admins.
+        /// </summary>
+        public DbSet<UserAdminsNotifications> UserAdminsNotifications { get; set; }
+
+        /// <summary>
+        /// Notificaciones Pendientes.
+        /// </summary>
+        public DbSet<NotificationPendients> NotificationPendients { get; set; }
+
+        /// <summary>
         /// Detalles de los pedidos.
         /// </summary>
         public DbSet<OrderDetail> OrderDetails { get; set; }
 
         /// <summary>
-        /// Calificación de Productos Standards.
+        /// Calificación de Productos.
         /// </summary>
         public DbSet<CalificationProduct> CalificationProduct { get; set; }
 
@@ -70,7 +75,7 @@
         public DbSet<Product> Products { get; set; }
 
         /// <summary>
-        /// Imagenes de productos standards.
+        /// Imagenes de productos.
         /// </summary>
         public DbSet<ImageProduct> ImagesProducts { get; set; }
 
@@ -80,12 +85,12 @@
         public DbSet<ImageAggregate> ImageAggregates { get; set; }
  
         /// <summary>
-        /// Pedidos de productos de agrego para un producto special.
+        /// Pedidos de productos de agrego para un producto.
         /// </summary>
         public DbSet<CantAggregate> CantAggregate { get; set; }
         
         /// <summary>
-        /// Categoria de los productos standards.
+        /// Categoria de los productos.
         /// </summary>
         public DbSet<Category> Categories { get; set; }
 

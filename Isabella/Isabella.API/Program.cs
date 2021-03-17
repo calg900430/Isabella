@@ -53,8 +53,12 @@ namespace Isabella.API
         public static IHostBuilder CreateHostBuilder(string[] args) =>
         Host.CreateDefaultBuilder(args)
         .ConfigureLogging(c => c.AddConsole()) //Agrega el registro.
-        .ConfigureWebHostDefaults(webBuilder =>
+        /*.ConfigureAppConfiguration((hostingContext,  config) => 
         {
+            config.AddEnvironmentVariables();
+        })*/
+        .ConfigureWebHostDefaults(webBuilder =>
+        { 
            webBuilder.UseStartup<Startup>();
         });
     }

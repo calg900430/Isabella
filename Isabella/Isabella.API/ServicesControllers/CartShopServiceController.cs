@@ -17,6 +17,7 @@
     using Isabella.Common.Dtos.SubCategory;
     using System.Diagnostics.CodeAnalysis;
     using Isabella.API.Models;
+    using System.Security.Claims;
 
     /// <summary>
     /// Servicio para el controlador del carrito de compras.
@@ -27,11 +28,16 @@
         private readonly ServiceGenericHelper<CartShop> _serviceGenericCartShopHelper;
         private readonly ServiceGenericHelper<Product> _serviceGenericProductHelper;
         private readonly ServiceGenericHelper<Aggregate> _serviceGenericAggregateHelper;
-        private readonly ServiceGenericHelper<CodeIdentification> _serviceGenericCodeIdentificationHelper;
         private readonly ServiceGenericHelper<CantAggregate> _serviceGenericCantAggregateHelper;
         private readonly ServiceGenericHelper<SubCategory> _serviceGenericSubCategoryHelper;
         private readonly ServiceGenericHelper<ProductCombined> _serviceGenericProductCombinedHelper;
+        private readonly IUserRepositoryHelper _userServiceHelper;
         private readonly IMapper _mapper;
+
+        /// <summary>
+        /// Claims del usuario.
+        /// </summary>
+        public ClaimsPrincipal ClaimsPrincipal { get; set; }
 
         /// <summary>
         /// Constructor.
@@ -39,27 +45,27 @@
         /// <param name="serviceGenericCarShopHelper"></param>
         /// <param name="serviceGenericProductHelper"></param>
         /// <param name="serviceGenericAggregateHelper"></param>
-        /// <param name="serviceGenericCodeIdentificationHelper"></param>
         /// <param name="serviceGenericCantAggregateHelper"></param>
         /// <param name="serviceGenericSubCategoryHelper"></param>
         /// <param name="serviceGenericProductCombinedHelper"></param>
+        /// <param name="userrepositoryHelper"></param>
         /// <param name="mapper"></param>
         public CartShopServiceController(ServiceGenericHelper<CartShop> serviceGenericCarShopHelper, 
         ServiceGenericHelper<Product> serviceGenericProductHelper, 
         ServiceGenericHelper<Aggregate> serviceGenericAggregateHelper,
-        ServiceGenericHelper<CodeIdentification> serviceGenericCodeIdentificationHelper,
         ServiceGenericHelper<CantAggregate> serviceGenericCantAggregateHelper,
         ServiceGenericHelper<SubCategory> serviceGenericSubCategoryHelper,
         ServiceGenericHelper<ProductCombined> serviceGenericProductCombinedHelper,
+        IUserRepositoryHelper userrepositoryHelper,
         IMapper mapper)
         {
             this._serviceGenericCartShopHelper = serviceGenericCarShopHelper;
             this._serviceGenericProductHelper = serviceGenericProductHelper;
             this._serviceGenericAggregateHelper = serviceGenericAggregateHelper;
-            this._serviceGenericCodeIdentificationHelper = serviceGenericCodeIdentificationHelper;
             this._serviceGenericCantAggregateHelper = serviceGenericCantAggregateHelper;
             this._serviceGenericSubCategoryHelper = serviceGenericSubCategoryHelper;
             this._serviceGenericProductCombinedHelper = serviceGenericProductCombinedHelper;
+            this._userServiceHelper = userrepositoryHelper;
             this._mapper = mapper;
         }
 
@@ -73,6 +79,27 @@
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
+                var userName = ClaimsPrincipal.Identity.Name;
+                if (userName == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ErrorGetCredentialsUser);
+                    return serviceResponse;
+                }
+                //Verifica si el usuario está registrado en la base de datos.
+                var user = await this._userServiceHelper.GetUserByUserNameAsync(userName).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
+                    return serviceResponse;
+                }
                 if (addProductsToCarShop == null)
                 {
                     serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
@@ -90,19 +117,6 @@
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
                     .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
-                    return serviceResponse;
-                }
-                //Verifica si el código de verificación está disponible
-                var code_identification = await this._serviceGenericCodeIdentificationHelper
-                .WhereSingleEntityAsync(c => c.Code == addProductsToCarShop.CodeIdentification)
-                .ConfigureAwait(false);
-                if (code_identification == null)
-                {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.NotCodeIdentification;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile
-                    .GetValueResourceString(GetValueResourceFile.KeyResource.NotCodeIdentification);
                     return serviceResponse;
                 }
                 //Verifica si el producto está en la base de datos y está disponible.
@@ -210,7 +224,7 @@
                 //Define una entidad consultable
                 IQueryable<CartShop> entity_carshop = context_cart_shop.AsQueryable();
                 //Agrega los Include y ThenInclude necesarios
-                entity_carshop = entity_carshop.Include(c => c.CodeIdentification)
+                entity_carshop = entity_carshop.Include(c => c.User)
                 .Include(c => c.ProductCombined.Product.Category)
                 .Include(c => c.ProductCombined.Product.SubCategories)
                 .Include(c => c.ProductCombined.SubCategory.Product.Category)
@@ -228,7 +242,7 @@
                 }
                 //Agrega los filtros restantes
                 entity_carshop = entity_carshop
-                .Where(c => c.CodeIdentification == code_identification)
+                .Where(c => c.User == user)
                 .Where(c => c.ProductCombined.Product == product)
                 .Where(c => c.ProductCombined.CantAggregates.Count == cantAggregates.Count)
                 .Where(c => c.ProductCombined.SubCategory == subCategory);
@@ -239,7 +253,7 @@
                 {
                     var product_is_cartshop = new CartShop
                     {
-                        CodeIdentification = code_identification,
+                        User = user,
                         ProductCombined = new ProductCombined
                         {
                             Product = product,
@@ -287,7 +301,7 @@
                 .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
@@ -301,36 +315,42 @@
         /// <summary>
         /// Obtiene el carrito de compras de un usuario.
         /// </summary>
-        /// <param name="codeIdentification"></param>
         /// <returns></returns>
-        public async Task<ServiceResponse<GetAllProductOfCartShopDto>> GetMyCartShopAsync(Guid codeIdentification)
+        public async Task<ServiceResponse<GetAllProductOfCartShopDto>> GetMyCartShopAsync()
         {
             ServiceResponse<GetAllProductOfCartShopDto> serviceResponse = new ServiceResponse<GetAllProductOfCartShopDto>();
             try
             {
-                //Verifica si el código de identificación está disponible
-                //Verifica si el código de verificación está disponible
-                var code_identification = await this._serviceGenericCodeIdentificationHelper
-                .WhereFirstEntityAsync(c => c.Code == codeIdentification)
-                .ConfigureAwait(false);
-                if (code_identification == null)
+                var userName = ClaimsPrincipal.Identity.Name;
+                if (userName == null)
                 {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.NotCodeIdentification;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
-                    .GetValueResourceString(GetValueResourceFile.KeyResource.NotCodeIdentification);
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ErrorGetCredentialsUser);
+                    return serviceResponse;
+                }
+                //Verifica si el usuario está registrado en la base de datos.
+                var user = await this._userServiceHelper.GetUserByUserNameAsync(userName).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
                     return serviceResponse;
                 }
                 //Verifica si hay productos en el carrito
                 var all_products_in_carshop = await this._serviceGenericCartShopHelper._context
-                .Include(c => c.CodeIdentification)
+                .Include(c => c.User)
                 .Include(c => c.ProductCombined.Product.Category)
                 .Include(c => c.ProductCombined.Product.SubCategories)
                 .Include(c => c.ProductCombined.SubCategory.Product.Category)
                 .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate)
                 .Include(c => c.ProductCombined.CantAggregates)
-                .Where(c => c.CodeIdentification == code_identification)
+                .Where(c => c.User == user)
                 .OrderByDescending(c => c.DateCreated)
                 .ToListAsync()
                 .ConfigureAwait(false);
@@ -346,8 +366,16 @@
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = new GetAllProductOfCartShopDto
                 {
-                   Identification = code_identification.Code,
-                   GetCarShopProducts = all_products_in_carshop.Select(c => new GetCarShopProductDto 
+                    GetUserDto = new Common.Dtos.Users.GetUserDto
+                    {
+                        Address = user.Address,
+                        FirstName = user.FirstName,
+                        Id = user.Id,
+                        ImageUserProfile = user.ImageUserProfile,
+                        LastName = user.LastName,
+                        PhoneNumber = user.PhoneNumber,
+                    },
+                    GetCarShopProducts = all_products_in_carshop.Select(c => new GetCarShopProductDto 
                    {
                       ProductCombinedId = c.ProductCombined.Id,
                       ProductId = c.ProductCombined.Product.Id,
@@ -378,7 +406,7 @@
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
-            catch (Exception ex)
+            catch(Exception)
             {
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
@@ -391,18 +419,38 @@
         /// <summary>
         /// Elimina un producto del carrito de compras
         /// </summary>
-        /// <param name="CodeVerification"></param>
         /// <param name="ProductCombinedId"></param>
         /// <returns></returns>
-        public async Task<ServiceResponse<bool>> RemoveProductOfCartShopAsync(Guid CodeVerification, int ProductCombinedId)
+        public async Task<ServiceResponse<bool>> RemoveProductOfCartShopAsync(int ProductCombinedId)
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
+                var userName = ClaimsPrincipal.Identity.Name;
+                if (userName == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ErrorGetCredentialsUser);
+                    return serviceResponse;
+                }
+                //Verifica si el usuario está registrado en la base de datos.
+                var user = await this._userServiceHelper.GetUserByUserNameAsync(userName).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
+                    return serviceResponse;
+                }
                 var carshop = await this._serviceGenericCartShopHelper
-                .WhereFirstEntityAsync(c => c.CodeIdentification.Code == CodeVerification
+                .WhereFirstEntityAsync(c => c.User == user
                 && c.ProductCombined.Id == ProductCombinedId,
-                c => c.ProductCombined.CantAggregates, c => c.CodeIdentification)
+                c => c.ProductCombined.CantAggregates, c => c.User)
                 .ConfigureAwait(false);
                 if (carshop == null)
                 {
@@ -466,6 +514,27 @@
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
+                var userName = ClaimsPrincipal.Identity.Name;
+                if (userName == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ErrorGetCredentialsUser);
+                    return serviceResponse;
+                }
+                //Verifica si el usuario está registrado en la base de datos.
+                var user = await this._userServiceHelper.GetUserByUserNameAsync(userName).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
+                    return serviceResponse;
+                }
                 if (updateSubCategoryProduct == null)
                 {
                     serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
@@ -473,19 +542,6 @@
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
                     .GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
-                    return serviceResponse;
-                }
-                //Verifica si el código de verificación está disponible
-                var codeidentification = await this._serviceGenericCodeIdentificationHelper
-                .WhereSingleEntityAsync(c => c.Code == updateSubCategoryProduct.CodeIdentification)
-                .ConfigureAwait(false);
-                if (codeidentification == null)
-                {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.NotCodeIdentification;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile
-                    .GetValueResourceString(GetValueResourceFile.KeyResource.NotCodeIdentification);
                     return serviceResponse;
                 }
                 //Verifica que la subcategoria exista y este disponible
@@ -507,14 +563,14 @@
                 //Define una entidad consultable
                 IQueryable<CartShop> entity_carshop = context_cart_shop.AsQueryable();
                 //Agrega los Include y ThenInclude necesarios
-                entity_carshop = entity_carshop.Include(c => c.CodeIdentification)
+                entity_carshop = entity_carshop.Include(c => c.User)
                 .Include(c => c.ProductCombined.Product.SubCategories).ThenInclude(c => c.Product.Category)
                 .Include(c => c.ProductCombined.Product.Category)
                 .Include(c => c.ProductCombined.SubCategory)
                 .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate);
                 //Agrega los filtros restantes
                 entity_carshop = entity_carshop
-                .Where(c => c.CodeIdentification == codeidentification)
+                .Where(c => c.User == user)
                 .Where(c => c.ProductCombined.Id == updateSubCategoryProduct.ProductCombinedId)
                 .Where(c => c.ProductCombined.SubCategory != subcategory);
                 //Ejecuta la consulta(Verifica si en el carrito del usuario existe un producto de este tipo)
@@ -544,7 +600,7 @@
                 //Verifica si el nuevo producto formado ya se encuentra en el carrito del usuario para solo actualizar las cantidades
                 //y eliminar las referencias a este producto.
                 entity_carshop = context_cart_shop.AsQueryable();
-                entity_carshop = entity_carshop.Include(c => c.CodeIdentification)
+                entity_carshop = entity_carshop.Include(c => c.User)
                 .Include(c => c.ProductCombined.Product.SubCategories).ThenInclude(c => c.Product)
                 .Include(c => c.ProductCombined.SubCategory)
                 .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate);
@@ -560,7 +616,7 @@
                     }
                 }
                 entity_carshop = entity_carshop
-                .Where(c => c.CodeIdentification == codeidentification)
+                .Where(c => c.User == user)
                 .Where(c => c.ProductCombined.Product == product_in_carshop.ProductCombined.Product)
                 .Where(c => c.ProductCombined.CantAggregates.Count == product_in_carshop.ProductCombined.CantAggregates.Count)
                 .Where(c => c.ProductCombined.SubCategory == subcategory);
@@ -619,7 +675,7 @@
                 .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
-            catch (Exception ex)
+            catch(Exception)
             {
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
@@ -633,25 +689,32 @@
         /// <summary>
         /// Elimina la subcategoria de un producto combinado que está en el carrito.
         /// </summary>
-        /// <param name="codeIdentification"></param>
         /// <param name="ProductCombinedId"></param>
         /// <returns></returns>
-        public async Task<ServiceResponse<bool>> RemoveSubCategoryAsync(Guid codeIdentification, int ProductCombinedId)
+        public async Task<ServiceResponse<bool>> RemoveSubCategoryAsync(int ProductCombinedId)
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
-                //Verifica si el código de verificación está disponible
-                var codeidentification = await this._serviceGenericCodeIdentificationHelper
-                .WhereSingleEntityAsync(c => c.Code == codeIdentification)
-                .ConfigureAwait(false);
-                if (codeidentification == null)
+                var userName = ClaimsPrincipal.Identity.Name;
+                if (userName == null)
                 {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.NotCodeIdentification;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
-                    .GetValueResourceString(GetValueResourceFile.KeyResource.NotCodeIdentification);
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ErrorGetCredentialsUser);
+                    return serviceResponse;
+                }
+                //Verifica si el usuario está registrado en la base de datos.
+                var user = await this._userServiceHelper.GetUserByUserNameAsync(userName).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
                     return serviceResponse;
                 }
                 //Verifica si el producto está en el carrito del usuario y 
@@ -660,14 +723,14 @@
                 //Define una entidad consultable
                 IQueryable<CartShop> entity_carshop = context_cart_shop.AsQueryable();
                 //Agrega los Include y ThenInclude necesarios
-                entity_carshop = entity_carshop.Include(c => c.CodeIdentification)
+                entity_carshop = entity_carshop.Include(c => c.User)
                 .Include(c => c.ProductCombined.Product.SubCategories).ThenInclude(c => c.Product.Category)
                 .Include(c => c.ProductCombined.Product.Category)
                 .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate)
                 .Include(c => c.ProductCombined.SubCategory);
                 //Agrega los filtros
                 entity_carshop = entity_carshop
-                .Where(c => c.CodeIdentification == codeidentification)
+                .Where(c => c.User == user)
                 .Where(c => c.ProductCombined.Id == ProductCombinedId);
                 //Ejecuta la consulta(Verifica si en el carrito del usuario existe un producto de este tipo)
                 var product_in_carshop = await entity_carshop.FirstOrDefaultAsync().ConfigureAwait(false);
@@ -694,7 +757,7 @@
                 //Verifica si el nuevo producto formado ya se encuentra en el carrito del usuario para solo actualizar las cantidades
                 //y eliminar las referencias a este producto.
                 entity_carshop = context_cart_shop.AsQueryable();
-                entity_carshop = entity_carshop.Include(c => c.CodeIdentification)
+                entity_carshop = entity_carshop.Include(c => c.User)
                 .Include(c => c.ProductCombined.Product.SubCategories).ThenInclude(c => c.Product)
                 .Include(c => c.ProductCombined.SubCategory)
                 .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate);
@@ -710,7 +773,7 @@
                     }
                 }
                 entity_carshop = entity_carshop
-                .Where(c => c.CodeIdentification == codeidentification)
+                .Where(c => c.User == user)
                 .Where(c => c.ProductCombined.Product == product_in_carshop.ProductCombined.Product)
                 .Where(c => c.ProductCombined.CantAggregates.Count == product_in_carshop.ProductCombined.CantAggregates.Count)
                 .Where(c => c.ProductCombined.SubCategory == null);
@@ -771,7 +834,7 @@
                 .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
@@ -792,6 +855,27 @@
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
+                var userName = ClaimsPrincipal.Identity.Name;
+                if (userName == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ErrorGetCredentialsUser);
+                    return serviceResponse;
+                }
+                //Verifica si el usuario está registrado en la base de datos.
+                var user = await this._userServiceHelper.GetUserByUserNameAsync(userName).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
+                    return serviceResponse;
+                }
                 if (modifyQuantityProduct == null)
                 {
                     serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
@@ -811,23 +895,10 @@
                     .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
                     return serviceResponse;
                 }
-                //Verifica si el código de verificación está disponible
-                var codeidentification = await this._serviceGenericCodeIdentificationHelper
-                .WhereSingleEntityAsync(c => c.Code == modifyQuantityProduct.CodeIdentification)
-                .ConfigureAwait(false);
-                if (codeidentification == null)
-                {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.NotCodeIdentification;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile
-                    .GetValueResourceString(GetValueResourceFile.KeyResource.NotCodeIdentification);
-                    return serviceResponse;
-                }
                 //Verifica si el producto está en el carrito del usuario.
                 var product_in_carshop = await this._serviceGenericCartShopHelper
                 .WhereFirstEntityAsync(c => c.ProductCombined.Id == modifyQuantityProduct.ProductCombinedId && 
-                c.CodeIdentification == codeidentification, c => c.ProductCombined)
+                c.User == user, c => c.User)
                 .ConfigureAwait(false);
                 if (product_in_carshop == null)
                 {
@@ -850,7 +921,7 @@
                 .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
-            catch (Exception ex)
+            catch(Exception)
             {
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
@@ -871,6 +942,27 @@
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
+                var userName = ClaimsPrincipal.Identity.Name;
+                if (userName == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ErrorGetCredentialsUser);
+                    return serviceResponse;
+                }
+                //Verifica si el usuario está registrado en la base de datos.
+                var user = await this._userServiceHelper.GetUserByUserNameAsync(userName).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
+                    return serviceResponse;
+                }
                 if (modifyQuantityProduct == null)
                 {
                     serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
@@ -890,24 +982,10 @@
                     .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
                     return serviceResponse;
                 }
-                //Verifica si el código de verificación está disponible
-                var codeidentification = await this._serviceGenericCodeIdentificationHelper
-                .WhereSingleEntityAsync(c => c.Code == modifyQuantityProduct.CodeIdentification)
-                .ConfigureAwait(false);
-                if (codeidentification == null)
-                {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.NotCodeIdentification;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile
-                    .GetValueResourceString(GetValueResourceFile.KeyResource.NotCodeIdentification);
-                    return serviceResponse;
-                }
-                //Verifica si el producto está en el carrito del usuario.
                 //Verifica si el producto está en el carrito del usuario.
                 var product_in_carshop = await this._serviceGenericCartShopHelper
                 .WhereFirstEntityAsync(c => c.ProductCombined.Id == modifyQuantityProduct.ProductCombinedId &&
-                c.CodeIdentification == codeidentification, c => c.ProductCombined)
+                c.User == user, c => c.ProductCombined)
                 .ConfigureAwait(false);
                 if (product_in_carshop == null)
                 {
@@ -930,7 +1008,7 @@
                 .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
-            catch (Exception ex)
+            catch(Exception)
             {
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
@@ -951,7 +1029,28 @@
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
-                if(modifyAggregateProduct == null)
+                var userName = ClaimsPrincipal.Identity.Name;
+                if (userName == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ErrorGetCredentialsUser);
+                    return serviceResponse;
+                }
+                //Verifica si el usuario está registrado en la base de datos.
+                var user = await this._userServiceHelper.GetUserByUserNameAsync(userName).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
+                    return serviceResponse;
+                }
+                if (modifyAggregateProduct == null)
                 {
                     serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
                     serviceResponse.Data = false;
@@ -970,32 +1069,19 @@
                     .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
                     return serviceResponse;
                 }
-                //Verifica si el código de verificación está disponible
-                var codeidentification = await this._serviceGenericCodeIdentificationHelper
-                .WhereSingleEntityAsync(c => c.Code == modifyAggregateProduct.CodeIdentification)
-                .ConfigureAwait(false);
-                if (codeidentification == null)
-                {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.NotCodeIdentification;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile
-                    .GetValueResourceString(GetValueResourceFile.KeyResource.NotCodeIdentification);
-                    return serviceResponse;
-                }
                 //Verifica si el producto está en el carrito del usuario y si el mismo tiene el agregado que se quiere actualizar.
                 //Obtiene el contexto
                 var context_cart_shop = this._serviceGenericCartShopHelper._context;
                 //Define una entidad consultable
                 IQueryable<CartShop> entity_carshop = context_cart_shop.AsQueryable();
                 //Agrega los Include y ThenInclude necesarios
-                entity_carshop = entity_carshop.Include(c => c.CodeIdentification)
+                entity_carshop = entity_carshop.Include(c => c.User)
                 .Include(c => c.ProductCombined.SubCategory)
                 .Include(c => c.ProductCombined.Product.Category)
                 .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate);
                 //Agrega los filtros restantes
                 entity_carshop = entity_carshop
-                .Where(c => c.CodeIdentification == codeidentification)
+                .Where(c => c.User == user)
                 .Where(c => c.ProductCombined.Id == modifyAggregateProduct.ProductCombinedId)
                 .Where(c => c.ProductCombined.CantAggregates.Select(c => c.Aggregate.Id)
                 .Any(x => x == modifyAggregateProduct.AggregateId) == true);
@@ -1025,7 +1111,7 @@
                 .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
-            catch (Exception ex)
+            catch(Exception)
             {
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
@@ -1046,6 +1132,27 @@
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
+                var userName = ClaimsPrincipal.Identity.Name;
+                if (userName == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ErrorGetCredentialsUser);
+                    return serviceResponse;
+                }
+                //Verifica si el usuario está registrado en la base de datos.
+                var user = await this._userServiceHelper.GetUserByUserNameAsync(userName).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
+                    return serviceResponse;
+                }
                 if (modifyAggregateProduct == null)
                 {
                     serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
@@ -1065,30 +1172,17 @@
                     .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
                     return serviceResponse;
                 }
-                //Verifica si el código de verificación está disponible
-                var codeidentification = await this._serviceGenericCodeIdentificationHelper
-                .WhereSingleEntityAsync(c => c.Code == modifyAggregateProduct.CodeIdentification)
-                .ConfigureAwait(false);
-                if (codeidentification == null)
-                {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.NotCodeIdentification;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile
-                    .GetValueResourceString(GetValueResourceFile.KeyResource.NotCodeIdentification);
-                    return serviceResponse;
-                }
                 //Verifica si el producto está en el carrito del usuario y si el mismo tiene el agregado que se quiere actualizar.
                 //Obtiene el contexto
                 var context_cart_shop = this._serviceGenericCartShopHelper._context;
                 //Define una entidad consultable
                 IQueryable<CartShop> entity_carshop = context_cart_shop.AsQueryable();
                 //Agrega los Include y ThenInclude necesarios
-                entity_carshop = entity_carshop.Include(c => c.CodeIdentification)
+                entity_carshop = entity_carshop.Include(c => c.User)
                 .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate);
                 //Agrega los filtros restantes
                 entity_carshop = entity_carshop
-                .Where(c => c.CodeIdentification == codeidentification)
+                .Where(c => c.User == user)
                 .Where(c => c.ProductCombined.Id == modifyAggregateProduct.ProductCombinedId)
                 .Where(c => c.ProductCombined.CantAggregates.Select(c => c.Aggregate.Id)
                 .Any(x => x == modifyAggregateProduct.AggregateId) == true);
@@ -1119,7 +1213,7 @@
                 .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
@@ -1140,6 +1234,27 @@
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
+                var userName = ClaimsPrincipal.Identity.Name;
+                if (userName == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ErrorGetCredentialsUser);
+                    return serviceResponse;
+                }
+                //Verifica si el usuario está registrado en la base de datos.
+                var user = await this._userServiceHelper.GetUserByUserNameAsync(userName).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
+                    return serviceResponse;
+                }
                 if (addAggregateInProduct == null)
                 {
                     serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
@@ -1147,19 +1262,6 @@
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
                     .GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
-                    return serviceResponse;
-                }
-                //Verifica si el código de verificación está disponible
-                var codeidentification = await this._serviceGenericCodeIdentificationHelper
-                .WhereSingleEntityAsync(c => c.Code == addAggregateInProduct.CodeIdentification)
-                .ConfigureAwait(false);
-                if (codeidentification == null)
-                {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.NotCodeIdentification;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile
-                    .GetValueResourceString(GetValueResourceFile.KeyResource.NotCodeIdentification);
                     return serviceResponse;
                 }
                 //Verifica si el agregado está disponible
@@ -1180,14 +1282,14 @@
                 //Define una entidad consultable
                 IQueryable<CartShop> entity_carshop = context_cart_shop.AsQueryable();
                 //Agrega los Include y ThenInclude necesarios
-                entity_carshop = entity_carshop.Include(c => c.CodeIdentification)
+                entity_carshop = entity_carshop.Include(c => c.User)
                 .Include(c => c.ProductCombined.Product.SubCategories).ThenInclude(c => c.Product)
                 .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate)
                 .Include(c => c.ProductCombined.SubCategory)
                 .Include(c => c.ProductCombined.Product.Category);
                 //Agrega los filtros restantes
                 entity_carshop = entity_carshop
-                .Where(c => c.CodeIdentification == codeidentification)
+                .Where(c => c.User == user)
                 .Where(c => c.ProductCombined.Id == addAggregateInProduct.ProductCombinedId);
                 //Ejecuta la consulta(Verifica si en el carrito del usuario existe un producto de este tipo)
                 var product_in_carshop = await entity_carshop.FirstOrDefaultAsync().ConfigureAwait(false);
@@ -1214,7 +1316,7 @@
                 else
                 {
                     entity_carshop = context_cart_shop.AsQueryable();
-                    entity_carshop = entity_carshop.Include(c => c.CodeIdentification)
+                    entity_carshop = entity_carshop.Include(c => c.User)
                     .Include(c => c.ProductCombined.Product.SubCategories).ThenInclude(c => c.Product)
                     .Include(c => c.ProductCombined.SubCategory)
                     .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate);
@@ -1233,7 +1335,7 @@
                     entity_carshop = entity_carshop.Where(c => c.ProductCombined.CantAggregates
                     .Select(c => c.Aggregate).Contains(aggregate) == true);
                     entity_carshop = entity_carshop
-                    .Where(c => c.CodeIdentification == codeidentification)
+                    .Where(c => c.User == user)
                     .Where(c => c.ProductCombined.Product == product_in_carshop.ProductCombined.Product)
                     .Where(c => c.ProductCombined.CantAggregates.Count == product_in_carshop.ProductCombined.CantAggregates.Count + 1)
                     .Where(c => c.ProductCombined.SubCategory == product_in_carshop.ProductCombined.SubCategory);
@@ -1311,7 +1413,7 @@
                 .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
-            catch (Exception ex)
+            catch(Exception)
             {
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
@@ -1325,26 +1427,33 @@
         /// <summary>
         /// Elimina un agregado de un producto del carrito de compras.
         /// </summary>
-        /// <param name="codeIdentification"></param>
         /// <param name="ProductCombinedId"></param>
         /// <param name="AggregateId"></param>
         /// <returns></returns>
-        public async Task<ServiceResponse<bool>> RemoveAggregateInProductOfCartShopAsync(Guid codeIdentification, int ProductCombinedId, int AggregateId)
+        public async Task<ServiceResponse<bool>> RemoveAggregateInProductOfCartShopAsync(int ProductCombinedId, int AggregateId)
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
-                //Verifica si el código de verificación está disponible
-                var codeidentification = await this._serviceGenericCodeIdentificationHelper
-                .WhereSingleEntityAsync(c => c.Code == codeIdentification)
-                .ConfigureAwait(false);
-                if (codeidentification == null)
+                var userName = ClaimsPrincipal.Identity.Name;
+                if (userName == null)
                 {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.NotCodeIdentification;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
-                    .GetValueResourceString(GetValueResourceFile.KeyResource.NotCodeIdentification);
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ErrorGetCredentialsUser);
+                    return serviceResponse;
+                }
+                //Verifica si el usuario está registrado en la base de datos.
+                var user = await this._userServiceHelper.GetUserByUserNameAsync(userName).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
                     return serviceResponse;
                 }
                 //Verifica si el agregado está disponible
@@ -1365,14 +1474,14 @@
                 //Define una entidad consultable
                 IQueryable<CartShop> entity_carshop = context_cart_shop.AsQueryable();
                 //Agrega los Include y ThenInclude necesarios
-                entity_carshop = entity_carshop.Include(c => c.CodeIdentification)
+                entity_carshop = entity_carshop.Include(c => c.User)
                 .Include(c => c.ProductCombined.Product.SubCategories).ThenInclude(c => c.Product)
                 .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate)
                 .Include(c => c.ProductCombined.SubCategory)
                 .Include(c => c.ProductCombined.Product.Category);
                 //Agrega los filtros restantes
                 entity_carshop = entity_carshop
-                .Where(c => c.CodeIdentification == codeidentification)
+                .Where(c => c.User == user)
                 .Where(c => c.ProductCombined.Id == ProductCombinedId);
                 //Ejecuta la consulta(Verifica si en el carrito del usuario existe un producto de este tipo)
                 var product_in_carshop = await entity_carshop.FirstOrDefaultAsync().ConfigureAwait(false);
@@ -1403,7 +1512,7 @@
                     .FirstOrDefault(c => c.Aggregate.Id == aggregate.Id);
                     product_in_carshop.ProductCombined.CantAggregates.Remove(deleteaggregate);
                     entity_carshop = context_cart_shop.AsQueryable();
-                    entity_carshop = entity_carshop.Include(c => c.CodeIdentification)
+                    entity_carshop = entity_carshop.Include(c => c.User)
                     .Include(c => c.ProductCombined.Product.SubCategories).ThenInclude(c => c.Product)
                     .Include(c => c.ProductCombined.SubCategory)
                     .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate);
@@ -1422,7 +1531,7 @@
                     entity_carshop = entity_carshop.Where(c => c.ProductCombined.CantAggregates
                     .Select(c => c.Aggregate).Contains(aggregate) == true);
                     entity_carshop = entity_carshop
-                    .Where(c => c.CodeIdentification == codeidentification)
+                    .Where(c => c.User == user)
                     .Where(c => c.ProductCombined.Product == product_in_carshop.ProductCombined.Product)
                     .Where(c => c.ProductCombined.CantAggregates.Count == product_in_carshop.ProductCombined.CantAggregates.Count)
                     .Where(c => c.ProductCombined.SubCategory == product_in_carshop.ProductCombined.SubCategory);
@@ -1484,7 +1593,7 @@
                 .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
-            catch (Exception ex)
+            catch(Exception)
             {
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
@@ -1498,16 +1607,36 @@
         /// <summary>
         /// Elimina todos los productos del carrito de compras del usuario.
         /// </summary>
-        /// <param name="codeIdentifaction"></param>
         /// <returns></returns>
-        public async Task<ServiceResponse<bool>> RemoveAllCarShopAsync(Guid codeIdentifaction)
+        public async Task<ServiceResponse<bool>> RemoveAllCarShopAsync()
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
+                var userName = ClaimsPrincipal.Identity.Name;
+                if (userName == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ErrorGetCredentialsUser);
+                    return serviceResponse;
+                }
+                //Verifica si el usuario está registrado en la base de datos.
+                var user = await this._userServiceHelper.GetUserByUserNameAsync(userName).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
+                    return serviceResponse;
+                }
                 var all_carshop = await this._serviceGenericCartShopHelper
-                .WhereListEntityAsync(c => c.CodeIdentification.Code == codeIdentifaction,
-                c => c.ProductCombined.CantAggregates, c => c.CodeIdentification, c => c.ProductCombined)
+                .WhereListEntityAsync(c => c.User == user,
+                c => c.ProductCombined.CantAggregates, c => c.User, c => c.ProductCombined)
                 .ConfigureAwait(false);
                 if (all_carshop == null)
                 {
@@ -1563,6 +1692,265 @@
                 .GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
             }
+        }
+
+        /// <summary>
+        /// Actualiza el carrito del usuario de forma general.
+        /// </summary>
+        /// <param name="updateCartShop"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<bool>> UpdateCartShopAsync(UpdateCartShopDto updateCartShop)
+        {
+           ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+           try
+           {
+                var userName = ClaimsPrincipal.Identity.Name;
+                if (userName == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ErrorGetCredentialsUser);
+                    return serviceResponse;
+                }
+                //Verifica si el usuario está registrado en la base de datos.
+                var user = await this._userServiceHelper.GetUserByUserNameAsync(userName).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
+                    return serviceResponse;
+                }
+                if (updateCartShop == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
+                    return serviceResponse;
+                }
+                //Verifica si el producto combinado está disponible.
+                //Obtiene el contexto
+                var context_cart_shop = this._serviceGenericCartShopHelper._context;
+                //Define una entidad consultable
+                IQueryable<CartShop> entity_carshop = context_cart_shop.AsQueryable();
+                //Agrega los Include y ThenInclude necesarios
+                entity_carshop = entity_carshop.Include(c => c.User)
+                .Include(c => c.ProductCombined.Product.Category)
+                .Include(c => c.ProductCombined.Product.SubCategories)
+                .Include(c => c.ProductCombined.SubCategory.Product.Category)
+                .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate);
+                //Agrega los filtros restantes
+                entity_carshop = entity_carshop
+                .Where(c => c.User == user)
+                .Where(c => c.ProductCombined.Id == updateCartShop.ProductCombinedId);
+                //Ejecuta la consulta(Verifica si en el carrito del usuario existe un producto de este tipo)
+                var product_in_carshop = await entity_carshop.SingleOrDefaultAsync().ConfigureAwait(false);
+                //Verifica si el producto no estaba en el carrito del usuario para agregarlo.
+                if (product_in_carshop == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotExistInCarShop;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotExistInCarShop);
+                    return serviceResponse;
+                }
+                //Cambiar la subcategoria
+                if(updateCartShop.SubCategoryId != null)
+                {
+                    //Verifica que la subcategoria exista y este disponible
+                    var subcategory = await this._serviceGenericSubCategoryHelper
+                    .GetLoadAsync(c => c.Id == updateCartShop.SubCategoryId && c.IsAvailable == true, c => c.Product.SubCategories)
+                    .ConfigureAwait(false);
+                    if (subcategory == null)
+                    {
+                        serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SubCategoryNotIsAvailable;
+                        serviceResponse.Data = false;
+                        serviceResponse.Success = false;
+                        serviceResponse.Message = GetValueResourceFile
+                        .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryNotIsAvailable);
+                        return serviceResponse;
+                    }
+                    //Verifica si la subcategoria es valida para el producto base
+                    if (product_in_carshop.ProductCombined.Product.SubCategories.Any(c => c.Id == subcategory.Id) == false)
+                    {
+                        serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SubCategoryNotIsProduct;
+                        serviceResponse.Data = false;
+                        serviceResponse.Success = false;
+                        serviceResponse.Message = GetValueResourceFile
+                        .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryNotIsProduct);
+                        return serviceResponse;
+                    }
+                    product_in_carshop.ProductCombined.SubCategory = subcategory;
+                }
+                //Cambiar la cantidad del producto
+                if(updateCartShop.QuantityProduct != null)
+                {
+                    //Verifica que la cantidad se mayor que 1.
+                    if (updateCartShop.QuantityProduct < 1)
+                    {
+                        serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CantIsNegative;
+                        serviceResponse.Data = false;
+                        serviceResponse.Success = false;
+                        serviceResponse.Message = GetValueResourceFile
+                        .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
+                        return serviceResponse;
+                    }
+                    product_in_carshop.ProductCombined.Quantity = (int) updateCartShop.QuantityProduct;
+                }
+                //Actualizar agregados
+                if (updateCartShop.CantAggregates != null)
+                {
+                    //Verifica que los agregados solicitados esten disponibles.
+                    List<Models.Entities.CantAggregate> cantAggregates = new List<Models.Entities.CantAggregate>();
+                    if (product_in_carshop.ProductCombined.Product.SupportAggregate == true && updateCartShop.CantAggregates != null)
+                    {
+                       foreach (string key in updateCartShop.CantAggregates.Keys)
+                        {
+                            int parse_key;
+                            if (!int.TryParse(key, out parse_key))
+                            {
+                                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.FormatAggregateNotSupport;
+                                serviceResponse.Data = false;
+                                serviceResponse.Success = false;
+                                serviceResponse.Message = GetValueResourceFile
+                                .GetValueResourceString(GetValueResourceFile.KeyResource.FormatAggregateNotSupport);
+                                return serviceResponse;
+                            }
+                            if (parse_key < 1)
+                            {
+                                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CantIsNegative;
+                                serviceResponse.Data = false;
+                                serviceResponse.Success = false;
+                                serviceResponse.Message = GetValueResourceFile
+                                .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
+                                return serviceResponse;
+                            }
+                            var quantity = updateCartShop.CantAggregates.GetValueOrDefault(key);
+                            if (quantity < 1)
+                            {
+                                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CantIsNegative;
+                                serviceResponse.Data = false;
+                                serviceResponse.Success = false;
+                                serviceResponse.Message = GetValueResourceFile
+                                .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
+                                return serviceResponse;
+                            }
+                            var aggregate = await this._serviceGenericAggregateHelper
+                            .WhereFirstEntityAsync(c => c.Id == parse_key && c.IsAvailabe == true)
+                            .ConfigureAwait(false);
+                            if (aggregate == null)
+                            {
+                                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.AggregateNotIsAvailable;
+                                serviceResponse.Data = false;
+                                serviceResponse.Success = false;
+                                serviceResponse.Message = GetValueResourceFile
+                                .GetValueResourceString(GetValueResourceFile.KeyResource.AggregateNotIsAvailable);
+                                return serviceResponse;
+                            }
+                            //TODO: Verifica que la cantidad de agregados solicitados este disponible
+                            var new_aggregate = new Models.Entities.CantAggregate
+                            {
+                                Aggregate = aggregate,
+                                Price = aggregate.Price,
+                                Quantity = quantity,
+                            };
+                            cantAggregates.Add(new_aggregate);
+                        }
+                    }
+                    foreach (CantAggregate cantaggregate in product_in_carshop.ProductCombined.CantAggregates)
+                    {
+                        var update_cantaggregate = cantAggregates.FirstOrDefault(c => c.Aggregate.Id == cantaggregate.Aggregate.Id);
+                        cantaggregate.Quantity += update_cantaggregate.Quantity;
+                    }
+                }
+                //Verifica si el producto resultante ya se encuentra en la base de datos.
+                entity_carshop = context_cart_shop.AsQueryable();
+                //Agrega los Include y ThenInclude necesarios
+                entity_carshop = entity_carshop.Include(c => c.User)
+                .Include(c => c.ProductCombined.Product.Category)
+                .Include(c => c.ProductCombined.Product.SubCategories)
+                .Include(c => c.ProductCombined.SubCategory.Product.Category)
+                .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate);
+                //Verifica si hay agregados para agregar el filtro para los agregados.
+                if (product_in_carshop.ProductCombined.CantAggregates.Any())
+                {
+                    //Crea la consulta con los posibles agregados, para luego verificar si el producto
+                    //Combinado los posee
+                    foreach (CantAggregate cantAggregate in product_in_carshop.ProductCombined.CantAggregates)
+                    {
+                        entity_carshop = entity_carshop.Where(c => c.ProductCombined.CantAggregates
+                       .Select(c => c.Aggregate).Contains(cantAggregate.Aggregate) == true);
+                    }
+                }
+                //Agrega los filtros restantes
+                entity_carshop = entity_carshop
+                .Where(c => c.User == user)
+                .Where(c => c.ProductCombined.Product == product_in_carshop.ProductCombined.Product)
+                .Where(c => c.ProductCombined.CantAggregates.Count == product_in_carshop.ProductCombined.CantAggregates.Count)
+                .Where(c => c.ProductCombined.SubCategory == product_in_carshop.ProductCombined.SubCategory);
+                //Ejecuta la consulta(Verifica si en el carrito del usuario existe un producto de este tipo)
+                var temp_product_in_carshop = await entity_carshop.SingleOrDefaultAsync().ConfigureAwait(false);
+                //Verifica si este tipo de producto no estaba en el carrito del usuario para agregarlo.
+                if (temp_product_in_carshop == null)
+                {
+                    //Actualiza el producto
+                    this._serviceGenericCartShopHelper.UpdateEntity(temp_product_in_carshop);
+                    //Actualiza la base de datos.
+                    await this._serviceGenericCartShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                }
+                //Si el usuario tiene ese producto combinado solo se actualizan las cantidades.
+                else
+                {
+                    //Verifica si es el mismo producto, esto puede suceder si solo se cambia la cantidad.
+                    if (temp_product_in_carshop.ProductCombined.Id == product_in_carshop.ProductCombined.Id)
+                    {
+                        //Actualiza el producto
+                        this._serviceGenericCartShopHelper.UpdateEntity(temp_product_in_carshop);
+                        //Actualiza la base de datos.
+                        await this._serviceGenericCartShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        List<CantAggregate> UpdateCanAggregate = new List<CantAggregate>();
+                        foreach (CantAggregate cantaggregate in product_in_carshop.ProductCombined.CantAggregates)
+                        {
+                            var update_cantaggregate = temp_product_in_carshop.ProductCombined
+                            .CantAggregates.FirstOrDefault(c => c.Aggregate.Id == cantaggregate.Aggregate.Id);
+                            cantaggregate.Quantity += update_cantaggregate.Quantity;
+                            UpdateCanAggregate.Add(cantaggregate);
+                        }
+                        //Actualiza las cantidades de los agregados
+                        this._serviceGenericCantAggregateHelper.UpdateRangeEntity(UpdateCanAggregate);
+                        await this._serviceGenericCantAggregateHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                        //Actualiza la cantidad del producto
+                        temp_product_in_carshop.ProductCombined.Quantity += product_in_carshop.ProductCombined.Quantity;
+                        //Guarda los cambios en la base de datos
+                        await this._serviceGenericCartShopHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                    }
+                }
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = true;
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+           }
+           catch 
+           {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = false;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile
+                .GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+           }
         }
     }
 }

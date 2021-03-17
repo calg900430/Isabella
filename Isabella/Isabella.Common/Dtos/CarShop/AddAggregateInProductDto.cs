@@ -5,12 +5,6 @@
     public class AddAggregateInProductDto
     {
         /// <summary>
-        /// Código de identificación.
-        /// </summary>
-        [Required(ErrorMessage = "Debe introducir el código de identificación.")]
-        public Guid CodeIdentification { get; set; }
-
-        /// <summary>
         /// ProductoStandard.
         /// </summary>
         [Required(ErrorMessage = "Debe introducir el id del producto combinado.")]

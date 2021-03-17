@@ -19,7 +19,7 @@
         /// <summary>
         /// Código de identificación.
         /// </summary>
-        public CodeIdentification CodeIdentification {get; set; }
+        public User User {get; set; }
 
         /// <summary>
         /// ProductCarShop

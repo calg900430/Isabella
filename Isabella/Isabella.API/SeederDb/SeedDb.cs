@@ -11,6 +11,7 @@
     using Models.Entities;
     using Data;
     using Resources;
+    using Microsoft.Extensions.Configuration;
 
     /// <summary>
     /// Seeder
@@ -20,18 +21,23 @@
         private readonly DataContext _dataContext;
         private readonly RoleManager<IdentityRole<int>> _roleManager;
         private readonly UserManager<User> _userManager;
-     
+        private readonly IConfiguration _configuration;
+
         /// <summary>
         /// Constructor del Seeder
         /// </summary>
         /// <param name="dataContext"></param>
         /// <param name="roleManager"></param>
         /// <param name="userManager"></param>
-        public SeedDb(DataContext dataContext, RoleManager<IdentityRole<int>> roleManager, UserManager<User> userManager)
+        /// <param name="configuration"></param>
+        public SeedDb(DataContext dataContext, RoleManager<IdentityRole<int>> roleManager, 
+        UserManager<User> userManager,
+        IConfiguration configuration )
         {
            this._dataContext = dataContext;
            this._roleManager = roleManager;
-           this._userManager = userManager;     
+           this._userManager = userManager;
+           this._configuration = configuration;
         }
 
         /// <summary>
@@ -42,19 +48,22 @@
         {
             try
             {
-                //Verifica si el archivo de recursos existe, sino lo manda a generar.
-                var path = $"{Directory.GetCurrentDirectory()}\\Resources\\ResourceFile.resources";
+                /*//Verifica si el archivo de recursos existe, sino lo manda a generar.
+                var path = $"{Directory.GetCurrentDirectory()}\\Resources\\ResourcesFile.resources";
                 var file_exist = File.Exists(path);
                 if (!file_exist)
-                CreateResourcesFile.GenerateResourceFileAsync(path);
+                CreateResourcesFile.GenerateResourceFileAsync(path);*/
                 //Borra la base de datos si existe(Esto solo está habilitado en el momento de hacer pruebas, 
                 //cuando todo este listo, debemos comentar esta linea)
-                await _dataContext.Database.EnsureDeletedAsync().ConfigureAwait(false);
+                //await _dataContext.Database.EnsureDeletedAsync().ConfigureAwait(false);
                 //Verifica si existe la base de datos, si no existe la crea.
                 await _dataContext.Database.EnsureCreatedAsync().ConfigureAwait(false);
 
                 /*Crea los roles del sistema*/
-                string[] roles = { "admin"};
+                string[] roles =
+                {
+                   Constants.RolesOfSystem[0],
+                };
                 foreach (string role in roles)
                 {
                     if (await this._roleManager.FindByNameAsync(role).ConfigureAwait(false) != null)
@@ -87,10 +96,10 @@
                 };
                 if (!await this._dataContext.Users.AnyAsync().ConfigureAwait(false))
                 {
-                    string[] password =
+                    string[] section_file_secret =
                     {
-                      new string("Yvcg.*456789*"),
-                      new string("MW3_MacTavish"),
+                       new string("admin1"),
+                       new string("admin2"),
                     };
                     /*Crea 2 usuarios admins.*/
                     for (int i = 0; i < users.Length; i++)
@@ -105,11 +114,19 @@
                             //Crea los usuarios admins
                             if (i < 2)
                             {
-                                var identity_user = await this._userManager.CreateAsync(users[i], password[i]).ConfigureAwait(false);
+                                var identity_user = await this._userManager.CreateAsync(users[i],
+                                this._configuration.GetSection("UsersDefault")
+                                .GetSection(section_file_secret[i]).Value).ConfigureAwait(false);
                                 if (identity_user.Succeeded != true)
                                 {
                                     throw new InvalidOperationException($"No se creó el usuario {users[i].UserName}.");
                                 }
+                                var user_admins_notifications = new UserAdminsNotifications
+                                {
+                                    User = users[i],
+                                };
+                                await this._dataContext.UserAdminsNotifications.AddAsync(user_admins_notifications).ConfigureAwait(false);
+                                await this._dataContext.SaveChangesAsync().ConfigureAwait(false);
                             }
                             //Asigna el role admin usuarios
                             if (i < 2)

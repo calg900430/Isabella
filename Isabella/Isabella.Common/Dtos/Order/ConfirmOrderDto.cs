@@ -5,12 +5,7 @@
 
     public class ConfirmOrderDto
     {
-        /// <summary>
-        /// Código de identificación.
-        /// </summary>
-        [Required(ErrorMessage = "Debe escribir el código del usuario.")]
-        public Guid CodeVerification { get; set; }
-
+       
         /// <summary>
         /// Gps
         /// </summary>

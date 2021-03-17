@@ -1,6 +1,6 @@
 ﻿namespace Isabella.Common.Dtos.Order
 {
-    using Isabella.Common.Dtos.CarShop;
+    using Isabella.Common.Dtos.Users;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -8,16 +8,15 @@
 
     public class GetAllOrderDto
     {
-       
         /// <summary>
-        /// Código de identificación.
+        /// User
         /// </summary>
-        public Guid CodeVerification { get; set; }
+        public GetUserDto GetUserDto { get; set; }
 
         /// <summary>
         /// Ordenes
         /// </summary>
-        public List<GetAllOrder> GetAllOrders { get; set; }
+        public List<GetOrderDto> GetAllOrders { get; set; }
 
         /// <summary>
         /// Fecha en que se realizó el pedido.
@@ -70,7 +69,7 @@
                 if (!GetAllOrders.Any())
                 return 0;
                 else
-                return this.GetAllOrders.Sum(c => c.PriceTotal);
+                return this.GetAllOrders.Sum(c => c.PriceTotalOfProductCombined);
             }
         }
 
@@ -96,15 +95,15 @@
             get
             {
                 if (!GetAllOrders.Any())
-                    return 0;
+                return 0;
                 else
-                    return this.GetAllOrders.Sum(c => c.PriceTotal);
+                return this.GetAllOrders.Sum(c => c.PriceTotal);
             }
         }
 
     }
 
-    public class GetAllOrder
+    public class GetOrderDto
     {
         /// <summary>
         /// Key
@@ -184,9 +183,9 @@
             get
             {
                 if (!GetAllOrderDetails.Any())
-                    return 0;
+                return 0;
                 else
-                    return this.GetAllOrderDetails.Sum(c => c.PriceTotal);
+                return this.GetAllOrderDetails.Sum(c => c.PriceTotal);
             }
         }
 
@@ -198,9 +197,9 @@
             get
             {
                 if (!GetAllOrderDetails.Any())
-                    return 0;
+                return 0;
                 else
-                    return this.GetAllOrderDetails.Sum(c => c.CantAggregates.Sum(x => x.PriceTotal));
+                return this.GetAllOrderDetails.Sum(c => c.CantAggregates.Sum(x => x.PriceTotal));
             }
         }
 

@@ -3,6 +3,7 @@ namespace Isabella.API
     using System;
     using System.IO;
     using System.Reflection;
+    using System.Threading.Tasks;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -22,6 +23,9 @@ namespace Isabella.API
     using Helpers;
     using Helpers.RepositoryHelpers;
     using AutoMapper;
+    using Isabella.API.Hubs;
+    using Isabella.API.Hubs.Services;
+
 
     /// <summary>
     /// Startup
@@ -75,8 +79,8 @@ namespace Isabella.API
             .AddEntityFrameworkStores<DataContext>();
 
             //Agrega y configura el servicio para conectarnos a SQL Server
-            var connectionstring = Constants.GetStringConnectionSQLServer(Configuration.GetSection("SQLServerLocal"));
-            //var connectionstring = Constants.GetStringConnectionSQLServer(Configuration.GetSection("SQLServer"));
+            //var connectionstring = Constants.GetStringConnectionSQLServer(Configuration.GetSection("SQLServerLocal"));
+            var connectionstring = Constants.GetStringConnectionSQLServer(Configuration.GetSection("SQLServer"));
             services.AddDbContext<DataContext>(c =>
             {
                 //c.UseLazyLoadingProxies() //Para poder usar carga diferida
@@ -129,20 +133,33 @@ namespace Isabella.API
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidIssuer = this.Configuration["AppSettings:Issuer"],
-                    ValidAudience = this.Configuration["AppSettings:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(Configuration
-                  .GetSection("AppSettings:Token").Value)),
+                   ValidateIssuer = true,
+                   ValidateAudience = true,
+                   ValidateLifetime = true,
+                   ValidateIssuerSigningKey = true,
+                   ValidIssuer = this.Configuration["AppSettings:Issuer"],
+                   ValidAudience = this.Configuration["AppSettings:Audience"],
+                   IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding
+                   .ASCII.GetBytes(Configuration
+                   .GetSection("AppSettings:Token").Value)),
                 };
                 //Para obtener el Token de las solicitudes de SignalR ya que el Token para 
                 //SignalR se envia  como un parametro de consulta y no en un encabezado.
-                /*options.Events = new JwtBearerEvents
+                options.Events = new JwtBearerEvents
                 {
-                    OnMessageReceived = context =>
+                   OnMessageReceived = context =>
                    {
-
+                       var accessToken = context.Request.Query["access_token"];
+                       //Si la solicitud es enviada a la Hub
+                       var path = context.Request.Path;
+                       if(!string.IsNullOrEmpty(accessToken) && 
+                       path.StartsWithSegments("/hub_notifications_admins"))
+                       {
+                           context.Token = accessToken;
+                       }
+                       return Task.CompletedTask;
                    }
-                };*/
+                };
             });
             /*.AddGoogle(go =>
             {
@@ -174,6 +191,12 @@ namespace Isabella.API
                tw.SaveTokens = true;
             });*/
 
+
+            //Agrega el servicio para el manejo del diccionario que almacena las conexiones del Hub
+            //Utilizamos el patrón Singleton para mantener una sola instancia durante toda la ejecución
+            //del programa.
+            services.AddSingleton<DicctionaryConnectedHub>();
+
             //Agrega el servicio del AutoMapper
             services.AddAutoMapper(typeof(Startup));
 
@@ -188,7 +211,7 @@ namespace Isabella.API
 
             //Agrega los servicios para el manejo de usuarios.
             services.AddScoped<UserServiceController>();
-            services.AddScoped<IUserRepositoryHelper, UserHelper>();
+            services.AddScoped<IUserRepositoryHelper, IUserHelper>();
             services.AddScoped<ServiceGenericHelper<User>>();
           
             //Agrega los servicios para el manejo de los productos.
@@ -220,9 +243,15 @@ namespace Isabella.API
             services.AddScoped<ServiceGenericHelper<Order>>();
             services.AddScoped<ServiceGenericHelper<OrderDetail>>();
 
-            //Agrega los servicios para el manejo de los códigos de verificación
-            services.AddScoped<CodeIdentificationServiceController>();
-            services.AddScoped<ServiceGenericHelper<CodeIdentification>>();
+            //Agrega el servicio para el manejo de las notificaciones
+            services.AddScoped<ServiceGenericHelper<UserAdminsNotifications>>();
+            services.AddScoped<ServiceGenericHelper<NotificationPendients>>();
+
+            //Agrega el servicio de SignalR
+            services.AddSignalR(options => 
+            { 
+               
+            });
         }
 
         /// <summary>
@@ -236,7 +265,7 @@ namespace Isabella.API
             {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
@@ -250,6 +279,12 @@ namespace Isabella.API
             });
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<NotificationsHub>("/hub_notifications_admins", options => 
+                {
+                    //options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.LongPolling;
+                    //options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
+
+                });
                 endpoints.MapControllers();
             });
         }

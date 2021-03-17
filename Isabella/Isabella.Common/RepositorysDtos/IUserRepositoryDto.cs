@@ -11,6 +11,28 @@
     /// </summary>
     public partial interface IUserRepositoryDto
     {
+
+        /// <summary>
+        /// Elimina un usuario admin a la lista de los que deben recibir notificaciones.
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        Task<ServiceResponse<bool>> RemoveUserAdminForNotifications(int UserId);
+
+        /// <summary>
+        /// Agrega un usuario admin a la lista de los que deben recibir notificaciones.
+        /// </summary>
+        /// <param name="UserId"></param>
+        /// <returns></returns>
+        Task<ServiceResponse<bool>> AddUserAdminForNotifications(int UserId);
+
+        /// <summary>
+        /// Registro rapido de usuario(Solicita el código de identificación para registrarse e iniciar sesión en la aplicación)
+        /// Le crea un correo y un password al usuario, que se le devuelve para que el mismo haga el login.
+        /// </summary>
+        /// <returns></returns>
+        Task<ServiceResponse<GetRegisterUserModeFastDto>> RegisterUserModeFastAsync();
+
         /// <summary>
         /// Establece si un usuario se banea o no.
         /// </summary>
@@ -124,7 +146,7 @@
         /// </summary>
         /// <param name="loginUser"></param>
         /// <returns></returns>
-        Task<ServiceResponse<GetDataUserForLoginDto>> LoginUserAsync(LoginUserWithUserNameDto loginUser);
+        Task<ServiceResponse<GetDataUserForLoginDto>> LoginUserAsync(LoginUserDto loginUser);
 
         /// <summary>
         /// Confirma el registro del usuario.

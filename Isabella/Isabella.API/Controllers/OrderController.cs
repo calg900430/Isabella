@@ -38,15 +38,15 @@
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //[ProducesResponseType(401)]
-        //[ProducesResponseType(403)]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
+        [ProducesResponseType(401)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult>ConfirmOrderAsync([FromBody] ConfirmOrderDto confirmOrder)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    this._orderServiceController.ClaimsPrincipal = HttpContext.User;
                     var result = await this._orderServiceController
                     .ConfirmOrderAsync(confirmOrder).ConfigureAwait(false);
                     if (result.Success)
@@ -66,22 +66,22 @@
         /// <summary>
         /// Obtiene todas las ordenes de un usuario.
         /// </summary>
-        /// <param name="codeIdentification"></param>
         /// <returns></returns>
         [HttpGet("get/all_order")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        //[ProducesResponseType(401)]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> GetAggregateForIdAsync(Guid codeIdentification)
+        [ProducesResponseType(401)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> GetAggregateForIdAsync()
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    this._orderServiceController.ClaimsPrincipal = HttpContext.User;
                     var result = await this._orderServiceController
-                    .GetAllOrderAsync(codeIdentification)
+                    .GetAllOrderAsync()
                     .ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);

@@ -23,7 +23,7 @@
     /// <summary>
     /// Servicio para la entidad que representa los usuarios.
     /// </summary>
-    public class UserHelper : IUserRepositoryHelper
+    public class IUserHelper : IUserRepositoryHelper
     {
         private readonly DataContext _dataContext;
         private readonly UserManager<User> _userManager;
@@ -37,7 +37,7 @@
         /// <param name="userManager"></param>
         /// <param name="roleManager"></param>
         /// <param name="configuration"></param>
-        public UserHelper(DataContext dataContext, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager,
+        public IUserHelper(DataContext dataContext, UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager,
         IConfiguration configuration)
         {
             this._dataContext = dataContext;

@@ -3,8 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using Microsoft.EntityFrameworkCore;
+    using System.Security.Claims;
     using System.Linq;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.AspNetCore.SignalR;
+    using Newtonsoft.Json;
 
     using Common;
     using Common.Dtos.Order;
@@ -15,36 +18,62 @@
     using AutoMapper;
     using Isabella.Common.Dtos.SubCategory;
     using Isabella.Common.Dtos.CarShop;
+   
+    using Isabella.API.Helpers.RepositoryHelpers;
+    using Isabella.API.Hubs;
+    using Isabella.API.Hubs.Services;
+   
 
     /// <summary>
     /// Servicio para las ordenes
     /// </summary>
-    public class OrderServiceController : IRepositoryOrderDto
+    public class OrderServiceController : IOrderRepositoryDto
     {
         private readonly ServiceGenericHelper<Order> _serviceGenericOrderHelper;
         private readonly ServiceGenericHelper<OrderDetail> _serviceGenericOrderDetailHelper;
-        private readonly ServiceGenericHelper<CodeIdentification> _serviceGenericCodeIdentificationHelper;
         private readonly ServiceGenericHelper<CartShop> _serviceGenericCartShopHelper;
+        private readonly IUserRepositoryHelper _userServiceHelper;
+        private readonly IHubContext<NotificationsHub> _hubContext;
+        private readonly DicctionaryConnectedHub _dicctionaryConnectedHubService;
+        private readonly ServiceGenericHelper<NotificationPendients> _serviceGenericNotificationsPendientsHelper;
+        private readonly ServiceGenericHelper<UserAdminsNotifications> _serviceGenericUserAdminsNotificationsHelper;
         private readonly IMapper _mapper;
+
+        /// <summary>
+        /// Claims del usuario.
+        /// </summary>
+        public ClaimsPrincipal ClaimsPrincipal { get; set; }
 
         /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="serviceGenericOrderHelper"></param>
         /// <param name="serviceGenericOrderDetailHelper"></param>
-        /// <param name="serviceGenericCodeIdentificationHelper"></param>
         /// <param name="serviceGenericCartShopHelper"></param>
+        /// <param name="userServiceHelper"></param>
+        /// <param name="hubContext"></param>
+        /// <param name="dicctionaryConnectedHubService"></param>
+        /// <param name="serviceGenericNotificationsPendientsHelper"></param>
+        /// <param name="serviceGenericUserAdminsNotificationsHelper"></param>
         /// <param name="mapper"></param>
         public OrderServiceController(ServiceGenericHelper<Order> serviceGenericOrderHelper, 
         ServiceGenericHelper<OrderDetail> serviceGenericOrderDetailHelper, 
-        ServiceGenericHelper<CodeIdentification> serviceGenericCodeIdentificationHelper,
         ServiceGenericHelper<CartShop> serviceGenericCartShopHelper,
+        IUserRepositoryHelper userServiceHelper,
+        IHubContext<NotificationsHub> hubContext,
+        DicctionaryConnectedHub dicctionaryConnectedHubService,
+        ServiceGenericHelper<NotificationPendients> serviceGenericNotificationsPendientsHelper,
+        ServiceGenericHelper<UserAdminsNotifications> serviceGenericUserAdminsNotificationsHelper,
         IMapper mapper)
         {
             this._serviceGenericOrderHelper = serviceGenericOrderHelper;
             this._serviceGenericOrderDetailHelper = serviceGenericOrderDetailHelper;
-            this._serviceGenericCodeIdentificationHelper = serviceGenericCodeIdentificationHelper;
             this._serviceGenericCartShopHelper = serviceGenericCartShopHelper;
+            this._userServiceHelper = userServiceHelper;
+            this._hubContext = hubContext;
+            this._dicctionaryConnectedHubService = dicctionaryConnectedHubService;
+            this._serviceGenericNotificationsPendientsHelper = serviceGenericNotificationsPendientsHelper;
+            this._serviceGenericUserAdminsNotificationsHelper = serviceGenericUserAdminsNotificationsHelper;
             this._mapper = mapper;
         }
 
@@ -58,28 +87,36 @@
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try
             {
-                //Verifica si el código de verificación está disponible
-                var code_identification = await this._serviceGenericCodeIdentificationHelper
-                .WhereFirstEntityAsync(c => c.Code == confirmOrder.CodeVerification)
-                .ConfigureAwait(false);
-                if (code_identification == null)
+                var userName = ClaimsPrincipal.Identity.Name;
+                if (userName == null)
                 {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.NotCodeIdentification;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
                     serviceResponse.Data = false;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
-                    .GetValueResourceString(GetValueResourceFile.KeyResource.NotCodeIdentification);
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ErrorGetCredentialsUser);
+                    return serviceResponse;
+                }
+                //Verifica si el usuario está registrado en la base de datos.
+                var user = await this._userServiceHelper.GetUserByUserNameAsync(userName).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
                     return serviceResponse;
                 }
                 //Obtiene todos los productos del carrito del usuario
                 var all_products_in_carshop = await this._serviceGenericCartShopHelper._context
-                .Include(c => c.CodeIdentification)
+                .Include(c => c.User)
                 .Include(c => c.ProductCombined.Product.Category)
                 .Include(c => c.ProductCombined.Product.SubCategories)
                 .Include(c => c.ProductCombined.SubCategory.Product.Category)
                 .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate)
                 .Include(c => c.ProductCombined.CantAggregates)
-                .Where(c => c.CodeIdentification == code_identification)
+                .Where(c => c.User == user)
                 .OrderByDescending(c => c.DateCreated)
                 .ToListAsync()
                 .ConfigureAwait(false);
@@ -110,7 +147,7 @@
                     Address = confirmOrder.Address,
                     AskForWho = confirmOrder.AskForWho,
                     Gps = this._mapper.Map<Gps>(confirmOrder.AddGps),
-                    CodeVerification = code_identification,
+                    User = user,
                     DeliveryDate = DateTime.UtcNow,
                     OrderDate = DateTime.UtcNow,
                     PhoneNumber = confirmOrder.PhoneNumber,
@@ -128,9 +165,11 @@
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile
                 .GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                //Notifica al admin, que el usuario confirmó su pedido
+                await ConfirmOrderNotificationAsync(order).ConfigureAwait(false);
                 return serviceResponse;
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
@@ -144,34 +183,41 @@
         /// <summary>
         /// Confirma las ordenes de un usuario.
         /// </summary>
-        /// <param name="codeIdentification"></param>
         /// <returns></returns>
-        public async Task<ServiceResponse<GetAllOrderDto>> GetAllOrderAsync(Guid codeIdentification)
+        public async Task<ServiceResponse<GetAllOrderDto>> GetAllOrderAsync()
         {
             ServiceResponse<GetAllOrderDto> serviceResponse = new ServiceResponse<GetAllOrderDto>();
             try
             {
-                //Verifica si el código de verificación está disponible
-                var code_identification = await this._serviceGenericCodeIdentificationHelper
-                .WhereFirstEntityAsync(c => c.Code == codeIdentification)
-                .ConfigureAwait(false);
-                if (code_identification == null)
+                var userName = ClaimsPrincipal.Identity.Name;
+                if (userName == null)
                 {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.NotCodeIdentification;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorGetCredentialsUser;
                     serviceResponse.Data = null;
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
-                    .GetValueResourceString(GetValueResourceFile.KeyResource.NotCodeIdentification);
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ErrorGetCredentialsUser);
+                    return serviceResponse;
+                }
+                //Verifica si el usuario está registrado en la base de datos.
+                var user = await this._userServiceHelper.GetUserByUserNameAsync(userName).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotFound;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.UserNotFound);
                     return serviceResponse;
                 }
                 //Verifica si hay ordenes disponibles del usuario
                 var all_order = await this._serviceGenericOrderHelper._context
-                .Include(c => c.CodeVerification)
+                .Include(c => c.User)
                 .Include(c => c.Gps)
                 .Include(c => c.OrderDetails).ThenInclude(c => c.ProductCombined.Product.Category)
                 .Include(c => c.OrderDetails).ThenInclude(c => c.ProductCombined.Product.SubCategories).ThenInclude(c => c.Product)
                 .Include(c => c.OrderDetails).ThenInclude(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate)
-                .Where(c => c.CodeVerification == code_identification)
+                .Where(c => c.User == user)
                 .OrderByDescending(c => c.OrderDate)
                 .ToListAsync()
                 .ConfigureAwait(false);
@@ -187,8 +233,16 @@
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = new GetAllOrderDto
                 {
-                    CodeVerification = code_identification.Code,
-                    GetAllOrders = all_order.Select(c => new GetAllOrder 
+                    GetUserDto = new Common.Dtos.Users.GetUserDto 
+                    { 
+                       Address = user.Address,
+                       FirstName = user.FirstName,
+                       Id = user.Id,
+                       ImageUserProfile = user.ImageUserProfile,
+                       LastName = user.LastName,
+                       PhoneNumber = user.PhoneNumber,
+                    } ,
+                    GetAllOrders = all_order.Select(c => new GetOrderDto 
                     {
                       Id = c.Id,
                       GetAllOrderDetails = c.OrderDetails.Select(x =>  new GetAllOrderDetail 
@@ -229,13 +283,118 @@
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
-            catch (Exception ex)
+            catch(Exception)
             {
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Notifica a los usuarios admin que un usuario ha realizado un pedido.
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
+        private async Task ConfirmOrderNotificationAsync(Order order)
+        {
+            //Obtiene los usuarios admins a los que se le debe notificar.
+            var users_admins_notifications = await this._serviceGenericUserAdminsNotificationsHelper
+            .GetLoadAsync(c => c.User).ConfigureAwait(false);
+            if (users_admins_notifications == null)
+            return;
+            foreach(User user in users_admins_notifications.Select(c => c.User).ToList())
+            {
+                //Verifica q el usuario admin este conectado
+                var user_connected = this._dicctionaryConnectedHubService.VerifyIsUserConnected(user.UserName);
+                if (user_connected)
+                {
+                    //Obtiene los dispositivos del usuario que están conectados para enviarle la notificación
+                    var devices_connected = this._dicctionaryConnectedHubService.GetAllDeviceConnectedOfUser(user.UserName);
+                    if(devices_connected == null)
+                    {
+                        var notification = new NotificationPendients
+                        {
+                            Order = order,
+                            UserAdmin = user,
+                        };
+                        await this._serviceGenericNotificationsPendientsHelper.AddEntityAsync(notification).ConfigureAwait(false);
+                        await this._serviceGenericNotificationsPendientsHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                        return;
+                    }
+                    //Mapea de Order a GetAllOrderDto
+                    var get_all_order = new GetAllOrderDto
+                    {
+                        DeliveryDate = DateTime.UtcNow,
+                        OrderDate = DateTime.UtcNow,
+                        GetUserDto = new Common.Dtos.Users.GetUserDto
+                        {
+                            Address = user.Address,
+                            FirstName = user.FirstName,
+                            Id = user.Id,
+                            ImageUserProfile = user.ImageUserProfile,
+                            LastName = user.LastName,
+                            PhoneNumber = user.PhoneNumber,
+                        },
+                        GetAllOrders = new List<GetOrderDto>
+                        {
+                            new GetOrderDto
+                            {
+                                Id = order.Id,
+                                GetAllOrderDetails = order.OrderDetails.Select(x =>  new GetAllOrderDetail
+                                {
+                                   ProductCombinedId = x.ProductCombined.Id,
+                                   ProductId = x.ProductCombined.Product.Id,
+                                   Average = x.ProductCombined.Product.Average,
+                                   SupportAggregate = x.ProductCombined.Product.SupportAggregate,
+                                   Name = x.ProductCombined.Product.Name,
+                                   Price = x.ProductCombined.Price,
+                                   Description = x.ProductCombined.Product.Description,
+                                   IsAvailabe = x.ProductCombined.Product.IsAvailabe,
+                                   Quantity = x.ProductCombined.Quantity,
+                                   SubCategory = this._mapper.Map<GetSubCategoryDto>(x.ProductCombined.SubCategory),
+                                   Category = new Common.Dtos.Category.GetCategoryDto
+                                   {
+                                      Id = x.ProductCombined.Product.Category.Id,
+                                      Name = x.ProductCombined.Product.Category.Name,
+                                   },
+                                   CantAggregates = x.ProductCombined.CantAggregates.Select(z => new GetCantAggregateDto
+                                   {
+                                      Id = z.Aggregate.Id,
+                                      Name = z.Aggregate.Name,
+                                      Price = z.Price,
+                                      Quantity = z.Quantity,
+                                   }).ToList(),
+                                   DateCreated = x.DateCreated,
+                                }).ToList(),
+                                Address = order.Address,
+                                AskForWho = order.AskForWho,
+                                PhoneNumber = order.PhoneNumber,
+                                GetGps = this._mapper.Map<GetGps>(order.Gps),
+                            }      
+                        },
+                        
+                    };
+                    //Serializa el objeto get_all_order
+                    var order_serialize = JsonConvert.SerializeObject(get_all_order);
+                    await this._hubContext.Clients.Clients(devices_connected.ToList())
+                   .SendAsync("ConfirmOrder", "Se ha solicitado un nuevo pedido.", $"{order_serialize.ToString()}")
+                   .ConfigureAwait(false);
+                }
+                //El usuario admin no está conectado.
+                else
+                {
+                    //Guarda las notificaciones en la base de datos hasta q el usuario admin se conecte.
+                    var notification = new NotificationPendients
+                    {
+                        Order = order,
+                        UserAdmin = user,
+                    };
+                    await this._serviceGenericNotificationsPendientsHelper.AddEntityAsync(notification).ConfigureAwait(false);
+                    await this._serviceGenericNotificationsPendientsHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                }
             }
         }
     }

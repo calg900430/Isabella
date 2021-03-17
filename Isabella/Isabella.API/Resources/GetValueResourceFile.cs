@@ -314,7 +314,20 @@
             /// </summary>
             UserNotAnyOrder = 70,
 
+            /// <summary>
+            /// No hay definidos usuarios admins para que reciban las notificaciones
+            /// </summary>
+            NotUserAdminsNotifications = 71,
 
+            /// <summary>
+            /// El usuario no está definido como un usuario que puede recibir notificaciones.
+            /// </summary>
+            UserAdminNotExistForNotifications = 72,
+
+            /// <summary>
+            /// El usuario está definido como un usuario que puede recibir notificaciones.
+            /// </summary>
+            UserAdminExistForNotifications = 73,
         }
 
         /// <summary>
@@ -381,7 +394,7 @@
         {
             Type getResource = typeof(GetValueResourceFile);
             var assembly = getResource.Assembly;
-            var name_file_resources = "ResourceFile.resources";
+            var name_file_resources = "ResourcesFile.resources";
             //Obtiene la referencia al archivo de recurso, esto lo hago así, porque el archivo de recursos
             //está en el directorio donde está la clase GetValueResourceFile.
             string resourceName = $"{getResource.Namespace}.{name_file_resources}";
@@ -444,7 +457,7 @@
         {
             Type getResource = typeof(GetValueResourceFile);
             var assembly = getResource.Assembly;
-            var name_file_resources = "ResourceFile.resources";
+            var name_file_resources = "ResourcesFile.resources";
             string resourceName = $"{getResource.Namespace}.{name_file_resources}";
             byte[] valueResource = null;
             using (ResourceReader resourceReader = new ResourceReader(assembly.GetManifestResourceStream(resourceName)))

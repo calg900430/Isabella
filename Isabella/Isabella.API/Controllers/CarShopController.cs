@@ -43,12 +43,15 @@
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> AddProductToCarShopAsync([FromBody] AddProductToCartShopDto addProductStandardToCarShop)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    this._carShopServiceController.ClaimsPrincipal = HttpContext.User;
                     var result = await this
                     ._carShopServiceController.AddProductsToCartShopAsync(addProductStandardToCarShop)
                     .ConfigureAwait(false);
@@ -69,20 +72,22 @@
         /// <summary>
         /// Obtiene el carrito de compras del usuario.
         /// </summary>
-        /// <param name="CodeIdentification"></param>
         /// <returns></returns>
         [HttpGet("get/my_carshop")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> GetMyCarShopAsync(Guid CodeIdentification)
+        [ProducesResponseType(401)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> GetMyCarShopAsync()
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    this._carShopServiceController.ClaimsPrincipal = HttpContext.User;
                     var result = await this
-                    ._carShopServiceController.GetMyCartShopAsync(CodeIdentification)
+                    ._carShopServiceController.GetMyCartShopAsync()
                     .ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
@@ -90,7 +95,7 @@
                      return BadRequest(result);
                 }
                 else
-                    return BadRequest(); //400
+                return BadRequest(); //400
             }
             catch (Exception ex)
             {
@@ -107,12 +112,15 @@
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> AddAggregateInProductToCarShopAsync([FromBody] AddAggregateInProductDto addAggregateInProduct)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    this._carShopServiceController.ClaimsPrincipal = HttpContext.User;
                     var result = await this
                     ._carShopServiceController.AddAggregateInProductAsync(addAggregateInProduct)
                     .ConfigureAwait(false);
@@ -139,12 +147,15 @@
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> UpdateQuantityProductInCarShopAsync([FromBody] ModifyQuantityProductDto modifyQuantityProduct)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    this._carShopServiceController.ClaimsPrincipal = HttpContext.User;
                     var result = await this
                     ._carShopServiceController
                     .UpdateQuantityProductAsync(modifyQuantityProduct)
@@ -172,12 +183,15 @@
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> IncrementQuantityProductInCarShopAsync([FromBody] ModifyQuantityProductDto modifyQuantityProduct)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    this._carShopServiceController.ClaimsPrincipal = HttpContext.User;
                     var result = await this
                     ._carShopServiceController
                     .IncrementQuantityProductAsync(modifyQuantityProduct)
@@ -205,12 +219,15 @@
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> UpdateQuantityAggregateOfProductInCarShopAsync([FromBody] ModifyCantInAggregateProductDto modifyCantInAggregateProduct)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    this._carShopServiceController.ClaimsPrincipal = HttpContext.User;
                     var result = await this
                     ._carShopServiceController
                     .UpdateQuantityInAggregateProductAsync(modifyCantInAggregateProduct)
@@ -238,12 +255,15 @@
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> IncrementQuantityAggregateOfProductInCarShopAsync([FromBody] ModifyCantInAggregateProductDto modifyCantInAggregateProduct)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    this._carShopServiceController.ClaimsPrincipal = HttpContext.User;
                     var result = await this
                     ._carShopServiceController
                     .IncrementQuantityInAggregateProductAsync(modifyCantInAggregateProduct)
@@ -271,12 +291,15 @@
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> UpdateSubCategoryOfProductInCarShopAsync([FromBody] UpdateSubCategoryProductDto updateSubCategoryProduct)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    this._carShopServiceController.ClaimsPrincipal = HttpContext.User;
                     var result = await this
                     ._carShopServiceController
                     .UpdateSubCategoryAsync(updateSubCategoryProduct)
@@ -298,22 +321,24 @@
         /// <summary>
         /// Elimina la subcategoria de un producto en el carrito de compras.
         /// </summary>
-        /// <param name="CodeIdentification"></param>
         /// <param name="ProductCombinedId"></param>
         /// <returns></returns>
         [HttpDelete("delete/subcategory_product_in_mycarshop")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> DeleteSubCategoryInProductInCarShopAsync(Guid CodeIdentification, int ProductCombinedId)
+        [ProducesResponseType(401)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> DeleteSubCategoryInProductInCarShopAsync(int ProductCombinedId)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    this._carShopServiceController.ClaimsPrincipal = HttpContext.User;
                     var result = await this
                     ._carShopServiceController
-                    .RemoveSubCategoryAsync(CodeIdentification, ProductCombinedId)
+                    .RemoveSubCategoryAsync(ProductCombinedId)
                     .ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
@@ -332,22 +357,24 @@
         /// <summary>
         /// Elimina un producto del carro de compras del usuario.
         /// </summary>
-        /// <param name="CodeIdentification"></param>
         /// <param name="ProductCombinedId"></param>
         /// <returns></returns>
         [HttpDelete("delete/product_in_mycarshop")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> DeleteProductInCarShopAsync(Guid CodeIdentification, int ProductCombinedId)
+        [ProducesResponseType(401)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> DeleteProductInCarShopAsync(int ProductCombinedId)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    this._carShopServiceController.ClaimsPrincipal = HttpContext.User;
                     var result = await this
                     ._carShopServiceController
-                    .RemoveProductOfCartShopAsync(CodeIdentification, ProductCombinedId)
+                    .RemoveProductOfCartShopAsync(ProductCombinedId)
                     .ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
@@ -366,7 +393,6 @@
         /// <summary>
         /// Elimina un agregado de un producto.
         /// </summary>
-        /// <param name="CodeIdentification"></param>
         /// <param name="ProductCombinedId"></param>
         /// <param name="AggregateId"></param>
         /// <returns></returns>
@@ -374,15 +400,18 @@
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> DeleteAggregateOfProductInCarShopAsync(Guid CodeIdentification, int ProductCombinedId, int AggregateId)
+        [ProducesResponseType(401)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> DeleteAggregateOfProductInCarShopAsync(int ProductCombinedId, int AggregateId)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    this._carShopServiceController.ClaimsPrincipal = HttpContext.User;
                     var result = await this
                     ._carShopServiceController
-                    .RemoveAggregateInProductOfCartShopAsync(CodeIdentification, ProductCombinedId, AggregateId)
+                    .RemoveAggregateInProductOfCartShopAsync(ProductCombinedId, AggregateId)
                     .ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
@@ -401,21 +430,23 @@
         /// <summary>
         /// Elimina todos los productos del carrito de compras.
         /// </summary>
-        /// <param name="CodeIdentification"></param>
         /// <returns></returns>
         [HttpDelete("delete/all_product")]
         [ProducesResponseType(200)]
         [ProducesResponseType(404)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> DeleteAllProductInCarShopAsync(Guid CodeIdentification)
+        [ProducesResponseType(401)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> DeleteAllProductInCarShopAsync()
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    this._carShopServiceController.ClaimsPrincipal = HttpContext.User;
                     var result = await this
                     ._carShopServiceController
-                    .RemoveAllCarShopAsync(CodeIdentification)
+                    .RemoveAllCarShopAsync()
                     .ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
