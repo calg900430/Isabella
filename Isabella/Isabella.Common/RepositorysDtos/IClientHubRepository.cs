@@ -16,6 +16,6 @@
         /// <param name="OrderId"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        Task ConfirmOrder(int UserId, int OrderId, string message);
+        Task ConfirmOrder(string order, string message);
     }
 }

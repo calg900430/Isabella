@@ -64,7 +64,7 @@
             .Where(c => c.UserAdmin.UserName == userName)
             .ToListAsync()
             .ConfigureAwait(false);
-            //Es un usuario que puede recibir notaficaciones.
+            //Es un usuario que puede recibir notificaciones.
             if (notifications_pendients.Any())
             {
                 //Obtiene los dispositivos del usuario que están conectados para enviarle la notificación
