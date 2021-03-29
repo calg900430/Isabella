@@ -181,13 +181,13 @@
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public IActionResult GetAllCategoriesIsAvailableAsync()
+        public async Task<IActionResult> GetAllCategoriesIsAvailableAsync()
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var result = this._categoryService.GetAllCategoryIsProductIsAvailable();
+                    var result = await this._categoryService.GetAllCategoryIsProductIsAvailableAsync();
                     if (result.Success)
                     return Ok(result);
                     else

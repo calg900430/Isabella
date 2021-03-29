@@ -55,14 +55,14 @@
         public async Task<User> AddUserAsync(User user, string password)
         {
             if (user == null)
-            throw new NullReferenceException();
+                throw new NullReferenceException();
             if (password == string.Empty || password == null)
-            throw new NotPasswordIsDefinedException("La contraseña no puede estar en blanco.");
+                throw new NotPasswordIsDefinedException("La contraseña no puede estar en blanco.");
             //Guarda al usuario en la base de datos.
             var user_identity = await this._userManager.CreateAsync(user, password).ConfigureAwait(false);
             //No se agregó el usuario
             if (user_identity.Succeeded == false)
-            return null;
+                return null;
             return user;
         }
 
@@ -92,15 +92,15 @@
         public async Task<bool> AddRoleForUserAsync(User user, string role)
         {
             if (user == null)
-            throw new NullReferenceException();
+                throw new NullReferenceException();
             if (role == string.Empty || role == null)
-            throw new RoleWrongException("Debe especificar el role que desea agregarle al usuario.");
+                throw new RoleWrongException("Debe especificar el role que desea agregarle al usuario.");
             //Agrega al nuevo usuario el rol.
             var identity_result = await this._userManager.AddToRoleAsync(user, role).ConfigureAwait(false);
             if (!identity_result.Succeeded)
-            return false;
+                return false;
             else
-            return true;
+                return true;
         }
 
         /// <summary>
@@ -115,11 +115,11 @@
             .IsInRoleAsync(user, role)
             .ConfigureAwait(false);
             if (role_user)
-            return true;
+                return true;
             else
-            return false;
+                return false;
         }
-        
+
         /// <summary>
         /// Obtiene todos los roles que posee un usuario.
         /// </summary>
@@ -128,10 +128,10 @@
         public async Task<List<string>> GetAllRoleOfUserAsync(User user)
         {
             var all_role = await this._userManager.GetRolesAsync(user).ConfigureAwait(false);
-            if(all_role == null)
-            return null;
+            if (all_role == null)
+                return null;
             else
-            return all_role.ToList();
+                return all_role.ToList();
         }
 
         /// <summary>
@@ -143,10 +143,10 @@
         public async Task<bool> RemoveRoleOfUserAsync(User user, string role)
         {
             var remove_role = await this._userManager.RemoveFromRoleAsync(user, role).ConfigureAwait(false);
-            if(remove_role.Succeeded)
-            return true;
+            if (remove_role.Succeeded)
+                return true;
             else
-            return false;
+                return false;
         }
 
         /// <summary>
@@ -159,8 +159,8 @@
             //Verificar que el email no este en uso.
             var user_email = await this._userManager.FindByEmailAsync(email).ConfigureAwait(false);
             if (user_email != null)
-            return true;
-            return false; 
+                return true;
+            return false;
         }
 
         /// <summary>
@@ -173,7 +173,7 @@
             //Verificar que la cuenta de usuario no este en uso.
             var user_useraccount = await this._userManager.FindByNameAsync(username).ConfigureAwait(false);
             if (user_useraccount != null)
-            return true;
+                return true;
             return false;
         }
 
@@ -185,7 +185,7 @@
         public async Task<string> GenerateTokenForConfirmRegisterAsync(User user)
         {
             if (user == null)
-            throw new NullReferenceException();
+                throw new NullReferenceException();
             var token = await this._userManager.GenerateEmailConfirmationTokenAsync(user).ConfigureAwait(false);
             return token;
         }
@@ -198,8 +198,8 @@
         public async Task<bool> VerifyRoleAsync(string role)
         {
             var role_existing = await this._roleManager.RoleExistsAsync(role).ConfigureAwait(false);
-            if(!role_existing)
-            return false;
+            if (!role_existing)
+                return false;
             return true;
         }
 
@@ -212,7 +212,7 @@
         {
             var role_existing = await this._roleManager.FindByIdAsync(RoleId.ToString()).ConfigureAwait(false);
             if (role_existing == null)
-            return null;
+                return null;
             return role_existing.Name;
         }
 
@@ -222,12 +222,12 @@
         /// <returns></returns>
         public async Task<int> GetIdOfLastUserAsync()
         {
-           var last_user = await this._dataContext.Users
-           .OrderBy(c => c.Id).LastOrDefaultAsync()
-           .ConfigureAwait(false);
-           if (last_user == null)
-           return -1;
-           return last_user.Id;
+            var last_user = await this._dataContext.Users
+            .OrderBy(c => c.Id).LastOrDefaultAsync()
+            .ConfigureAwait(false);
+            if (last_user == null)
+                return -1;
+            return last_user.Id;
         }
 
         /// <summary>
@@ -238,8 +238,8 @@
         public async Task<User> GetUserByUserNameAsync(string userName)
         {
             var user = await this._userManager.FindByNameAsync(userName).ConfigureAwait(false);
-            if(user == null)
-            return null;
+            if (user == null)
+                return null;
             return user;
         }
 
@@ -252,7 +252,7 @@
         {
             var user = await this._userManager.FindByIdAsync(userId.ToString()).ConfigureAwait(false);
             if (user == null)
-            return null;
+                return null;
             return user;
         }
 
@@ -265,7 +265,7 @@
         {
             var user = await this._userManager.FindByEmailAsync(email).ConfigureAwait(false);
             if (user == null)
-            return null;
+                return null;
             return user;
         }
 
@@ -277,12 +277,12 @@
         public async Task<bool> VerifyConfirmRegisterUserAsync(User user)
         {
             if (user == null)
-            throw new NullReferenceException();
+                throw new NullReferenceException();
             var confirm_register = await this._userManager.IsEmailConfirmedAsync(user).ConfigureAwait(false);
-            if(confirm_register == false)
-            return false;
+            if (confirm_register == false)
+                return false;
             else
-            return true;
+                return true;
         }
 
         /// <summary>
@@ -294,13 +294,13 @@
         public async Task<bool> ConfirmRegisterUserAsync(User user, string Token)
         {
             if (user == null)
-            throw new NullReferenceException();
+                throw new NullReferenceException();
             //Confirma el registro del usuario.
             var identity = await this._userManager.ConfirmEmailAsync(user, Token).ConfigureAwait(false);
-            if(identity.Succeeded == true)
-            return true;
+            if (identity.Succeeded == true)
+                return true;
             else
-            return false;
+                return false;
         }
 
         /// <summary>
@@ -312,10 +312,10 @@
         public async Task<bool> VerifyPasswordUserAsync(User user, string password)
         {
             if (user == null)
-            throw new NullReferenceException();
+                throw new NullReferenceException();
             var password_correct = await _userManager.CheckPasswordAsync(user, password).ConfigureAwait(false);
-            if(!password_correct)
-            return false;
+            if (!password_correct)
+                return false;
             return true;
         }
 
@@ -327,14 +327,14 @@
         public async Task<(DateTime?, string)> CreateTokenAsync(User user)
         {
             if (user == null)
-            throw new NullReferenceException();
+                throw new NullReferenceException();
             List<Claim> claims = new List<Claim>();
             //Genera un número aleatorio con esto hago que el Token sea diferente cada vez
             Random random = new Random(DateTime.Now.Hour);
             //Obtiene los roles del usuario
             var list_roles = await this._userManager.GetRolesAsync(user).ConfigureAwait(false);
             foreach (string role in list_roles)
-            claims.Add(new Claim(ClaimTypes.Role, role));
+                claims.Add(new Claim(ClaimTypes.Role, role));
             //Agrega como reclamo Identity.Name el UserName del usuario
             claims.Add(new Claim(ClaimTypes.Name, user.UserName));
             //Agrega como reclamo para el identificador de nombres el Id Guid del usuario.
@@ -369,7 +369,7 @@
             //Accede a la fecha de expiración del Token
             var data_expires = securityTokenDescriptor.Expires;
             var token = jwtSecurityTokenHandler.WriteToken(securityToken);
-            return (data_expires,token);
+            return (data_expires, token);
         }
 
         /// <summary>
@@ -380,7 +380,7 @@
         {
             var list_users = await this._dataContext.Users.ToListAsync().ConfigureAwait(false);
             if (list_users == null)
-            return null;
+                return null;
             return list_users;
         }
 
@@ -392,10 +392,10 @@
         {
             var role_existing = await this._roleManager.FindByIdAsync(RoleId.ToString()).ConfigureAwait(false);
             if (role_existing == null)
-            return null;
+                return null;
             var list_users = await this._userManager.GetUsersInRoleAsync(role_existing.Name).ConfigureAwait(false);
             if (list_users == null)
-            return null;
+                return null;
             return list_users.ToList();
         }
 
@@ -409,12 +409,12 @@
         public async Task<bool> UpdatePasswordAsync(User user, string oldPassword, string newPassword)
         {
             if (user == null)
-            throw new NullReferenceException();
+                throw new NullReferenceException();
             var identity_result = await this._userManager.ChangePasswordAsync(user, oldPassword, newPassword).ConfigureAwait(false);
             if (!identity_result.Succeeded)
-            return false;
+                return false;
             else
-            return true;
+                return true;
         }
 
         /// <summary>
@@ -425,15 +425,15 @@
         public async Task<bool> DeleteImageProfileUserAsync(User user)
         {
             if (user == null)
-            throw new NullReferenceException();
+                throw new NullReferenceException();
             user.ImageUserProfile = null;
             var delete_image_user = await this._userManager.UpdateAsync(user).ConfigureAwait(false);
-            if(delete_image_user.Succeeded)
-            return true;
+            if (delete_image_user.Succeeded)
+                return true;
             else
-            return false;
+                return false;
         }
-       
+
         /// <summary>
         /// Actualiza un usuario.
         /// </summary>
@@ -442,10 +442,10 @@
         public async Task<User> UpdateUserAsync(User user)
         {
             if (user == null)
-            throw new NullReferenceException();
+                throw new NullReferenceException();
             var identity_result = await this._userManager.UpdateAsync(user).ConfigureAwait(false);
-            if(identity_result.Succeeded)
-            return user;
+            if (identity_result.Succeeded)
+                return user;
             return null;
         }
 
@@ -457,7 +457,7 @@
         public async Task<string> GenerateTokenForRecoverPasswordAsync(User user)
         {
             if (user == null)
-            throw new NullReferenceException();
+                throw new NullReferenceException();
             var token = await this._userManager.GeneratePasswordResetTokenAsync(user).ConfigureAwait(false);
             return token;
         }
@@ -473,10 +473,10 @@
         {
             //Confirma el código de recuperación
             var identity = await this._userManager.ResetPasswordAsync(user, Token, newPassword).ConfigureAwait(false);
-            if(identity.Succeeded == true)
-            return true;
+            if (identity.Succeeded == true)
+                return true;
             else
-            return false;
+                return false;
         }
     }
 

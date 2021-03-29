@@ -93,7 +93,7 @@
         /// Devuelve las categorias de los productos que esten disponibles. 
         /// </summary>
         /// <returns></returns>
-        public async Task<ServiceResponse<List<GetCategoryDto>>> GetAllCategoryIsProductIsAvailable()
+        public async Task<ServiceResponse<List<GetCategoryDto>>> GetAllCategoryIsProductIsAvailableAsync()
         {
             ServiceResponse<List<GetCategoryDto>> serviceResponse = new ServiceResponse<List<GetCategoryDto>>();
             try

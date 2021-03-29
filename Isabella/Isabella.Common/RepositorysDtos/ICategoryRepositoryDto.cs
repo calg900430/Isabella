@@ -46,7 +46,7 @@
         /// Devuelve las categorias de los productos que esten disponibles. 
         /// </summary>
         /// <returns></returns>
-        Task<ServiceResponse<List<GetCategoryDto>>> GetAllCategoryIsProductIsAvailable();
+        Task<ServiceResponse<List<GetCategoryDto>>> GetAllCategoryIsProductIsAvailableAsync();
 
         /// <summary>
         ///  Actualiza una categoria.

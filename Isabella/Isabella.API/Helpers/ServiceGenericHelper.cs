@@ -92,9 +92,9 @@
         params Expression<Func<TEntity, object>>[] parameters)
         {
             if (entity == null)
-            throw new NullEntityException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
+                throw new NullEntityException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
             if (CantEntity < 0)
-            throw new CantNegativeException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative));
+                throw new CantNegativeException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative));
             //Crea la consulta para determinar las entidades relacionadas deseadas.
             IQueryable<TEntity> query = m_dbSet.AsQueryable();
             if (await query.AnyAsync().ConfigureAwait(false))
@@ -124,9 +124,9 @@
         params Expression<Func<TEntity, object>>[] parameters)
         {
             if (entity == null)
-            throw new NullEntityException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
+                throw new NullEntityException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
             if (CantEntity < 0)
-            throw new CantNegativeException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative));
+                throw new CantNegativeException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative));
             //Crea la consulta para determinar las entidades relacionadas deseadas.
             IQueryable<TEntity> query = m_dbSet.AsQueryable();
             if (await query.AnyAsync().ConfigureAwait(false))
@@ -142,7 +142,7 @@
             .ToListAsync<TEntity>()
             .ConfigureAwait(false);
         }
-       
+
         /// <summary>
         /// Devuelve una cantidad de entidades determinada a partir del Id de una entidad y la cantidad deseada.
         /// Este metodo es útil cuando tenemos una colección de entidades que todas están relacionadas con otra entidad.
@@ -156,13 +156,13 @@
         public virtual List<TEntity> GetLoadAsync(int Id, ICollection<TEntity> list_entities, int CantEntity)
         {
             if (list_entities == null)
-            throw new NullEntityException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
+                throw new NullEntityException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
             if (CantEntity < 0)
-            throw new CantNegativeException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative));
+                throw new CantNegativeException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative));
             //Verifica si la entidad está en la colección dada.
             var entity_reference = list_entities.FirstOrDefault(c => c.Id == Id);
             if (entity_reference == null)
-            return null;
+                return null;
             //Crea la consulta para seleccionar a partir de cual se quiere una cantidad determinada.
             var query = from cant_entity in list_entities where cant_entity.Id > entity_reference.Id select cant_entity;
             //Ejecuta la consulta
@@ -196,7 +196,7 @@
             //Crea la consulta para determinar las filtros que se desean a aplicar.
             IQueryable<TEntity> query = m_dbSet.AsQueryable();
             foreach (Expression<Func<TEntity, object>> include in parameters_filters)
-            query = query.Include(include);
+                query = query.Include(include);
             //Crea el filtro deseado para la consulta
             query = query.Where(create_query);
             //Ejecuta la consulta
@@ -218,7 +218,7 @@
             //Crea la consulta para determinar las filtros que se desean a aplicar.
             IQueryable<TEntity> query = m_dbSet.AsQueryable();
             foreach (Expression<Func<TEntity, object>> include in parameters_filters)
-            query = query.Include(include);
+                query = query.Include(include);
             //Crea el filtro deseado para la consulta
             query = query.Where(create_query);
             //Ejecuta la consulta
@@ -239,7 +239,7 @@
             //Crea la consulta para determinar las filtros que se desean a aplicar.
             IQueryable<TEntity> query = m_dbSet.AsQueryable();
             foreach (Expression<Func<TEntity, object>> include in parameters_filters)
-            query = query.Include(include);
+                query = query.Include(include);
             //Crea el filtro deseado para la consulta
             query = query.Where(create_query);
             //Ejecuta la consulta
@@ -254,13 +254,13 @@
         public virtual async Task<bool> VerifyIsContainsEntity(List<int> ListEntityId)
         {
             IQueryable<TEntity> query = m_dbSet.AsQueryable();
-            foreach(int id in ListEntityId)
+            foreach (int id in ListEntityId)
             {
-               if(await query.FirstOrDefaultAsync(c => c.Id == id)
-               .ConfigureAwait(false) != null)
-               continue;
-               else
-               return false;
+                if (await query.FirstOrDefaultAsync(c => c.Id == id)
+                .ConfigureAwait(false) != null)
+                    continue;
+                else
+                    return false;
             }
             return true;
         }
@@ -285,7 +285,7 @@
         public virtual async Task AddRangeEntityAsync(List<TEntity> entities)
         {
             if (entities == null)
-            throw new NullEntityException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
+                throw new NullEntityException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
             await m_dbSet.AddRangeAsync(entities).ConfigureAwait(false);
         }
 
@@ -318,7 +318,7 @@
         public virtual void UpdateRangeEntity(List<TEntity> entity)
         {
             if (entity == null)
-            throw new NullEntityException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
+                throw new NullEntityException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
             m_dbSet.UpdateRange(entity);
         }
 
@@ -329,7 +329,7 @@
         public void RemoveEntity(TEntity entity)
         {
             if (entity == null)
-            throw new NullEntityException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
+                throw new NullEntityException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
             m_dbSet.Remove(entity);
         }
 
@@ -340,7 +340,7 @@
         public void RemoveRangeEntity(List<TEntity> entities)
         {
             if (entities == null)
-            throw new NullEntityException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
+                throw new NullEntityException(GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
             m_dbSet.RemoveRange(entities);
         }
 
@@ -357,7 +357,7 @@
             {
             }
         }
-        class CantNegativeException: Exception
+        class CantNegativeException : Exception
         {
             public CantNegativeException(string message) : base(message)
             {
