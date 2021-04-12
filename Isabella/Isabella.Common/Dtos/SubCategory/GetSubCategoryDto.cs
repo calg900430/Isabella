@@ -26,5 +26,10 @@
         /// Enable
         /// </summary>
         public bool IsAvailable { get; set; }
+
+        /// <summary>
+        /// Description
+        /// </summary>
+        public string Description { get; set; }
     }
 }

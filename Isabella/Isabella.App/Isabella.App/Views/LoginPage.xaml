@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Isabella.App.Views.LoginPage"
+             BindingContext="{Binding Main, Source={StaticResource Locator}}"
+             Title="{Binding Title}">
+    <ContentPage.Content>
+        <ScrollView BindingContext="{Binding Login}">
+            <StackLayout>
+                <StackLayout Padding="10">
+                    <Label Text="Email"></Label>
+                    <Entry Text="{Binding Email}" 
+                   Placeholder="Enter your email"
+                   Keyboard="Email">
+                    </Entry>
+                    <Label Text="Password"></Label>
+                    <Entry Text="{Binding Password}" 
+                  IsPassword="True" 
+                  Placeholder="Enter your passoword.">
+                    </Entry>
+                    <StackLayout
+                    HorizontalOptions="Center" 
+                    Orientation="Horizontal">
+                        <Label Text="Remember me in this device" 
+                           VerticalOptions="Center">
+                        </Label>
+                        <Switch IsToggled="{Binding IsRemember}"></Switch>
+                    </StackLayout>
+                    <Label Text="Forgot my password?" 
+                    HorizontalOptions="Center" 
+                    TextColor="Black">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer 
+                           Command="{Binding RememberPasswordCommand}">
+                            </TapGestureRecognizer>
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <ActivityIndicator IsRunning="{Binding IsBusy}" 
+                   VerticalOptions="CenterAndExpand">
+                    </ActivityIndicator>
+                    <StackLayout Orientation="Horizontal">
+                        <Button Text="Login" 
+                      HeightRequest="46"
+                      HorizontalOptions="FillAndExpand"
+                      IsEnabled="{Binding IsEnable}"
+                      BorderRadius="23"
+                      Command="{Binding LoginCommand}">
+                        </Button>
+                        <Button Text="Register" 
+                      HeightRequest="46"
+                      BorderRadius="23"
+                      HorizontalOptions="FillAndExpand"
+                      IsEnabled="{Binding IsEnable}"
+                      Command="{Binding RegisterCommand}">
+                        </Button>
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

@@ -61,19 +61,6 @@
                     .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
                     return serviceResponse;
                 }
-                //Verifica que la subcategoria es valida
-                var subcategory = await this._serviceGenericSubCategoryHelper
-                .WhereSingleEntityAsync(c => c.Name == addSubCategoryProduct.Name, c => c.Product)
-                .ConfigureAwait(false);
-                if (subcategory != null)
-                {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SubCategoryExist;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile
-                    .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryExist);
-                    return serviceResponse;
-                }
                 //Verifica que el producto existe.
                 var product = await this._serviceGenericProductHelper
                 .GetLoadAsync(c => c.Id == addSubCategoryProduct.ProductId)
@@ -87,12 +74,26 @@
                     .GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotFound);
                     return serviceResponse;
                 }
+                //Verifica que la subcategoria es valida
+                var subcategory = await this._serviceGenericSubCategoryHelper
+                .WhereSingleEntityAsync(c => c.Name == addSubCategoryProduct.Name && c.Product == product, c => c.Product)
+                .ConfigureAwait(false);
+                if (subcategory != null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SubCategoryExist;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryExist);
+                    return serviceResponse;
+                }
                 var new_subcategory = new SubCategory
                 {
                     Product = product,
                     Name = addSubCategoryProduct.Name,
                     Price = addSubCategoryProduct.Price,
                     IsAvailable = addSubCategoryProduct.IsAvailable,
+                    Description = addSubCategoryProduct.Description,
                 };
                 await this._serviceGenericSubCategoryHelper
                 .AddEntityAsync(new_subcategory)
@@ -199,6 +200,7 @@
                     Price = c.Price, 
                     ProductId = c.Product.Id,
                     IsAvailable = c.IsAvailable,
+                    Description = c.Description,
                 }).ToList();
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -243,6 +245,7 @@
                     Price = c.Price,
                     ProductId = c.Product.Id,
                     IsAvailable = c.IsAvailable,
+                    Description = c.Description,
                 }).ToList();
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -287,6 +290,7 @@
                     Price = c.Price,
                     ProductId = c.Product.Id,
                     IsAvailable = c.IsAvailable,
+                    Description = c.Description,
                 }).ToList();
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -333,6 +337,7 @@
                     Price = subcategory.Price,
                     ProductId = subcategory.Product.Id,
                     IsAvailable = subcategory.IsAvailable,
+                    Description = subcategory.Description,
                 };
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -379,6 +384,7 @@
                     Price = subcategory.Price,
                     ProductId = subcategory.Product.Id,
                     IsAvailable = subcategory.IsAvailable,
+                    Description = subcategory.Description,
                 };
                 serviceResponse.Success = true;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
@@ -408,7 +414,20 @@
                 var subcategory = await this._serviceGenericSubCategoryHelper
                 .WhereFirstEntityAsync(c => c.Id == updateSubCategoryDto.Id, c => c.Product)
                 .ConfigureAwait(false);
-                if (subcategory == null)
+                //Verifica que el producto existe.
+                var product = await this._serviceGenericProductHelper
+                .GetLoadAsync(c => c.Id == updateSubCategoryDto.ProductId)
+                .ConfigureAwait(false);
+                if(product == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotFound);
+                    return serviceResponse;
+                }
+                if(subcategory == null)
                 {
                     serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SubCategoryNotFound;
                     serviceResponse.Data = false;
@@ -417,7 +436,7 @@
                     .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryNotFound);
                     return serviceResponse;
                 }
-                if (updateSubCategoryDto.Price != null)
+                if(updateSubCategoryDto.Price != null)
                 {
                     if (updateSubCategoryDto.Price < 1)
                     {
@@ -431,9 +450,25 @@
                     subcategory.Price = (decimal)updateSubCategoryDto.Price; 
                 }
                 if(updateSubCategoryDto.Name != null)
-                subcategory.Name = updateSubCategoryDto.Name;
+                {
+                   var name_subcategory = await this._serviceGenericSubCategoryHelper
+                   .WhereSingleEntityAsync(c => c.Name == updateSubCategoryDto.Name && c.Product == product, c => c.Product)
+                   .ConfigureAwait(false);
+                   if (name_subcategory != null)
+                   {
+                        serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SubCategoryExist;
+                        serviceResponse.Data = false;
+                        serviceResponse.Success = false;
+                        serviceResponse.Message = GetValueResourceFile
+                        .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryExist);
+                        return serviceResponse;
+                   }
+                   subcategory.Name = updateSubCategoryDto.Name;
+                }
                 if(updateSubCategoryDto.IsAvailable != null)
                 subcategory.IsAvailable = (bool) updateSubCategoryDto.IsAvailable;
+                if (updateSubCategoryDto.Description != null)
+                subcategory.Description = updateSubCategoryDto.Description;
                 this._serviceGenericSubCategoryHelper.UpdateEntity(subcategory);
                 await this._serviceGenericSubCategoryHelper.SaveChangesBDAsync().ConfigureAwait(false);
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;

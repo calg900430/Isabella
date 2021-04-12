@@ -27,6 +27,7 @@
         private readonly ServiceGenericHelper<Aggregate> _serviceGenericAggregateHelper;
         private readonly ServiceGenericHelper<Category> _serviceGenericCategoryHelper;
         private readonly ServiceGenericHelper<ImageAggregate> _serviceGenericImageAggregateHelper;
+        private readonly ServiceGenericHelper<CantAggregate> _serviceGenericCantAggregateHelper;
 
         /// <summary>
         /// Constructor.
@@ -34,13 +35,16 @@
         /// <param name="serviceGenericAggregateHelper"></param>
         /// <param name="serviceGenericCategoryHelper"></param>
         /// <param name="serviceGenericImageAggregateHelper"></param>
+        /// <param name="serviceGenericCantAggregateHelper"></param>
         public AggregateServiceController(ServiceGenericHelper<Aggregate> serviceGenericAggregateHelper,
         ServiceGenericHelper<Category> serviceGenericCategoryHelper, 
-        ServiceGenericHelper<ImageAggregate> serviceGenericImageAggregateHelper)
+        ServiceGenericHelper<ImageAggregate> serviceGenericImageAggregateHelper,
+        ServiceGenericHelper<CantAggregate> serviceGenericCantAggregateHelper)
         {
             this._serviceGenericAggregateHelper = serviceGenericAggregateHelper;
             this._serviceGenericCategoryHelper = serviceGenericCategoryHelper;
             this._serviceGenericImageAggregateHelper = serviceGenericImageAggregateHelper;
+            this._serviceGenericCantAggregateHelper = serviceGenericCantAggregateHelper;
         }
 
         /// <summary>
@@ -1094,7 +1098,6 @@
                     .GetValueResourceString(GetValueResourceFile.KeyResource.AggregateNotFound);
                     return serviceResponse;
                 }
-                //Elimina el producto
                 this._serviceGenericAggregateHelper.RemoveEntity(aggregate);
                 //Guarda los cambios en la base de datos.
                 await this._serviceGenericAggregateHelper

@@ -73,6 +73,9 @@
                 await this._serviceGenericCategoryHelper
                 .AddEntityAsync(new_category)
                 .ConfigureAwait(false);
+                //Guarda los cambios en la base de datos.
+                await this._serviceGenericCategoryHelper
+                .SaveChangesBDAsync().ConfigureAwait(false);
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Data = true;
                 serviceResponse.Success = true;

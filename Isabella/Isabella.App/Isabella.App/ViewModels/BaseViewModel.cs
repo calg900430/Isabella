@@ -1,0 +1,61 @@
+﻿namespace Isabella.App.ViewModels
+{
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
+    using System.Text;
+    using Xamarin.Forms;
+
+    using Isabella.App.Services.ServicesMock.RepositorysMock;
+
+    /// <summary>
+    /// BaseViewModel
+    /// </summary>
+    public class BaseViewModel : INotifyPropertyChanged
+    {
+        //Servicios Mock
+        public IUserMockRepository userMockService = DependencyService.Get<IUserMockRepository>();
+       
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            var changed = PropertyChanged;
+            if (changed == null)
+            return;
+            changed.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        protected bool SetProperty<T>(ref T backingStore, T value,
+           [CallerMemberName]string propertyName = "",
+           Action onChanged = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(backingStore, value))
+            return false;
+            backingStore = value;
+            onChanged?.Invoke();
+            OnPropertyChanged(propertyName);
+            return true;
+        }
+
+        /// <summary>
+        /// Propiedad para indicar si un control está ocupado.
+        /// </summary>
+        bool _isBusy;
+        public bool IsBusy
+        {
+            get { return _isBusy; }
+            set { SetProperty(ref _isBusy, value); }
+        }
+
+        /// <summary>
+        /// Propiedad para poner titulo a las Pages.
+        /// </summary>
+        string title = string.Empty;
+        public string Title
+        {
+            get { return title; }
+            set { SetProperty(ref title, value); }
+        }
+    }
+}

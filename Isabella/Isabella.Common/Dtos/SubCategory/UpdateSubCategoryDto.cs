@@ -11,6 +11,11 @@
         public int Id { get; set; }
 
         /// <summary>
+        /// Producto.
+        /// </summary>
+        public int ProductId { get; set; }
+
+        /// <summary>
         /// Nombre de la categoría del producto.
         /// </summary>
         public string Name { get; set; }
@@ -24,5 +29,10 @@
         /// Enable
         /// </summary>
         public bool? IsAvailable { get; set; }
+
+        /// <summary>
+        /// Description
+        /// </summary>
+        public string Description { get; set; }
     }
 }

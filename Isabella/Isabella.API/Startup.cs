@@ -79,8 +79,8 @@ namespace Isabella.API
             .AddEntityFrameworkStores<DataContext>();
 
             //Agrega y configura el servicio para conectarnos a SQL Server
-            //var connectionstring = Constants.GetStringConnectionSQLServer(Configuration.GetSection("SQLServerLocal"));
-            var connectionstring = Constants.GetStringConnectionSQLServer(Configuration.GetSection("SQLServer"));
+            var connectionstring = Constants.GetStringConnectionSQLServer(Configuration.GetSection("SQLServerLocal"));
+            //var connectionstring = Constants.GetStringConnectionSQLServer(Configuration.GetSection("SQLServer"));
             services.AddDbContext<DataContext>(c =>
             {
                 //c.UseLazyLoadingProxies() //Para poder usar carga diferida
