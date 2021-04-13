@@ -13,7 +13,7 @@
         /// <summary>
         /// Producto.
         /// </summary>
-        public int ProductId { get; set; }
+        public int? ProductId { get; set; }
 
         /// <summary>
         /// Nombre de la categoría del producto.

@@ -74,19 +74,6 @@
                     .GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotFound);
                     return serviceResponse;
                 }
-                //Verifica que la subcategoria es valida
-                var subcategory = await this._serviceGenericSubCategoryHelper
-                .WhereSingleEntityAsync(c => c.Name == addSubCategoryProduct.Name && c.Product == product, c => c.Product)
-                .ConfigureAwait(false);
-                if (subcategory != null)
-                {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SubCategoryExist;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile
-                    .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryExist);
-                    return serviceResponse;
-                }
                 var new_subcategory = new SubCategory
                 {
                     Product = product,
@@ -414,6 +401,15 @@
                 var subcategory = await this._serviceGenericSubCategoryHelper
                 .WhereFirstEntityAsync(c => c.Id == updateSubCategoryDto.Id, c => c.Product)
                 .ConfigureAwait(false);
+                if (subcategory == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SubCategoryNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryNotFound);
+                    return serviceResponse;
+                }
                 //Verifica que el producto existe.
                 var product = await this._serviceGenericProductHelper
                 .GetLoadAsync(c => c.Id == updateSubCategoryDto.ProductId)
@@ -425,15 +421,6 @@
                     serviceResponse.Success = false;
                     serviceResponse.Message = GetValueResourceFile
                     .GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotFound);
-                    return serviceResponse;
-                }
-                if(subcategory == null)
-                {
-                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SubCategoryNotFound;
-                    serviceResponse.Data = false;
-                    serviceResponse.Success = false;
-                    serviceResponse.Message = GetValueResourceFile
-                    .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryNotFound);
                     return serviceResponse;
                 }
                 if(updateSubCategoryDto.Price != null)
@@ -449,23 +436,11 @@
                     }
                     subcategory.Price = (decimal)updateSubCategoryDto.Price; 
                 }
+                if(updateSubCategoryDto.ProductId != null)
+                subcategory.Product = product;
                 if(updateSubCategoryDto.Name != null)
-                {
-                   var name_subcategory = await this._serviceGenericSubCategoryHelper
-                   .WhereSingleEntityAsync(c => c.Name == updateSubCategoryDto.Name && c.Product == product, c => c.Product)
-                   .ConfigureAwait(false);
-                   if (name_subcategory != null)
-                   {
-                        serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SubCategoryExist;
-                        serviceResponse.Data = false;
-                        serviceResponse.Success = false;
-                        serviceResponse.Message = GetValueResourceFile
-                        .GetValueResourceString(GetValueResourceFile.KeyResource.SubCategoryExist);
-                        return serviceResponse;
-                   }
-                   subcategory.Name = updateSubCategoryDto.Name;
-                }
-                if(updateSubCategoryDto.IsAvailable != null)
+                subcategory.Name = updateSubCategoryDto.Name;
+                if (updateSubCategoryDto.IsAvailable != null)
                 subcategory.IsAvailable = (bool) updateSubCategoryDto.IsAvailable;
                 if (updateSubCategoryDto.Description != null)
                 subcategory.Description = updateSubCategoryDto.Description;

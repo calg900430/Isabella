@@ -49,13 +49,13 @@
             try
             {
                 //Verifica si el archivo de recursos existe, sino lo manda a generar.
-                var path = $"{Directory.GetCurrentDirectory()}\\Resources\\ResourcesFile.resources";
+                /*var path = $"{Directory.GetCurrentDirectory()}\\Resources\\ResourcesFile.resources";
                 var file_exist = File.Exists(path);
                 if (!file_exist)
                 CreateResourcesFile.GenerateResourceFileAsync(path);
                 //Borra la base de datos si existe(Esto solo está habilitado en el momento de hacer pruebas, 
                 //cuando todo este listo, debemos comentar esta linea)
-                await _dataContext.Database.EnsureDeletedAsync().ConfigureAwait(false);
+                await _dataContext.Database.EnsureDeletedAsync().ConfigureAwait(false);*/
                 //Verifica si existe la base de datos, si no existe la crea.
                 await _dataContext.Database.EnsureCreatedAsync().ConfigureAwait(false);
 
