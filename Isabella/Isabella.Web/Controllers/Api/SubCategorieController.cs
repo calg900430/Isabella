@@ -19,7 +19,7 @@
     /// Controlador para las subcategorias.
     /// </summary>
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class SubCategorieController : Controller
     {
         private readonly SubCategorieServiceController _subCategoryService;

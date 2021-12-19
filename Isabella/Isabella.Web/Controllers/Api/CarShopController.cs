@@ -20,7 +20,7 @@
     /// Controlador para el carrito de compras.
     /// </summary>
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ProducesResponseType(200)]
     [ProducesResponseType(404)]
     [ProducesResponseType(400)]

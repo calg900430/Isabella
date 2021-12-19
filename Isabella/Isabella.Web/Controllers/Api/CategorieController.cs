@@ -19,7 +19,7 @@
     /// Controlador para las categorias de productos standards.
     /// </summary>
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class CategorieController : Controller
     {
         private readonly CategorieServiceController _categoryService;

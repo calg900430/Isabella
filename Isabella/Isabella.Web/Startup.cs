@@ -273,7 +273,7 @@ namespace Isabella.Web
             .SetIsOriginAllowed(origin => true)
             .AllowCredentials()
             );
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();

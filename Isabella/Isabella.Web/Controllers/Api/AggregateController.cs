@@ -22,7 +22,7 @@
     /// Controlador para los productos standard.
     /// </summary>
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class AggregateController : Controller
     {
         private readonly AggregateServiceController _aggregateServiceController;

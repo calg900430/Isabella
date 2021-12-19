@@ -15,7 +15,7 @@
     /// Ordenes
     /// </summary>
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class OrderController : Controller
     {
         private readonly OrderServiceController _orderServiceController;

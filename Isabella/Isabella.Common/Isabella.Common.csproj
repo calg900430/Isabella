@@ -9,5 +9,9 @@
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.7.0" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.1" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Dtos\v2\" />
+  </ItemGroup>
 
 </Project>

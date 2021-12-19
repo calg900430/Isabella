@@ -14,7 +14,7 @@
     /// Controlador para los datos del restaurante.
     /// </summary>
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class RestaurantController : Controller
     {
         private readonly RestaurantServiceController _restaurantServiceController;

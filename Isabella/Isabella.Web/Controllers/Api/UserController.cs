@@ -18,7 +18,7 @@
     /// Controlador para el servicio de usuarios.
     /// </summary>
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class UserController : Controller
     {
         private readonly UserServiceController _userRepository;

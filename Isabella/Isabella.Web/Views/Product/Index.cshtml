@@ -30,9 +30,9 @@
             <thead>
                 <tr>
                     @*<th>
-                            @ViewData["Id"]
-                        </th>*@
-                    <th width:"4px">
+                      @ViewData["Id"]
+                    </th>*@
+                    <th width="4px">
                         @ViewData["Name"]
                     </th>
                     <th>
@@ -56,13 +56,13 @@
                         @*<td>@Html.DisplayFor(model => item.Id)</td>*@
                         <td>@Html.DisplayFor(model => item.Name)</td>
                         <td>
-                            @if (item.GetAllImagesProducts != null)
+                            @if(item.GetAllImagesProducts != null)
                             {
                                 if (item.GetAllImagesProducts.Count > 0)
                                 {
                                     @*Convierte el array byte en una imagen*@
-                                    <img src="data:imge;base64,@System.Convert.ToBase64String(item.GetAllImagesProducts[0].Image)" ,
-                                         style="width:75px;height:75px;max-width: 100%; height: auto;" />
+                                    <img class="ImageProducts" src="data:imge;base64,
+                                    @System.Convert.ToBase64String(item.GetAllImagesProducts[0].Image)"/>
                                 }
                                 else
                                 {
@@ -90,7 +90,7 @@
                             <a asp-action="Delete" asp-route-id="@item.Id" id="buttom_delete" class="btn btn-danger">Borrar</a>
                         </td>
                     </tr>
-                }
+                 }
             </tbody>
         </table>
     </div>
@@ -135,7 +135,6 @@
             });
         });
     </script>
-}
 
 
 
