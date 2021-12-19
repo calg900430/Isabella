@@ -1,0 +1,142 @@
+﻿@*
+    Vista para mostrar los productos disponibles
+*@
+
+@*Establece que objeto va a recibir la View, ViewData me permite Bindear entre
+    el controlador y la vista, uso esta forma, para no poner texto explicito, así si cambio aquí
+    me cambiara en donde quiera que aparezca el key del diccionario referenciado*@
+@model List<Isabella.Web.ViewModels.ProductViewModel.GetProductViewModel>
+
+@{
+    ViewData["Title"] = "Productos";
+    //ViewData["Id"] = "Id";
+    ViewData["Image"] = "Imagen";
+    ViewData["Name"] = "Nombre";
+    ViewData["Price"] = "Precio";
+    ViewData["Available"] = "Disponible?";
+}
+
+@*Pone el Titulo que establecimos en la coleccion ViewData desde el controlador*@
+<h2>@ViewData["Title"]</h2>
+@*Se crea un enlace del tipo botón usando las clases de Boostrap *@
+<p>
+    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i>Crear Producto</a>
+</p>
+<div class="row">
+    <div class="col-md-12">
+        @*Se crea una tabla para mostrar los productos*@
+        <table class="table">
+            @*Se crean las columnas y se le pone el nombre a cada una*@
+            <thead>
+                <tr>
+                    @*<th>
+                            @ViewData["Id"]
+                        </th>*@
+                    <th width:"4px">
+                        @ViewData["Name"]
+                    </th>
+                    <th>
+                        @ViewData["Image"]
+                    </th>
+                    <th>
+                        @ViewData["Price"]
+                    </th>
+                    <th>
+                        @ViewData["Available"]
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            @*Se crean las filas que contienen los elementos de cada columna que
+                en este caso son los datos de los productos*@
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        @*<td>@Html.DisplayFor(model => item.Id)</td>*@
+                        <td>@Html.DisplayFor(model => item.Name)</td>
+                        <td>
+                            @if (item.GetAllImagesProducts != null)
+                            {
+                                if (item.GetAllImagesProducts.Count > 0)
+                                {
+                                    @*Convierte el array byte en una imagen*@
+                                    <img src="data:imge;base64,@System.Convert.ToBase64String(item.GetAllImagesProducts[0].Image)" ,
+                                         style="width:75px;height:75px;max-width: 100%; height: auto;" />
+                                }
+                                else
+                                {
+                                    <b>No Disponible</b>
+                                }
+                            }
+                            else
+                            {
+                                <b>No Disponible</b>
+                            }
+                        </td>
+                        <td>@Html.DisplayFor(model => item.Price)</td>
+                        @if (item.IsAvailabe)
+                        {
+                            <td>Sí</td>
+                        }
+                        else
+                        {
+                            <td>No</td>
+                        }
+                        @*Se crean los botones Edit, Delete y Details para cada producto*@
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Editar</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Detalles</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" id="buttom_delete" class="btn btn-danger">Borrar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@*Ventana Modal*@
+<div id="confirmDialog" class="modal fade">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="fa fa-window-close"></i>
+                </button>
+                <h4 class="modal-title">Confirm</h4>
+            </div>
+            <div class="modal-body">
+                <p>Desea eliminar el producto?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnYes">Sí</button>
+                <button type="button" class="btn btn-success" id="btnNo">No</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    @*Script para el manejo de la ventana modal*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnConfirm").click(function () {
+                $("#confirmDialog").modal('show');
+                return false;
+            });
+
+            $("#btnNo").click(function () {
+                $("#confirmDialog").modal('hide');
+                return false;
+            });
+
+            $("#btnYes").click(function () {
+                window.location.href = '/Orders/ConfirmOrder';
+            });
+        });
+    </script>
+}
+
+
+
+

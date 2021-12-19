@@ -1,0 +1,19 @@
+﻿@model Isabella.Web.ViewModels.ProductViewModel.GetProductViewModel
+
+@{
+    ViewData["Title"] = "Borrar";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<h3>¿Estás seguro que deseas borrar el producto @Model.Name?</h3>
+<div>
+    <hr />
+    <form asp-action="DeleteConfirmed">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Borrar" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-success">Atrás</a>
+    </form>
+</div>
+
+

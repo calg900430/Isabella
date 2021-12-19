@@ -1,0 +1,60 @@
+﻿@*
+    Vista para mostrar las categorias disponibles
+*@
+
+@*Establece que objeto va a recibir la View, ViewData me permite Bindear entre
+    el controlador y la vista, uso esta forma, para no poner texto explicito, así si cambio aquí
+    me cambiara en donde quiera que aparezca el key del diccionario referenciado*@
+@model List<Isabella.Web.ViewModels.CategorieViewModel.GetCategorieViewModel>
+
+@{
+    ViewData["Title"] = "Categorias";
+    ViewData["Id"] = "Id";
+    ViewData["Name"] = "Nombre";  
+}
+
+@*Pone el Titulo que establecimos en la coleccion ViewData desde el controlador*@
+<h2>@ViewData["Title"]</h2>
+@*Se crea un enlace del tipo botón usando las clases de Boostrap *@
+<p>
+    <a asp-action="Create" class="btn btn-primary">Crear Categoria</a>
+</p>
+    <div class="row">
+        <div class="col-md-12">
+            @*Se crea una tabla para mostrar los productos*@
+            <table class="table">
+                @*Se crean las columnas y se le pone el nombre a cada una*@
+                <thead>
+                    <tr>
+                        <th>
+                            @ViewData["Id"]
+                        </th>
+                        <th>
+                            @ViewData["Name"]
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                @*Se crean las filas que contienen los elementos de cada columna que
+                en este caso son los datos de los productos*@
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(model => item.Id)</td>
+                            <td>@Html.DisplayFor(model => item.Name)</td>
+                            @*Se crean los botones Edit y Delete para cada categoria*@
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Editar</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Borrar</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+

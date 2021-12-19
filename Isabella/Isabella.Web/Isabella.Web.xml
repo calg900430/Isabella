@@ -1,0 +1,3830 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Isabella.Web</name>
+    </assembly>
+    <members>
+        <member name="T:Isabella.Web.AutoMapperProfile">
+            <summary>
+            Perfiles para el AutoMapper
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.AutoMapperProfile.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Constants">
+            <summary>
+            Esta clase tiene todas las constantes del proyecto y recibe los parametros para la conexión
+            con nuestra cuenta de Cosmos Azure DB.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Constants.GetStringConnectionSQLServer(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Obtiene la cadena de conexión de la base de datos SQL Server
+            desde el archivo de configuración appsetting.json
+            </summary>
+            <param name="configurationSection"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Isabella.Web.Constants.RolesOfSystem">
+            <summary>
+            Roles del sistema.
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Constants.MAX_LENTHG_IMAGE_PROFILE_USER">
+            <summary>
+            Capacidad máxima de la imagen de perfil de usuario.
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Constants.MAX_LENTHG_IMAGE_PRODUCT">
+            <summary>
+            Capacidad máxima de las imagen de un producto.
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Constants.MAX_LENTHG_IMAGE_AGGREGATE">
+            <summary>
+            Capacidad máxima de las imagen de un agregado.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Controllers.API.AggregateController">
+            <summary>
+            Controlador para los productos standard.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.AggregateController.#ctor(Isabella.Web.ServicesControllers.AggregateServiceController)">
+            <summary>
+            Servicio de los agregados.
+            </summary>
+            <param name="aggregateServiceController"></param>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.AggregateController.AddAggregateAsync(Isabella.Common.Dtos.Aggregate.AddAggregateDto)">
+            <summary>
+            Agregar un nuevo agregado.
+            </summary>
+            <param name="aggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.AggregateController.UpdateAggregateAsync(Isabella.Common.Dtos.Aggregate.UpdateAggregateDto)">
+            <summary>
+            Actualiza un agregado.
+            </summary>
+            <param name="updateAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.AggregateController.GetAggregateForIdAsync(System.Int32)">
+            <summary>
+            Obtiene un agregado dado su Id.
+            </summary>
+            <param name="AggregateId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.AggregateController.GetAllAggregateAsync">
+            <summary>
+            Obtiene todos los agregados.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.AggregateController.GetIdOfLastAggregateAsync">
+            <summary>
+            Obtiene el Id del último agregado que se registró en el sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.AggregateController.GetImageAggregateAsync(System.Int32,System.Int32)">
+            <summary>
+            Accede una imagen especifica de un agregado.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.AggregateController.AddImageAggregateAsync(Microsoft.AspNetCore.Http.IFormFile,System.Int32)">
+            <summary>
+            Agrega una imagen de un agregado(Usando IFormFile).
+            </summary>
+            <param name="formFile"></param>
+            <param name="AggregateId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.AggregateController.AddImageAggregateAsync(Isabella.Common.Dtos.Aggregate.AddImageAggregateDto)">
+            <summary>
+            Agrega una imagen a un agregado(Usando Dto).
+            </summary>
+            <param name="addImageAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.AggregateController.DeleteImageAggregateAsync(System.Int32,System.Int32)">
+            <summary>
+            Borra una imagen de un agregado.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.AggregateController.EnableProductAggregateAsync(System.Int32,System.Boolean)">
+            <summary>
+            Establece un agregado en disponible o no disponible.
+            </summary>
+            <param name="AggregateId"></param>
+            <param name="enable"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.AggregateController.GetCantAggregateAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad determinada de productos dado un agregado de referencia y la cantidad.
+            </summary>
+            <param name="AggregateId"></param>
+            <param name="cantAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.AggregateController.GetListIdOfImageAggregateAsync(System.Int32)">
+            <summary>
+            Obtiene todos los Id de las imagenes de un agregado.
+            </summary>
+            <param name="AggregateId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.AggregateController.GetAllImageAggregatedAsync(System.Int32)">
+            <summary>
+            Obtiene todas las imagenes de un agregado.
+            </summary>
+            <param name="AggregatedId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.AggregateController.GetCantImageAggregateAsync(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad especifica de imagenes de un agregado.
+            </summary>
+            <param name="AggregateId"></param>
+            <param name="ImageId"></param>
+            <param name="cantImages"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.AggregateController.GetAggregateIsAvailableForIdAsync(System.Int32)">
+            <summary>
+            Obtiene un agregado dado su Id si el mismo está disponible.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.AggregateController.GetCantAggregateIsAvailabelAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad determinada de agregados disponibles dado un agregado de referencia y la cantidad.
+            </summary>
+            <param name="AggregateId"></param>
+            <param name="CantAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.AggregateController.GetAllAggregateIsAvailableAsync">
+            <summary>
+            Obtiene todos los agregados disponibles.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.AggregateController.DeleteAggregateAsync(System.Int32)">
+            <summary>
+            Elimina un agregado.
+            </summary>
+            <param name="AggregateId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Controllers.API.CarShopController">
+            <summary>
+            Controlador para el carrito de compras.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.CarShopController.#ctor(Isabella.Web.ServicesControllers.CartShopServiceController,Isabella.Web.ServicesControllers.RestaurantServiceController)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="carShopServiceController"></param>
+            <param name="restaurantServiceController"></param>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.CarShopController.AddProductToCarShopAsync(Isabella.Common.Dtos.CarShop.AddProductToCartShopDto)">
+            <summary>
+            Agregar un nuevo pedido al carrito de compras.
+            </summary>
+            <param name="addProductStandardToCarShop"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.CarShopController.GetMyCarShopAsync">
+            <summary>
+            Obtiene el carrito de compras del usuario.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.CarShopController.AddAggregateInProductToCarShopAsync(Isabella.Common.Dtos.CarShop.AddAggregateInProductDto)">
+            <summary>
+            Agregar un nuevo agregado a un producto que está disponible en el carrito de compras.
+            </summary>
+            <param name="addAggregateInProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.CarShopController.UpdateQuantityProductInCarShopAsync(Isabella.Common.Dtos.CarShop.ModifyQuantityProductDto)">
+            <summary>
+            Actualiza la cantidad del producto.
+            </summary>
+            <param name="modifyQuantityProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.CarShopController.IncrementQuantityProductInCarShopAsync(Isabella.Common.Dtos.CarShop.ModifyQuantityProductDto)">
+            <summary>
+            Incrementa la cantidad del producto en un valor dado.
+            </summary>
+            <param name="modifyQuantityProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.CarShopController.UpdateQuantityAggregateOfProductInCarShopAsync(Isabella.Common.Dtos.CarShop.ModifyCantInAggregateProductDto)">
+            <summary>
+            Actualiza la cantidad de un agregado para un producto.
+            </summary>
+            <param name="modifyCantInAggregateProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.CarShopController.IncrementQuantityAggregateOfProductInCarShopAsync(Isabella.Common.Dtos.CarShop.ModifyCantInAggregateProductDto)">
+            <summary>
+            Incrementa la cantidad de un agregado dado un valor.
+            </summary>
+            <param name="modifyCantInAggregateProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.CarShopController.UpdateSubCategoryOfProductInCarShopAsync(Isabella.Common.Dtos.CarShop.UpdateSubCategoryProductDto)">
+            <summary>
+            Actualiza la subcategoria de un producto del carrito.
+            </summary>
+            <param name="updateSubCategoryProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.CarShopController.DeleteSubCategoryInProductInCarShopAsync(System.Int32)">
+            <summary>
+            Elimina la subcategoria de un producto en el carrito de compras.
+            </summary>
+            <param name="ProductCombinedId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.CarShopController.DeleteProductInCarShopAsync(System.Int32)">
+            <summary>
+            Elimina un producto del carro de compras del usuario.
+            </summary>
+            <param name="ProductCombinedId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.CarShopController.DeleteAggregateOfProductInCarShopAsync(System.Int32,System.Int32)">
+            <summary>
+            Elimina un agregado de un producto.
+            </summary>
+            <param name="ProductCombinedId"></param>
+            <param name="AggregateId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.CarShopController.DeleteAllProductInCarShopAsync">
+            <summary>
+            Elimina todos los productos del carrito de compras.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Controllers.API.CategorieController">
+            <summary>
+            Controlador para las categorias de productos standards.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.CategorieController.#ctor(Isabella.Web.ServicesControllers.CategorieServiceController)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="categoryServiceController"></param>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.CategorieController.AddCategoryStandardAsync(Isabella.Common.Dtos.Categorie.AddCategorieDto)">
+            <summary>
+            Agrega una nueva categoria.
+            </summary>
+            <param name="addCategory"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.CategorieController.GetCategoryForIdAsync(System.Int32)">
+            <summary>
+            Obtiene una categoria por su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.CategorieController.GetCategoryForNameAsync(System.String)">
+            <summary>
+            Obtiene una categoria por su nombre.
+            </summary>
+            <param name="Name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.CategorieController.GetAllCategoriesAsync">
+            <summary>
+            Obtiene todas las categorias.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.CategorieController.GetAllCategoriesIsAvailableAsync">
+            <summary>
+            Obtiene todas las categorias disponibles.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.CategorieController.DeleteCategoryAsync(System.Int32)">
+            <summary>
+            Elimina una categoria.
+            </summary>
+            <param name="CategoryId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.CategorieController.UpdateCategoryAsync(Isabella.Common.Dtos.Categorie.UpdateCategoryDto)">
+            <summary>
+            Actualiza una categoria.
+            </summary>
+            <param name="updateCategory"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Controllers.API.OrderController">
+            <summary>
+            Ordenes
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.OrderController.#ctor(Isabella.Web.ServicesControllers.OrderServiceController,Isabella.Web.ServicesControllers.RestaurantServiceController)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="orderServiceController"></param>
+            <param name="restaurantServiceController"></param>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.OrderController.ConfirmOrderAsync(Isabella.Common.Dtos.Order.ConfirmOrderDto)">
+            <summary>
+            Confirma el pedido del usuario.
+            </summary>
+            <param name="confirmOrder"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.OrderController.GetAggregateForIdAsync">
+            <summary>
+            Obtiene todas las ordenes de un usuario.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Controllers.API.ProductController">
+            <summary>
+            Controlador para los productos standard.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.#ctor(Isabella.Web.ServicesControllers.ProductServiceController)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="productStandardRepository"></param>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.AddProductdAsync(Isabella.Common.Dtos.Product.AddProductDto)">
+            <summary>
+            Agrega un nuevo producto.
+            </summary>
+            <param name="addProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.UpdateProductAsync(Isabella.Common.Dtos.Product.UpdateProductDto)">
+            <summary>
+            Actualiza un producto.
+            </summary>
+            <param name="updateProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.GetProductForIdAsync(System.Int32)">
+            <summary>
+            Obtiene un producto dado su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.GetAllProductAsync">
+            <summary>
+            Obtiene todos los productos.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.GetIdOfLastProductAsync">
+            <summary>
+            Obtiene el Id del último producto que se registró en el sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.GetImageProductAsync(System.Int32,System.Int32)">
+            <summary>
+            Accede una imagen especifica de un producto.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.AddImageProductAsync(Microsoft.AspNetCore.Http.IFormFile,System.Int32)">
+            <summary>
+            Agrega una imagen de un producto(Usando IFormFile).
+            </summary>
+            <param name="formFile"></param>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.AddImageProductAsync(Isabella.Common.Dtos.Product.AddImageProductDto)">
+            <summary>
+            Agrega una imagen a un producto(Usando Dto).
+            </summary>
+            <param name="addImageProductStandard"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.DeleteImageProductAsync(System.Int32,System.Int32)">
+            <summary>
+            Borra una imagen de un producto.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.EnableProductAsync(System.Int32,System.Boolean)">
+            <summary>
+            Establece un producto en disponible o no disponible.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="enable"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.GetCantProductAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad determinada de productos dado un producto de referencia y la cantidad.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="CantProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.GetListIdOfImageProductAsync(System.Int32)">
+            <summary>
+            Obtiene todos los Id de las imagenes de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.GetAllImageProductAsync(System.Int32)">
+            <summary>
+            Obtiene todas las imagenes de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.GetCantImageProductAsync(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad especifica de imagenes de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="ImageId"></param>
+            <param name="CantImages"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.GetProductIsAvailableForIdAsync(System.Int32)">
+            <summary>
+            Obtiene un producto dado su Id si el mismo está disponible.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.GetCantProductIsAvailabelAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad determinada de productos disponibles dado un producto de referencia y la cantidad.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="CantProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.GetAllProductIsAvailableAsync">
+            <summary>
+            Obtiene todos los productos disponibles.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.GetAllProductIsAvailableOfCategory(System.Int32)">
+            <summary>
+            Obtiene todos los productos disponibles de una categoria determinada.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.GetAllProductOfCategory(System.Int32)">
+            <summary>
+            Obtiene todos los productos de una categoria determinada.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.DeleteProductAsync(System.Int32)">
+            <summary>
+            Elimina un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Controllers.API.RestaurantController">
+            <summary>
+            Controlador para los datos del restaurante.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.RestaurantController.#ctor(Isabella.Web.ServicesControllers.RestaurantServiceController)">
+            <summary>
+            Constructor RestaurantController. 
+            </summary>
+            <param name="restaurantServiceController"></param>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.RestaurantController.CloseRestaurantAsync">
+            <summary>
+            Cierra el restaurante.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.RestaurantController.OpenRestaurantAsync">
+            <summary>
+            Abre el restaurante.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.RestaurantController.GetStateRestaurantAsync">
+            <summary>
+            Verifica el estado del restaurante.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Controllers.API.SubCategorieController">
+            <summary>
+            Controlador para las subcategorias.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.SubCategorieController.#ctor(Isabella.Web.ServicesControllers.SubCategorieServiceController)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="subCategoryServiceController"></param>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.SubCategorieController.AddSubCategoryStandardAsync(Isabella.Common.Dtos.SubCategorie.AddSubCategorieToProductDto)">
+            <summary>
+            Agrega una nueva subcategoria.
+            </summary>
+            <param name="addSubCategory"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.SubCategorieController.GetSubCategoryForIdAsync(System.Int32)">
+            <summary>
+            Obtiene una subcategoria por su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.SubCategorieController.GetSubCategoryForNameAsync(System.String)">
+            <summary>
+            Obtiene una subcategoria por su nombre.
+            </summary>
+            <param name="Name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.SubCategorieController.GetAllSubCategoriesAsync">
+            <summary>
+            Obtiene todas las subcategorias.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.SubCategorieController.GetAllSubCategoriesIsAvailableAsync">
+            <summary>
+            Obtiene todas las subcategorias disponibles.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.SubCategorieController.GetAllSubCategoriesIsNotAvailableAsync">
+            <summary>
+            Obtiene todas las subcategorias no disponibles.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.SubCategorieController.DeleteSubCategoryAsync(System.Int32)">
+            <summary>
+            Elimina una subcategoria.
+            </summary>
+            <param name="SubCategoryId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.SubCategorieController.UpdateSubCategoryAsync(Isabella.Common.Dtos.SubCategorie.UpdateSubCategorieDto)">
+            <summary>
+            Actualiza una subcategoria.
+            </summary>
+            <param name="updateSubCategory"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Controllers.API.UserController">
+            <summary>
+            Controlador para el servicio de usuarios.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.#ctor(Isabella.Web.ServicesControllers.UserServiceController)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="userRepositoryDto"></param>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.AddUserModeFastAsync">
+            <summary>
+            Registro rapido de usuario(Solicita el código de identificación para registrarse e iniciar sesión en la aplicación)
+            Le crea un correo y un password al usuario, que se le devuelve para que el mismo haga el login.
+            En este modo no tiene que confirmar el registro a través del correo.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.AddUserAsync(Isabella.Common.Dtos.Users.RegisterUserDto)">
+            <summary>
+            Agrega un nuevo usuario y le envia un correo con el código de confirmación del registro.
+            </summary>
+            <param name="newuser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.ConfirmRegisterUserAsync(System.String,System.String)">
+            <summary>
+            Confirma el registro de un usuario en la aplicación con los detalles enviados a su correo electrónico.
+            </summary>
+            <param name="Id"></param>
+            <param name="Token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.DeleteImageProfileUserAsync">
+            <summary>
+            Borra la imagen de perfil del usuario.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.GetIdOfLastUserAsync">
+            <summary>
+            Obtiene el Id del último usuario que se registró en el sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.GetUserForUserIdAsync(System.Int32)">
+            <summary>
+            Obtiene un usuario dado su Id.
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.GetAllUserAsync">
+            <summary>
+            Obtiene todos los usuarios del sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.GetAllUserAsync(System.Int32)">
+            <summary>
+            Obtiene todos los usuarios del sistema con un determinado rol.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.GetUserForUserNameAsync(System.String)">
+            <summary>
+            Obtiene un usuario dada su cuenta de usuario.
+            </summary>
+            <param name="UserName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.GetUserForUserEmailAsync(System.String)">
+            <summary>
+            Obtiene un usuario dado su email.
+            </summary>
+            <param name="Email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.LoginUserAsync(Isabella.Common.Dtos.Users.LoginUserDto)">
+            <summary>
+            Login del usuario y obtiene el token de acceso,el tiempo de expiración y otros datos del usuario.
+            </summary>
+            <param name="loginUser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.LoginExternProviderForAsync(System.String)">
+            <summary>
+            Login de usuarios con proveedores externos(Google, Facebook, Twitter y Apple). 
+            Si el usuario no existe lo registra en la aplicación.
+            </summary>
+            <param name="scheme"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.ConfirmRecoverPasswordUserAsync(System.String,System.String,System.String)">
+            <summary>
+            Recupera la contraseña del usuario con los detalles enviados a su correo electrónico.
+            </summary>
+            <param name="Id"></param>
+            <param name="Token"></param>
+            <param name="NewPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.GetUsersForIdAndCantAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene un número determinado de usuarios dado un Id y la cantidad deseada.
+            </summary>
+            <param name="UserId"></param>
+            <param name="CantUsers"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.UpdateUserAsync(Isabella.Common.Dtos.Users.UpdateUserDto)">
+            <summary>
+            Actualiza un usuario.
+            </summary>
+            <param name="updateUser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.ChangePasswordUserAsync(Isabella.Common.Dtos.Users.ChangePasswordUserDto)">
+            <summary>
+            Cambia la contraseña de un usuario.
+            </summary>
+            <param name="changePassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.EmailForRecoverPasswordUserAsync(Isabella.Common.Dtos.Users.ResetPasswordDto)">
+            <summary>
+            Envia un correo al usuario con los detalles para la recuperación de la contraseña.
+            </summary>
+            <param name="resetPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.NewEmailConfirmRegisterUserAsync(Isabella.Common.Dtos.Users.SendToNewCodeConfirmationRegisterDto)">
+            <summary>
+            Envia un nuevo correo al usuario con los detalles para la confirmación del registro.
+            </summary>
+            <param name="sendToNewCodeConfirmationRegister"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.AddImageProfileUserAsync(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Agrega o actualiza una imagen de perfil de un usuario determinado usando IFormFile.
+            </summary>
+            <param name="formFile"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.RemoveRoleOfUserAsync(System.Int32,System.Int32)">
+            <summary>
+            Elimina un role determinado de un usuario dado.
+            </summary>
+            <param name="UserId"></param>
+            <param name="RoleId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.GetAllUserAllDataAsync">
+            <summary>
+            Obtiene todos los usuarios con todos sus datos, disponible solo para usuarios admins.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.GetUserAllDataAsync(System.Int32)">
+            <summary>
+            Obtiene todos los datos de un usuario, disponible solo para usuarios admins.
+            </summary>
+            <param name="UserId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.AddRoleToUserAsync(System.Int32,System.Int32)">
+            <summary>
+            Asigna un role determinado a un usuario.
+            </summary>
+            <param name="UserId"></param>
+            <param name="RoleId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.UserBannerUserAsync(System.Int32,System.Boolean)">
+            <summary>
+            Indica si un usuario es baneado o no.
+            </summary>
+            <param name="UserId"></param>
+            <param name="banner"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.RemoveUserAdminForNotifications(System.Int32)">
+            <summary>
+            Elimina el usuario admin de la lista de los que reciben las notificaciones de las ordenes.
+            </summary>
+            <param name="UserId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.AddUserAdminForNotifications(System.Int32)">
+            <summary>
+            Agrega un usuario admin a la lista de los que reciben las notificaciones de las ordenes.
+            </summary>
+            <param name="UserId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.API.UserController.AddOrUpdateChatIdTelegramUserAdminForNotifications(System.Int32,System.Int32)">
+            <summary>
+            Actualiza o agrega el chat id de un usuario admin para recibir por Telegram las notificaciones de las ordenes.
+            </summary>
+            <param name="UserId"></param>
+            <param name="ChatIdTelegram"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Controllers.CategorieController">
+            <summary>
+            Controlador de Productos 
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Controllers.CategorieController.#ctor(Isabella.Web.ServicesControllers.CategorieServiceController)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="categoryServiceController"></param>
+        </member>
+        <member name="M:Isabella.Web.Controllers.CategorieController.Index">
+            <summary>
+            Obtiene todas las categorias.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.CategorieController.AddCategoryAsync(Isabella.Common.Dtos.Categorie.AddCategorieDto)">
+            <summary>
+            Agrega una nueva categoria.
+            </summary>
+            <param name="addCategory"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.CategorieController.DeleteCategoryAsync(System.Int32)">
+            <summary>
+            Elimina una categoria.
+            </summary>
+            <param name="CategoryId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.CategorieController.UpdateCategoryAsync(Isabella.Common.Dtos.Categorie.UpdateCategoryDto)">
+            <summary>
+            Actualiza una categoria.
+            </summary>
+            <param name="updateCategory"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Controllers.ProductController">
+            <summary>
+            Controlador de Productos 
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Controllers.ProductController.#ctor(Isabella.Web.ServicesControllers.ProductServiceController,Isabella.Web.ServicesControllers.CategorieServiceController)">
+            <summary>
+            
+            </summary>
+            <param name="productServiceController"></param>
+            <param name="categorieServiceController"></param>
+        </member>
+        <member name="M:Isabella.Web.Controllers.ProductController.Index">
+            <summary>
+            Muestra todos los productos disponibles en la base de datos
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.ProductController.Details(System.Nullable{System.Int32})">
+            <summary>
+            Muestra los detalles del producto.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.ProductController.Create">
+            <summary>
+            Muestra los elementos para crear un producto.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.ProductController.Create(Isabella.Web.ViewModels.ProductViewModel.AddProductViewModel,System.String)">
+            <summary>
+            Crea un nuevo producto.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.ProductController.Edit(System.Nullable{System.Int32})">
+            <summary>
+            Crea la view donde se va a actualizar el producto.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.ProductController.Edit(Isabella.Web.ViewModels.ProductViewModel.UpdateProductViewModel,System.String)">
+            <summary>
+            Actualiza un producto.
+            </summary>
+            <param name="updateProductViewModel"></param>
+            <param name="Categories"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.ProductController.Delete(System.Nullable{System.Int32})">
+            <summary>
+            Crea la View donde se elimina el producto.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.ProductController.DeleteConfirmed(System.Int32)">
+            <summary>
+            Se elimina el producto.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Data.DataContext">
+            <summary>
+            DataContext
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Data.DataContext.#ctor(Microsoft.EntityFrameworkCore.DbContextOptions{Isabella.Web.Data.DataContext})">
+            <summary>
+            Constructor del Context
+            </summary>
+            <param name="dbContextOptions"></param>
+        </member>
+        <member name="P:Isabella.Web.Data.DataContext.Gps">
+            <summary>
+            Coordenadas Gps.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Data.DataContext.Orders">
+            <summary>
+            Pedidos de los usuarios.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Data.DataContext.UserAdminsNotifications">
+            <summary>
+            Notificaciones para los usuarios admins.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Data.DataContext.NotificationPendients">
+            <summary>
+            Notificaciones Pendientes.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Data.DataContext.OrderDetails">
+            <summary>
+            Detalles de los pedidos.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Data.DataContext.CalificationProduct">
+            <summary>
+            Calificación de Productos.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Data.DataContext.CalificationRestaurants">
+            <summary>
+            Calificacion
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Data.DataContext.CarShops">
+            <summary>
+            Carrito de compra de productos standards
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Data.DataContext.Aggregates">
+            <summary>
+            Productos de agregos.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Data.DataContext.Products">
+            <summary>
+            Productos.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Data.DataContext.ImagesProducts">
+            <summary>
+            Imagenes de productos.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Data.DataContext.ImageAggregates">
+            <summary>
+            Imagenes Agregados.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Data.DataContext.CantAggregate">
+            <summary>
+            Pedidos de productos de agrego para un producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Data.DataContext.Categories">
+            <summary>
+            Categoria de los productos.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Data.DataContext.SubCategories">
+            <summary>
+            SubCategorias.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Data.DataContext.ProductCombineds">
+            <summary>
+            Producto Combinado.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Data.DataContext.Restaurants">
+            <summary>
+            Restaurant
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Data.DataContext.OnModelCreating(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <summary>
+            Crea el modelo para la base de datos
+            </summary>
+            <param name="builder"></param>
+        </member>
+        <member name="T:Isabella.Web.Helpers.MailHelper">
+            <summary>
+            Servicio para el envio de correos electronicos.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Helpers.MailHelper.#ctor(Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:Isabella.Web.Helpers.MailHelper.SendMail(System.String,System.String,System.String)">
+            <summary>
+            Envia correos a un destinatario.
+            </summary>
+            <param name="destiny"></param>
+            <param name="subject"></param>
+            <param name="body_message"></param>
+        </member>
+        <member name="T:Isabella.Web.Helpers.RepositoryHelpers.IServiceGenericRepository`1">
+            <summary>
+            Repositorio Génerico
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IServiceGenericRepository`1.GetLoadAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+            <summary>
+            Implementa un metodo generico que devuelve una entidad con las relaciones indicadas.
+            </summary>
+            <param name="Id"></param>
+            <param name="parameters"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper">
+            <summary>
+            Repositorio para los usuarios.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.LoginInAsync(Isabella.Web.Models.Entities.User,System.String,System.Boolean)">
+            <summary>
+            Login Web
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.LoginOutAsync">
+            <summary>
+            Logout Web
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.AddUserAsync(Isabella.Web.Models.Entities.User,System.String)">
+            <summary>
+            Agrega un usuario con contraseña definida.
+            </summary>
+            <param name="user"></param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.AddUserAsync(Isabella.Web.Models.Entities.User)">
+            <summary>
+            Agrega un usuario sin contraseña definida(Esto es para login con proveedor externo).
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.GenerateTokenForConfirmRegisterAsync(Isabella.Web.Models.Entities.User)">
+            <summary>
+            Envia un correo al usuario con los detalles para la confirmación del registro en la aplicación.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.GetIdOfLastUserAsync">
+            <summary>
+            Obtiene el Id del último usuario registrado.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.VerifyRoleAsync(System.String)">
+            <summary>
+            Verifica si existe el role en el sistema.
+            </summary>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.VerifyEmailAsync(System.String)">
+            <summary>
+            Verifica si el email dado está en uso.
+            </summary>
+            <param name="email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.VerifyRoleAsync(System.Int32)">
+            <summary>
+            Verifica si un role está disponible dado su Id.
+            </summary>
+            <param name="RoleId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.VerifyUserNameAsync(System.String)">
+            <summary>
+            Verifica si la cuenta de usuario dada está en uso.
+            </summary>
+            <param name="userName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.RemoveRoleOfUserAsync(Isabella.Web.Models.Entities.User,System.String)">
+            <summary>
+            Elimina un role especifico de un usuario.
+            </summary>
+            <param name="user"></param>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.GetUserByUserNameAsync(System.String)">
+            <summary>
+            Obtiene un usuario dada su cuenta de usuario.
+            </summary>
+            <param name="userName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.GetUserByIdAsync(System.Int32)">
+            <summary>
+            Obtiene un Usuario dado su Id.
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.GetUserByEmailAsync(System.String)">
+            <summary>
+            Obtiene un usuario dado su correo electrónico.
+            </summary>
+            <param name="email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.GetAllUserAsync">
+            <summary>
+            Obtiene todos los usuarios del sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.GetAllUserWithRoleAsync(System.Int32)">
+            <summary>
+            Obtiene todos los usuarios del sistema que tienen un role determinado.
+            </summary>
+            <param name="RoleId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.AddRoleForUserAsync(Isabella.Web.Models.Entities.User,System.String)">
+            <summary>
+            Agregar un role a un usuario.
+            </summary>
+            <param name="user"></param>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.VerifyConfirmRegisterUserAsync(Isabella.Web.Models.Entities.User)">
+            <summary>
+            Verifica si el usuario confirmó su registro.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.ConfirmRegisterUserAsync(Isabella.Web.Models.Entities.User,System.String)">
+            <summary>
+            Confirma el registro del usuario confirmó su registro.
+            </summary>
+            <param name="user"></param>
+            <param name="Token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.VerifyPasswordUserAsync(Isabella.Web.Models.Entities.User,System.String)">
+            <summary>
+            Verifica que la contraseña del usuario es correcta.
+            </summary>
+            <param name="user"></param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.CreateTokenAsync(Isabella.Web.Models.Entities.User)">
+            <summary>
+            Crea un Token Web Json para el usuario.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.DeleteImageProfileUserAsync(Isabella.Web.Models.Entities.User)">
+            <summary>
+            Borra la imagen de perfil de un usuario determinado.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.UpdatePasswordAsync(Isabella.Web.Models.Entities.User,System.String,System.String)">
+            <summary>
+            Cambia la contraseña de un usuario.
+            </summary>
+            <param name="user"></param>
+            <param name="oldPassword"></param>
+            <param name="newPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.UpdateUserAsync(Isabella.Web.Models.Entities.User)">
+            <summary>
+            Actualiza el usuario.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.GenerateTokenForRecoverPasswordAsync(Isabella.Web.Models.Entities.User)">
+            <summary>
+            Genera el token del usuario para la recuperación de la contraseña.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.RecoverPasswwordUserAsync(Isabella.Web.Models.Entities.User,System.String,System.String)">
+            <summary>
+            Recupera la contraseña
+            </summary>
+            <param name="user"></param>
+            <param name="Token"></param>
+            <param name="newPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.VerifyRoleInUserAsync(Isabella.Web.Models.Entities.User,System.String)">
+            <summary>
+            Verifica si un usuario tiene un role determinado.
+            </summary>
+            <param name="user"></param>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.GetAllRoleOfUserAsync(Isabella.Web.Models.Entities.User)">
+            <summary>
+            Obtiene todos los roles que posee un usuario.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Helpers.ServiceGenericHelper`1">
+            <summary>
+            Helper que representa un servicio generico para realizar CRUD sobre las entidades.
+            </summary>
+            <typeparam name="TEntity"></typeparam>
+        </member>
+        <member name="F:Isabella.Web.Helpers.ServiceGenericHelper`1._dataContext">
+            <summary>
+            Contexto.
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Helpers.ServiceGenericHelper`1.m_dbSet">
+            <summary>
+            Representa la tabla de la entidad.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Helpers.ServiceGenericHelper`1._context">
+            <summary>
+            Devuelve el contexto actual de datos.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Helpers.ServiceGenericHelper`1.#ctor(Isabella.Web.Data.DataContext)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="dataContext"></param>
+        </member>
+        <member name="M:Isabella.Web.Helpers.ServiceGenericHelper`1.GetLoadAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+            <summary>
+            Devuelve una entidad con las relaciones indicada.
+            </summary>
+            <param name="Id"></param>
+            <param name="parameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.ServiceGenericHelper`1.GetLoadAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+            <summary>
+            Obtiene todas las entidades disponibles con las entidades relacionadas deseadas.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.ServiceGenericHelper`1.GetLoadAsync(`0,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+            <summary>
+            Obtiene una cantidad determinada de entidades a partir de una entidad dada más la cantidad deseada.
+            </summary>
+            <param name="entity"></param>
+            <param name="CantEntity"></param>
+            <param name="parameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.ServiceGenericHelper`1.GetLoadAsync(`0,System.Int32,System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+            <summary>
+            Obtiene una cantidad determinada de entidades a partir de una entidad dada más la cantidad deseada mientras cumplan con una condicción determinada.
+            </summary>
+            <param name="entity"></param>
+            <param name="CantEntity"></param>
+            <param name="create_query"></param>
+            <param name="parameters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.ServiceGenericHelper`1.GetLoadAsync(System.Int32,System.Collections.Generic.ICollection{`0},System.Int32)">
+            <summary>
+            Devuelve una cantidad de entidades determinada a partir del Id de una entidad y la cantidad deseada.
+            Este metodo es útil cuando tenemos una colección de entidades que todas están relacionadas con otra entidad.
+            Así podemos obtener una cantidad determinada de las mismas, ya que el Id de está puede no estar de forma consecutiva,
+            en la tabla de origen, por lo que usamos este método cuando tenemos todas las relaciones de una entidad.
+            </summary>
+            <param name="Id"></param>
+            <param name="list_entities"></param>
+            <param name="CantEntity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.ServiceGenericHelper`1.LastEntityAsync">
+            <summary>
+            Devuelve la ultima entidad.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.ServiceGenericHelper`1.WhereListEntityAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+            <summary>
+            Crea una consulta para aplicar a una entidad y indica las relaciones que se desean traer.
+            Devuelve todas las entidades que cumplen con la condicción.
+            </summary>
+            <param name="create_query"></param>
+            <param name="parameters_filters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.ServiceGenericHelper`1.WhereSingleEntityAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+            <summary>
+            Crea una consulta para aplicar a una entidad y indica las relaciones que se desean traer.
+            Devuelve la entidad que cumple con la condicción si existe alguna otra entidad que cumple con la condicción
+            se lanza una excepción.
+            </summary>
+            <param name="create_query"></param>
+            <param name="parameters_filters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.ServiceGenericHelper`1.WhereFirstEntityAsync(System.Linq.Expressions.Expression{System.Func{`0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{`0,System.Object}}[])">
+            <summary>
+            Crea una consulta para aplicar a una entidad y indica las relaciones que se desean traer.
+            Devuelve la primera entidad que cumpla con la condicción.
+            </summary>
+            <param name="create_query"></param>
+            <param name="parameters_filters"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.ServiceGenericHelper`1.VerifyIsContainsEntity(System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Verifica si una tabla contiene todas las entidades enviadas dado sus Id.
+            </summary>
+            <param name="ListEntityId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.ServiceGenericHelper`1.AddEntityAsync(`0)">
+            <summary>
+            Guarda una entidad en la base de datos.
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.ServiceGenericHelper`1.AddRangeEntityAsync(System.Collections.Generic.List{`0})">
+            <summary>
+            Guarda una lista de entidades en la base de datos.
+            </summary>
+            <param name="entities"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.ServiceGenericHelper`1.SaveChangesBDAsync">
+            <summary>
+            Guarda los cambios en la base de datos.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.ServiceGenericHelper`1.UpdateEntity(`0)">
+            <summary>
+            Actualiza una lista de entidades.
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.ServiceGenericHelper`1.UpdateRangeEntity(System.Collections.Generic.List{`0})">
+            <summary>
+            Actualiza una entidad.
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.ServiceGenericHelper`1.RemoveEntity(`0)">
+            <summary>
+            Elimina una entidad.
+            </summary>
+            <param name="entity"></param>
+        </member>
+        <member name="M:Isabella.Web.Helpers.ServiceGenericHelper`1.RemoveRangeEntity(System.Collections.Generic.List{`0})">
+            <summary>
+            Elimina una entidad.
+            </summary>
+            <param name="entities"></param>
+        </member>
+        <member name="T:Isabella.Web.Helpers.ServiceGenericHelper`1.NullEntityException">
+            <summary>
+            Entidad Nula.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Helpers.UploadFileHelper">
+            <summary>
+            Servicio para el manejo de archivos de subida.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Helpers.UploadFileHelper.UploadFile(System.IO.MemoryStream,System.String,System.String)">
+            <summary>
+            Guarda un archivo que envio el usuario en el servidor.
+            </summary>
+            <param name="memoryStream"></param>
+            <param name="folder"></param>
+            <param name="fileName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Helpers.IUserHelper">
+            <summary>
+            Servicio para la entidad que representa los usuarios.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.#ctor(Isabella.Web.Data.DataContext,Microsoft.AspNetCore.Identity.UserManager{Isabella.Web.Models.Entities.User},Microsoft.AspNetCore.Identity.RoleManager{Microsoft.AspNetCore.Identity.IdentityRole{System.Int32}},Microsoft.AspNetCore.Identity.SignInManager{Isabella.Web.Models.Entities.User},Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="dataContext"></param>
+            <param name="userManager"></param>
+            <param name="roleManager"></param>
+            <param name=""></param>
+            <param name="signInManager"></param>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.LoginInAsync(Isabella.Web.Models.Entities.User,System.String,System.Boolean)">
+            <summary>
+            Login Web
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.LoginOutAsync">
+            <summary>
+            Logout Web
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.AddUserAsync(Isabella.Web.Models.Entities.User,System.String)">
+            <summary>
+            Agrega un usuario con contraseña definida.
+            </summary>
+            <param name="user"></param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.AddUserAsync(Isabella.Web.Models.Entities.User)">
+            <summary>
+            Agrega un usuario sin contraseña definida(Esto es para login con proveedor externo).
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.AddRoleForUserAsync(Isabella.Web.Models.Entities.User,System.String)">
+            <summary>
+            Agrega un role determinado a un usuario.
+            </summary>
+            <param name="user"></param>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.VerifyRoleInUserAsync(Isabella.Web.Models.Entities.User,System.String)">
+            <summary>
+            Verifica si un usuario tiene un role asignado
+            </summary>
+            <param name="user"></param>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.GetAllRoleOfUserAsync(Isabella.Web.Models.Entities.User)">
+            <summary>
+            Obtiene todos los roles que posee un usuario.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.RemoveRoleOfUserAsync(Isabella.Web.Models.Entities.User,System.String)">
+            <summary>
+            Elimina un role especifico de un usuario.
+            </summary>
+            <param name="user"></param>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.VerifyEmailAsync(System.String)">
+            <summary>
+            Verifica si un email está en uso.
+            </summary>
+            <param name="email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.VerifyUserNameAsync(System.String)">
+            <summary>
+            Verifica si una cuenta de usuario está en uso.
+            </summary>
+            <param name="username"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.GenerateTokenForConfirmRegisterAsync(Isabella.Web.Models.Entities.User)">
+            <summary>
+            Genera el Token del usuario para la confirmación del registro.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.VerifyRoleAsync(System.String)">
+            <summary>
+            Verifica si el role está definido en la app.
+            </summary>
+            <param name="role"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.VerifyRoleAsync(System.Int32)">
+            <summary>
+            Verifica si el role está definido en la app.
+            </summary>
+            <param name="RoleId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.GetIdOfLastUserAsync">
+            <summary>
+            Obtiene el Id del último usuario registrado en el sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.GetUserByUserNameAsync(System.String)">
+            <summary>
+            Obtiene un usuario dada su cuenta de usuario.
+            </summary>
+            <param name="userName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.GetUserByIdAsync(System.Int32)">
+            <summary>
+            Obtiene un Usuario dado su Id.
+            </summary>
+            <param name="userId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.GetUserByEmailAsync(System.String)">
+            <summary>
+            Obtiene un usuario dado su correo electrónico.
+            </summary>
+            <param name="email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.VerifyConfirmRegisterUserAsync(Isabella.Web.Models.Entities.User)">
+            <summary>
+            Verifica si el usuario confirmó su registro.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.ConfirmRegisterUserAsync(Isabella.Web.Models.Entities.User,System.String)">
+            <summary>
+            Verifica si el usuario confirmó su registro.
+            </summary>
+            <param name="user"></param>
+            <param name="Token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.VerifyPasswordUserAsync(Isabella.Web.Models.Entities.User,System.String)">
+            <summary>
+            Verifica que la contraseña del usuario es correcta.
+            </summary>
+            <param name="user"></param>
+            <param name="password"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.CreateTokenAsync(Isabella.Web.Models.Entities.User)">
+            <summary>
+            Crea un Token Web Json para el usuario.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.GetAllUserAsync">
+            <summary>
+            Obtiene todos los usuarios del sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.GetAllUserWithRoleAsync(System.Int32)">
+            <summary>
+            Obtiene todos los usuarios del sistema que tienen un role determinado.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.UpdatePasswordAsync(Isabella.Web.Models.Entities.User,System.String,System.String)">
+            <summary>
+            Cambia la contraseña de un usuario.
+            </summary>
+            <param name="user"></param>
+            <param name="oldPassword"></param>
+            <param name="newPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.DeleteImageProfileUserAsync(Isabella.Web.Models.Entities.User)">
+            <summary>
+            Borra la imagen de perfil de un usuario determinado.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.UpdateUserAsync(Isabella.Web.Models.Entities.User)">
+            <summary>
+            Actualiza un usuario.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.GenerateTokenForRecoverPasswordAsync(Isabella.Web.Models.Entities.User)">
+            <summary>
+            Envia un correo al usuario con un código para la recuperaión de su contraseña.
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.RecoverPasswwordUserAsync(Isabella.Web.Models.Entities.User,System.String,System.String)">
+            <summary>
+            Recupera la contraseña del usuario. 
+            </summary>
+            <param name="user"></param>
+            <param name="Token"></param>
+            <param name="newPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RoleWrongException.#ctor(System.String)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="T:Isabella.Web.Hubs.DicctionaryConnectedHub">
+            <summary>
+            Servicio Externo al Hub para el manejo de las conexiones.
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Hubs.DicctionaryConnectedHub._devicesconnecteds">
+            <summary>
+            Representa un diccionario con las conexiones a un Hub especifico.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Hubs.DicctionaryConnectedHub.CantConnected">
+            <summary>
+            Devuelve la cantidad de usuarios que están conectados al servidor Hub.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Hubs.DicctionaryConnectedHub.GetAllDeviceConnected(System.Collections.Generic.List{System.String})">
+            <summary>
+            Devuelve los Id de la conexión de los dispositivos de un usuario que están conectados 
+            actualmente, dada una lista de Keys.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Hubs.DicctionaryConnectedHub.AddNewDevice(System.String,System.String)">
+            <summary>
+            Agrega un nuevo dispositivo que se conectó al Hub al diccionario.
+            </summary>
+            <param name="key_userName"></param>
+            <param name="connectionID"></param>
+        </member>
+        <member name="M:Isabella.Web.Hubs.DicctionaryConnectedHub.RemoveDevice(System.String,System.String)">
+            <summary>
+            Elimina un dispositivo del diccionario(Cuando se desconecta del Hub)
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Hubs.DicctionaryConnectedHub.GetAllDeviceConnectedOfUser(System.String)">
+            <summary>
+            Devuelve todos los dispositivos que están conectados actualmente de un usuario.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Hubs.DicctionaryConnectedHub.VerifyIsUserConnected(System.String)">
+            <summary>
+            Verifica si un usuario determinado está conectado.
+            </summary>
+            <param name="key_userName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Hubs.NotificationsHub">
+            <summary>
+            Hub para las notificaciones que usa Isabellsa 
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Hubs.NotificationsHub.#ctor(Isabella.Web.Hubs.DicctionaryConnectedHub,Isabella.Web.Data.DataContext,AutoMapper.IMapper)">
+            <summary>
+            
+            </summary>
+            <param name="dicctionaryConnectedHubService"></param>
+            <param name="dataContext"></param>
+            <param name="mapper"></param>
+        </member>
+        <member name="M:Isabella.Web.Hubs.NotificationsHub.OnConnectedAsync">
+            <summary>
+            Evento OnConnected, se ejecuta cada vez que un usuario se conecta.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Hubs.NotificationsHub.OnDisconnectedAsync(System.Exception)">
+            <summary>
+            Evento OnDisconnectedAsync, se ejecuta cada vez que 
+            un usuario se desconecta.
+            </summary>
+            <param name="exception"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.Aggregate">
+            <summary>
+            Agregados.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Aggregate.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Aggregate.Images">
+            <summary>
+            Imagenes para los productos. 
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Aggregate.Name">
+            <summary>
+            Nombre del Producto ofertado por el Restaurante.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Aggregate.Price">
+            <summary>
+            Precio del agregado.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Aggregate.LastBuy">
+            <summary>
+            Ultima compra.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Aggregate.DateCreated">
+            <summary>
+            Fecha en que se creo el producto
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Aggregate.DateUpdate">
+            <summary>
+            Fecha en que se actualizo el producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Aggregate.IsAvailabe">
+            <summary>
+            Indica si el producto está disponible.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Aggregate.Stock">
+            <summary>
+            Cantidad disponible en el Stock
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Aggregate.Description">
+            <summary>
+            Descripción del Producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.CalificationProduct">
+            <summary>
+            Calificación de los productos Standard
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationProduct.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationProduct.User">
+            <summary>
+            User.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationProduct.Product">
+            <summary>
+            Producto 
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationProduct.DateCreated">
+            <summary>
+            Fecha en la que el usuario dió la calificación del producto
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationProduct.Calification">
+            <summary>
+            Calificación del cliente acerca del Producto(1-5 Estrellas)
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationProduct.Opinion">
+            <summary>
+            Opinión del cliente acerca del Producto
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.CalificationRestaurant">
+            <summary>
+            Entidad que representa la calificación del Cliente acerca del restaurante
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationRestaurant.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationRestaurant.User">
+            <summary>
+            Código de identificación.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationRestaurant.DateCreated">
+            <summary>
+            Fecha en la que el usuario dió la calificación del producto
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationRestaurant.Calification">
+            <summary>
+            Calificación del cliente acerca del Producto(1-5 Estrellas)
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CalificationRestaurant.Opinion">
+            <summary>
+            Opinión del cliente acerca del Producto
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.CantAggregate">
+            <summary>
+            Agregados
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CantAggregate.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CantAggregate.ProductCombined">
+            <summary>
+            Producto Combinado
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CantAggregate.Aggregate">
+            <summary>
+            Producto de agrego
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CantAggregate.Price">
+            <summary>
+            Precio actual del Producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CantAggregate.Quantity">
+            <summary>
+            Cantidad de Productos.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CantAggregate.PriceTotal">
+            <summary>
+            Precio total del Producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.CartShop">
+            <summary>
+            Carro de compras Fast(Para pedidos informales, o sea usuarios que no desean ser clientes oficiales)
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CartShop.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CartShop.User">
+            <summary>
+            Código de identificación.
+            
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CartShop.ProductCombined">
+            <summary>
+            ProductCarShop
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CartShop.DateCreated">
+            <summary>
+            Fecha en que se agrego el producto al carrito.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CartShop.QuantityTotalProductCombined">
+            <summary>
+            Cantidad de Productos.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CartShop.QuantityTotalAggregate">
+            <summary>
+            Cantidad Total de Agregados.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CartShop.PriceTotalOfAggregates">
+            <summary>
+            Precio total en agregados
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.CartShop.PriceTotal">
+            <summary>
+            Precio Total del posible pedido.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.Category">
+            <summary>
+            Entidad que representa la categoria de un producto standard
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Category.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Category.Name">
+            <summary>
+            Nombre de la categoría del producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.Gps">
+            <summary>
+            GPS
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Gps.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Gps.Latitude_Gps">
+            <summary>
+            Latitud(Coordenada GPS)
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Gps.Longitude_Gps">
+            <summary>
+            Longitude(Coordenada GPS)
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Gps.Favorite_Gps">
+            <summary>
+            GPS Favorito
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Gps.Name_Gps">
+            <summary>
+            Nombre del GPS
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.ImageAggregate">
+            <summary>
+            Entidad que representa las imagenes de los Productos
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageAggregate.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageAggregate.Aggregate">
+            <summary>
+            Producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageAggregate.Image">
+            <summary>
+            Imagen del producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.ImageProduct">
+            <summary>
+            Entidad que representa las imagenes de los Productos
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageProduct.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageProduct.Product">
+            <summary>
+            Producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ImageProduct.Image">
+            <summary>
+            Imagen del producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.NotificationPendients">
+            <summary>
+            Notificaciones Pendientes para el admin.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.NotificationPendients.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.NotificationPendients.UserAdmin">
+            <summary>
+            Usuario admin a los que se le debe notificar.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.NotificationPendients.Order">
+            <summary>
+            Ordenes.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.Order">
+            <summary>
+            Ordenes del tipo fast(Para pedidos informales, o sea usuarios que no desean ser clientes oficiales)
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.User">
+            <summary>
+            User.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.OrderDetails">
+            <summary>
+            Detalle de ordenes.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.Gps">
+            <summary>
+            Gps
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.PhoneNumber">
+            <summary>
+            Gps
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.Address">
+            <summary>
+            Dirección donde entregar la orden
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.AskForWho">
+            <summary>
+            Dirección donde entregar la orden
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.OrderDate">
+            <summary>
+            Fecha en que se realizó el pedido.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.DeliveryDate">
+            <summary>
+            Tiempo en el que se debe entregar el pedido.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.Lines">
+            <summary>
+            Cantidad de productos sin repetir(o sea productos diferentes) que tiene nuestro carrito.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.QuantityTotalProductCombined">
+            <summary>
+            Cantidad Total de Productos.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.QuantityTotalAggregate">
+            <summary>
+            Cantidad Total de Agregados.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.PriceTotalOfAggregates">
+            <summary>
+            Precio total en agregados
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Order.PriceTotal">
+            <summary>
+            Precio Total del posible pedido.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.OrderDetail">
+            <summary>
+            Detalles de un pedido de tipo Fast
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.OrderDetail.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.OrderDetail.ProductCombined">
+            <summary>
+            ProductCarShop
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.OrderDetail.PriceProductCombined">
+            <summary>
+            Precio Producto, el mismo se define si el usuario elige el producto con subcategoria o no.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.OrderDetail.QuantityProductCombined">
+            <summary>
+            Cantidad de Productos.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.OrderDetail.QuantityTotalAggregate">
+            <summary>
+            Cantidad Total de Agregados.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.OrderDetail.PriceTotalOfAggregates">
+            <summary>
+            Precio total en agregados
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.OrderDetail.PriceTotal">
+            <summary>
+            Precio Total del posible pedido.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.OrderDetail.DateCreated">
+            <summary>
+            Fecha en que se agrego el producto al carrito.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.Product">
+            <summary>
+            Entidad producto: Son los platos que oferta el Restaurante.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.Category">
+            <summary>
+            Categoria del producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.Images">
+            <summary>
+            Imagenes para los productos. 
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.SubCategories">
+            <summary>
+            SubCategorias del producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.Name">
+            <summary>
+            Nombre del Producto ofertado por el Restaurante.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.Price">
+            <summary>
+            Precio del Produto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.LastBuy">
+            <summary>
+            Ultima Compra vez que algún usuario compro el producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.DateCreated">
+            <summary>
+            Fecha en que se creo el producto
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.DateUpdate">
+            <summary>
+            Fecha en que se actualizo el producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.IsAvailabe">
+            <summary>
+            Indica si el producto está disponible.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.Stock">
+            <summary>
+            Cantidad disponible en el Stock
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.Description">
+            <summary>
+            Descripción del Producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.Average">
+            <summary>
+            Promedio de calificaciones del usuario acerca del producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Product.SupportAggregate">
+            <summary>
+            Indica si el producto se le puede incluir agregados.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.ProductCombined">
+            <summary>
+            ProductCarShop
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ProductCombined.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ProductCombined.Product">
+            <summary>
+            Producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ProductCombined.SubCategory">
+            <summary>
+            SubCategoria del Producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ProductCombined.CantAggregates">
+            <summary>
+            Cantidad de agregos.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ProductCombined.Price">
+            <summary>
+            Precio Producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ProductCombined.Quantity">
+            <summary>
+            Cantidad de Productos.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.ProductCombined.PriceTotal">
+            <summary>
+            Precio total del Producto.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.Restaurant">
+            <summary>
+            Restaurante
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Restaurant.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Restaurant.Name">
+            <summary>
+            Nombre
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Restaurant.IsOpenRestaurant">
+            <summary>
+            Indica si el restaurante está abierto o cerrado.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Restaurant.BeginHour">
+            <summary>
+            Hora de apertura del restaurante
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.Restaurant.CloseHour">
+            <summary>
+            Horra de cerrar el restaurante
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.SubCategory">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.SubCategory.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.SubCategory.Product">
+            <summary>
+            Producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.SubCategory.Name">
+            <summary>
+            Nombre de la categoría del producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.SubCategory.Price">
+            <summary>
+            Precio del Produto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.SubCategory.Description">
+            <summary>
+            Descripción
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.SubCategory.IsAvailable">
+            <summary>
+            Enable
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.User">
+            <summary>
+            Users.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.IdForClaim">
+            <summary>
+            Id para Claim
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.DateCreated">
+            <summary>
+            Fecha en la que se actualizó campos del usuario en el sistema.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.DateUpdated">
+            <summary>
+            Fecha en el que se registró el usuario en el sistema.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.LastDateConnected">
+            <summary>
+            Ultima vez que el usuario se conecto a la API InkNation.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.FirstName">
+            <summary>
+            Nombre
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.LastName">
+            <summary>
+            Apellidos
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.FullName">
+            <summary>
+            Nombre completo del usuario.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.Address">
+            <summary>
+            Dirección.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.RecoverPassword">
+            <summary>
+            Indica que el usuario solicito recuperación de contraseña.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.Enable">
+            <summary>
+            Enable
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.User.ImageUserProfile">
+            <summary>
+            Imagen de perfil del usuario.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.Entities.UserAdminsNotifications">
+            <summary>
+            Usuarios admins que deben recibir las notificaciones.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.UserAdminsNotifications.Id">
+            <summary>
+            Id
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.UserAdminsNotifications.User">
+            <summary>
+            Usuario admin a los que se le debe notificar.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.Entities.UserAdminsNotifications.UserTelegramChatId">
+            <summary>
+            Id de Chat de Telegram
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Models.IEntity">
+            <summary>
+            Interfaz para implementar Id.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.Models.IEntity.Id">
+            <summary>
+            Key
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Program.RunSeeding(Microsoft.Extensions.Hosting.IHost)">
+             <summary>
+            Ejecuta el Seeder.
+             </summary>
+             <param name="host"></param>
+        </member>
+        <member name="T:Isabella.Web.Resources.CreateResourcesFile">
+            <summary>
+            Genera el archivo de recurso.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Resources.CreateResourcesFile.GenerateResourceFileAsync(System.String)">
+            <summary>
+            Genera el archivo de recursos.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Resources.GetValueResourceFile">
+            <summary>
+            Obtiene los valores de un archivo de recursos.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Resources.GetValueResourceFile.KeyResource">
+            <summary>
+            Representa los Key de los recursos.
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.ImageUserNotValide">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.CategoryExist">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.CategoryNotAllFound">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.ProductNotNew">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.SubCategoryExist">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.SubCategoryNotFound">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.SubCategoryNotAllFound">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.ImageAggregateNotValide">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.AggregateNotFound">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.AggregateAllNotFound">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.AggregateNotNew">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.BadRole">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.BadEmail">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.UserConfirmRegister">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.TokeConfirmRegisterBad">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.RequiredEmailOfUser">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.NotConfirmRegister">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.VerifyPasswordAndEmail">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.ErrorGenerateToken">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.LoginUserSuccess">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.UserNotNew">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.EmailNotSend">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.EmailRegisterConfirmation">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.ImageErrorValue">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.PasswordNotCorrect">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.CodeRecoverPassword">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.ErrorGetCredentialsUser">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.ProductExist">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.AggregateExist">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.ImagesNoExist">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.NotCodeIdentification">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.CarShopNotProducts">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.ProductNotIsAvailable">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.NotFoundFileEmbedded">
+            <summary>
+            No se encuentra el archivo incrustado.
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.UserAllNotFoundWithRole">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.ProductNotHaveAggregate">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.IsNotRoleOfUser">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.IsNotRemoveRoleOfUser">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.IsUserHaveRole">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.IsNotAssignRoleOfUser">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.ProductAllNotIsAvailable">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.ProductsOfCategoryNotAvailable">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.ProductsIsAvailableOfCategoryNotAvailable">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.ExceptionDeleteEntity">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.AggregateNotIsAvailable">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.AggregateAllNotIsAvailable">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.ProductNotSupportAggregate">
+            <summary>
+            El producto no soporta agregados.
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.FormatAggregateNotSupport">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.SubCategoryNotIsProduct">
+            <summary>
+            La subcategoria no pertence al producto.
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.ProductNotExistInCarShop">
+            <summary>
+            El producto no existe en el carrito de compras del usuario.
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.ProductInCartHaveSubCategory">
+            <summary>
+            El producto no se encuentra en el carrito o ya tiene asignada esa subcategoria.
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.ProductInCartNotHaveSubCategory">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.ProductCombinedNotHaveSubCategory">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.SubCategoryNotIsAvailable">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.UserNotAnyOrder">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.NotUserAdminsNotifications">
+            <summary>
+            No hay definidos usuarios admins para que reciban las notificaciones
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.UserAdminNotExistForNotifications">
+            <summary>
+            El usuario no está definido como un usuario que puede recibir notificaciones.
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.UserAdminExistForNotifications">
+            <summary>
+            El usuario está definido como un usuario que puede recibir notificaciones.
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.RestaurantIsClose">
+            <summary>
+            El restaurante está cerrado.
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.RestaurantIsOpen">
+            <summary>
+            El restaurante está cerrado.
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.RestaurantError">
+            <summary>
+            Error al obtener los datos del resturante.
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.RestaurantClose">
+            <summary>
+            Cierra el restaurante.
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.RestaurantOpen">
+            <summary>
+            Abre el restaurante
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.Resources.GetValueResourceFile.KeyResourceImage">
+            <summary>
+            Recursos de Imagenes de la aplicación
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResourceImage.ImageAceitunas">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResourceImage.ImageAtun">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResourceImage.ImageSetas">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResourceImage.ImageCamarones">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResourceImage.ImageChorizo">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResourceImage.ImageJamon">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Resources.GetValueResourceFile.GetValueResourceString(Isabella.Web.Resources.GetValueResourceFile.KeyResource)">
+            <summary>
+            Obtiene el valor de un recurso desde el archivo de recurso dado un key dado.
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Resources.GetValueResourceFile.GetValueResourceImage(Isabella.Web.Resources.GetValueResourceFile.KeyResourceImage)">
+            <summary>
+            Obtiene una imagen desde el archivo de recursos.
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Resources.GetValueResourceFile.GetValueResourceImage(System.String)">
+            <summary>
+            Obtiene una imagen desde el archivo de recursos dado el key como string.
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Resources.GetValueResourceFile.GetImage(System.String)">
+            <summary>
+            Obtiene una imagen que se encuenta en el archivo de recursos.
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Resources.UtilityForReadFileEmbedded">
+            <summary>
+            Utilidad para leeer scripts SQL.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Resources.UtilityForReadFileEmbedded.ReadFileEmmbeded(System.Type,System.String)">
+            <summary>
+            Lee un archivo que este incrustado en el emsamblado.
+            </summary>
+            <param name="getResource">Tipo de recurso</param>
+            <param name="filename">Nombre del archivo</param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.SeederDb.SeedDb">
+            <summary>
+            Seeder
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.SeederDb.SeedDb.#ctor(Isabella.Web.Data.DataContext,Microsoft.AspNetCore.Identity.RoleManager{Microsoft.AspNetCore.Identity.IdentityRole{System.Int32}},Microsoft.AspNetCore.Identity.UserManager{Isabella.Web.Models.Entities.User},Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Constructor del Seeder
+            </summary>
+            <param name="dataContext"></param>
+            <param name="roleManager"></param>
+            <param name="userManager"></param>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:Isabella.Web.SeederDb.SeedDb.SeedAsync">
+            <summary>
+            Seeder
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.ServicesControllers.AggregateServiceController">
+            <summary>
+            Servicio para el controlador de los agregados.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.#ctor(Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Aggregate},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Category},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.ImageAggregate},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.CantAggregate})">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="serviceGenericAggregateHelper"></param>
+            <param name="serviceGenericCategoryHelper"></param>
+            <param name="serviceGenericImageAggregateHelper"></param>
+            <param name="serviceGenericCantAggregateHelper"></param>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.AddAggregateAsync(Isabella.Common.Dtos.Aggregate.AddAggregateDto)">
+            <summary>
+            Agrega un nuevo agregado.
+            </summary>
+            <param name="addAggregate"></param> 
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.AddImageAggregateAsync(Microsoft.AspNetCore.Http.IFormFile,System.Int32)">
+            <summary>
+            Agrega una imagen de un agregado(Usando IFormFile).
+            </summary>
+            <param name="formFile"></param>
+            <param name="AggregateId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.AddImageAggregateAsync(Isabella.Common.Dtos.Aggregate.AddImageAggregateDto)">
+            <summary>
+            Agrega una imagen a un agregado.
+            </summary>
+            <param name="addImageAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.DeleteImageAggregateAsync(System.Int32,System.Int32)">
+            <summary>
+            Borra una imagen de un agregado.
+            </summary>
+            <param name="AggregateId"></param>
+            <param name="ImageId"></param>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.EnableAggregateAsync(System.Int32,System.Boolean)">
+            <summary>
+            Habilita o deshabilita un agregado.
+            </summary>
+            <param name="AggregateId"></param>
+            <param name="enable"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.GetAllImageAggregateAsync(System.Int32)">
+            <summary>
+            Obtiene todas las imagenes de un agregado.
+            </summary>
+            <param name="AggregateId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.GetAllAggregateAsync">
+            <summary>
+            Obtiene todos los agregado en la base de datos.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.GetCantImageAggregateAsync(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad especifica de imagenes de un agregado.
+            </summary>
+            <param name="AggregateId"></param>
+            <param name="ImageId"></param>
+            <param name="CantImages"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.GetCantAggregateAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad determinada de agregados dado un agregado de referencia y la cantidad.
+            </summary>
+            <param name="AggregateId"></param>
+            <param name="cantAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.GetIdOfLastAggregateAsync">
+            <summary>
+            Obtiene el Id del último agregado.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.GetImageAggregateForIdAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene una imagen determinada de un agregado.
+            </summary>
+            <param name="AggregateId"></param>
+            <param name="ImageId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.GetListIdOfImageAggregateAsync(System.Int32)">
+            <summary>
+            Devuelve una lista con los Id de todas las imagenes del agregado.
+            </summary>
+            <param name="AggregateId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.GetAggregateForIdAsync(System.Int32)">
+            <summary>
+            Obtiene un agregado dado su Id.
+            </summary>
+            <param name="AggregateId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.UpdateAggregateAsync(Isabella.Common.Dtos.Aggregate.UpdateAggregateDto)">
+            <summary>
+            Actualiza un agregado.
+            </summary>
+            <param name="updateAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.GetAggregateIsAvailableForIdAsync(System.Int32)">
+            <summary>
+            Obtiene un agregado dado su Id si el mismo está disponible.
+            </summary>
+            <param name="AggregateId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.GetAllAggregateIsAvailableAsync">
+            <summary>
+            Obtiene todos los agregados disponibles en la base de datos.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.GetCantAggregateIsAvailableAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad determinada de agregados disponibles dado un agregado de referencia y la cantidad.
+            </summary>
+            <param name="AggregateId"></param>
+            <param name="cantAggregate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.DeleteAggregateAsync(System.Int32)">
+            <summary>
+            Borra un agregado.
+            </summary>
+            <param name="AggregateId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.ServicesControllers.CartShopServiceController">
+            <summary>
+            Servicio para el controlador del carrito de compras.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.ServicesControllers.CartShopServiceController.ClaimsPrincipal">
+            <summary>
+            Claims del usuario.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CartShopServiceController.#ctor(Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.CartShop},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Product},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Aggregate},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.CantAggregate},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.SubCategory},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.ProductCombined},Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper,AutoMapper.IMapper)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="serviceGenericCarShopHelper"></param>
+            <param name="serviceGenericProductHelper"></param>
+            <param name="serviceGenericAggregateHelper"></param>
+            <param name="serviceGenericCantAggregateHelper"></param>
+            <param name="serviceGenericSubCategoryHelper"></param>
+            <param name="serviceGenericProductCombinedHelper"></param>
+            <param name="userrepositoryHelper"></param>
+            <param name="mapper"></param>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CartShopServiceController.AddProductsToCartShopAsync(Isabella.Common.Dtos.CarShop.AddProductToCartShopDto)">
+            <summary>
+            Agrega productos al carrito de compras.
+            </summary>
+            <param name="addProductsToCarShop"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CartShopServiceController.GetMyCartShopAsync">
+            <summary>
+            Obtiene el carrito de compras de un usuario.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CartShopServiceController.RemoveProductOfCartShopAsync(System.Int32)">
+            <summary>
+            Elimina un producto del carrito de compras
+            </summary>
+            <param name="ProductCombinedId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CartShopServiceController.UpdateSubCategoryAsync(Isabella.Common.Dtos.CarShop.UpdateSubCategoryProductDto)">
+            <summary>
+            Actualiza la subcategoria de un producto.
+            </summary>
+            <param name="updateSubCategoryProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CartShopServiceController.RemoveSubCategoryAsync(System.Int32)">
+            <summary>
+            Elimina la subcategoria de un producto combinado que está en el carrito.
+            </summary>
+            <param name="ProductCombinedId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CartShopServiceController.UpdateQuantityProductAsync(Isabella.Common.Dtos.CarShop.ModifyQuantityProductDto)">
+            <summary>
+            Actualiza la cantidad de un producto.
+            </summary>
+            <param name="modifyQuantityProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CartShopServiceController.IncrementQuantityProductAsync(Isabella.Common.Dtos.CarShop.ModifyQuantityProductDto)">
+            <summary>
+            Incrementa la cantidad de un producto en un valor dado.
+            </summary>
+            <param name="modifyQuantityProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CartShopServiceController.UpdateQuantityInAggregateProductAsync(Isabella.Common.Dtos.CarShop.ModifyCantInAggregateProductDto)">
+            <summary>
+            Actualiza la cantidad de un agregado en un producto que está en el carrito.
+            </summary>
+            <param name="modifyAggregateProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CartShopServiceController.IncrementQuantityInAggregateProductAsync(Isabella.Common.Dtos.CarShop.ModifyCantInAggregateProductDto)">
+            <summary>
+            Incrementa la cantidad de un agregado en un producto en un valor dado.
+            </summary>
+            <param name="modifyAggregateProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CartShopServiceController.AddAggregateInProductAsync(Isabella.Common.Dtos.CarShop.AddAggregateInProductDto)">
+            <summary>
+            Agrega un nuevo agregado a un producto que está en el carrito de compras.
+            </summary>
+            <param name="addAggregateInProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CartShopServiceController.RemoveAggregateInProductOfCartShopAsync(System.Int32,System.Int32)">
+            <summary>
+            Elimina un agregado de un producto del carrito de compras.
+            </summary>
+            <param name="ProductCombinedId"></param>
+            <param name="AggregateId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CartShopServiceController.RemoveAllCarShopAsync">
+            <summary>
+            Elimina todos los productos del carrito de compras del usuario.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CartShopServiceController.UpdateCartShopAsync(Isabella.Common.Dtos.CarShop.UpdateCartShopDto)">
+            <summary>
+            Actualiza el carrito del usuario de forma general.
+            </summary>
+            <param name="updateCartShop"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.ServicesControllers.CategorieServiceController">
+            <summary>
+            Servicio para el controlador de las categorias de los productos.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CategorieServiceController.#ctor(Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Category},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Product})">
+            <summary>
+            Categorias
+            </summary>
+            <param name="serviceGenericCategoryHelper"></param>
+            <param name="serviceGenericProductHelper"></param>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CategorieServiceController.AddCategoryAsync(Isabella.Common.Dtos.Categorie.AddCategorieDto)">
+            <summary>
+            Agrega una nueva categoria.
+            </summary> 
+            <param name="addCategory"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CategorieServiceController.GetAllCategoryIsProductIsAvailableAsync">
+            <summary>
+            Devuelve las categorias de los productos que esten disponibles. 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CategorieServiceController.DeleteCategoryAsync(System.Int32)">
+            <summary>
+            Elimina una categoria
+            </summary>
+            <param name="CategoryId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CategorieServiceController.GetAllCategoryAsync">
+            <summary>
+            Devuelve las categorias disponibles.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CategorieServiceController.GetCategoryForIdAsync(System.Int32)">
+            <summary>
+            Devuelve una categoria por su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CategorieServiceController.GetCategoryForNameAsync(System.String)">
+            <summary>
+            Devuelve una categoria dado su nombre.
+            </summary>
+            <param name="Name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.CategorieServiceController.UpdateCategoryAsync(Isabella.Common.Dtos.Categorie.UpdateCategoryDto)">
+            <summary>
+            Actualiza una categoria.
+            </summary>
+            <param name="updateCategory"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.ServicesControllers.OrderServiceController">
+            <summary>
+            Servicio para las ordenes
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.ServicesControllers.OrderServiceController.ClaimsPrincipal">
+            <summary>
+            Claims del usuario.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.OrderServiceController.#ctor(Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Order},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.OrderDetail},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.CartShop},Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper,Microsoft.AspNetCore.SignalR.IHubContext{Isabella.Web.Hubs.NotificationsHub},Isabella.Web.Hubs.DicctionaryConnectedHub,Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.NotificationPendients},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.UserAdminsNotifications},AutoMapper.IMapper)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="serviceGenericOrderHelper"></param>
+            <param name="serviceGenericOrderDetailHelper"></param>
+            <param name="serviceGenericCartShopHelper"></param>
+            <param name="userServiceHelper"></param>
+            <param name="hubContext"></param>
+            <param name="dicctionaryConnectedHubService"></param>
+            <param name="serviceGenericNotificationsPendientsHelper"></param>
+            <param name="serviceGenericUserAdminsNotificationsHelper"></param>
+            <param name="mapper"></param>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.OrderServiceController.ConfirmOrderAsync(Isabella.Common.Dtos.Order.ConfirmOrderDto)">
+            <summary>
+            Confirma las ordenes de un usuario.
+            </summary>
+            <param name="confirmOrder"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.OrderServiceController.GetAllOrderAsync">
+            <summary>
+            Obtiene todas las ordenes del usuario.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.OrderServiceController.ConfirmOrderNotificationAsyncWithSignalR(Isabella.Web.Models.Entities.Order)">
+            <summary>
+            Notifica a los usuarios admin a través de SignalR que un usuario ha realizado un pedido.
+            </summary>
+            <param name="order"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.OrderServiceController.ConfirmOrderNotificationAsyncWithTelegram(Isabella.Web.Models.Entities.Order)">
+            <summary>
+            Notifica a los usuarios admin a través de Telegram que un usuario ha realizado un pedido.
+            </summary>
+            <param name="order"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.ServicesControllers.ProductServiceController">
+            <summary>
+            Servicio para el controlador de los productos.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.#ctor(Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Product},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Category},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.ImageProduct},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.SubCategory},Microsoft.Extensions.Logging.ILogger{Isabella.Web.ServicesControllers.ProductServiceController})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="serviceProductGenericHelper"></param>
+            <param name="serviceCategoryGenericHelper"></param>
+            <param name="serviceGenericImageProductHelper"></param>
+            <param name="serviceGenericSubCategoryHelper"></param>
+            <param name="logger"></param>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.AddProductAsync(Isabella.Common.Dtos.Product.AddProductDto)">
+            <summary>
+            Agregar un nuevo producto.
+            </summary>
+            <param name="addProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.UpdateProductAsync(Isabella.Common.Dtos.Product.UpdateProductDto)">
+            <summary>
+            Actualiza un producto.
+            </summary>
+            <param name="updateProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.GetProductForIdAsync(System.Int32)">
+            <summary>
+            Obtiene un producto dado su Id.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.GetProductsWithAllElement">
+            <summary>
+            Obtiene todos los elementos de todos los productos
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.GetProductWithAllElement(System.Int32)">
+            <summary>
+            Obtiene todos los elementos de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.GetAllProductAsync">
+            <summary>
+            Obtiene todos los productos disponibles en la base de datos.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.GetIdOfLastProductAsync">
+            <summary>
+            Obtiene el Id del último producto.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.GetImageProductForIdAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene una imagen determinada de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="ImageId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.AddImageProductAsync(Microsoft.AspNetCore.Http.IFormFile,System.Int32)">
+            <summary>
+            Agrega una imagen de un producto(Usando IFormFile).
+            </summary>
+            <param name="formFile"></param>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.AddImageProductAsync(Isabella.Common.Dtos.Product.AddImageProductDto)">
+            <summary>
+            Agrega una imagen a un producto.
+            </summary>
+            <param name="addImageProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.DeleteImageProductAsync(System.Int32,System.Int32)">
+            <summary>
+            Borra una imagen de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="ImageId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.EnableProductAsync(System.Int32,System.Boolean)">
+            <summary>
+            Establece un producto en disponible o no disponible.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="enable"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.GetCantProductAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad determinada de productos dado un producto de referencia y la cantidad.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="cantProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.GetListIdOfImageProductAsync(System.Int32)">
+            <summary>
+            Devuelve una lista con los Id de todas las imagenes del producto.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.GetAllImageProductAsync(System.Int32)">
+            <summary>
+            Obtiene todas las imagenes de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.GetCantImageProductAsync(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad especifica de imagenes de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <param name="ImageId"></param>
+            <param name="cantImages"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.GetProductIsAvailableForIdAsync(System.Int32)">
+            <summary>
+            Obtiene un producto dado su Id si el mismo está disponible(Obtiene las subcategorias que están disponibles).
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.GetAllProductIsAvailableAsync">
+            <summary>
+            Obtiene todos los productos que esten disponibles para la venta(Obtiene las subcategorias que están disponibles).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.GetCantProductIsAvailableAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene una cantidad determinada de productos disponibles dado un producto de referencia y la cantidad.
+            (Obtiene las subcategorias que están disponibles).
+            </summary>
+            <param name="ProductId"></param>
+            <param name="cantProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.GetAllProductOfCategory(System.Int32)">
+            <summary>
+            Obtiene todos los productos de una categoria determinada.
+            (Obtiene las subcategorias que están disponibles).
+            </summary>
+            <param name="CategoryId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.GetAllProductIsAvailableOfCategory(System.Int32)">
+            <summary>
+            Obtiene todos los productos disponibles de una categoria determinada.
+            (Obtiene las subcategorias que están disponibles).
+            </summary>
+            <param name="CategoryId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.DeleteProductAsync(System.Int32)">
+            <summary>
+            Elimina un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.ServicesControllers.RestaurantServiceController">
+            <summary>
+            Servicio para el controlador del restaurante.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.ServicesControllers.RestaurantServiceController.ClaimsPrincipal">
+            <summary>
+            Claims del usuario.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.RestaurantServiceController.#ctor(Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Restaurant},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.CartShop},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.CantAggregate},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.ProductCombined},Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="serviceGenericRestaurantHelper"></param>
+            <param name="serviceGenericCarShopHelper"></param>
+            <param name="serviceGenericCantAggregateHelper"></param>
+            <param name="serviceGenericProductCombinedHelper"></param>
+            <param name="userRepositoryHelper"></param>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.RestaurantServiceController.GetStateRestaurantAsync">
+            <summary>
+            Verifica el estado del resturante.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.RestaurantServiceController.CloseRestautantAsync">
+            <summary>
+            Cierra el restaurante.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.RestaurantServiceController.OpenRestaurantAsync">
+            <summary>
+            Abre el restaurante.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.ServicesControllers.SubCategorieServiceController">
+            <summary>
+            Servicio para el controlador de las subcategorias.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.SubCategorieServiceController.#ctor(Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.SubCategory},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Product})">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="serviceGenericSubCategoryHelper"></param>
+            <param name="serviceGenericProductHelper"></param>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.SubCategorieServiceController.AddSubCategoryAsync(Isabella.Common.Dtos.SubCategorie.AddSubCategorieToProductDto)">
+            <summary>
+            Agrega una nueva subcategoria a un producto.
+            </summary>
+            <param name="addSubCategoryProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.SubCategorieServiceController.DeleteSubCategoryAsync(System.Int32)">
+            <summary>
+            Elimina una subcategoria
+            </summary>
+            <param name="SubCategoryId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.SubCategorieServiceController.GetAllSubCategoryAsync">
+            <summary>
+            Obtiene todas las subcategorias.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.SubCategorieServiceController.GetAllSubCategoryIsAvailableAsync">
+            <summary>
+            Obtiene todas las subcategorias que están disponibles.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.SubCategorieServiceController.GetAllSubCategoryIsNotAvailableAsync">
+            <summary>
+            Obtiene todas las subcategorias que no están disponible
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.SubCategorieServiceController.GetSubCategoryForIdAsync(System.Int32)">
+            <summary>
+            Obtiene una subcategoria por su Id.
+            </summary>
+            <param name="Id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.SubCategorieServiceController.GetSubCategoryForNameAsync(System.String)">
+            <summary>
+            Obtiene una subcategoria por su nombre.
+            </summary>
+            <param name="Name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.SubCategorieServiceController.UpdateSubCategoryAsync(Isabella.Common.Dtos.SubCategorie.UpdateSubCategorieDto)">
+            <summary>
+            Actualiza una subcategoria.
+            </summary>
+            <param name="updateSubCategoryDto"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.ServicesControllers.UserServiceController">
+            <summary>
+            Servicio para el controlador de los usuarios.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.ServicesControllers.UserServiceController.ClaimsPrincipal">
+            <summary>
+            Claims del usuario.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.ServicesControllers.UserServiceController.Url">
+            <summary>
+            Url del controlador.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.ServicesControllers.UserServiceController.HttpRequest">
+            <summary>
+            Solicitud Http
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.#ctor(Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper,Isabella.Web.Helpers.MailHelper,Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.User},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.UserAdminsNotifications})">
+            <summary>
+            Constructor
+            </summary>
+            <param name="userRepository"></param>
+            <param name="mailHelper"></param>
+            <param name="serviceGenericUserHelper"></param>
+            <param name="serviceGenericUserAdminsNotificationsHelper"></param>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.RegisterUserModeFastAsync">
+            <summary>
+            Registro rapido de usuario(Solicita el código de identificación para registrarse e iniciar sesión en la aplicación)
+            Le crea un correo y un password al usuario, que se le devuelve para que el mismo haga el login.
+            En este modo no tiene que confirmar el registro a través del correo.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.AddUserAsync(Isabella.Common.Dtos.Users.RegisterUserDto)">
+            <summary>
+            Agrega un usuario al sistema y le asigna un role
+            </summary>
+            <param name="newuser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.ConfirmEmailUserAsync(System.String,System.String)">
+            <summary>
+            Confirma el registro de un usuario en el sistema con el código enviado a su correo electrónico.
+            </summary>
+            <param name="Id"></param>
+            <param name="Token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.GetAllUserAsync">
+            <summary>
+            Obtiene todos los usuarios del sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.GetIdOfLastUserAsync">
+            <summary>
+            Obtiene el Id del último usuario que se registró en el sistema.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.GetUserByIdAsync(System.Int32)">
+            <summary>
+            Obtiene un usuario dado su Id.
+            </summary>
+            <param name="UserId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.GetUserByUserNameAsync(System.String)">
+            <summary>
+            Obtiene un usuario dada su cuenta de usuario.
+            </summary>
+            <param name="UserName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.GetUserByEmailAsync(System.String)">
+            <summary>
+            Obtiene un usuario dado su email.
+            </summary>
+            <param name="Email"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.LoginUserAsync(Isabella.Common.Dtos.Users.LoginUserDto)">
+            <summary>
+            Realiza el login del usuario y obtiene el token de acceso,el tiempo de expiración y otros datos del usuario.
+            </summary>
+            <param name="loginUser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.GetCantUserAsync(System.Int32,System.Int32)">
+            <summary>
+            Obtiene un número determinado de usuarios dado un Id y la cantidad deseada.
+            </summary>
+            <param name="UserId"></param>
+            <param name="CantUsers"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.ResetPasswordUserAsync(Isabella.Common.Dtos.Users.ResetPasswordDto)">
+            <summary>
+            Solicita la recuperación de la contraseña.
+            </summary>
+            <param name="resetPassword"></param>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.SendToNewCodeConfirmationEmailAsync(Isabella.Common.Dtos.Users.SendToNewCodeConfirmationRegisterDto)">
+            <summary>
+            Envia un nuevo correo al usuario con el código para la confirmación del registro.
+            </summary>
+            <param name="sendToNewCodeConfirmationRegister"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.RecoverPasswwordUserAsync(System.String,System.String,System.String)">
+            <summary>
+            Ejecuta la función que recupera la contraseña del usuario con el código enviado a su correo electronico.
+            </summary>
+            <param name="Id"></param>
+            <param name="Token"></param>
+            <param name="newPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.UpdateUserAsync(Isabella.Common.Dtos.Users.UpdateUserDto)">
+            <summary>
+            Ejecuta la función que actualiza al usuario.
+            </summary>
+            <param name="updateUser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.DeleteImageProfileUserAsync">
+            <summary>
+            Ejecuta la función para borrar la imagen de perfil del usuario especificado.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.UpdatePasswordAsync(Isabella.Common.Dtos.Users.ChangePasswordUserDto)">
+            <summary>
+            Ejecuta la función para cambiar la contraseña de un usuario.
+            </summary>
+            <param name="changePassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.ExecuteDeleteImageProfileUserAsync(System.Security.Claims.ClaimsPrincipal)">
+            <summary>
+            Borra la imagen de perfil del usuario.
+            </summary>
+            <param name="claimsPrincipal"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.ExecuteUpdateUserAsync(Isabella.Common.Dtos.Users.UpdateUserDto,System.Security.Claims.ClaimsPrincipal)">
+            <summary>
+            Actualiza el usuario.
+            </summary>
+            <param name="updateUser"></param>
+            <param name="claimsPrincipal"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.ExecuteUpdatePasswordAsync(Isabella.Common.Dtos.Users.ChangePasswordUserDto,System.Security.Claims.ClaimsPrincipal)">
+            <summary>
+            Cambia la contraseña del usuario.
+            </summary>
+            <param name="changePassword"></param>
+            <param name="claimsPrincipal"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.AddOrUpdateImageProfileUser(Microsoft.AspNetCore.Http.IFormFile,System.Security.Claims.ClaimsPrincipal)">
+            <summary>
+            Agrega o actualiza una imagen de usuario usando IFormFile
+            </summary>
+            <param name="formFile"></param>
+            <param name="claimsPrincipal"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.LoginExternProviderForAsync(System.String)">
+            <summary>
+            Login de usuarios con proveedores externos(Google, Facebook, Twitter y Apple). 
+            Si el usuario no existe lo registra en la aplicación.
+            </summary>
+            <param name="scheme"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.RemoveRoleInUserAsync(System.Int32,System.Int32)">
+            <summary>
+            Elimina un role a un usuario.
+            </summary>
+            <param name="UserId"></param>
+            <param name="RoleId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.AssigningRoleToUserAsync(System.Int32,System.Int32)">
+            <summary>
+            Asigna un nuevo role a un usuario.
+            </summary>
+            <param name="UserId"></param>
+            <param name="RoleId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.GetAllDataOfUserAsync">
+            <summary>
+            Obtiene todos los usuarios disponibles con datos disponibles solo para usuarios admin.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.GetAllDataOfOnlyUserAsync(System.Int32)">
+            <summary>
+            Obtiene un usuario dado su Id con datos disponibles solo para usuarios admin.
+            </summary>
+            <param name="UserId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.GetAllRoleOfUser(System.Int32)">
+            <summary>
+            Obtiene los roles disponibles de un usuario.
+            </summary>
+            <param name="UserId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.BannerUserAsync(System.Int32,System.Boolean)">
+            <summary>
+            Establece si un usuario se banea o no.
+            </summary>
+            <param name="UserId"></param>
+            <param name="banner"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.GetAllUserWithRoleAsync(System.Int32)">
+            <summary>
+            Obtiene los usuarios de un determinado role.
+            </summary>
+            <param name="RoleId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.RemoveUserAdminForNotifications(System.Int32)">
+            <summary>
+            Elimina un usuario admin a la lista de los que deben recibir notificaciones.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.AddUserAdminForNotifications(System.Int32)">
+            <summary>
+            Agrega un usuario admin a la lista de los que deben recibir notificaciones.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.UpdateChatIdTelegramUserAdminForNotifications(System.Int32,System.Int32)">
+            <summary>
+            Agrega o actualiza el chat id de telegram de un usuario admin para recibir las notificaciones
+            </summary>
+            <param name="UserId"></param>
+            <param name="TelegramChatId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.ViewModels.CategorieViewModel.GetCategorieViewModel">
+            <summary>
+            GetCategorieViewModel
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.ViewModels.ProductViewModel.AddImageProductViewModel">
+            <summary>
+            AddImageProductViewModel
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.ViewModels.ProductViewModel.AddImageProductViewModel.ProductId">
+            <summary>
+            Id del Producto.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.ViewModels.ProductViewModel.AddImageProductViewModel.ImageFile">
+            <summary>
+            Imagen
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.ViewModels.ProductViewModel.AddProductViewModel">
+            <summary>
+            AddProductViewModel
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.ViewModels.ProductViewModel.GetAllImagesProductViewModel">
+            <summary>
+            ViewModel de las imagenes de los productos
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.ViewModels.ProductViewModel.GetAllImagesProductViewModel.Id">
+            <summary>
+            Producto
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.ViewModels.ProductViewModel.GetAllImagesProductViewModel.ImageFile">
+            <summary>
+            Nueva Imagen
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.ViewModels.ProductViewModel.GetAllImagesProductViewModel.GetImages">
+            <summary>
+            Imagenes
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.ViewModels.ProductViewModel.GetProductViewModel">
+            <summary>
+            ViewModel para el manejo de un producto y sus entidades.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.ViewModels.ProductViewModel.GetProductViewModel.GetAllImagesProducts">
+            <summary>
+            Imagenes
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.ViewModels.ProductViewModel.UpdateProductViewModel">
+            <summary>
+            UpdateProductViewModel
+            </summary>
+        </member>
+    </members>
+</doc>

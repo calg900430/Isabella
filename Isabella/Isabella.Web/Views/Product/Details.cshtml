@@ -1,0 +1,115 @@
+﻿@*
+    Vista para mostrar los detalles de un producto
+*@
+
+
+@*Establece que objeto va a recibir la View*@
+@model Isabella.Web.ViewModels.ProductViewModel.GetProductViewModel
+
+@{
+    ViewData["Title"] = "Detalles";
+    ViewData["Producto"] = "Producto";
+    ViewData["Id"] = "Id";
+    ViewData["Name"] = "Nombre";
+    ViewData["Image"] = "Imagen";
+    ViewData["Categorie"] = "Categoria";
+    ViewData["SubCategorie"] = "SubCategorias";
+    ViewData["NotSubCategorie"] = "No tiene subcategorias establecidas";
+    ViewData["Price"] = "Precio";
+    ViewData["IsAvailable"] = "Disponible?";
+    ViewData["IsSupportAggregate"] = "Agregados?";
+    ViewData["Description"] = "Descripción";
+}
+
+<h2>@ViewData["Title"]</h2>
+<div class="dl-horizontal">
+  <hr />
+    @*Crea una lista para mostrar los detalles del producto*@
+<dl class="dl-horizontal align-content-lg-between">
+    <dd>@ViewData["Name"]</dd>
+    <dt>@Html.DisplayFor(model => model.Name)</dt>
+    <dt>
+       
+    </dt>
+    <dd>
+        @if (Model.GetAllImagesProducts != null)
+        {
+            if (Model.GetAllImagesProducts.Count > 0)
+            {
+                @*Convierte el array byte en una imagen*@
+                <img src="data:imge;base64,@System.Convert.ToBase64String(Model.GetAllImagesProducts[0].Image)" ,
+                     style="width:300px;height:450px;max-width: 100%; height: auto;" />
+            }
+            else
+            {
+                <b>No Disponible</b>
+            }
+        }
+        else
+        {
+            <b>No Disponible</b>
+        }
+    </dd>
+    <dt>@ViewData["Description"]</dt>
+    @if (!string.IsNullOrWhiteSpace(Model.Description))
+    {
+      <dd>@Html.DisplayFor(model => model.Description)</dd>
+    }
+    else
+    {
+      <dd>No hay descripción del producto.</dd>
+    }
+    <dd>@ViewData["Categorie"]</dd>
+    <dt>@Html.DisplayFor(model => model.Category.Name)</dt>
+    <dd>@ViewData["SubCategorie"]</dd>
+    <dt>
+            <select class="form-control" id="SubCategorias" name="SubCategorias">
+                @if (Model.GetSubCategoryDtos != null)
+                {
+                    if (Model.GetSubCategoryDtos.Count > 0)
+                    {
+                        @foreach (var item in Model.GetSubCategoryDtos)
+                        {
+                            <option>@Html.DisplayFor(model => item.Name)</option>
+                        }
+                    }
+                    else
+                    {
+                        <option>@ViewData["NotSubCategorie"]</option>
+                    }
+                }
+                else
+                {
+                    <option>@ViewData["NotSubCategorie"]</option>
+                }
+            </select>
+        </dt>
+    <dd>@ViewData["IsSupportAggregate"]</dd>
+    @if (Model.SupportAggregate)
+        {
+            <dt>Sí</dt>
+        }
+    else
+        {
+            <dt>No</dt>
+        }
+    <dd>@ViewData["Price"]</dd>
+    <dt>@Html.DisplayFor(model => model.Price)</dt>
+    <dd>@ViewData["IsAvailable"]</dd>
+    @if (Model.IsAvailabe)
+    {
+       <dt>Sí</dt>
+    }
+    else
+    {
+      <dt>No</dt>
+    }
+    </dl>
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar</a>
+    <a asp-action="Index" class="btn btn-success">Atrás</a>
+</div>
+
+
+
+
+
