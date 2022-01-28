@@ -1,7 +1,7 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
-a.navbar-brand {
+a .navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-all;
@@ -71,6 +71,41 @@ body {
 }
 
 /*Mis Estilos*/
+ #ex4
+ {
+   display: inline-block;
+ }
+ #ex4 .p1[data-count]:after
+ {
+   position: absolute;
+   right: 10%;
+   top: 8%;
+   content: attr(data-count);
+   font-size: 40%;
+   padding: .2em;
+   border-radius: 50%;
+   line-height: 1em;
+   color: white;
+   background: rgba(255, 0, 0, 0.85);
+   text-align: center;
+   min-width: 1em;
+ }
+ #ex3 .p2[data-count]:after {
+    position: absolute;
+    right: 0%;
+    top: 1%;
+    content: attr(data-count);
+    font-size: 60%;
+    padding: .6em;
+    border-radius: 50%;
+    line-height: .10em;
+    color: white;
+    background: rgba(255, 0, 0, 0.85);
+    text-align: center;
+    min-width: 1em;
+    font-weight: bold;
+}
+ 
 .ImageProducts
 {
   object-fit:cover;
@@ -80,5 +115,5 @@ body {
 
 .ImageProducts:hover
 {
-
+  object-fit:scale-down;
 }

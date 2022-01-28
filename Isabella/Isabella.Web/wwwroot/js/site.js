@@ -1,4 +1,19 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿//Datos del servidor.
+let hosting = false;
+let URI_SERVER;
 
-// Write your JavaScript code.
+function getUriServer()
+{
+    if (hosting) {
+        //Hosting
+        URI_SERVER = 'http://jrariasga-001-site1.btempurl.com/';
+    }
+    else {
+        //Local
+        URI_SERVER = 'https://localhost:44352/';
+    }
+    return URI_SERVER;
+}
+
+
+

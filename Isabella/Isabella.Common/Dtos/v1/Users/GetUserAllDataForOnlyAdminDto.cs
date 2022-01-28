@@ -6,7 +6,7 @@
     /// <summary>
     /// Obtiene todos los datos de un usuario.
     /// </summary>
-    public class GetUserAllDataForOnlyAdmin
+    public class GetUserAllDataForOnlyAdminDto
     {
         /// <summary>
         /// Key

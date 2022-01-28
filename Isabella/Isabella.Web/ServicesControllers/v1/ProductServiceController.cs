@@ -16,6 +16,7 @@
     using Resources;
     //using Castle.Core.Logging;
     using Microsoft.Extensions.Logging;
+    using Isabella.Web.ViewModels.ProductViewModel;
 
     /// <summary>
     /// Servicio para el controlador de los productos.
@@ -23,9 +24,13 @@
     public class ProductServiceController : IProductRepositoryDto
     {
         private readonly ServiceGenericHelper<Product> _serviceGenericProductHelper;
-        private readonly ServiceGenericHelper<Category> _serviceGenericCategoryHelper;
+        private readonly ServiceGenericHelper<Categorie> _serviceGenericCategorieHelper;
         private readonly ServiceGenericHelper<ImageProduct> _serviceGenericImageProductHelper;
-        private readonly ServiceGenericHelper<SubCategory> _serviceGenericSubCategoryHelper;
+        private readonly ServiceGenericHelper<SubCategorie> _serviceGenericSubCategorieHelper;
+        private readonly ServiceGenericHelper<OrderDetail> _serviceGenericHelperOrderDetail;
+        private readonly ServiceGenericHelper<ProductCombined> _serviceGenericHelperProductCombined;
+        private readonly ServiceGenericHelper<CalificationProduct> _serviceGenericCalificationProduct;
+
         private readonly ILogger<ProductServiceController> _logger;
 
 
@@ -35,18 +40,27 @@
         /// <param name="serviceProductGenericHelper"></param>
         /// <param name="serviceCategoryGenericHelper"></param>
         /// <param name="serviceGenericImageProductHelper"></param>
-        /// <param name="serviceGenericSubCategoryHelper"></param>
+        /// <param name="serviceGenericSubCategorieHelper"></param>
+        /// <param name="serviceGenericHelperProductCombined"></param>
+        /// <param name="serviceGenericHelperOrderDetail"></param>
+        /// <param name="serviceGenericHelperCalificationProduct"></param>
         /// <param name="logger"></param>
         public ProductServiceController(ServiceGenericHelper<Product> serviceProductGenericHelper, 
-        ServiceGenericHelper<Category> serviceCategoryGenericHelper, 
+        ServiceGenericHelper<Categorie> serviceCategoryGenericHelper, 
         ServiceGenericHelper<ImageProduct> serviceGenericImageProductHelper,
-        ServiceGenericHelper<SubCategory> serviceGenericSubCategoryHelper,
+        ServiceGenericHelper<SubCategorie> serviceGenericSubCategorieHelper,
+        ServiceGenericHelper<ProductCombined> serviceGenericHelperProductCombined,
+        ServiceGenericHelper<OrderDetail> serviceGenericHelperOrderDetail,
+        ServiceGenericHelper<CalificationProduct> serviceGenericHelperCalificationProduct,
         ILogger<ProductServiceController> logger)
         {
             this._serviceGenericProductHelper = serviceProductGenericHelper;
-            this._serviceGenericCategoryHelper = serviceCategoryGenericHelper;
+            this._serviceGenericCategorieHelper = serviceCategoryGenericHelper;
             this._serviceGenericImageProductHelper = serviceGenericImageProductHelper;
-            this._serviceGenericSubCategoryHelper = serviceGenericSubCategoryHelper;
+            this._serviceGenericSubCategorieHelper = serviceGenericSubCategorieHelper;
+            this._serviceGenericHelperProductCombined = serviceGenericHelperProductCombined;
+            this._serviceGenericHelperOrderDetail = serviceGenericHelperOrderDetail;
+            this._serviceGenericCalificationProduct = serviceGenericHelperCalificationProduct;
             this._logger = logger;
         }
 
@@ -80,7 +94,7 @@
                     return serviceResponse;
                 }
                 //Verifica que la categoria exista.
-                var category = await this._serviceGenericCategoryHelper
+                var category = await this._serviceGenericCategorieHelper
                 .GetLoadAsync(c => c.Id == addProduct.CategorieId)
                 .ConfigureAwait(false);
                 if (category == null)
@@ -111,7 +125,7 @@
                     DateCreated = DateTime.UtcNow,
                     DateUpdate = DateTime.UtcNow,
                     Description = addProduct.Description,
-                    IsAvailabe = addProduct.IsAvailabe,
+                    IsAvailabe = addProduct.IsAvailable,
                     Name = addProduct.Name,
                     Price = addProduct.Price,
                     Stock = addProduct.Stock,
@@ -139,6 +153,339 @@
                 return serviceResponse;
             }
         }
+
+        /// <summary>
+        /// Agregar un nuevo producto junto con una imagen.
+        /// </summary>
+        /// <param name="addProductViewModel"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<bool>> AddProductToImageAsync(AddProductViewModel addProductViewModel)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            try
+            {
+                if (addProductViewModel == null) 
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
+                    _logger.LogWarning(1, GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull));
+                    return serviceResponse;
+                }
+                //Verifica que la imagen cumple con sus parametros.
+                if (addProductViewModel.ImageFile == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
+                    return serviceResponse;
+                }
+                if (addProductViewModel.ImageFile.Length <= 0)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
+                    return serviceResponse;
+                }
+                if (addProductViewModel.ImageFile.Length > Constants.MAX_LENTHG_IMAGE_PRODUCT)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImageProductNotValide;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ImageProductNotValide);
+                    return serviceResponse;
+                }
+                //Verifica que los campos numericos esten bien.
+                if (addProductViewModel.Stock < 1 || addProductViewModel.Price < 1)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CantIsNegative;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
+                    _logger.LogWarning(2, GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative));
+                    return serviceResponse;
+                }
+                //Verifica que la categoria exista.
+                var category = await this._serviceGenericCategorieHelper
+                .GetLoadAsync(c => c.Id == addProductViewModel.CategorieId)
+                .ConfigureAwait(false);
+                if (category == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CategoryNotFound;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CategoryNotFound);
+                    return serviceResponse;
+                }
+                //Verifica que el nombre no este en uso
+                var product_exist = await this._serviceGenericProductHelper
+                .WhereSingleEntityAsync(c => c.Name == addProductViewModel.Name)
+                .ConfigureAwait(false);
+                if (product_exist != null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductExist;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.ProductExist);
+                    return serviceResponse;
+                }
+                //Mapea de AddProductStandardDto a ProductStandard
+                var new_product = new Product
+                {
+                    Category = category,
+                    DateCreated = DateTime.UtcNow,
+                    DateUpdate = DateTime.UtcNow,
+                    Description = addProductViewModel.Description,
+                    IsAvailabe = addProductViewModel.IsAvailable,
+                    Name = addProductViewModel.Name,
+                    Price = addProductViewModel.Price,
+                    Stock = addProductViewModel.Stock,
+                    LastBuy = DateTime.UtcNow,
+                    SupportAggregate = addProductViewModel.SupportAggregate,
+                };
+                //Guarda el nuevo producto en la base de datos.
+                await this._serviceGenericProductHelper
+                .AddEntityAsync(new_product)
+                .ConfigureAwait(false);
+                //Guarda los cambios en la base de datos.
+                await this._serviceGenericProductHelper.SaveChangesBDAsync();
+                //Obtiene ultimo producto creado o sea el que acabamos de agregar.
+                var product = await GetLastProductAsync().ConfigureAwait(false);
+                if(product == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                    return serviceResponse;
+                }
+                //Nombre de la imagen
+                var file = $"{Guid.NewGuid()}.jpg";
+                //Ruta temporal donde la guardaremos antes de enviarla a la base de datos.
+                var path = Path.Combine(Directory.GetCurrentDirectory(), file);
+                //Crea el archivo de la imagen que se encuentra en memoria RAM y lo guarda en la ruta seleccionada.
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                   await addProductViewModel.ImageFile.CopyToAsync(stream).ConfigureAwait(false);
+                };
+                var arraybyte_image = await File.ReadAllBytesAsync(path).ConfigureAwait(false);
+                //Crea la relacion de la imagen con el producto.
+                var imagen_product = new ImageProduct
+                {
+                    Image = arraybyte_image,
+                    Product = product
+                };
+                //Guarda la imagen del producto.
+                await this._serviceGenericImageProductHelper
+                .AddEntityAsync(imagen_product)
+                .ConfigureAwait(false);
+                //Guarda los cambios en la base de datos.
+                await this._serviceGenericImageProductHelper
+                .SaveChangesBDAsync()
+                .ConfigureAwait(false);
+                //Borra el archivo de imagen temporal
+                File.Delete(path);
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = true;
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = false;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Actualiza un producto(UpdateViewModel).
+        /// </summary>
+        /// <param name="updateProductViewModel"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<GetProductDto>> UpdateProductViewModelAsync(UpdateProductViewModel updateProductViewModel)
+        {
+            ServiceResponse<GetProductDto> serviceResponse = new ServiceResponse<GetProductDto>();
+            try
+            {
+                if (updateProductViewModel == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
+                    return serviceResponse;
+                }
+                //Verifica si la imagen cumple con los requisitos.
+                if (updateProductViewModel.ImageFile != null)
+                {
+                    if (updateProductViewModel.ImageFile.Length <= 0)
+                    {
+                        serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
+                        serviceResponse.Data = null;
+                        serviceResponse.Success = false;
+                        serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
+                        return serviceResponse;
+                    }
+                    if (updateProductViewModel.ImageFile.Length > Constants.MAX_LENTHG_IMAGE_PRODUCT)
+                    {
+                        serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImageProductNotValide;
+                        serviceResponse.Data = null;
+                        serviceResponse.Success = false;
+                        serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ImageProductNotValide);
+                        return serviceResponse;
+                    }
+                }
+                //Obtiene el producto que se desea actualizar
+                var product = await this._serviceGenericProductHelper
+                .GetLoadAsync(c => c.Id == updateProductViewModel.ProductId, x => x.Images)
+                .ConfigureAwait(false);
+                if (product == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotFound;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotFound);
+                    return serviceResponse;
+                }
+                //Actualiza los campos del producto.
+                product.IsAvailabe = (bool)updateProductViewModel.IsAvailable;
+                product.SupportAggregate = (bool)updateProductViewModel.SupportAggregate;
+                if (updateProductViewModel.CategorieId != null)
+                {
+                    //Busca si la nueva categoria está en la base de datos.
+                    var category = await this._serviceGenericCategorieHelper
+                    .GetLoadAsync(c => c.Id == updateProductViewModel.CategorieId)
+                    .ConfigureAwait(false);
+                    if (category == null)
+                    {
+                        serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CategoryNotFound;
+                        serviceResponse.Data = null;
+                        serviceResponse.Success = false;
+                        serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CategoryNotFound);
+                        return serviceResponse;
+                    }
+                    product.Category = category;
+                }
+                if (updateProductViewModel.Description != null)
+                product.Description = updateProductViewModel.Description;
+                if (updateProductViewModel.Name != null)
+                product.Name = updateProductViewModel.Name;
+                if (updateProductViewModel.Price != null)
+                {
+                    product.Price = (decimal)updateProductViewModel.Price;
+                    if (updateProductViewModel.Price < 1)
+                    {
+                        serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CantIsNegative;
+                        serviceResponse.Data = null;
+                        serviceResponse.Success = false;
+                        serviceResponse.Message = GetValueResourceFile
+                        .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
+                        return serviceResponse;
+                    }
+                }
+                if (updateProductViewModel.Stock != null)
+                {
+                    if (updateProductViewModel.Stock < 1)
+                    {
+                        serviceResponse.Code = (int)GetValueResourceFile.KeyResource.CantIsNegative;
+                        serviceResponse.Data = null;
+                        serviceResponse.Success = false;
+                        serviceResponse.Message = GetValueResourceFile
+                        .GetValueResourceString(GetValueResourceFile.KeyResource.CantIsNegative);
+                        return serviceResponse;
+                    }
+                    product.Stock = (int)updateProductViewModel.Stock;
+                }  
+                product.DateUpdate = DateTime.UtcNow;
+                if(updateProductViewModel.ImageFile != null)
+                {
+                    //Nombre de la imagen
+                    var file = $"{Guid.NewGuid()}.jpg";
+                    //Ruta temporal donde la guardaremos antes de enviarla a la base de datos.
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), file);
+                    //Crea el archivo de la imagen que se encuentra en memoria RAM y lo guarda en la ruta seleccionada.
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await updateProductViewModel.ImageFile.CopyToAsync(stream).ConfigureAwait(false);
+                    };
+                    var arraybyte_image = await File.ReadAllBytesAsync(path).ConfigureAwait(false);
+                    //Actualiza la primera imagen del producto q 
+                    //es la q se asume que es la principal.
+                    //Esto lo hice así porq al inicio un producto podia tener varias imagenes
+                    //Pero lo dejamos asi por si mas adelante volvemos con la idea incial en alguna Update
+                    var image = product.Images.FirstOrDefault();
+                    if (image == null)
+                    {
+                        //Crea la relacion de la imagen con el producto.
+                        var imagen_product = new ImageProduct
+                        {
+                            Image = arraybyte_image,
+                            Product = product,
+                        };
+                        //Guarda la imagen del producto.
+                        await this._serviceGenericImageProductHelper
+                        .AddEntityAsync(imagen_product)
+                        .ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        image.Image = arraybyte_image;
+                        //Actualiza la imagen del producto.
+                        this._serviceGenericImageProductHelper
+                        .UpdateEntity(image);
+                    }
+                    //Guarda los cambios en la base de datos.
+                    await this._serviceGenericImageProductHelper
+                    .SaveChangesBDAsync()
+                    .ConfigureAwait(false);
+                    //Borra el archivo de imagen temporal
+                    File.Delete(path);
+                }
+                //Actualiza la entidad
+                this._serviceGenericProductHelper
+                .UpdateEntity(product);
+                //Guarda los cambios en la base de datos.
+                await this._serviceGenericProductHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = new GetProductDto
+                {
+                    Average = product.Average,
+                    Description = product.Description,
+                    Categorie = new Common.Dtos.Categorie.GetCategorieDto
+                    {
+                        Id = product.Category.Id,
+                        Name = product.Category.Name,
+                    },
+                    Id = product.Id,
+                    Name = product.Name,
+                    Price = product.Price,
+                    IsAvailabe = product.IsAvailabe,
+                    Stock = product.Stock,
+                    SupportAggregate = product.SupportAggregate
+                };
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+                return serviceResponse;
+            }
+        }
+
 
         /// <summary>
         /// Actualiza un producto.
@@ -171,13 +518,13 @@
                     return serviceResponse;
                 }
                 //Actualiza los campos del producto.
-                if (updateProduct.IsAvailabe != null)
-                product.IsAvailabe = (bool)updateProduct.IsAvailabe;
-                if (updateProduct.CategoryId != null)
+                if (updateProduct.IsAvailable != null)
+                product.IsAvailabe = (bool)updateProduct.IsAvailable;
+                if (updateProduct.CategorieId != null)
                 {
                     //Busca si la nueva categoria está en la base de datos.
-                    var category = await this._serviceGenericCategoryHelper
-                    .GetLoadAsync(c => c.Id == updateProduct.CategoryId)
+                    var category = await this._serviceGenericCategorieHelper
+                    .GetLoadAsync(c => c.Id == updateProduct.CategorieId)
                     .ConfigureAwait(false);
                     if (category == null)
                     {
@@ -232,7 +579,7 @@
                 { 
                    Average = product.Average,
                    Description = product.Description,
-                   Category = new Common.Dtos.Categorie.GetCategorieDto
+                   Categorie = new Common.Dtos.Categorie.GetCategorieDto
                    {
                        Id = product.Category.Id,
                        Name = product.Category.Name,
@@ -281,7 +628,7 @@
                 serviceResponse.Data = new GetProductDto
                 {
                     Id = product.Id,
-                    Category = new Common.Dtos.Categorie.GetCategorieDto
+                    Categorie = new Common.Dtos.Categorie.GetCategorieDto
                     {
                         Id = product.Category.Id,
                         Name = product.Category.Name,
@@ -291,8 +638,9 @@
                     Price = product.Price,
                     Average = product.Average,
                     IsAvailabe = product.IsAvailabe,
+                    Stock = product.Stock,
                     SupportAggregate = product.SupportAggregate,
-                    GetSubCategoryDtos = product.SubCategories.Select(c => new Common.Dtos.SubCategorie.GetSubCategorieDto
+                    GetSubCategories = product.SubCategories.Select(c => new Common.Dtos.SubCategorie.GetSubCategorieDto
                     {
                        Id = c.Id,
                        Name = c.Name,
@@ -319,9 +667,9 @@
         /// Obtiene todos los elementos de todos los productos
         /// </summary>
         /// <returns></returns>
-        public async Task<ServiceResponse<List<GetAllElementsOfProduct>>> GetProductsWithAllElement()
+        public async Task<ServiceResponse<List<GetAllElementOfProductDto>>> GetProductsWithAllElement()
         {
-            ServiceResponse<List<GetAllElementsOfProduct>> serviceResponse = new ServiceResponse<List<GetAllElementsOfProduct>>();
+            ServiceResponse<List<GetAllElementOfProductDto>> serviceResponse = new ServiceResponse<List<GetAllElementOfProductDto>>();
             try
             {
                 //Obtiene los productos disponibles
@@ -338,10 +686,10 @@
                     return serviceResponse;
                 }
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
-                serviceResponse.Data = all_product.Select(c => new GetAllElementsOfProduct
+                serviceResponse.Data = all_product.Select(c => new GetAllElementOfProductDto
                 {
                     Id = c.Id,
-                    Category = new Common.Dtos.Categorie.GetCategorieDto
+                    Categorie = new Common.Dtos.Categorie.GetCategorieDto
                     {
                         Id = c.Category.Id,
                         Name = c.Category.Name,
@@ -357,7 +705,7 @@
                     ProductId = c.Id
                     }).ToList(),
                     SupportAggregate = c.SupportAggregate,
-                    GetSubCategoryDtos = c.SubCategories.Select(x => new Common.Dtos.SubCategorie.GetSubCategorieDto
+                    GetSubCategories = c.SubCategories.Select(x => new Common.Dtos.SubCategorie.GetSubCategorieDto
                     {
                         Id = x.Id,
                         Name = x.Name,
@@ -385,9 +733,9 @@
         /// </summary>
         /// <param name="ProductId"></param>
         /// <returns></returns>
-        public async Task<ServiceResponse<GetAllElementsOfProduct>> GetProductWithAllElement(int ProductId)
+        public async Task<ServiceResponse<GetAllElementOfProductDto>> GetProductWithAllElement(int ProductId)
         {
-            ServiceResponse<GetAllElementsOfProduct> serviceResponse = new ServiceResponse<GetAllElementsOfProduct>();
+            ServiceResponse<GetAllElementOfProductDto> serviceResponse = new ServiceResponse<GetAllElementOfProductDto>();
             try
             {
                 //Obtiene el producto.
@@ -403,10 +751,10 @@
                     return serviceResponse;
                 }
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
-                serviceResponse.Data = new GetAllElementsOfProduct
+                serviceResponse.Data = new GetAllElementOfProductDto
                 {
                     Id = product.Id,
-                    Category = new Common.Dtos.Categorie.GetCategorieDto
+                    Categorie = new Common.Dtos.Categorie.GetCategorieDto
                     {
                         Id = product.Category.Id,
                         Name = product.Category.Name,
@@ -423,7 +771,7 @@
                     Average = product.Average,
                     IsAvailabe = product.IsAvailabe,
                     SupportAggregate = product.SupportAggregate,
-                    GetSubCategoryDtos = product.SubCategories.Select(c => new Common.Dtos.SubCategorie.GetSubCategorieDto
+                    GetSubCategories = product.SubCategories.Select(c => new Common.Dtos.SubCategorie.GetSubCategorieDto
                     {
                         Id = c.Id,
                         Name = c.Name,
@@ -472,7 +820,7 @@
                 serviceResponse.Data = all_product.Select(c => new GetProductDto
                 {
                     Id = c.Id,
-                    Category = new Common.Dtos.Categorie.GetCategorieDto
+                    Categorie = new Common.Dtos.Categorie.GetCategorieDto
                     {
                         Id = c.Category.Id,
                         Name = c.Category.Name,
@@ -483,7 +831,7 @@
                     IsAvailabe = c.IsAvailabe,
                     Average = c.Average,
                     SupportAggregate = c.SupportAggregate,
-                    GetSubCategoryDtos = c.SubCategories.Select(x => new Common.Dtos.SubCategorie.GetSubCategorieDto
+                    GetSubCategories = c.SubCategories.Select(x => new Common.Dtos.SubCategorie.GetSubCategorieDto
                     {
                         Id = x.Id,
                         Name = x.Name,
@@ -896,7 +1244,7 @@
                 serviceResponse.Data = all_cant_product.Select(c => new GetProductDto
                 {
                     Id = c.Id,
-                    Category = new Common.Dtos.Categorie.GetCategorieDto
+                    Categorie = new Common.Dtos.Categorie.GetCategorieDto
                     {
                         Id = c.Category.Id,
                         Name = c.Category.Name,
@@ -907,7 +1255,7 @@
                     IsAvailabe = c.IsAvailabe,
                     Average = c.Average,
                     SupportAggregate = c.SupportAggregate,
-                    GetSubCategoryDtos = c.SubCategories.Select(x => new Common.Dtos.SubCategorie.GetSubCategorieDto
+                    GetSubCategories = c.SubCategories.Select(x => new Common.Dtos.SubCategorie.GetSubCategorieDto
                     {
                         Id = x.Id,
                         Name = x.Name,
@@ -1145,7 +1493,7 @@
                 serviceResponse.Data = new GetProductDto
                 {
                     Id = product.Id,
-                    Category = new Common.Dtos.Categorie.GetCategorieDto
+                    Categorie = new Common.Dtos.Categorie.GetCategorieDto
                     {
                         Id = product.Category.Id,
                         Name = product.Category.Name,
@@ -1156,7 +1504,7 @@
                     Average = product.Average,
                     IsAvailabe = product.IsAvailabe,
                     SupportAggregate = product.SupportAggregate,
-                    GetSubCategoryDtos = product.SubCategories.Select(c => new Common.Dtos.SubCategorie.GetSubCategorieDto
+                    GetSubCategories = product.SubCategories.Select(c => new Common.Dtos.SubCategorie.GetSubCategorieDto
                     {
                         Id = c.Id,
                         Name = c.Name,
@@ -1211,7 +1559,7 @@
                 serviceResponse.Data = all_product.Select(c => new GetProductDto
                 {
                     Id = c.Id,
-                    Category = new Common.Dtos.Categorie.GetCategorieDto
+                    Categorie = new Common.Dtos.Categorie.GetCategorieDto
                     {
                         Id = c.Category.Id,
                         Name = c.Category.Name,
@@ -1222,7 +1570,7 @@
                     IsAvailabe = c.IsAvailabe,
                     Average = c.Average,
                     SupportAggregate = c.SupportAggregate,
-                    GetSubCategoryDtos = c.SubCategories.Select(x => new Common.Dtos.SubCategorie.GetSubCategorieDto
+                    GetSubCategories = c.SubCategories.Select(x => new Common.Dtos.SubCategorie.GetSubCategorieDto
                     {
                         Id = x.Id,
                         Name = x.Name,
@@ -1299,7 +1647,7 @@
                 serviceResponse.Data = all_cant_product.Select(c => new GetProductDto
                 {
                     Id = c.Id,
-                    Category = new Common.Dtos.Categorie.GetCategorieDto
+                    Categorie = new Common.Dtos.Categorie.GetCategorieDto
                     {
                         Id = c.Category.Id,
                         Name = c.Category.Name,
@@ -1310,7 +1658,7 @@
                     IsAvailabe = c.IsAvailabe,
                     Average = c.Average,
                     SupportAggregate = c.SupportAggregate,
-                    GetSubCategoryDtos = c.SubCategories.Select(x => new Common.Dtos.SubCategorie.GetSubCategorieDto
+                    GetSubCategories = c.SubCategories.Select(x => new Common.Dtos.SubCategorie.GetSubCategorieDto
                     {
                         Id = x.Id,
                         Name = x.Name,
@@ -1346,7 +1694,7 @@
             try
             {
                 //Verifica que la categoria es valida
-                var category = await this._serviceGenericCategoryHelper
+                var category = await this._serviceGenericCategorieHelper
                 .WhereFirstEntityAsync(c => c.Id == CategoryId)
                 .ConfigureAwait(false);
                 if (category == null)
@@ -1375,7 +1723,7 @@
                 serviceResponse.Data = all_product.Select(c => new GetProductDto
                 {
                     Id = c.Id,
-                    Category = new Common.Dtos.Categorie.GetCategorieDto
+                    Categorie = new Common.Dtos.Categorie.GetCategorieDto
                     {
                         Id = c.Category.Id,
                         Name = c.Category.Name,
@@ -1386,7 +1734,7 @@
                     IsAvailabe = c.IsAvailabe,
                     Average = c.Average,
                     SupportAggregate = c.SupportAggregate,
-                    GetSubCategoryDtos = c.SubCategories.Select(x => new Common.Dtos.SubCategorie.GetSubCategorieDto
+                    GetSubCategories = c.SubCategories.Select(x => new Common.Dtos.SubCategorie.GetSubCategorieDto
                     {
                         Id = x.Id,
                         Name = x.Name,
@@ -1421,7 +1769,7 @@
             try
             {
                 //Verifica que la categoria es valida
-                var category = await this._serviceGenericCategoryHelper
+                var category = await this._serviceGenericCategorieHelper
                 .WhereFirstEntityAsync(c => c.Id == CategoryId)
                 .ConfigureAwait(false);
                 if (category == null)
@@ -1456,7 +1804,7 @@
                 serviceResponse.Data = all_product.Select(c => new GetProductDto
                 {
                     Id = c.Id,
-                    Category = new Common.Dtos.Categorie.GetCategorieDto
+                    Categorie = new Common.Dtos.Categorie.GetCategorieDto
                     {
                         Id = c.Category.Id,
                         Name = c.Category.Name,
@@ -1467,7 +1815,7 @@
                     IsAvailabe = c.IsAvailabe,
                     Average = c.Average,
                     SupportAggregate = c.SupportAggregate,
-                    GetSubCategoryDtos = c.SubCategories.Select(x => new Common.Dtos.SubCategorie.GetSubCategorieDto
+                    GetSubCategories = c.SubCategories.Select(x => new Common.Dtos.SubCategorie.GetSubCategorieDto
                     {
                         Id = x.Id,
                         Name = x.Name,
@@ -1512,6 +1860,54 @@
                     .GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotFound);
                     return serviceResponse;
                 }
+                //Verifica si el producto está relacionado ya con las entidades OrderDetail y
+                //CalificationProduct.
+                var productIs_OrderDetail = await this._serviceGenericHelperOrderDetail
+                .WhereFirstEntityAsync(c => c.ProductCombined.Product == product).ConfigureAwait(false);
+                var productIs_CalificationProduct = await this._serviceGenericCalificationProduct
+                .WhereFirstEntityAsync(c => c.Product == product).ConfigureAwait(false);
+                if (productIs_OrderDetail == null && productIs_CalificationProduct == null)
+                {
+                   //Busca todas las subcategorias del producto.
+                   var list_subcategories = await this._serviceGenericSubCategorieHelper
+                   .WhereListEntityAsync(c => c.Product == product).ConfigureAwait(false);
+                   if(list_subcategories.Any())
+                   {
+                      //Manda a eliminar las subcategorias del producto.
+                      _serviceGenericSubCategorieHelper.RemoveRangeEntity(list_subcategories);
+                      //Guarda los cambios.
+                      await _serviceGenericSubCategorieHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                   }
+                   //Busca todas las imagenes del producto.
+                   var list_images = await this._serviceGenericImageProductHelper
+                   .WhereListEntityAsync(c => c.Product == product).ConfigureAwait(false);
+                   if(list_images.Any())
+                   {
+                      //Manda a eliminar todas las imagenes del producto.
+                      this._serviceGenericImageProductHelper.RemoveRangeEntity(list_images);
+                      //Guarda los cambios.
+                      await this._serviceGenericImageProductHelper.SaveChangesBDAsync().ConfigureAwait(false);
+                   }
+                   //Busca los productos combinados que se crearon con este producto
+                   var list_productcombined = await this._serviceGenericHelperProductCombined
+                   .WhereListEntityAsync(c => c.Product == product).ConfigureAwait(false);
+                   if(list_productcombined.Any())
+                   {
+                      //Manda a eliminar los productos combinados hechos con este producto.
+                      this._serviceGenericHelperProductCombined.RemoveRangeEntity(list_productcombined);
+                      //Guarda los cambios.
+                      await this._serviceGenericHelperProductCombined.SaveChangesBDAsync().ConfigureAwait(false);
+                   }
+                }
+                else
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.DeleteEntityProduct;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.DeleteEntityProduct);
+                    return serviceResponse;
+                }
                 //Elimina el producto
                 this._serviceGenericProductHelper.RemoveEntity(product);
                 //Guarda los cambios en la base de datos.
@@ -1533,14 +1929,34 @@
                 .GetValueResourceString(GetValueResourceFile.KeyResource.ExceptionDeleteEntity);
                 return serviceResponse;
             }
-            catch (Exception)
+            catch(Exception ex)
             {
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
-                serviceResponse.Message = GetValueResourceFile
-                .GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                serviceResponse.Message = ex.Message;
                 return serviceResponse;
+            }
+        }
+
+        /************************Funciones Privadas***********************************/
+        
+        /// <summary>
+        /// Obtiene el último producto.
+        /// </summary>
+        /// <returns></returns>
+        private async Task<Product> GetLastProductAsync()
+        {
+            try
+            {
+                var last_product = await this._serviceGenericProductHelper
+                .LastEntityAsync()
+                .ConfigureAwait(false);
+                return last_product;
+            }
+            catch (Exception)
+            {
+               return null;
             }
         }
     }

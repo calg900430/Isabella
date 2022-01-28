@@ -50,7 +50,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ServicesControllers\IServicesRepository\" />
+    <Folder Include="ServicesControllers\v1\IServicesRepository\" />
+    <Folder Include="ServicesControllers\v2\IServicesRepository\" />
+    <Folder Include="ViewModels\RestaurantViewModel\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -19,7 +19,7 @@
     /// </summary>
     public class CategorieServiceController : ICategoryRepositoryDto
     {
-        private readonly ServiceGenericHelper<Category> _serviceGenericCategoryHelper;
+        private readonly ServiceGenericHelper<Categorie> _serviceGenericCategoryHelper;
         private readonly ServiceGenericHelper<Product> _serviceGenericProductHelper;
 
         /// <summary>
@@ -27,7 +27,7 @@
         /// </summary>
         /// <param name="serviceGenericCategoryHelper"></param>
         /// <param name="serviceGenericProductHelper"></param>
-        public CategorieServiceController(ServiceGenericHelper<Category> serviceGenericCategoryHelper,
+        public CategorieServiceController(ServiceGenericHelper<Categorie> serviceGenericCategoryHelper,
         ServiceGenericHelper<Product> serviceGenericProductHelper)
         {
             this._serviceGenericCategoryHelper = serviceGenericCategoryHelper;
@@ -66,7 +66,7 @@
                     .GetValueResourceString(GetValueResourceFile.KeyResource.CategoryExist);
                     return serviceResponse;
                 }
-                var new_category = new Category
+                var new_category = new Categorie
                 {
                    Name = addCategory.Name,
                 };
@@ -331,7 +331,7 @@
         /// </summary>
         /// <param name="updateCategory"></param>
         /// <returns></returns>
-        public async Task<ServiceResponse<bool>> UpdateCategoryAsync(UpdateCategoryDto updateCategory)
+        public async Task<ServiceResponse<bool>> UpdateCategoryAsync(UpdateCategorieDto updateCategory)
         {
             ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
             try

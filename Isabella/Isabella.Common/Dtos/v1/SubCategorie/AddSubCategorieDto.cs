@@ -2,7 +2,7 @@
 {
     using System.ComponentModel.DataAnnotations;
 
-    public class AddSubCategorieToProductDto
+    public class AddSubCategorieDto
     {
         /// <summary>
         /// Producto.

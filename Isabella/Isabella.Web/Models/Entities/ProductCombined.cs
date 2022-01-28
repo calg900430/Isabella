@@ -23,7 +23,7 @@
         /// <summary>
         /// SubCategoria del Producto.
         /// </summary>
-        public SubCategory SubCategory { get; set; }
+        public SubCategorie SubCategory { get; set; }
 
         /// <summary>
         /// Cantidad de agregos.

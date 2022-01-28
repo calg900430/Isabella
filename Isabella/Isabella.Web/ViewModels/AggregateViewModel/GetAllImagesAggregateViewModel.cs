@@ -1,11 +1,13 @@
-﻿namespace Isabella.Web.ViewModels.ProductViewModel
+﻿namespace Isabella.Web.ViewModels.AggregateViewModel
 {
-    using Isabella.Common.Dtos.Product;
-    using Microsoft.AspNetCore.Http;
+    
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
+    using Isabella.Common.Dtos.Aggregate;
+    using Microsoft.AspNetCore.Http;
 
     /// <summary>
     /// ViewModel de las imagenes de los productos
@@ -25,6 +27,6 @@
         /// <summary>
         /// Imagenes
         /// </summary>
-        public List<GetImageProductDto> GetImages { get; set; }
+        public List<GetImageAggregateDto> GetImages { get; set; }
     }
 }

@@ -6,15 +6,20 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
 
     using Isabella.Common.Dtos.Product;
    
+
     /// <summary>
-    /// AddProductViewModel
+    /// Agregar un nuevo producto.
     /// </summary>
     public class AddProductViewModel : AddProductDto
     {
-        [Display(Name = "Image")]
+        /// <summary>
+        /// Imagen
+        /// </summary>
+        [Required(ErrorMessage = "Es necesario una imagen para el producto.")]
         public IFormFile ImageFile { get; set; }
     }
 }

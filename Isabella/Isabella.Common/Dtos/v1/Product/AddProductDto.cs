@@ -1,6 +1,5 @@
 ﻿namespace Isabella.Common.Dtos.Product
 {
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     /// <summary>
@@ -18,7 +17,7 @@
         /// Nombre 
         /// </summary>
         [Required(ErrorMessage = "Debe introducir el nombre del producto.")]
-        [MaxLength(100, ErrorMessage = "Ha superado el limite máximo de caracteres permitidos para el nombre del producto.")]
+        [MaxLength(20, ErrorMessage = "Ha superado el limite máximo de caracteres permitidos para el nombre del producto.")]
         public string Name { get; set; }
 
         /// <summary>
@@ -31,7 +30,7 @@
         /// <summary>
         /// Indica si el producto está disponible.
         /// </summary>
-        public bool IsAvailabe { get; set; }
+        public bool IsAvailable { get; set; }
 
         /// <summary>
         /// Indica si el producto se le puede incluir agregados.
@@ -47,7 +46,8 @@
         /// <summary>
         /// Descripción de la publicacion
         /// </summary>
-        [MaxLength(1000, ErrorMessage = "Ha superado el limite máximo de caracteres permitidos para dar una descripción del producto.")]
+        [Required(ErrorMessage = "Debe introducir una descripción del producto.")]
+        [MaxLength(100, ErrorMessage = "Ha superado el limite máximo de caracteres permitidos para dar una descripción del producto.")]
         public string Description { get; set; }
     }
 }

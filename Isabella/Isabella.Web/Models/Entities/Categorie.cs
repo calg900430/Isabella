@@ -1,13 +1,17 @@
-﻿namespace Isabella.Common.Dtos.Categorie
+﻿namespace Isabella.Web.Models.Entities
 {
+    using System.ComponentModel.DataAnnotations;
+    using Models;
+
     /// <summary>
-    /// Dto para actualizar una subcategoria.
+    /// Entidad que representa la categoria de un producto standard
     /// </summary>
-    public class UpdateCategoryDto
+    public class Categorie : IEntity
     {
         /// <summary>
-        /// Key
+        /// Id
         /// </summary>
+        [Key]
         public int Id { get; set; }
 
         /// <summary>

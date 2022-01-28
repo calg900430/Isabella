@@ -20,94 +20,97 @@
     ViewData["IsSupportAggregate"] = "Agregados?";
     ViewData["Description"] = "Descripción";
 }
+<hr />
 
 <h2>@ViewData["Title"]</h2>
-<div class="dl-horizontal">
-  <hr />
-    @*Crea una lista para mostrar los detalles del producto*@
-<dl class="dl-horizontal align-content-lg-between">
-    <dd>@ViewData["Name"]</dd>
-    <dt>@Html.DisplayFor(model => model.Name)</dt>
-    <dt>
-       
-    </dt>
-    <dd>
-        @if (Model.GetAllImagesProducts != null)
-        {
-            if (Model.GetAllImagesProducts.Count > 0)
+<div class="row">
+    <div class="col-md-12">
+        <div style="text-align:center">
+            @if (Model.GetAllImagesProducts != null)
             {
-                @*Convierte el array byte en una imagen*@
-                <img src="data:imge;base64,@System.Convert.ToBase64String(Model.GetAllImagesProducts[0].Image)" ,
-                     style="width:300px;height:450px;max-width: 100%; height: auto;" />
-            }
-            else
-            {
-                <b>No Disponible</b>
-            }
-        }
-        else
-        {
-            <b>No Disponible</b>
-        }
-    </dd>
-    <dt>@ViewData["Description"]</dt>
-    @if (!string.IsNullOrWhiteSpace(Model.Description))
-    {
-      <dd>@Html.DisplayFor(model => model.Description)</dd>
-    }
-    else
-    {
-      <dd>No hay descripción del producto.</dd>
-    }
-    <dd>@ViewData["Categorie"]</dd>
-    <dt>@Html.DisplayFor(model => model.Category.Name)</dt>
-    <dd>@ViewData["SubCategorie"]</dd>
-    <dt>
-            <select class="form-control" id="SubCategorias" name="SubCategorias">
-                @if (Model.GetSubCategoryDtos != null)
+                if (Model.GetAllImagesProducts.Count > 0)
                 {
-                    if (Model.GetSubCategoryDtos.Count > 0)
-                    {
-                        @foreach (var item in Model.GetSubCategoryDtos)
-                        {
-                            <option>@Html.DisplayFor(model => item.Name)</option>
-                        }
-                    }
-                    else
-                    {
-                        <option>@ViewData["NotSubCategorie"]</option>
-                    }
+                    @*Convierte el array byte en una imagen*@
+                    <img src="data:imge;base64,@System.Convert.ToBase64String(Model.GetAllImagesProducts[0].Image)" ,
+                         style="width:300px;height:450px;max-width: 100%; height: auto; text-align:center" />
                 }
                 else
                 {
+                    <b>Imagen No Disponible</b>
+                }
+            }
+            else
+            {
+                <b>Imagen No Disponible</b>
+            }
+        </div>
+
+        <hr />
+        <div>
+            <label>@ViewData["Name"]</label>
+            <p class="text-success">@Html.DisplayFor(model => model.Name)</p>
+        </div>
+        <hr />
+        <div>
+            <label>@ViewData["Description"]</label>
+            <p class="text-success" rows="3">@Html.DisplayFor(model => model.Description)</p>
+        </div>
+        <hr />
+        <div>
+            <label>@ViewData["Categorie"]</label>
+            <p class="text-success">@Html.DisplayFor(model => model.Categorie.Name)</p>
+        </div>
+        <hr />
+        <div>
+            <label>@ViewData["SubCategorie"]</label>
+            <select class="form-select text-success" id="SelectSubCategories">
+                @if (Model.GetSubCategories.Count <= 0 || Model.GetSubCategories == null)
+                {
                     <option>@ViewData["NotSubCategorie"]</option>
                 }
+                else
+                {
+                    @foreach (var subcategorie in Model.GetSubCategories)
+                    {
+                        <option>@subcategorie.Name</option>
+                    }
+                }
             </select>
-        </dt>
-    <dd>@ViewData["IsSupportAggregate"]</dd>
-    @if (Model.SupportAggregate)
-        {
-            <dt>Sí</dt>
-        }
-    else
-        {
-            <dt>No</dt>
-        }
-    <dd>@ViewData["Price"]</dd>
-    <dt>@Html.DisplayFor(model => model.Price)</dt>
-    <dd>@ViewData["IsAvailable"]</dd>
-    @if (Model.IsAvailabe)
-    {
-       <dt>Sí</dt>
-    }
-    else
-    {
-      <dt>No</dt>
-    }
-    </dl>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar</a>
-    <a asp-action="Index" class="btn btn-success">Atrás</a>
+            <hr />
+            <div>
+                <label>@ViewData["Price"]</label>
+                <p class="text-success">@Html.DisplayFor(model => model.Price)</p>
+            </div>
+            <hr />
+            <div>
+                <label>@ViewData["IsSupportAggregate"]</label>
+                @if (Model.SupportAggregate)
+                {
+                    <p class="text-success">Sí </p>
+                }
+                else
+                {
+                    <p class="text-success">No</p>
+                }
+            </div>
+            <hr />
+            <div>
+                <label>@ViewData["IsAvailable"]</label>
+                @if (Model.IsAvailabe)
+                {
+                    <p class="text-success">Sí </p>
+                }
+                else
+                {
+                    <p class="text-success">No</p>
+                }
+            </div>
+            <hr />
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Actualizar</a>
+            <a asp-action="Index" class="btn btn-success"><i class="fa fa-chevron-left"></i> Atrás</a>
+        </div>
 </div>
+
 
 
 

@@ -15,12 +15,12 @@
         /// <summary>
         /// Categoria del producto.
         /// </summary>
-        public GetCategorieDto Category { get; set; }
+        public GetCategorieDto Categorie { get; set; }
 
         /// <summary>
         /// SubCategorias.
         /// </summary>
-        public List<GetSubCategorieDto> GetSubCategoryDtos { get; set; }
+        public List<GetSubCategorieDto> GetSubCategories { get; set; }
 
         /// <summary>
         /// Nombre del Producto ofertado por el Restaurante.
@@ -32,6 +32,12 @@
         /// </summary>
         [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = false)]
         public decimal Price { get; set; }
+
+        /// <summary>
+        /// Stock
+        /// </summary>
+        public int Stock { get; set; }
+
 
         /// <summary>
         /// Descripción del Producto.

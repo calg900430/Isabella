@@ -40,8 +40,8 @@ namespace Isabella.Web
             services.AddControllersWithViews();
 
             //Agrega y configura el servicio para conectarnos a SQL Server
-            //var connectionstring = Constants.GetStringConnectionSQLServer(Configuration.GetSection("SQLServerLocal"));
-            var connectionstring = Constants.GetStringConnectionSQLServer(Configuration.GetSection("SQLServer"));
+            var connectionstring = Constants.GetStringConnectionSQLServer(Configuration.GetSection("SQLServerLocal"));
+            //var connectionstring = Constants.GetStringConnectionSQLServer(Configuration.GetSection("SQLServer"));
             services.AddDbContext<DataContext>(cfg =>
             {
                 //c.UseLazyLoadingProxies() //Para poder usar carga diferida
@@ -204,11 +204,11 @@ namespace Isabella.Web
 
             //Agrega los servicios para el manejo de las subcategorias.
             services.AddScoped<CategorieServiceController>();
-            services.AddScoped<ServiceGenericHelper<SubCategory>>();
+            services.AddScoped<ServiceGenericHelper<SubCategorie>>();
 
             //Agrega los servicios para el manejo de las categorias.
             services.AddScoped<SubCategorieServiceController>();
-            services.AddScoped<ServiceGenericHelper<Category>>();
+            services.AddScoped<ServiceGenericHelper<Categorie>>();
 
             //Agrega los servicios para el manejo del carrito de compras
             services.AddScoped<CartShopServiceController>();
@@ -229,28 +229,14 @@ namespace Isabella.Web
             services.AddScoped<ServiceGenericHelper<Restaurant>>();
             services.AddScoped<RestaurantServiceController>();
 
+            //Agrega el servicio para el manejo de las calificaciones del producto
+            services.AddScoped<ServiceGenericHelper<CalificationProduct>>();
+
             //Agrega el servicio de SignalR
             services.AddSignalR(options =>
             {
 
             });
-
-            //Agrega el servicio para las politicas de autorizacion
-            /*services.AddAuthorization(options =>
-            {
-                //Obtiene los requerimientos de apertura del restaurante
-                //desde la base de datos.
-
-                //Agrega la politica de autorización por apertura del restaurante
-                options.AddPolicy("StateRestaurant", policy =>
-                {
-                    policy.AddRequirements(
-                    new StateRestaurant(true, DateTime.UtcNow,
-                    DateTime.UtcNow));
-                });
-            });*/
-            //Registramos nuestro controlador de autorización StateRestaurantHandler
-            //services.AddSingleton<IAuthorizationHandler, StateRestaurantHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -267,14 +253,15 @@ namespace Isabella.Web
                 app.UseHsts();
             }
             //Configuración del CORS
-            app.UseCors(x =>
+            /*app.UseCors(x =>
             x.AllowAnyMethod()
             .AllowAnyHeader()
             .SetIsOriginAllowed(origin => true)
             .AllowCredentials()
-            );
+            );*/
             //app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseDefaultFiles();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();

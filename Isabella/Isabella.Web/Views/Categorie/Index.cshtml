@@ -10,51 +10,140 @@
 @{
     ViewData["Title"] = "Categorias";
     ViewData["Id"] = "Id";
-    ViewData["Name"] = "Nombre";  
+    ViewData["Name"] = "Nombre";
 }
-
+<hr />
 @*Pone el Titulo que establecimos en la coleccion ViewData desde el controlador*@
 <h2>@ViewData["Title"]</h2>
 @*Se crea un enlace del tipo botón usando las clases de Boostrap *@
 <p>
     <a asp-action="Create" class="btn btn-primary">Crear Categoria</a>
 </p>
-    <div class="row">
-        <div class="col-md-12">
-            @*Se crea una tabla para mostrar los productos*@
-            <table class="table">
-                @*Se crean las columnas y se le pone el nombre a cada una*@
-                <thead>
+<div class="row">
+    <div class="col-md-12">
+        @*Se crea una tabla para mostrar las categorias*@
+        <table class="table">
+            @*Se crean las columnas y se le pone el nombre a cada una*@
+            <thead>
+                <tr>
+                    <th>
+                        @ViewData["Name"]
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            @*Se crean las filas que contienen los elementos de cada columna que
+            en este caso son los datos de las categorias*@
+            <tbody>
+                @foreach (var item in Model)
+                {
                     <tr>
-                        <th>
-                            @ViewData["Id"]
-                        </th>
-                        <th>
-                            @ViewData["Name"]
-                        </th>
-                        <th></th>
+                        <td>@Html.DisplayFor(model => item.Name)</td>
+                        @*Se crean los botones Edit y Delete para cada categoria*@
+                        <td id="@item.Id">
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                            <a id="buttomdelete" asp-route-id="@item.Id" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                        </td>
                     </tr>
-                </thead>
-                @*Se crean las filas que contienen los elementos de cada columna que
-                en este caso son los datos de los productos*@
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>@Html.DisplayFor(model => item.Id)</td>
-                            <td>@Html.DisplayFor(model => item.Name)</td>
-                            @*Se crean los botones Edit y Delete para cada categoria*@
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Editar</a>
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Borrar</a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@*Ventana Modal*@
+<div id="confirmDelete" class="modal fade">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <i class="fa fa-window-close"></i>
+                </button>
+                <h4 class="modal-title">Borrar</h4>
+            </div>
+            <div class="modal-body">
+                <p>Desea eliminar la categoria?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnYesDelete">Sí</button>
+                <button type="button" class="btn btn-success" id="btnNoDelete">No</button>
+            </div>
         </div>
     </div>
+</div>
 
+@section Scripts
+    {
+    @*Script para el manejo de la ventana modal*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var id = 0;
+            var url_server_local = 'https://localhost:44352/product/deleteconfirmed';
+            var url_server_online = 'https://localhost:44352/product/deleteconfirmed';
 
+            //Muestra la ventana modal
+            $('a[id*=buttomdelete]').click(function () {
+                id = $(this).parent()[0].id
+                $("#confirmDelete").modal('show');
+                return false;
+            });
+
+            //Cancelar
+            $("#btnNoDelete").click(function () {
+                $("#confirmDelete").modal('hide');
+                return false;
+            });
+
+            //Manda a eliminar un producto
+            $("#btnYesDelete").click(function () {
+                try {
+                    //Id del producto
+                    var product_delete = { Id: id };
+                    //Manda a eliminar el producto
+                    fetch(url_server_local, {
+                        method: 'POST',
+                        //mode:  'no-cors',
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(product_delete)
+                    })
+                        .then(response => response.json())
+                        .then(contenido => console.log(contenido))
+                        .catch(error => console.error('Ha ocurrido un error', error));
+                    /*.then(function(response) {
+                        //Objeto Response
+                        if (response.ok) {
+                            var a = response.json();
+                            console.log(a);
+                        }
+                        else
+                        {
+                           console.log(response);
+                        }
+                        //return false;
+                    })
+                    .then(function(data) {
+                        //Datos q se esperan recibir
+                        console.log(data);
+                        //return false;
+                    })
+                    .catch(function(error) {
+                        //No se ejecutó la promesa o sea ocurrió un error
+                        console.log(error);
+                        //return false;
+                    });*/
+                }
+                catch (error) {
+                    //console.log(error);
+                    //return false;
+                }
+                window.location.href = '/Product';
+            });
+        });
+    </script>
+}
 
 

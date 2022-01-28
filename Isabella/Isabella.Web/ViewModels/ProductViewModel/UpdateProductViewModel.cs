@@ -2,16 +2,24 @@
 {
     using Isabella.Common.Dtos.Product;
     using Microsoft.AspNetCore.Http;
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
+    using System.ComponentModel.DataAnnotations;
+   
 
     /// <summary>
     /// UpdateProductViewModel
     /// </summary>
     public class UpdateProductViewModel : UpdateProductDto
     {
-       
+        /// <summary>
+        /// Imagen a actualizar
+        /// </summary>
+        [Display(Name = "Image")]
+        public IFormFile ImageFile { get; set; }
+
+        /// <summary>
+        /// Imagenes
+        /// </summary>
+        public List<GetImageProductDto> Images { get; set; }
     }
 }

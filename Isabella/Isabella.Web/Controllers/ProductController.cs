@@ -9,7 +9,10 @@
 
     using Isabella.Web.ServicesControllers;
     using Isabella.Web.ViewModels.ProductViewModel;
-   
+    using Isabella.Common.Dtos.Categorie;
+    using Isabella.Web.ViewModels.CategorieViewModel;
+    using Microsoft.AspNetCore.Http;
+    using Isabella.Common.Dtos.Product;
 
     /// <summary>
     /// Controlador de Productos 
@@ -37,7 +40,6 @@
         /// Muestra todos los productos disponibles en la base de datos
         /// </summary>
         /// <returns></returns>
-        [HttpGet()]
         public async Task<IActionResult> Index()
         {
             //Obtiene todos los productos con sus imagenes de la base de datos.
@@ -72,37 +74,28 @@
         }
 
         /// <summary>
-        /// Muestra los detalles del producto.
+        /// Se elimina el producto.
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        [HttpGet("Details")]
-        public async Task<IActionResult> Details(int? Id)
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> Delete(int Id)
         {
-            if (Id == null)
+            //Obtiene el producto
+            try
             {
-                return NotFound();
+                var result = await this._productServiceController
+                .DeleteProductAsync(Id).ConfigureAwait(false);
+                if (!result.Success)
+                return NotFound(result);
+                else
+                return Ok(result);               
             }
-            //Obtiene el producto.
-            var product = await this._productServiceController
-            .GetProductForIdAsync(Id.Value)
-            .ConfigureAwait(false);
-            //Obtiene todas las imagenes del producto actual
-            var all_images = await this._productServiceController
-            .GetAllImageProductAsync(Id.Value)
-            .ConfigureAwait(false);
-            return View(new GetProductViewModel
+            catch(Exception ex)
             {
-                SupportAggregate = product.Data.SupportAggregate,
-                Id = product.Data.Id,
-                Price = product.Data.Price,
-                Name = product.Data.Name,
-                IsAvailabe = product.Data.IsAvailabe,
-                GetAllImagesProducts = all_images.Data,
-                GetSubCategoryDtos = product.Data.GetSubCategoryDtos,
-                Category = product.Data.Category,
-                Description = product.Data.Description,   
-            });
+                //Lanza la pagina de control de excepciones.
+                return NotFound(ex.Message);
+            }
         }
 
         /// <summary>
@@ -112,66 +105,66 @@
         [HttpGet("Create")]
         public async Task<IActionResult> Create()
         {
-            //Obtiene todas las categorias
-            var all_categorie = await this._categorieServiceController.GetAllCategoryAsync().ConfigureAwait(false);
-            //Creamos una lista del tipo SelectListItem
-            var selected_categories = new List<SelectListItem>();
-            //Convierte la lista de categorias al tipo SelectListItem
-            selected_categories = all_categorie.Data.Select(c => new SelectListItem
+            try
             {
-                Text = c.Name,
-                Value = c.Id.ToString()
+                //Obtiene todas las categorias
+                var all_categorie = await this._categorieServiceController.GetAllCategoryAsync()
+                .ConfigureAwait(false);
+                var categories = all_categorie.Data.Select(c => new GetCategorieViewModel
+                {
+                    Name = c.Name,
+                    Id = c.Id
 
-            }).ToList();
-            //Asignamos la lista de categorias al ViewData
-            //ViewData se pasa automaticamente a la vista.
-            ViewBag.Categories = selected_categories;
-            return View(); 
+                }).ToList();
+                //Asignamos la lista de categorias al ViewBag para acceder a el en la vista.
+                ViewBag.Categories = categories;
+                return View();
+            }
+            catch (Exception ex)
+            {
+                //Retorna la vista de manejo de Excepciones
+                return View(ex.Message);
+            }
         }
 
         /// <summary>
         /// Crea un nuevo producto.
         /// </summary>
+        /// <param name="addProductViewModel"></param>
         /// <returns></returns>
         [HttpPost("Create")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(AddProductViewModel addProductViewModel, string Categories)
+        public async Task<IActionResult> Create([FromForm] AddProductViewModel addProductViewModel)
         {
-            if(ModelState.IsValid)
+            try
             {
-                //Parsea el Id de la categoria.
-                var result = int.TryParse(Categories, out int IdCategorie);
-                if (!result)
+                if (ModelState.IsValid)
                 {
-                    return NotFound();
-                }
-                //Establece el valor de la categoria
-                addProductViewModel.CategorieId = IdCategorie;
-                //Guarda en la base de datos el nuevo objeto.
-                var result_for_add_to_product = await this._productServiceController
-                .AddProductAsync(addProductViewModel);
-                if(result_for_add_to_product.Success)
-                {
-                    //Obtiene el Id del ultimo producto o sea el que acabamos de agregar
-                    var DataId = await this._productServiceController.GetIdOfLastProductAsync().ConfigureAwait(false);
-                    //Agrega la imagen del producto usando IFormFile
-                    var is_save_imageawait = this._productServiceController.AddImageProductAsync(addProductViewModel.ImageFile, DataId.Data).ConfigureAwait(false);
-                    //Retorna a la vista Index, donde debe aparecer el nuevo producto.
-                    return RedirectToAction(nameof(Index));
+                    //Guarda en la base de datos el nuevo objeto.
+                    var result_for_add_to_product = await this._productServiceController
+                    .AddProductToImageAsync(addProductViewModel);
+                    if (result_for_add_to_product.Success)
+                    {
+                      return Ok();
+                    }
+                    else
+                    {
+                       return NotFound(result_for_add_to_product);
+                    }
                 }
                 else
                 {
-                   return NotFound();
+                    //Retorna a la vista el mismo addProductViewModel para que verifique el error
+                    //y no tenga volver a llenar los datos.
+                    return View(addProductViewModel);
                 }
             }
-            else
+            catch(Exception ex)
             {
-                //Retorna a la vista el mismo addProductViewModel para que verifique el error
-                //y no tenga volver a llenar los datos.
-                return View(addProductViewModel);
+               //Retorna la vista de manejo de Excepciones
+               return View(ex.Message);
             }
+            
         }
-
 
         /// <summary>
         /// Crea la view donde se va a actualizar el producto.
@@ -179,140 +172,124 @@
         /// <param name="Id"></param>
         /// <returns></returns>
         [HttpGet("Edit")]
-        public async Task<IActionResult> Edit(int? Id)
+        public async Task<IActionResult> Edit(int Id)
         {
-            if (Id == null)
+            try
             {
-                return NotFound();
-            }
-            var product = await this._productServiceController
-            .GetProductForIdAsync(Id.Value).ConfigureAwait(false);
-            if(product.Success)
-            {
-                //Obtiene todas las imagenes del producto.
-                var all_image_product = await this._productServiceController
-                .GetAllImageProductAsync(product.Data.Id).ConfigureAwait(false);
-                ViewBag.AllImages = all_image_product.Data;
-                //Obtiene todas las categorias
-                var all_categorie = await this._categorieServiceController.GetAllCategoryAsync().ConfigureAwait(false);
-                //Creamos una lista del tipo SelectListItem
-                var selected_categories = new List<SelectListItem>();
-                //Convierte la lista de categorias al tipo SelectListItem
-                selected_categories = all_categorie.Data.Select(c => new SelectListItem
+                var product = await this._productServiceController
+                .GetProductForIdAsync(Id).ConfigureAwait(false);
+                if(product.Success)
                 {
-                    Text = c.Name,
-                    Value = c.Id.ToString()
+                   //Obtiene todas las categorias
+                   var all_categorie = await this._categorieServiceController.GetAllCategoryAsync().ConfigureAwait(false);
+                   var categories = all_categorie.Data.Select(c => new GetCategorieViewModel
+                   {
+                      Id = c.Id,
+                      Name = c.Name
+                   }).ToList();
+                   //Asignamos la lista de categorias y imagenes al ViewBag
+                   //ViewBag a se pasa automaticamente a la vista.
+                   ViewBag.Categories = categories;
+                   //Obtiene las imagenes del producto.
+                   var images = await this._productServiceController 
+                   .GetAllImageProductAsync(product.Data.Id)
+                   .ConfigureAwait(false);
+                   var updateproductviewmodel = new UpdateProductViewModel
+                   {
+                      ProductId = product.Data.Id,
+                      CategorieId = product.Data.Categorie.Id,
+                      Description = product.Data.Description,
+                      IsAvailable = product.Data.IsAvailabe,
+                      Name = product.Data.Name,
+                      Price = product.Data.Price,
+                      Stock = product.Data.Stock,
+                      SupportAggregate = product.Data.SupportAggregate,
+                      Images = images.Data
+                   };
+                   return View(updateproductviewmodel);
+                }
+                else
+                {
+                   return NotFound();
+                }            
+            }
+            catch
+            {
+                //TODO:Retorna página de excepciones con el mensaje del motivo de la Excepcion.
+                return View();
+            }
 
-                }).ToList();
-                //Asignamos la lista de categorias al ViewData
-                //ViewData se pasa automaticamente a la vista.
-                ViewBag.Categories = selected_categories;
-                var updateproductviewmodel = new UpdateProductViewModel
-                {
-                    ProductId = product.Data.Id,
-                };
-                return View(updateproductviewmodel);
-            }
-            else
-            {
-               return NotFound();
-            }   
         }
 
         /// <summary>
         /// Actualiza un producto.
         /// </summary>
         /// <param name="updateProductViewModel"></param>
-        /// <param name="Categories"></param>
         /// <returns></returns>
-        [HttpPost("Edit")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(UpdateProductViewModel updateProductViewModel,string Categories)
+        [HttpPut("Edit")]
+        public async Task<IActionResult> Edit([FromForm] UpdateProductViewModel updateProductViewModel)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                   
-                }
-                catch
-                {
-                   
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View();
-        }
-
-        
-        /// <summary>
-        /// Crea la View donde se elimina el producto.
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        [HttpGet("Delete")]
-        public async Task<IActionResult> Delete(int? Id)
-        {
-            //Obtiene el producto
             try
             {
-                if (Id == null)
+                if (ModelState.IsValid)
                 {
-                    //Lanza la pagina de control de excepciones.
-                    return NotFound();
-                }
-                var product = await this._productServiceController
-                .GetProductForIdAsync(Id.Value).ConfigureAwait(false);
-                if(!product.Success)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    var productviewmodel = new GetProductViewModel
+                    var updateproduct = await this._productServiceController
+                    .UpdateProductViewModelAsync(updateProductViewModel)
+                    .ConfigureAwait(false);
+                    if (updateproduct.Success)
+                    return Ok();
+                    else
                     {
-                        Id = product.Data.Id,
-                        Name = product.Data.Name,
-                    };
-                    return View(productviewmodel);
-                }
-            }
-            catch
-            {
-                //Lanza la pagina de control de excepciones.
-                return NotFound();
-            }
-        }
-
-        /// <summary>
-        /// Se elimina el producto.
-        /// </summary>
-        /// <param name="Id"></param>
-        /// <returns></returns>
-        [HttpPost("DeleteConfirmed")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int Id)
-        {
-            //Obtiene el producto
-            try
-            {
-                var result = await this._productServiceController
-                .DeleteProductAsync(Id).ConfigureAwait(false);
-                if(!result.Success)
-                {
-                    //Lanza la pagina de control de excepciones.
-                    return NotFound();
+                       return NotFound(updateproduct);
+                    }
                 }
                 else
                 {
-                   return RedirectToAction(nameof(Index));
+                   return BadRequest();
                 }
             }
             catch
             {
-                //Lanza la pagina de control de excepciones.
-                return NotFound();
-            }
+              return View();
+            }          
         }
+
+        /// <summary>
+        /// Muestra los detalles del producto.
+        /// </summary>
+        /// <param name="Id"></param>
+        /// <returns></returns>
+        [HttpGet("Details")]
+        public async Task<IActionResult> Details(int Id)
+        {
+            try
+            {
+                //Obtiene el producto.
+                var product = await this._productServiceController
+                .GetProductForIdAsync(Id)
+                .ConfigureAwait(false);
+                //Obtiene todas las imagenes del producto actual
+                var all_images = await this._productServiceController
+                .GetAllImageProductAsync(Id)
+                .ConfigureAwait(false);
+                return View(new GetProductViewModel
+                {
+                    SupportAggregate = product.Data.SupportAggregate,
+                    Id = product.Data.Id,
+                    Price = product.Data.Price,
+                    Name = product.Data.Name,
+                    IsAvailabe = product.Data.IsAvailabe,
+                    GetAllImagesProducts = all_images.Data,
+                    GetSubCategories = product.Data.GetSubCategories,
+                    Categorie = product.Data.Categorie,
+                    Description = product.Data.Description,
+                });
+            }
+            catch(Exception ex)
+            {
+               //Muestra la pagina de excepciones
+               return View();
+            }           
+        }     
     }
 }

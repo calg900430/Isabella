@@ -53,6 +53,6 @@
         /// </summary>
         /// <param name="updateCategory"></param>
         /// <returns></returns>
-        Task<ServiceResponse<bool>> UpdateCategoryAsync(UpdateCategoryDto updateCategory);
+        Task<ServiceResponse<bool>> UpdateCategoryAsync(UpdateCategorieDto updateCategory);
     }
 }

@@ -7,7 +7,7 @@
     /// <summary>
     /// 
     /// </summary>
-    public class SubCategory : IEntity
+    public class SubCategorie : IEntity
     {
         /// <summary>
         /// Key

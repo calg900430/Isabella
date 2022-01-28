@@ -1,100 +1,77 @@
 ﻿@*
-    Vista para mostrar los productos disponibles
+    Vista para las SubCategorias de los productos.
 *@
 
 @*Establece que objeto va a recibir la View, ViewData me permite Bindear entre
     el controlador y la vista, uso esta forma, para no poner texto explicito, así si cambio aquí
     me cambiara en donde quiera que aparezca el key del diccionario referenciado*@
-@model List<Isabella.Web.ViewModels.ProductViewModel.GetProductViewModel>
+@model List<Isabella.Web.ViewModels.SubCategorieViewModel.GetSubCategorieViewModel>
 
 @{
-    ViewData["Title"] = "Productos";
-    //ViewData["Id"] = "Id";
-    ViewData["Image"] = "Imagen";
+    ViewData["Title"] = "SubCategoria";
     ViewData["Name"] = "Nombre";
     ViewData["Price"] = "Precio";
     ViewData["Available"] = "Disponible?";
+    ViewData["Product"] = "Producto";
 }
-
+<hr />
 @*Pone el Titulo que establecimos en la coleccion ViewData desde el controlador*@
 <h2>@ViewData["Title"]</h2>
 @*Se crea un enlace del tipo botón usando las clases de Boostrap *@
 <p>
-    <a asp-action="Create" class="btn btn-primary">Crear Producto</a>
+    <a asp-action="Create" class="btn btn-primary">Crear SubCategoria</a>
 </p>
-    <div class="row">
-        <div class="col-md-12">
-            @*Se crea una tabla para mostrar los productos*@
-            <table class="table">
-                @*Se crean las columnas y se le pone el nombre a cada una*@
-                <thead>
-                    <tr>
-                        @*<th>
-                            @ViewData["Id"]
-                        </th>*@
-                        <th width:"4px">
-                            @ViewData["Name"]
-                        </th>
-                        <th>
-                            @ViewData["Image"]
-                        </th>
-                        <th>
-                            @ViewData["Price"]
-                        </th>
-                        <th>
-                            @ViewData["Available"]
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                @*Se crean las filas que contienen los elementos de cada columna que
+<div class="row">
+    <div class="col-md-12">
+        @*Se crea una tabla para mostrar las subcategorias*@
+        <table class="table">
+            @*Se crean las columnas y se le pone el nombre a cada una*@
+            <thead>
+                <tr>
+                    <th width="4px">
+                        @ViewData["Name"]
+                    </th>
+                    <th>
+                        @ViewData["Price"]
+                    </th>
+                    <th>
+                        @ViewData["Available"]
+                    </th>
+                    <th width="4px">
+                        @ViewData["Product"]
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            @*Se crean las filas que contienen los elementos de cada columna que
                 en este caso son los datos de los productos*@
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            @*<td>@Html.DisplayFor(model => item.Id)</td>*@
-                            <td>@Html.DisplayFor(model => item.Name)</td>
-                            <td>
-                                @if (item.GetAllImagesProducts != null)
-                                {
-                                    if (item.GetAllImagesProducts.Count > 0)
-                                    {
-                                        @*Convierte el array byte en una imagen*@
-                                        <img src="data:imge;base64,@System.Convert.ToBase64String(item.GetAllImagesProducts[0].Image)" ,
-                                             style="width:75px;height:75px;max-width: 100%; height: auto;" />
-                                    }
-                                    else
-                                    {
-                                        <b>No Disponible</b>
-                                    }
-                                }
-                                else
-                                {
-                                    <b>No Disponible</b>
-                                }
-                            </td>
-                            <td>@Html.DisplayFor(model => item.Price)</td>
-                            @if (item.IsAvailabe)
-                            {
-                                <td>Sí</td>
-                            }
-                            else
-                            {
-                                <td>No</td>
-                            }
-                            @*Se crean los botones Edit, Delete y Details para cada producto*@
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Editar</a>
-                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Detalles</a>
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Borrar</a>
-                            </td>
-                        </tr>
-                     }
-                </tbody>
-            </table>
-        </div>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(model => item.Name)</td>
+                        <td>@Html.DisplayFor(model => item.Price)</td>
+                        @if (item.IsAvailable)
+                        {
+                            <td>Sí</td>
+                        }
+                        else
+                        {
+                            <td>No</td>
+                        }
+                        <td>@Html.DisplayFor(model => item.GetProductViewModel.Name)</td>
+                        @*Se crean los botones Edit, Delete y Details para cada subcategoria*@
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
+</div>
 
 
 

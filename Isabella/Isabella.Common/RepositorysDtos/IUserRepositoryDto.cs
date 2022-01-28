@@ -59,14 +59,14 @@
         /// Obtiene todos los usuarios disponibles con datos disponibles solo para usuarios admin.
         /// </summary>
         /// <returns></returns>
-        Task<ServiceResponse<List<GetUserAllDataForOnlyAdmin>>> GetAllDataOfUserAsync();
+        Task<ServiceResponse<List<GetUserAllDataForOnlyAdminDto>>> GetAllDataOfUserAsync();
 
         /// <summary>
         /// Obtiene un usuario dado su Id con datos disponibles solo para usuarios admin
         /// </summary>
         /// <param name="UserId"></param>
         /// <returns></returns>
-        Task<ServiceResponse<GetUserAllDataForOnlyAdmin>> GetAllDataOfOnlyUserAsync(int UserId);
+        Task<ServiceResponse<GetUserAllDataForOnlyAdminDto>> GetAllDataOfOnlyUserAsync(int UserId);
 
         /// <summary>
         /// Obtiene los roles disponibles de un usuario.

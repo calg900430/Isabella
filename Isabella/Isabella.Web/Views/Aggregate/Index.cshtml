@@ -1,38 +1,35 @@
 ﻿@*
-    Vista para mostrar los productos disponibles
+    Vista para mostrar los agregados disponibles
 *@
 
 @*Establece que objeto va a recibir la View, ViewData me permite Bindear entre
     el controlador y la vista, uso esta forma, para no poner texto explicito, así si cambio aquí
     me cambiara en donde quiera que aparezca el key del diccionario referenciado*@
-@model List<Isabella.Web.ViewModels.ProductViewModel.GetProductViewModel>
+@model List<Isabella.Web.ViewModels.AggregateViewModel.GetAggregateViewModel>
 
 @{
-    ViewData["Title"] = "Productos";
+    ViewData["Title"] = "Agregados";
     //ViewData["Id"] = "Id";
     ViewData["Image"] = "Imagen";
     ViewData["Name"] = "Nombre";
     ViewData["Price"] = "Precio";
     ViewData["Available"] = "Disponible?";
 }
-
+<hr />
 @*Pone el Titulo que establecimos en la coleccion ViewData desde el controlador*@
 <h2>@ViewData["Title"]</h2>
 @*Se crea un enlace del tipo botón usando las clases de Boostrap *@
 <p>
-    <a asp-action="Create" class="btn btn-primary">Crear Producto</a>
+    <a asp-action="Create" class="btn btn-primary">Crear Agregado</a>
 </p>
     <div class="row">
         <div class="col-md-12">
-            @*Se crea una tabla para mostrar los productos*@
+            @*Se crea una tabla para mostrar los agregados*@
             <table class="table">
                 @*Se crean las columnas y se le pone el nombre a cada una*@
                 <thead>
                     <tr>
-                        @*<th>
-                            @ViewData["Id"]
-                        </th>*@
-                        <th width:"4px">
+                        <th width="4px">
                             @ViewData["Name"]
                         </th>
                         <th>
@@ -48,7 +45,7 @@
                     </tr>
                 </thead>
                 @*Se crean las filas que contienen los elementos de cada columna que
-                en este caso son los datos de los productos*@
+                en este caso son los datos de los agregados*@
                 <tbody>
                     @foreach (var item in Model)
                     {
@@ -56,13 +53,13 @@
                             @*<td>@Html.DisplayFor(model => item.Id)</td>*@
                             <td>@Html.DisplayFor(model => item.Name)</td>
                             <td>
-                                @if (item.GetAllImagesProducts != null)
+                                @if (item.GetAllImagesAggregate != null)
                                 {
-                                    if (item.GetAllImagesProducts.Count > 0)
+                                    if (item.GetAllImagesAggregate.Count > 0)
                                     {
                                         @*Convierte el array byte en una imagen*@
-                                        <img src="data:imge;base64,@System.Convert.ToBase64String(item.GetAllImagesProducts[0].Image)" ,
-                                             style="width:75px;height:75px;max-width: 100%; height: auto;" />
+                                        <img src="data:imge;base64,@System.Convert.ToBase64String(item.GetAllImagesAggregate[0].Image)" ,
+                                        style="width:75px;height:75px;max-width: 100%; height: auto;" />
                                     }
                                     else
                                     {
@@ -83,12 +80,12 @@
                             {
                                 <td>No</td>
                             }
-                            @*Se crean los botones Edit, Delete y Details para cada producto*@
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Editar</a>
-                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Detalles</a>
-                                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Borrar</a>
-                            </td>
+                            @*Se crean los botones Edit, Delete y Details para cada agregado*@
+                          <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                          </td>
                         </tr>
                      }
                 </tbody>

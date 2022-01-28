@@ -16,8 +16,8 @@
         public AutoMapperProfile()
         {
             //Mapeo entre las entidades SubCategory y GetSubCategoryDto
-            CreateMap<SubCategory, GetSubCategorieDto>();
-            CreateMap<GetSubCategorieDto, SubCategory>();
+            CreateMap<SubCategorie, GetSubCategorieDto>();
+            CreateMap<GetSubCategorieDto, SubCategorie>();
 
             //Mapeo Gps
             CreateMap<Gps, GetGps>();

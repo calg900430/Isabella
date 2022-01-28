@@ -9,18 +9,17 @@
 
 @{
     ViewData["Title"] = "Productos";
-    //ViewData["Id"] = "Id";
     ViewData["Image"] = "Imagen";
     ViewData["Name"] = "Nombre";
     ViewData["Price"] = "Precio";
     ViewData["Available"] = "Disponible?";
 }
-
+<hr />
 @*Pone el Titulo que establecimos en la coleccion ViewData desde el controlador*@
 <h2>@ViewData["Title"]</h2>
-@*Se crea un enlace del tipo botón usando las clases de Boostrap *@
+@*Se crea un enlace del tipo botón usando las clases de Boostrap*@
 <p>
-    <a asp-action="Create" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i>Crear Producto</a>
+    <a asp-action="Create" class="btn btn-primary">Crear Producto</a>
 </p>
 <div class="row">
     <div class="col-md-12">
@@ -29,9 +28,6 @@
             @*Se crean las columnas y se le pone el nombre a cada una*@
             <thead>
                 <tr>
-                    @*<th>
-                      @ViewData["Id"]
-                    </th>*@
                     <th width="4px">
                         @ViewData["Name"]
                     </th>
@@ -53,16 +49,15 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        @*<td>@Html.DisplayFor(model => item.Id)</td>*@
                         <td>@Html.DisplayFor(model => item.Name)</td>
                         <td>
-                            @if(item.GetAllImagesProducts != null)
+                            @if (item.GetAllImagesProducts != null)
                             {
                                 if (item.GetAllImagesProducts.Count > 0)
                                 {
                                     @*Convierte el array byte en una imagen*@
                                     <img class="ImageProducts" src="data:imge;base64,
-                                    @System.Convert.ToBase64String(item.GetAllImagesProducts[0].Image)"/>
+                                    @System.Convert.ToBase64String(item.GetAllImagesProducts[0].Image)" />
                                 }
                                 else
                                 {
@@ -84,57 +79,175 @@
                             <td>No</td>
                         }
                         @*Se crean los botones Edit, Delete y Details para cada producto*@
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning">Editar</a>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info">Detalles</a>
-                            <a asp-action="Delete" asp-route-id="@item.Id" id="buttom_delete" class="btn btn-danger">Borrar</a>
+                        <td id="@item.Id">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></a>
+                            <a id="buttomdelete" asp-route-id="@item.Id" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a>
                         </td>
                     </tr>
-                 }
+                }
             </tbody>
         </table>
     </div>
 </div>
+<hr />
 
-@*Ventana Modal*@
-<div id="confirmDialog" class="modal fade">
-    <div class="modal-dialog modal-sm">
+@*Ventanas Modal de confirmación de borrar producto*@
+<div id="confirmDelete" class="modal fade">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">
-                    <i class="fa fa-window-close"></i>
+                <h5 class="modal-title">Borrar</h5>
+                <button id="btnCloseModalConfirmDelete" type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true"></span>
                 </button>
-                <h4 class="modal-title">Confirm</h4>
             </div>
-            <div class="modal-body">
-                <p>Desea eliminar el producto?</p>
+            <div class="modal-body" style="text-align:center">
+                <p>¿Desea eliminar el producto?</p>
+                <hr />
+                <div class="fa-2x">
+                    <i id="iconWaitDelete" class="fas fa-spinner fa-spin" style="display:none"></i>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="btnYes">Sí</button>
-                <button type="button" class="btn btn-success" id="btnNo">No</button>
+                <button type="button" class="btn btn-success" id="btnYesDelete">Sí</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnNoDelete">No</button>
             </div>
         </div>
     </div>
 </div>
 
+@*Ventanas Modal de respuesta del servidor al borrar el producto*@
+<div id="responseDelete" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Error</h5>
+                <button id="btnCloseModalResponseDelete" type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="messageModalResponseDelete"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnCloseResponseDelete">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+    {
     @*Script para el manejo de la ventana modal*@
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#btnConfirm").click(function () {
-                $("#confirmDialog").modal('show');
+            let id = 0;
+            let url = getUriServer() + 'product/delete/';
+
+            //Evento Click del Botón Delete(Muestra la ventana Modal de eliminar el producto)
+            $('a[id*=buttomdelete]').click(function (e) {
+                e.preventDefault();
+                id = $(this).parent()[0].id
+                $("#confirmDelete").modal({ backdrop: 'static', keyboard: true }, 'show');
                 return false;
             });
 
-            $("#btnNo").click(function () {
-                $("#confirmDialog").modal('hide');
+            //Evento Click del Botón No(Cierra la ventana Modal de eliminar el producto)
+            $('#btnNoDelete').click(function (e) {
+                e.preventDefault();
+                $("#confirmDelete").modal('hide');
                 return false;
             });
 
-            $("#btnYes").click(function () {
-                window.location.href = '/Orders/ConfirmOrder';
+            //Evento Click del Botón Cerrar(Cierra la ventana Modal de eliminar el producto)
+            $('#btnCloseModalConfirmDelete').click(function (e) {
+                e.preventDefault();
+                $("#confirmDelete").modal('hide');
+                return false;
             });
+
+            //Evento Click del Botón Cerrar(Cierra la ventana Modal de respuesta del servidor)
+            $('#btnCloseModalResponseDelete').click(function (e) {
+                e.preventDefault();
+                $("#responseDelete").modal('hide');
+                return false;
+            });
+
+            //Evento Click del Botón Cerrar(Cierra la ventana Modal de respuesta del servidor)
+            $('#btnCloseResponseDelete').click(function (e) {
+                e.preventDefault();
+                $('#responseDelete').modal('hide');
+                return false;
+            });
+
+            //Evento Click del Botón Sí(Manda a eliminar un producto)
+            $('#btnYesDelete').click(async function (e) {
+                try {
+                    e.preventDefault();
+                    await WaitResponseServer()
+                    var responseService = await DeleteProduct(id);
+                    if (responseService.ok) {
+                        $('#confirmDelete').modal('hide');
+                        window.location.href = '/Product';
+                        await HideWaitResponseServer();
+                        return false;
+                    }
+                    else if (responseService.status == 404) {
+                        let response = await responseService.json();
+                        let message = response.message;
+                        $('#messageModalResponseDelete').text(message)
+                        $('#confirmDelete').modal('hide');
+                        $('#responseDelete').modal({ backdrop: 'static', keyboard: true }, 'show');
+                        await HideWaitResponseServer();
+                        return false;
+                    }                 
+                }
+                catch (error) {
+                    $('#confirmDelete').modal('hide');
+                    $('#responseDelete').modal({ backdrop: 'static', keyboard: true }, 'show');
+                    $('#messageModal').text(error.message);
+                    await HideWaitResponseServer();
+                    return false;
+                }
+            });
+
+            //Mostrar icono de espera y bloquear botones de la modal.
+            async function WaitResponseServer() {
+                $('#messageModalResponseDelete').text("");
+                $('#iconWaitDelete').show();
+                $('#btnYesDelete').prop("disabled", true);
+                $('#btnCloseModalConfirmDelete').prop("disabled", true);
+                $('#btnNoDelete').prop("disabled", true);
+            }
+
+            //Ocultar icono de espera y desbloquear botones de la modal.
+            async function HideWaitResponseServer() {
+                $('#iconWaitDelete').hide();
+                $('#btnYesDelete').prop("disabled", false);
+                $('#btnCloseModalConfirmDelete').prop("disabled", false);
+                $('#btnNoDelete').prop("disabled", false);
+            }
+
+            //Función para eliminar el producto
+            async function DeleteProduct(id)
+            {
+               //Manda a eliminar el producto
+               let responseService = await fetch(url + "?id=" + id, {
+                method: 'DELETE',
+                headers:
+                {
+                  'Content-Type': 'application/json'
+                },
+               });
+               return responseService
+            }
         });
     </script>
+}
+
 
 
 

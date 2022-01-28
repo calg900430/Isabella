@@ -25,7 +25,7 @@
     {
 
         private readonly ServiceGenericHelper<Aggregate> _serviceGenericAggregateHelper;
-        private readonly ServiceGenericHelper<Category> _serviceGenericCategoryHelper;
+        private readonly ServiceGenericHelper<Categorie> _serviceGenericCategoryHelper;
         private readonly ServiceGenericHelper<ImageAggregate> _serviceGenericImageAggregateHelper;
         private readonly ServiceGenericHelper<CantAggregate> _serviceGenericCantAggregateHelper;
 
@@ -37,7 +37,7 @@
         /// <param name="serviceGenericImageAggregateHelper"></param>
         /// <param name="serviceGenericCantAggregateHelper"></param>
         public AggregateServiceController(ServiceGenericHelper<Aggregate> serviceGenericAggregateHelper,
-        ServiceGenericHelper<Category> serviceGenericCategoryHelper, 
+        ServiceGenericHelper<Categorie> serviceGenericCategoryHelper, 
         ServiceGenericHelper<ImageAggregate> serviceGenericImageAggregateHelper,
         ServiceGenericHelper<CantAggregate> serviceGenericCantAggregateHelper)
         {
@@ -453,6 +453,8 @@
             }
         }
 
+      
+
         /// <summary>
         /// Obtiene todos los agregado en la base de datos.
         /// </summary>
@@ -498,6 +500,107 @@
             }
         }
 
+        /// <summary>
+        /// Obtiene todos los elementos de todos los agregados
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ServiceResponse<List<GetAllElementOfAggregateDto>>> GetAggregatesWithAllElement()
+        {
+            ServiceResponse<List<GetAllElementOfAggregateDto>> serviceResponse = new ServiceResponse<List<GetAllElementOfAggregateDto>>();
+            try
+            {
+                //Obtiene los productos disponibles
+                var all_aggregate = await this._serviceGenericAggregateHelper
+                .GetLoadAsync(c => c.Images)
+                .ConfigureAwait(false);
+                if (all_aggregate == null || all_aggregate.Count <= 0)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.AggregateAllNotFound;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.AggregateAllNotFound);
+                    return serviceResponse;
+                }
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = all_aggregate.Select(c => new GetAllElementOfAggregateDto
+                {
+                    Id = c.Id,
+                    Description = c.Description,
+                    Name = c.Name,
+                    Price = c.Price, 
+                    IsAvailabe = c.IsAvailabe,
+                    GetAllImagesAggregate = c.Images.Select(x => new GetImageAggregateDto
+                    {
+                        Image = x.Image,
+                        ImageId = x.Id,
+                        AggregateId = c.Id
+                    }).ToList(),                    
+                }).ToList();
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene todos los elementos de un agregado.
+        /// </summary>
+        /// <param name="AggregateId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<GetAllElementOfAggregateDto>> GetAggregateWithAllElement(int AggregateId)
+        {
+            ServiceResponse<GetAllElementOfAggregateDto> serviceResponse = new ServiceResponse<GetAllElementOfAggregateDto>();
+            try
+            {
+                var aggregate = await this._serviceGenericAggregateHelper
+                .GetLoadAsync(c=> c.Id == AggregateId, c => c.Images)
+                .ConfigureAwait(false);
+                if (aggregate == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.AggregateAllNotFound;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.AggregateAllNotFound);
+                    return serviceResponse;
+                }
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = new GetAllElementOfAggregateDto
+                {
+                    Id = aggregate.Id,
+                    Description = aggregate.Description,
+                    Name = aggregate.Name,
+                    Price = aggregate.Price,
+                    IsAvailabe = aggregate.IsAvailabe,
+                    GetAllImagesAggregate = aggregate.Images.Select(x => new GetImageAggregateDto
+                    {
+                        Image = x.Image,
+                        ImageId = x.Id,
+                        AggregateId = aggregate.Id
+                    }).ToList(),
+                };
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
         /// <summary>
         /// Obtiene una cantidad especifica de imagenes de un agregado.
         /// </summary>

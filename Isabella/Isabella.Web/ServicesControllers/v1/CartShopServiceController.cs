@@ -16,7 +16,6 @@
     using AutoMapper;
     using Isabella.Common.Dtos.SubCategorie;
     using System.Diagnostics.CodeAnalysis;
-    using Isabella.Web.Models;
     using System.Security.Claims;
 
     /// <summary>
@@ -29,7 +28,7 @@
         private readonly ServiceGenericHelper<Product> _serviceGenericProductHelper;
         private readonly ServiceGenericHelper<Aggregate> _serviceGenericAggregateHelper;
         private readonly ServiceGenericHelper<CantAggregate> _serviceGenericCantAggregateHelper;
-        private readonly ServiceGenericHelper<SubCategory> _serviceGenericSubCategoryHelper;
+        private readonly ServiceGenericHelper<SubCategorie> _serviceGenericSubCategoryHelper;
         private readonly ServiceGenericHelper<ProductCombined> _serviceGenericProductCombinedHelper;
         private readonly IUserRepositoryHelper _userServiceHelper;
         private readonly IMapper _mapper;
@@ -54,7 +53,7 @@
         ServiceGenericHelper<Product> serviceGenericProductHelper, 
         ServiceGenericHelper<Aggregate> serviceGenericAggregateHelper,
         ServiceGenericHelper<CantAggregate> serviceGenericCantAggregateHelper,
-        ServiceGenericHelper<SubCategory> serviceGenericSubCategoryHelper,
+        ServiceGenericHelper<SubCategorie> serviceGenericSubCategoryHelper,
         ServiceGenericHelper<ProductCombined> serviceGenericProductCombinedHelper,
         IUserRepositoryHelper userrepositoryHelper,
         IMapper mapper)
@@ -133,7 +132,7 @@
                     return serviceResponse;
                 }
                 //Verifica si el usuario pide el producto con subcategoria
-                var subCategory = new SubCategory();
+                var subCategory = new SubCategorie();
                 if (addProductsToCarShop.SubCategoryId != null)
                 {
                     //Verifica si la subcategoria existe y pertenece al producto

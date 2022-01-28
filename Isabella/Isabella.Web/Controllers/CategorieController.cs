@@ -36,7 +36,6 @@
         /// Obtiene todas las categorias.
         /// </summary>
         /// <returns></returns>
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Index()
         {
             try
@@ -69,13 +68,29 @@
         }
 
         /// <summary>
+        /// Muestra la View para crear una categoria.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("Create")]
+        public IActionResult Create()
+        {
+            try
+            {
+               return View();
+            }
+            catch (Exception ex)
+            {
+               return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Agrega una nueva categoria.
         /// </summary>
         /// <param name="addCategory"></param>
         /// <returns></returns>
-        [HttpPost("add/category")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        public async Task<IActionResult> AddCategoryAsync(AddCategorieDto addCategory)
+        [HttpPost("Create")]
+        public async Task<IActionResult> Create([FromBody] AddCategorieDto addCategory)
         {
             try
             {
@@ -85,7 +100,7 @@
                     ._categoryService.AddCategoryAsync(addCategory)
                     .ConfigureAwait(false);
                     if (result.Success)
-                    return Ok(result);
+                    return RedirectToAction(nameof(Index)); 
                     else
                     return BadRequest(result);
                 }
@@ -99,34 +114,15 @@
         }
 
         /// <summary>
-        /// Elimina una categoria.
+        /// Muestra la View para actualizar una categoria.
         /// </summary>
-        /// <param name="CategoryId"></param>
         /// <returns></returns>
-        [HttpDelete("del/category")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(403)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        public async Task<IActionResult> DeleteCategoryAsync(int CategoryId)
+        [HttpGet("Edit")]
+        public IActionResult Edit()
         {
             try
             {
-                if (ModelState.IsValid)
-                {
-                    var result = await this
-                    ._categoryService
-                    .DeleteCategoryAsync(CategoryId)
-                    .ConfigureAwait(false);
-                    if (result.Success)
-                        return Ok(result);
-                    else
-                        return BadRequest(result);
-                }
-                else
-                    return BadRequest(); //400
+                return View();
             }
             catch (Exception ex)
             {
@@ -139,14 +135,8 @@
         /// </summary>
         /// <param name="updateCategory"></param>
         /// <returns></returns>
-        [HttpPut("update/category")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(404)]
-        [ProducesResponseType(400)]
-        [ProducesResponseType(401)]
-        [ProducesResponseType(403)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        public async Task<IActionResult> UpdateCategoryAsync([FromBody] UpdateCategoryDto updateCategory)
+        [HttpPost("Edit")]
+        public async Task<IActionResult> Edit(UpdateCategorieDto updateCategory)
         {
             try
             {
@@ -157,12 +147,42 @@
                     .UpdateCategoryAsync(updateCategory)
                     .ConfigureAwait(false);
                     if (result.Success)
-                        return Ok(result);
+                    return RedirectToAction(nameof(Index));
                     else
-                        return BadRequest(result);
+                    return BadRequest(result.Message);
                 }
                 else
-                    return BadRequest(); //400
+                return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// Elimina una categoria.
+        /// </summary>
+        /// <param name="CategoryId"></param>
+        /// <returns></returns>
+        [HttpPost("Delete")]
+        public async Task<IActionResult> Delete(int CategoryId)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this
+                    ._categoryService
+                    .DeleteCategoryAsync(CategoryId)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                    return RedirectToAction(nameof(Index));
+                    else
+                    return BadRequest(result.Message);
+                }
+                else
+                return BadRequest(); //400
             }
             catch (Exception ex)
             {

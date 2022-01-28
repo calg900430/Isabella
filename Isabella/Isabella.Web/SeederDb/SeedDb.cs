@@ -186,32 +186,32 @@
                 }
 
                 /*Crea las categorias de los productos.*/
-                List<Category> categorys = new List<Category>();
+                List<Categorie> categorys = new List<Categorie>();
                 if (!await this._dataContext.Categories.AnyAsync().ConfigureAwait(false))
                 {
-                    categorys = new List<Category>
+                    categorys = new List<Categorie>
                     {
-                        new Category
+                        new Categorie
                         {    
                            Id = 1,
                            Name = "Entrantes"
                         }, //0-Entrantes
-                        new Category
+                        new Categorie
                         {
                             Id = 2,
                             Name = "Platos Principales"
                         }, //1-Platos Principales
-                        new Category
+                        new Categorie
                         {
                              Id = 3,
                              Name = "Pizzas y Pastas"
                         }, //2-Pizzas y Pastas
-                        new Category
+                        new Categorie
                         {
                             Id = 4,
                             Name = "Postres"
                         }, //3-Postres
-                        new Category
+                        new Categorie
                         {
                              Id = 5,
                              Name = "Bebidas"
@@ -415,9 +415,9 @@
                            DateUpdate = DateTime.UtcNow,
                            LastBuy = DateTime.UtcNow,
                            SupportAggregate = false,
-                           SubCategories = new List<SubCategory>
+                           SubCategories = new List<SubCategorie>
                            {
-                               new SubCategory
+                               new SubCategorie
                                {
                                   Name = "Ración Doble",
                                   Price = 240,
@@ -439,9 +439,9 @@
                            DateUpdate = DateTime.UtcNow,
                            LastBuy = DateTime.UtcNow,
                            SupportAggregate = false,
-                           SubCategories = new List<SubCategory>
+                           SubCategories = new List<SubCategorie>
                            {
-                               new SubCategory
+                               new SubCategorie
                                {
                                   Name = "Ración Doble",
                                   Price = 400,
@@ -505,9 +505,9 @@
                            DateUpdate = DateTime.UtcNow,
                            LastBuy = DateTime.UtcNow,
                            SupportAggregate = true,
-                           SubCategories = new List<SubCategory>
+                           SubCategories = new List<SubCategorie>
                            {
-                               new SubCategory
+                               new SubCategorie
                                {
                                   Name = "Queso Gouda",
                                   Price = 165,
@@ -529,23 +529,23 @@
                            DateUpdate = DateTime.UtcNow,
                            LastBuy = DateTime.UtcNow,
                            SupportAggregate = true,
-                           SubCategories = new List<SubCategory>
+                           SubCategories = new List<SubCategorie>
                            {
-                               new SubCategory
+                               new SubCategorie
                                {
                                   Name = "Ración Familiar",
                                   Price = 310,
                                   Description = "Pizza para la familia.",
                                   IsAvailable = true,
                                },
-                               new SubCategory
+                               new SubCategorie
                                {
                                   Name = "Ración Familiar con Queso Gouda",
                                   Price = 350,
                                   Description = "Pizza para la familia elaborada con queso gouda.",
                                   IsAvailable = true,
                                },
-                               new SubCategory
+                               new SubCategorie
                                {
                                   Name = "Queso Gouda",
                                   Price = 190,

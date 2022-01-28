@@ -30,7 +30,8 @@
                 rw.AddResource("UserAdminNotExistForNotifications", "El usuario no está definido como un usuario que puede recibir notificaciones.");
                 rw.AddResource("NotUserAdminsNotifications", "No hay definidos usuarios admins para recibir las notificaciones..");
                 rw.AddResource("UserNotAnyOrder", "El usuario no tiene ordenes disponibles.");
-                rw.AddResource("ExceptionDeleteEntity", "No se puede eliminar la entidad, ya que la misma actualmente tiene relaciones con otras entidades en la base de datos.");
+                rw.AddResource("ExceptionDeleteEntity", "Error al borrar la entidad y sus relaciones.");
+                rw.AddResource("DeleteEntityProduct", "El producto ya ha sido comprado o algún usuario lo ha calificado.No se puede eliminar para no afectar el historial de la base de datos.");
                 rw.AddResource("SuccessOk", "Se ha ejecutado la operación correctamente.");
                 rw.AddResource("Exception", "Se ha generado un error en la aplicación");
                 rw.AddResource("UserNotFound", "El usuario no está registrado en la aplicación.");
@@ -49,9 +50,9 @@
                 rw.AddResource("ProductAllNotFound", "No hay productos en la base de datos.");
                 rw.AddResource("ImageNotExist", "La imagen no existe o no pertenece a la entidad seleccionada.");
                 rw.AddResource("ImageProductNotValide",
-                $"La imagen de un producto no puede ser mayor de {Constants.MAX_LENTHG_IMAGE_PRODUCT} bytes.");
+                $"La imagen de un producto no puede ser mayor de {Constants.MAX_LENTHG_IMAGE_PRODUCT/1000} KB.");
                 rw.AddResource("ImageUserNotValide",
-                $"La imagen de perfil de un usuario no puede ser mayor de {Constants.MAX_LENTHG_IMAGE_PROFILE_USER} bytes.");
+                $"La imagen de perfil de un usuario no puede ser mayor de {Constants.MAX_LENTHG_IMAGE_PROFILE_USER/1000} KB.");
                 rw.AddResource("CategoryExist", "La categoria ya existe.Seleccione otro nombre.");
                 rw.AddResource("CategoryNotAllFound", "No hay categorias disponibles.");
                 rw.AddResource("ProductNotNew", "No se han agregado nuevos productos.");

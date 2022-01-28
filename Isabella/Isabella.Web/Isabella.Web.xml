@@ -48,6 +48,23 @@
             Capacidad máxima de las imagen de un agregado.
             </summary>
         </member>
+        <member name="T:Isabella.Web.Controllers.AggregateController">
+            <summary>
+            Controlador de Productos 
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Controllers.AggregateController.#ctor(Isabella.Web.ServicesControllers.AggregateServiceController)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="aggregateServiceController"></param>
+        </member>
+        <member name="M:Isabella.Web.Controllers.AggregateController.Index">
+            <summary>
+            Muestra todos los agregados disponibles en la base de datos
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Isabella.Web.Controllers.API.AggregateController">
             <summary>
             Controlador para los productos standard.
@@ -332,7 +349,7 @@
             <param name="CategoryId"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.Web.Controllers.API.CategorieController.UpdateCategoryAsync(Isabella.Common.Dtos.Categorie.UpdateCategoryDto)">
+        <member name="M:Isabella.Web.Controllers.API.CategorieController.UpdateCategoryAsync(Isabella.Common.Dtos.Categorie.UpdateCategorieDto)">
             <summary>
             Actualiza una categoria.
             </summary>
@@ -554,7 +571,7 @@
             </summary>
             <param name="subCategoryServiceController"></param>
         </member>
-        <member name="M:Isabella.Web.Controllers.API.SubCategorieController.AddSubCategoryStandardAsync(Isabella.Common.Dtos.SubCategorie.AddSubCategorieToProductDto)">
+        <member name="M:Isabella.Web.Controllers.API.SubCategorieController.AddSubCategoryStandardAsync(Isabella.Common.Dtos.SubCategorie.AddSubCategorieDto)">
             <summary>
             Agrega una nueva subcategoria.
             </summary>
@@ -829,25 +846,37 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Isabella.Web.Controllers.CategorieController.AddCategoryAsync(Isabella.Common.Dtos.Categorie.AddCategorieDto)">
+        <member name="M:Isabella.Web.Controllers.CategorieController.Create">
+            <summary>
+            Muestra la View para crear una categoria.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.CategorieController.Create(Isabella.Common.Dtos.Categorie.AddCategorieDto)">
             <summary>
             Agrega una nueva categoria.
             </summary>
             <param name="addCategory"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.Web.Controllers.CategorieController.DeleteCategoryAsync(System.Int32)">
+        <member name="M:Isabella.Web.Controllers.CategorieController.Edit">
             <summary>
-            Elimina una categoria.
+            Muestra la View para actualizar una categoria.
             </summary>
-            <param name="CategoryId"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.Web.Controllers.CategorieController.UpdateCategoryAsync(Isabella.Common.Dtos.Categorie.UpdateCategoryDto)">
+        <member name="M:Isabella.Web.Controllers.CategorieController.Edit(Isabella.Common.Dtos.Categorie.UpdateCategorieDto)">
             <summary>
             Actualiza una categoria.
             </summary>
             <param name="updateCategory"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.CategorieController.Delete(System.Int32)">
+            <summary>
+            Elimina una categoria.
+            </summary>
+            <param name="CategoryId"></param>
             <returns></returns>
         </member>
         <member name="T:Isabella.Web.Controllers.ProductController">
@@ -868,9 +897,9 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Isabella.Web.Controllers.ProductController.Details(System.Nullable{System.Int32})">
+        <member name="M:Isabella.Web.Controllers.ProductController.Delete(System.Int32)">
             <summary>
-            Muestra los detalles del producto.
+            Se elimina el producto.
             </summary>
             <param name="Id"></param>
             <returns></returns>
@@ -881,39 +910,66 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Isabella.Web.Controllers.ProductController.Create(Isabella.Web.ViewModels.ProductViewModel.AddProductViewModel,System.String)">
+        <member name="M:Isabella.Web.Controllers.ProductController.Create(Isabella.Web.ViewModels.ProductViewModel.AddProductViewModel)">
             <summary>
             Crea un nuevo producto.
             </summary>
+            <param name="addProductViewModel"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.Web.Controllers.ProductController.Edit(System.Nullable{System.Int32})">
+        <member name="M:Isabella.Web.Controllers.ProductController.Edit(System.Int32)">
             <summary>
             Crea la view donde se va a actualizar el producto.
             </summary>
             <param name="Id"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.Web.Controllers.ProductController.Edit(Isabella.Web.ViewModels.ProductViewModel.UpdateProductViewModel,System.String)">
+        <member name="M:Isabella.Web.Controllers.ProductController.Edit(Isabella.Web.ViewModels.ProductViewModel.UpdateProductViewModel)">
             <summary>
             Actualiza un producto.
             </summary>
             <param name="updateProductViewModel"></param>
-            <param name="Categories"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.Web.Controllers.ProductController.Delete(System.Nullable{System.Int32})">
+        <member name="M:Isabella.Web.Controllers.ProductController.Details(System.Int32)">
             <summary>
-            Crea la View donde se elimina el producto.
+            Muestra los detalles del producto.
             </summary>
             <param name="Id"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.Web.Controllers.ProductController.DeleteConfirmed(System.Int32)">
+        <member name="T:Isabella.Web.Controllers.SubCategorieController">
             <summary>
-            Se elimina el producto.
+            Controlador de Productos 
             </summary>
-            <param name="Id"></param>
+        </member>
+        <member name="M:Isabella.Web.Controllers.SubCategorieController.#ctor(Isabella.Web.ServicesControllers.SubCategorieServiceController)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="subcategorieServiceController"></param>
+        </member>
+        <member name="M:Isabella.Web.Controllers.SubCategorieController.Index">
+            <summary>
+            Muestra todos las subcategorias disponibles en la base de datos
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Isabella.Web.Controllers.UserController">
+            <summary>
+            User
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Controllers.UserController.#ctor(Isabella.Web.ServicesControllers.UserServiceController)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="userServiceController"></param>
+        </member>
+        <member name="M:Isabella.Web.Controllers.UserController.Index">
+            <summary>
+            Obtiene todos los usuarios administradores.
+            </summary>
             <returns></returns>
         </member>
         <member name="T:Isabella.Web.Data.DataContext">
@@ -1016,7 +1072,7 @@
             <summary>
             Crea el modelo para la base de datos
             </summary>
-            <param name="builder"></param>
+            <param name="modelBuilder"></param>
         </member>
         <member name="T:Isabella.Web.Helpers.MailHelper">
             <summary>
@@ -1932,17 +1988,17 @@
             Precio Total del posible pedido.
             </summary>
         </member>
-        <member name="T:Isabella.Web.Models.Entities.Category">
+        <member name="T:Isabella.Web.Models.Entities.Categorie">
             <summary>
             Entidad que representa la categoria de un producto standard
             </summary>
         </member>
-        <member name="P:Isabella.Web.Models.Entities.Category.Id">
+        <member name="P:Isabella.Web.Models.Entities.Categorie.Id">
             <summary>
             Id
             </summary>
         </member>
-        <member name="P:Isabella.Web.Models.Entities.Category.Name">
+        <member name="P:Isabella.Web.Models.Entities.Categorie.Name">
             <summary>
             Nombre de la categoría del producto.
             </summary>
@@ -2302,37 +2358,37 @@
             Horra de cerrar el restaurante
             </summary>
         </member>
-        <member name="T:Isabella.Web.Models.Entities.SubCategory">
+        <member name="T:Isabella.Web.Models.Entities.SubCategorie">
             <summary>
             
             </summary>
         </member>
-        <member name="P:Isabella.Web.Models.Entities.SubCategory.Id">
+        <member name="P:Isabella.Web.Models.Entities.SubCategorie.Id">
             <summary>
             Key
             </summary>
         </member>
-        <member name="P:Isabella.Web.Models.Entities.SubCategory.Product">
+        <member name="P:Isabella.Web.Models.Entities.SubCategorie.Product">
             <summary>
             Producto.
             </summary>
         </member>
-        <member name="P:Isabella.Web.Models.Entities.SubCategory.Name">
+        <member name="P:Isabella.Web.Models.Entities.SubCategorie.Name">
             <summary>
             Nombre de la categoría del producto.
             </summary>
         </member>
-        <member name="P:Isabella.Web.Models.Entities.SubCategory.Price">
+        <member name="P:Isabella.Web.Models.Entities.SubCategorie.Price">
             <summary>
             Precio del Produto.
             </summary>
         </member>
-        <member name="P:Isabella.Web.Models.Entities.SubCategory.Description">
+        <member name="P:Isabella.Web.Models.Entities.SubCategorie.Description">
             <summary>
             Descripción
             </summary>
         </member>
-        <member name="P:Isabella.Web.Models.Entities.SubCategory.IsAvailable">
+        <member name="P:Isabella.Web.Models.Entities.SubCategorie.IsAvailable">
             <summary>
             Enable
             </summary>
@@ -2773,6 +2829,11 @@
             Abre el restaurante
             </summary>
         </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.DeleteEntityProduct">
+            <summary>
+            Borrar la entidad producto
+            </summary>
+        </member>
         <member name="T:Isabella.Web.Resources.GetValueResourceFile.KeyResourceImage">
             <summary>
             Recursos de Imagenes de la aplicación
@@ -2874,7 +2935,7 @@
             Servicio para el controlador de los agregados.
             </summary>
         </member>
-        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.#ctor(Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Aggregate},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Category},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.ImageAggregate},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.CantAggregate})">
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.#ctor(Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Aggregate},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Categorie},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.ImageAggregate},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.CantAggregate})">
             <summary>
             Constructor.
             </summary>
@@ -2931,6 +2992,19 @@
             <summary>
             Obtiene todos los agregado en la base de datos.
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.GetAggregatesWithAllElement">
+            <summary>
+            Obtiene todos los elementos de todos los agregados
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.GetAggregateWithAllElement(System.Int32)">
+            <summary>
+            Obtiene todos los elementos de un agregado.
+            </summary>
+            <param name="AggregateId"></param>
             <returns></returns>
         </member>
         <member name="M:Isabella.Web.ServicesControllers.AggregateServiceController.GetCantImageAggregateAsync(System.Int32,System.Int32,System.Int32)">
@@ -3023,7 +3097,7 @@
             Claims del usuario.
             </summary>
         </member>
-        <member name="M:Isabella.Web.ServicesControllers.CartShopServiceController.#ctor(Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.CartShop},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Product},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Aggregate},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.CantAggregate},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.SubCategory},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.ProductCombined},Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper,AutoMapper.IMapper)">
+        <member name="M:Isabella.Web.ServicesControllers.CartShopServiceController.#ctor(Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.CartShop},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Product},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Aggregate},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.CantAggregate},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.SubCategorie},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.ProductCombined},Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper,AutoMapper.IMapper)">
             <summary>
             Constructor.
             </summary>
@@ -3131,7 +3205,7 @@
             Servicio para el controlador de las categorias de los productos.
             </summary>
         </member>
-        <member name="M:Isabella.Web.ServicesControllers.CategorieServiceController.#ctor(Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Category},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Product})">
+        <member name="M:Isabella.Web.ServicesControllers.CategorieServiceController.#ctor(Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Categorie},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Product})">
             <summary>
             Categorias
             </summary>
@@ -3178,7 +3252,7 @@
             <param name="Name"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.Web.ServicesControllers.CategorieServiceController.UpdateCategoryAsync(Isabella.Common.Dtos.Categorie.UpdateCategoryDto)">
+        <member name="M:Isabella.Web.ServicesControllers.CategorieServiceController.UpdateCategoryAsync(Isabella.Common.Dtos.Categorie.UpdateCategorieDto)">
             <summary>
             Actualiza una categoria.
             </summary>
@@ -3241,14 +3315,17 @@
             Servicio para el controlador de los productos.
             </summary>
         </member>
-        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.#ctor(Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Product},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Category},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.ImageProduct},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.SubCategory},Microsoft.Extensions.Logging.ILogger{Isabella.Web.ServicesControllers.ProductServiceController})">
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.#ctor(Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Product},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Categorie},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.ImageProduct},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.SubCategorie},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.ProductCombined},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.OrderDetail},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.CalificationProduct},Microsoft.Extensions.Logging.ILogger{Isabella.Web.ServicesControllers.ProductServiceController})">
             <summary>
             Constructor
             </summary>
             <param name="serviceProductGenericHelper"></param>
             <param name="serviceCategoryGenericHelper"></param>
             <param name="serviceGenericImageProductHelper"></param>
-            <param name="serviceGenericSubCategoryHelper"></param>
+            <param name="serviceGenericSubCategorieHelper"></param>
+            <param name="serviceGenericHelperProductCombined"></param>
+            <param name="serviceGenericHelperOrderDetail"></param>
+            <param name="serviceGenericHelperCalificationProduct"></param>
             <param name="logger"></param>
         </member>
         <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.AddProductAsync(Isabella.Common.Dtos.Product.AddProductDto)">
@@ -3256,6 +3333,20 @@
             Agregar un nuevo producto.
             </summary>
             <param name="addProduct"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.AddProductToImageAsync(Isabella.Web.ViewModels.ProductViewModel.AddProductViewModel)">
+            <summary>
+            Agregar un nuevo producto junto con una imagen.
+            </summary>
+            <param name="addProductViewModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.UpdateProductViewModelAsync(Isabella.Web.ViewModels.ProductViewModel.UpdateProductViewModel)">
+            <summary>
+            Actualiza un producto(UpdateViewModel).
+            </summary>
+            <param name="updateProductViewModel"></param>
             <returns></returns>
         </member>
         <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.UpdateProductAsync(Isabella.Common.Dtos.Product.UpdateProductDto)">
@@ -3412,6 +3503,12 @@
             <param name="ProductId"></param>
             <returns></returns>
         </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.GetLastProductAsync">
+            <summary>
+            Obtiene el último producto.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Isabella.Web.ServicesControllers.RestaurantServiceController">
             <summary>
             Servicio para el controlador del restaurante.
@@ -3455,28 +3552,33 @@
             Servicio para el controlador de las subcategorias.
             </summary>
         </member>
-        <member name="M:Isabella.Web.ServicesControllers.SubCategorieServiceController.#ctor(Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.SubCategory},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Product})">
+        <member name="M:Isabella.Web.ServicesControllers.SubCategorieServiceController.#ctor(Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.SubCategorie},Isabella.Web.Helpers.ServiceGenericHelper{Isabella.Web.Models.Entities.Product})">
             <summary>
             Constructor.
             </summary>
             <param name="serviceGenericSubCategoryHelper"></param>
             <param name="serviceGenericProductHelper"></param>
         </member>
-        <member name="M:Isabella.Web.ServicesControllers.SubCategorieServiceController.AddSubCategoryAsync(Isabella.Common.Dtos.SubCategorie.AddSubCategorieToProductDto)">
+        <member name="M:Isabella.Web.ServicesControllers.SubCategorieServiceController.AddSubCategorieAsync(Isabella.Common.Dtos.SubCategorie.AddSubCategorieDto)">
             <summary>
             Agrega una nueva subcategoria a un producto.
             </summary>
             <param name="addSubCategoryProduct"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.Web.ServicesControllers.SubCategorieServiceController.DeleteSubCategoryAsync(System.Int32)">
+        <member name="M:Isabella.Web.ServicesControllers.SubCategorieServiceController.DeleteSubCategorieAsync(System.Int32)">
             <summary>
             Elimina una subcategoria
             </summary>
             <param name="SubCategoryId"></param>
             <returns></returns>
         </member>
-        <member name="M:Isabella.Web.ServicesControllers.SubCategorieServiceController.GetAllSubCategoryAsync">
+        <member name="M:Isabella.Web.ServicesControllers.SubCategorieServiceController.GetAllSubCategorieAsync">
+            <summary>
+            Obtiene todas las subcategorias.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.SubCategorieServiceController.GetAllSubCategorieWithProductAsync">
             <summary>
             Obtiene todas las subcategorias.
             </summary>
@@ -3746,6 +3848,12 @@
             <param name="RoleId"></param>
             <returns></returns>
         </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.GetAllUserAdminsAsync">
+            <summary>
+            Obtiene los usuarios admins del sistema.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:Isabella.Web.ServicesControllers.UserServiceController.RemoveUserAdminForNotifications(System.Int32)">
             <summary>
             Elimina un usuario admin a la lista de los que deben recibir notificaciones.
@@ -3766,47 +3874,92 @@
             <param name="TelegramChatId"></param>
             <returns></returns>
         </member>
+        <member name="T:Isabella.Web.ViewModels.AggregateViewModel.AddAggregateViewModel">
+            <summary>
+            AddProductViewModel
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.ViewModels.AggregateViewModel.AddAggregateViewModel.ImageFile">
+            <summary>
+            Imagen del Agregado
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.ViewModels.AggregateViewModel.GetAggregateViewModel">
+            <summary>
+            ViewModel para el manejo de un producto y sus entidades.
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.ViewModels.AggregateViewModel.GetAggregateViewModel.GetAllImagesAggregate">
+            <summary>
+            Imagenes
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.ViewModels.AggregateViewModel.GetAllImagesAggregateViewModel">
+            <summary>
+            ViewModel de las imagenes de los productos
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.ViewModels.AggregateViewModel.GetAllImagesAggregateViewModel.Id">
+            <summary>
+            Producto
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.ViewModels.AggregateViewModel.GetAllImagesAggregateViewModel.ImageFile">
+            <summary>
+            Nueva Imagen
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.ViewModels.AggregateViewModel.GetAllImagesAggregateViewModel.GetImages">
+            <summary>
+            Imagenes
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.ViewModels.AggregateViewModel.UpdateProductViewModel">
+            <summary>
+            UpdateProductViewModel
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.ViewModels.CategorieViewModel.AddCategorieViewModel">
+            <summary>
+            AddProductViewModel
+            </summary>
+        </member>
         <member name="T:Isabella.Web.ViewModels.CategorieViewModel.GetCategorieViewModel">
             <summary>
             GetCategorieViewModel
             </summary>
         </member>
-        <member name="T:Isabella.Web.ViewModels.ProductViewModel.AddImageProductViewModel">
+        <member name="T:Isabella.Web.ViewModels.CategorieViewModel.UpdateCategorieViewModel">
             <summary>
-            AddImageProductViewModel
-            </summary>
-        </member>
-        <member name="P:Isabella.Web.ViewModels.ProductViewModel.AddImageProductViewModel.ProductId">
-            <summary>
-            Id del Producto.
-            </summary>
-        </member>
-        <member name="P:Isabella.Web.ViewModels.ProductViewModel.AddImageProductViewModel.ImageFile">
-            <summary>
-            Imagen
+            UpdateProductViewModel
             </summary>
         </member>
         <member name="T:Isabella.Web.ViewModels.ProductViewModel.AddProductViewModel">
             <summary>
-            AddProductViewModel
+            Agregar un nuevo producto.
             </summary>
         </member>
-        <member name="T:Isabella.Web.ViewModels.ProductViewModel.GetAllImagesProductViewModel">
+        <member name="P:Isabella.Web.ViewModels.ProductViewModel.AddProductViewModel.ImageFile">
+            <summary>
+            Imagen
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.ViewModels.ProductViewModel.GetAllImagesAggregateViewModel">
             <summary>
             ViewModel de las imagenes de los productos
             </summary>
         </member>
-        <member name="P:Isabella.Web.ViewModels.ProductViewModel.GetAllImagesProductViewModel.Id">
+        <member name="P:Isabella.Web.ViewModels.ProductViewModel.GetAllImagesAggregateViewModel.Id">
             <summary>
             Producto
             </summary>
         </member>
-        <member name="P:Isabella.Web.ViewModels.ProductViewModel.GetAllImagesProductViewModel.ImageFile">
+        <member name="P:Isabella.Web.ViewModels.ProductViewModel.GetAllImagesAggregateViewModel.ImageFile">
             <summary>
             Nueva Imagen
             </summary>
         </member>
-        <member name="P:Isabella.Web.ViewModels.ProductViewModel.GetAllImagesProductViewModel.GetImages">
+        <member name="P:Isabella.Web.ViewModels.ProductViewModel.GetAllImagesAggregateViewModel.GetImages">
             <summary>
             Imagenes
             </summary>
@@ -3824,6 +3977,41 @@
         <member name="T:Isabella.Web.ViewModels.ProductViewModel.UpdateProductViewModel">
             <summary>
             UpdateProductViewModel
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.ViewModels.ProductViewModel.UpdateProductViewModel.ImageFile">
+            <summary>
+            Imagen a actualizar
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.ViewModels.ProductViewModel.UpdateProductViewModel.Images">
+            <summary>
+            Imagenes
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.ViewModels.SubCategorieViewModel.AddSubCategorieViewModel">
+            <summary>
+            AddProductViewModel
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.ViewModels.SubCategorieViewModel.GetSubCategorieViewModel">
+            <summary>
+            GetCategorieViewModel
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.ViewModels.SubCategorieViewModel.GetSubCategorieViewModel.GetProductViewModel">
+            <summary>
+            Producto
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.ViewModels.SubCategorieViewModel.UpdateSubCategorieViewModel">
+            <summary>
+            UpdateProductViewModel
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.ViewModels.UsersViewModel.GetUserAdminViewModel">
+            <summary>
+            Obtiene todos los datos de un usuario.
             </summary>
         </member>
     </members>

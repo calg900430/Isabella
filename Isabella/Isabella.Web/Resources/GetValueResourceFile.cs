@@ -354,6 +354,11 @@
             /// Abre el restaurante
             /// </summary>
             RestaurantOpen = 78,
+
+            /// <summary>
+            /// Borrar la entidad producto
+            /// </summary>
+            DeleteEntityProduct = 79
         }
 
         /// <summary>

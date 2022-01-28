@@ -8,7 +8,7 @@
     /// <summary>
     /// Calificación de los productos Standard
     /// </summary>
-    public class CalificationProduct
+    public class CalificationProduct : IEntity
     {
         /// <summary>
         /// Key

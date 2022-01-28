@@ -45,14 +45,14 @@
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "admin")]
-        public async Task<IActionResult> AddSubCategoryStandardAsync([FromBody] AddSubCategorieToProductDto addSubCategory)
+        public async Task<IActionResult> AddSubCategoryStandardAsync([FromBody] AddSubCategorieDto addSubCategory)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
                     var result = await this
-                    ._subCategoryService.AddSubCategoryAsync(addSubCategory)
+                    ._subCategoryService.AddSubCategorieAsync(addSubCategory)
                     .ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
@@ -155,7 +155,7 @@
                 {
                     var result = await this
                     ._subCategoryService
-                    .GetAllSubCategoryAsync()
+                    .GetAllSubCategorieAsync()
                     .ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);
@@ -259,7 +259,7 @@
                 {
                     var result = await this
                     ._subCategoryService
-                    .DeleteSubCategoryAsync(SubCategoryId)
+                    .DeleteSubCategorieAsync(SubCategoryId)
                     .ConfigureAwait(false);
                     if (result.Success)
                     return Ok(result);

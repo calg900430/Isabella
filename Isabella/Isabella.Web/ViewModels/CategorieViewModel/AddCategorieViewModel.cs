@@ -1,12 +1,12 @@
 ﻿namespace Isabella.Web.ViewModels.CategorieViewModel
 {
     using Isabella.Common.Dtos.Categorie;
-
+   
     /// <summary>
-    /// GetCategorieViewModel
+    /// AddProductViewModel
     /// </summary>
-    public class GetCategorieViewModel : GetCategorieDto
+    public class AddCategorieViewModel : AddCategorieDto
     {
-
+       
     }
 }

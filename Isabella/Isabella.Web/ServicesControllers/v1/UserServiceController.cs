@@ -1442,9 +1442,9 @@
         /// Obtiene todos los usuarios disponibles con datos disponibles solo para usuarios admin.
         /// </summary>
         /// <returns></returns>
-        public async Task<ServiceResponse<List<GetUserAllDataForOnlyAdmin>>> GetAllDataOfUserAsync()
+        public async Task<ServiceResponse<List<GetUserAllDataForOnlyAdminDto>>> GetAllDataOfUserAsync()
         {
-            ServiceResponse<List<GetUserAllDataForOnlyAdmin>> serviceResponse = new ServiceResponse<List<GetUserAllDataForOnlyAdmin>>();
+            ServiceResponse<List<GetUserAllDataForOnlyAdminDto>> serviceResponse = new ServiceResponse<List<GetUserAllDataForOnlyAdminDto>>();
             try
             {
                 var list_users = await this._userService.GetAllUserAsync().ConfigureAwait(false);
@@ -1457,10 +1457,10 @@
                     return serviceResponse;
                 }
                 //Mapea de una lista de User a una lista de GetUserDto.
-                List<GetUserAllDataForOnlyAdmin> userAllDataForOnlyAdmins = new List<GetUserAllDataForOnlyAdmin>();
+                List<GetUserAllDataForOnlyAdminDto> userAllDataForOnlyAdmins = new List<GetUserAllDataForOnlyAdminDto>();
                 foreach(User c in list_users)
                 {
-                    var useralldataforonlyadmins = new GetUserAllDataForOnlyAdmin
+                    var useralldataforonlyadmins = new GetUserAllDataForOnlyAdminDto
                     {
                         Id = c.Id,
                         Address = c.Address,
@@ -1498,9 +1498,9 @@
         /// </summary>
         /// <param name="UserId"></param>
         /// <returns></returns>
-        public async Task<ServiceResponse<GetUserAllDataForOnlyAdmin>> GetAllDataOfOnlyUserAsync(int UserId)
+        public async Task<ServiceResponse<GetUserAllDataForOnlyAdminDto>> GetAllDataOfOnlyUserAsync(int UserId)
         {
-            ServiceResponse<GetUserAllDataForOnlyAdmin> serviceResponse = new ServiceResponse<GetUserAllDataForOnlyAdmin>();
+            ServiceResponse<GetUserAllDataForOnlyAdminDto> serviceResponse = new ServiceResponse<GetUserAllDataForOnlyAdminDto>();
             try
             {
                 var user = await this._userService.GetUserByIdAsync(UserId).ConfigureAwait(false);
@@ -1514,7 +1514,7 @@
                 }
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 //Mapea de User a GetUserDto.
-                serviceResponse.Data = new GetUserAllDataForOnlyAdmin
+                serviceResponse.Data = new GetUserAllDataForOnlyAdminDto
                 {
                     Id = user.Id,
                     Address = user.Address,
@@ -1580,6 +1580,7 @@
             }
         }
 
+      
         /// <summary>
         /// Establece si un usuario se banea o no.
         /// </summary>
@@ -1620,6 +1621,51 @@
                     LastName = c.LastName,
                     PhoneNumber = c.PhoneNumber,
                     ImageUserProfile = c.ImageUserProfile,
+                }).ToList();
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Obtiene los usuarios admins del sistema.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<ServiceResponse<List<GetUserAllDataForOnlyAdminDto>>> GetAllUserAdminsAsync()
+        {
+            ServiceResponse<List<GetUserAllDataForOnlyAdminDto>> serviceResponse = new ServiceResponse<List<GetUserAllDataForOnlyAdminDto>>();
+            try
+            {
+                var list_users = await this._userService.GetAllUserWithRoleAsync(1).ConfigureAwait(false);
+                if (list_users == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserAllNotFoundWithRole;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile
+                    .GetValueResourceString(GetValueResourceFile.KeyResource.UserAllNotFoundWithRole);
+                    return serviceResponse;
+                }
+                //Mapea de una lista de User a una lista de GetUserDto.
+                serviceResponse.Data = list_users.Select(c => new GetUserAllDataForOnlyAdminDto
+                {
+                    Address = c.Address,
+                    FirstName = c.FirstName,
+                    Id = c.Id,
+                    LastName = c.LastName,
+                    PhoneNumber = c.PhoneNumber,
+                    ImageUserProfile = c.ImageUserProfile,
+                    Email = c.Email,
                 }).ToList();
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
                 serviceResponse.Success = true;

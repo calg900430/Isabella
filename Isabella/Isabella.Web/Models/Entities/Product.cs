@@ -20,7 +20,7 @@
         /// <summary>
         /// Categoria del producto.
         /// </summary>
-        public Category Category { get; set; }
+        public Categorie Category { get; set; }
 
         /// <summary>
         /// Imagenes para los productos. 
@@ -30,7 +30,7 @@
         /// <summary>
         /// SubCategorias del producto.
         /// </summary>
-        public ICollection<SubCategory> SubCategories { get; set; }
+        public ICollection<SubCategorie> SubCategories { get; set; }
 
         /// <summary>
         /// Nombre del Producto ofertado por el Restaurante.

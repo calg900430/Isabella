@@ -92,12 +92,12 @@
         /// <summary>
         /// Categoria de los productos.
         /// </summary>
-        public DbSet<Category> Categories { get; set; }
+        public DbSet<Categorie> Categories { get; set; }
 
         /// <summary>
         /// SubCategorias.
         /// </summary>
-        public DbSet<SubCategory> SubCategories { get; set; }
+        public DbSet<SubCategorie> SubCategories { get; set; }
 
         /// <summary>
         /// Producto Combinado.
@@ -112,10 +112,10 @@
         /// <summary>
         /// Crea el modelo para la base de datos
         /// </summary>
-        /// <param name="builder"></param>
-        protected override void OnModelCreating(ModelBuilder builder)
+        /// <param name="modelBuilder"></param>
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

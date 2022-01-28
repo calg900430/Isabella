@@ -13,7 +13,7 @@
         /// <summary>
         /// Obtiene todas las subcategorias.
         /// </summary>
-        Task<ServiceResponse<List<GetSubCategorieDto>>> GetAllSubCategoryAsync();
+        Task<ServiceResponse<List<GetSubCategorieDto>>> GetAllSubCategorieAsync();
 
         /// <summary>
         /// Obtiene todas las subcategorias que están disponibles.
@@ -44,7 +44,7 @@
         /// </summary>
         /// <param name="addSubCategoryProduct"></param>
         /// <returns></returns>
-        Task<ServiceResponse<bool>> AddSubCategoryAsync(AddSubCategorieToProductDto addSubCategoryProduct);
+        Task<ServiceResponse<bool>> AddSubCategorieAsync(AddSubCategorieDto addSubCategoryProduct);
 
         /// <summary>
         /// Actualiza una nueva subcategoria.
@@ -58,6 +58,6 @@
         /// </summary>
         /// <param name="SubCategoryId"></param>
         /// <returns></returns>
-        Task<ServiceResponse<bool>> DeleteSubCategoryAsync(int SubCategoryId);
+        Task<ServiceResponse<bool>> DeleteSubCategorieAsync(int SubCategoryId);
     }
 }

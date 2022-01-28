@@ -5,8 +5,6 @@
 
 @model Isabella.Web.ViewModels.ProductViewModel.AddProductViewModel;
 
-
-
 @{
     ViewData["Title"] = "Crear";
     ViewData["Name"] = "Nombre";
@@ -15,59 +13,245 @@
     ViewData["IsAvailable"] = "Disponible?";
     ViewData["IsSupportAggregate"] = "Agregados?";
     ViewData["Categorie"] = "Categoria";
+    ViewData["Description"] = "Descripción";
 }
 
-<h2>@ViewData["Title"]</h2>
 <hr />
+<h2>@ViewData["Title"]</h2>
 @*Formulario para crear productos*@
 <div class="row">
-    <div class="col-lg-auto">
-        <form asp-action="Create" enctype="multipart/form-data">
+    <div class="col-md-12">
+        <form id="form_create_validate" asp-action="Create" enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
-                <label asp-for="Name" class="control-label">@ViewData["Name"]</label>
-                <input asp-for="Name" class="form-control" />
+                <label asp-for="Name" class="form-label mt-4">@ViewData["Name"]</label>
+                <input id="nameproduct" asp-for="Name" class="form-control" placeholder="Escriba el nombre del producto">
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="Price" class="control-label">@ViewData["Price"]</label>
-                <input asp-for="Price" class="form-control" />
+                <label asp-for="Description" class="form-label mt-4">@ViewData["Description"]</label>
+                <textarea id="descriptionproduct" asp-for="Description" class="form-control" placeholder="Escriba una descripción del producto" rows="3"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Price" class="form-label mt-4">@ViewData["Price"]</label>
+                <input id="priceproduct" asp-for="Price" type="number" class="form-control" placeholder="Escriba el precio del producto">
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <fieldset>
-                    @ViewData["Categorie"]
-                    @*Crea el ComboBox que creamos en el Controller usando ViewBag*@
-                    @Html.DropDownList("Categories")
-                </fieldset>
+                <label asp-for="CategorieId" class="form-label mt-4">@ViewData["Categorie"]</label>
+                <select asp-for="CategorieId" class="form-select" id="SelectCategorie">
+                    @foreach (var categorie in ViewBag.Categories)
+                    {
+                        <option value="@categorie.Id">@categorie.Name</option>
+                    }
+                </select>
             </div>
+
             <div class="form-group">
-                <label asp-for="ImageFile" class="control-label"></label>
-                <input asp-for="ImageFile" type="file"/>
-                <span  asp-validation-for="ImageFile" class="text-danger"></span>
+                <label asp-for="ImageFile" for="formFile" class="form-label mt-4">Seleccione una imagen</label>
+                <input id="imageproduct" name="ImageFile" asp-for="ImageFile" accept="image/png,image/jpeg" class="form-control" type="file">
+                <span asp-validation-for="ImageFile" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="Stock" class="control-label">@ViewData["Cant"]</label>
-                <input asp-for="Stock" class="form-control text-danger"/>
+                <label asp-for="Stock" class="form-label mt-4">@ViewData["Cant"]</label>
+                <input id="stockproduct" asp-for="Stock" type="number" class="form-control">
                 <span asp-validation-for="Stock" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label>
-                        <input asp-for="IsAvailabe" /> @ViewData["IsAvailable"]
-                    </label>
-                </div>
+
+            <hr />
+
+            <div class="form-check">
+                <label asp-for="IsAvailable" class="form-check-label" for="flexCheckDefault">
+                    @ViewData["IsAvailable"]
+                    <input id="isavailableproduct" asp-for="IsAvailable" class="form-check-input" type="checkbox">
+                </label>
             </div>
+
+            <hr />
+
+            <div class="form-check">
+                <label asp-for="SupportAggregate" class="form-check-label" for="flexCheckDefault">
+                    @ViewData["IsSupportAggregate"]
+                    <input id="issupportaggregate" asp-for="SupportAggregate" class="form-check-input" type="checkbox">
+                </label>
+            </div>
+
+            <hr />
+
             <div class="form-group">
-                <button type="submit" value="Create" 
-                 class="btn btn-primary"><i class="fa fa-save"></i> Crear</button>
+                <button id="buttomcreateproduct" class="btn btn-primary">
+                    <i class="fa fa-save"></i> Guardar
+                </button>
                 <a asp-action="Index" class="btn btn-success"><i class="fa fa-chevron-left"></i> Atrás</a>
             </div>
+
         </form>
     </div>
 </div>
 
+@*Ventana Modal para la espera a que se agregue el producto.*@
+<div id="responseAddProduct" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button id="btnCloseModalAddProduct" type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body" style="text-align:center">
+                <p id="messageModalResponseAddProduct">               
+                </p>
+                <hr />
+                <div class="fa-2x">
+                    <i id="iconWaitAddProduct" class="fas fa-spinner fa-spin"></i>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnCloseresponseAddProduct">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @*Ejecuta los scripts para generar el color rojo en los textos de error*@
-@section Scripts {
+@section Scripts
+{
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            //Obtiene la URI y crea la el endpoint para crear un nuevo producto
+            let url = getUriServer() + 'product/create';
+            //Id de Categoria
+            let categorieId = 1;
+          
+            //Evento Change del ComboBox de las categorias.
+            $("#SelectCategorie").change(function ()
+            {
+                categorieId = parseInt($("#SelectCategorie").val());            
+            });
+
+            //Evento Click del Botón Cerrar(Cierra la ventana Modal de respuesta del servidor)
+            $('#btnCloseModalAddProduct').click(function (e) {
+                e.preventDefault();
+                $("#responseAddProduct").modal('hide');
+                return false;
+            });
+
+            //Evento Click del Botón Cerrar(Cierra la ventana Modal de respuesta del servidor)
+            $('#btnCloseresponseAddProduct').click(function(e) {
+                e.preventDefault();
+                $('#responseAddProduct').modal('hide');
+                return false;
+            });
+
+            //Evento click del botón de guardar producto
+            $('#buttomcreateproduct').click(async function (e)
+            {
+                try
+                {
+                  e.preventDefault();
+                  $('#form_create_validate').validate();
+                  if ($('#form_create_validate').valid() === false)
+                  {
+                    return false;
+                  }
+                  else
+                  {
+                    $('#iconWaitAddProduct').hide();
+                    $('#messageModalResponseAddProduct').text("");
+                    //Muestra la modal de crear el producto.
+                    $('#responseAddProduct').modal({ backdrop: "static", keyboard: true }, 'show');
+                    $('#iconWaitAddProduct').show();
+                    $('#messageModalResponseAddProduct').text("Creando producto...");
+                    //Deshabilita los botones Ok y Cerrar de la modal
+                    $('#btnCloseresponseAddProduct').prop("disabled", true);
+                    $('#btnCloseModalAddProduct').prop("disabled", true);
+
+                    //Obtiene los valores del producto.
+                    var name = $('#nameproduct').val();
+                    var description = $('#descriptionproduct').val();
+                    var price = parseFloat($('#priceproduct').val());
+                    var stock = parseInt($('#stockproduct').val());
+                    var isavailableproduct = false;
+                    var issupportaggregate = false;
+                    if($('#isavailableproduct').val() == "true")
+                     isavailableproduct = true;
+                    else if($('#isavailableproduct').val() == "false")
+                     isavailableproduct = false;
+                    else
+                     isavailableproduct = false;
+                    if($('#issupportaggregate').val() == "true")
+                     issupportaggregate = true;
+                    else if($('#issupportaggregate').val() == "false")
+                     issupportaggregate = false;
+                    else
+                     issupportaggregate = false;
+                    var image = document.getElementById("imageproduct").files;
+                    //Crea el formulario de datos del producto.
+                    var formData = new FormData();
+                    if(image[0] == null)
+                    formData.append("ImageFile", null);
+                    else
+                    formData.append("ImageFile", image[0]);
+                    formData.append("Name", name);
+                    formData.append("Description", description);
+                    formData.append("Price", price);
+                    formData.append("Stock", stock);
+                    formData.append("CategorieId", categorieId);
+                    formData.append("IsAvailable", isavailableproduct);
+                    formData.append("SupportAggregate", issupportaggregate);
+
+                    var responseService = await AddProduct(formData);
+
+                    if (responseService.ok) 
+                    {
+                        $("#responseAddProduct").modal('hide');
+                        $('#iconWaitAddProduct').hide();
+                        $('#messageModalResponseAddProduct').text("");
+                        $('#btnCloseresponseAddProduct').prop("disabled", false);
+                        $('#btnCloseModalAddProduct').prop("disabled", false);
+                        window.location.href = '/Product';
+                        return false;
+                    }
+                    if (responseService.status == 404) 
+                    {
+                        let response = await responseService.json();
+                        let message = response.message;
+                        $('#iconWaitAddProduct').hide();
+                        $('#messageModalResponseAddProduct').text(message)
+                        $('#btnCloseresponseAddProduct').prop("disabled", false);
+                        $('#btnCloseModalAddProduct').prop("disabled", false);
+                        return false;
+                    }                    
+                  }
+                }
+                catch(error)
+                {
+                   $('#messageModalResponseAddProduct').text(error.message)
+                   $('#btnCloseresponseAddProduct').prop("disabled", false);
+                   $('#btnCloseModalAddProduct').prop("disabled", false);
+                   return false;
+                }              
+            });
+
+            //Crear Producto
+            async function AddProduct(product_form)
+            {
+                 let responseService = await fetch(url, {
+                        method: 'POST',
+                        body: product_form
+                 });
+                return responseService;
+            }
+        });
+    </script>
 }
