@@ -41,7 +41,7 @@ namespace Isabella.Web
 
             //Agrega y configura el servicio para conectarnos a SQL Server
             var connectionstring = Constants.GetStringConnectionSQLServer(Configuration.GetSection("SQLServerLocal"));
-            //var connectionstring = Constants.GetStringConnectionSQLServer(Configuration.GetSection("SQLServer"));
+            ///var connectionstring = Constants.GetStringConnectionSQLServer(Configuration.GetSection("SQLServer"));
             services.AddDbContext<DataContext>(cfg =>
             {
                 //c.UseLazyLoadingProxies() //Para poder usar carga diferida
@@ -253,12 +253,12 @@ namespace Isabella.Web
                 app.UseHsts();
             }
             //Configuración del CORS
-            /*app.UseCors(x =>
+            app.UseCors(x =>
             x.AllowAnyMethod()
             .AllowAnyHeader()
             .SetIsOriginAllowed(origin => true)
             .AllowCredentials()
-            );*/
+            );
             //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseDefaultFiles();
@@ -266,7 +266,7 @@ namespace Isabella.Web
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseCookiePolicy();
-            //app.UseCors("AllowSpecificOrigin");
+            app.UseCors("AllowSpecificOrigin");
             //Agrega el Middleware del Swagger(JSON)
             app.UseSwagger();
             //Usar SwaggerUI(Sitio Web de Swagger que se construye desde el JSON)
@@ -284,7 +284,7 @@ namespace Isabella.Web
                 });
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Product}/{action=Index}/{id?}");
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

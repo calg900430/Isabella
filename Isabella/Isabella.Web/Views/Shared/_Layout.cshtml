@@ -10,68 +10,82 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Isabella</a>
-                @*Barra de Búsqueda*@
-                <form class="d-flex">
-                    <input class="form-control me-sm-2" type="text" placeholder="Buscar">
-                    <button class="btn btn-dark my-2 my-sm-0" type="submit">
-                        <i class="fa fa-search" aria-hidden="true"></i>
+        @if (User.Identity.IsAuthenticated && this.User.IsInRole("admin"))
+        {
+            <nav class="navbar navbar-fixed-top navbar-expand-lg navbar-dark bg-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">Isabella</a>
+                    @*Barra de Búsqueda*@
+                    <form class="d-flex">
+                        <input class="form-control me-sm-2" type="text" placeholder="Buscar">
+                        <button class="btn btn-dark my-2 my-sm-0" type="submit">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                    @*Notificaciones de Pedidos*@
+                    <div id="ex3">
+                        <span class="p2 fa-stack has-badge" data-count="+99">
+                            <!--<i class="p2 fa fa-circle fa-stack-2x"></i>-->
+                            <i class="fa fa-shopping-cart fa-inverse"></i>
+                        </span>
+                    </div>
+                    @*Notificaciones Generales*@
+                    <div id="ex3">
+                        <span class="p2 fa-stack has-badge" data-count="10">
+                            <!--<i class="p2 fa fa-circle fa-stack-2x"></i>-->
+                            <i class="fa fa-bell fa-inverse"></i>
+                        </span>
+                    </div>
+                    <div>
+                        <a asp-action="edit" class="text-white">@this.User.Identity.Name</a>
+                    </div>
+                    @*Icono del menu hamburguesas*@
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+                            aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
                     </button>
-                </form>
-                @*Notificaciones de Pedidos*@
-                <div id="ex3">
-                    <span class="p2 fa-stack has-badge" data-count="+99">
-                        <!--<i class="p2 fa fa-circle fa-stack-2x"></i>-->
-                        <i class="fa fa-shopping-cart fa-inverse"></i>
-                    </span>
+                    @*Elementos del Menu *@
+                    <div class="navbar-collapse collapse" id="navbarColor02" style="">
+                        <ul class="navbar-nav me-auto">
+                            
+                            @*Imagen y datos del usuario logueado*@
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Restaurant" asp-action="Index">Restaurante</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Product" asp-action="Index">Productos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Categorie" asp-action="Index">Categorias</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Aggregate" asp-action="Index">Agregados</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="SubCategorie" asp-action="Index">SubCategorias</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="User" asp-action="Index">Administradores</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="User" asp-action="Logout">Cerrar Sesión</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                @*Notificaciones Generales*@
-                <div id="ex3">
-                    <span class="p2 fa-stack has-badge" data-count="10">
-                        <!--<i class="p2 fa fa-circle fa-stack-2x"></i>-->
-                        <i class="fa fa-bell fa-inverse"></i>
-                    </span>
-                </div>
-                @*Icono del menu hamburguesas*@
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
-                        aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                @*Elementos del Menu *@
-                <div class="navbar-collapse collapse" id="navbarColor02" style="">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Restaurant" asp-action="Index">Restaurante</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Product" asp-action="Index">Productos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Categorie" asp-action="Index">Categorias</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Aggregate" asp-action="Index">Agregados</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="SubCategorie" asp-action="Index">SubCategorias</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="User" asp-action="Index">Administradores</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="User" asp-action="LoginAdmins">Autenticarse</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="User" asp-action="LogoutAdmins">Cerrar</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
+            </nav>
+        }
+        else
+        {
+           <nav class="navbar navbar-fixed-top navbar-expand-lg navbar-dark bg-dark">
+               <div class="container-fluid">
+                   <a class="navbar-brand" href="#">Isabella</a>
+                   <a class="nav-link" asp-area="" asp-controller="User" asp-action="Login">Autenticarse</a>
+               </div> 
+           </nav>
+        }
+</header>
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

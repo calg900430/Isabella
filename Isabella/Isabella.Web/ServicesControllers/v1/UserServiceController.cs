@@ -17,6 +17,7 @@
     using Helpers;
     using Helpers.RepositoryHelpers;
     using Resources;
+    using Isabella.Web.ViewModels.UsersViewModel;
 
     /// <summary>
     /// Servicio para el controlador de los usuarios.
@@ -113,7 +114,7 @@
         }
 
         /// <summary>
-        /// Agrega un usuario al sistema y le asigna un role
+        /// Agrega un usuario al sistema.
         /// </summary>
         /// <param name="newuser"></param>
         /// <returns></returns>
@@ -175,16 +176,16 @@
                 //Obtiene el Token de confirmación de registro del usuario.
                 var token = await this._userService.GenerateTokenForConfirmRegisterAsync(user).ConfigureAwait(false);
                 //Crea un Link que contiene el Token de confirmación.
-                var tokenLink = this.Url.Action("ConfirmRegisterUserAsync", "Users", new
+                var tokenLink = this.Url.Action("ConfirmRegister", "User", new
                 {
                     userid = user.Id,
                     token = token,
                 }, protocol: HttpRequest.Scheme);
-                var body_message = $"<h1>Email Confirmation</h1>" +
-                 "Hello you have registered in the Isabella application," +
-                 $"to allow the user, plase click in this link:</br></br><a href = \"{tokenLink}\">Confirm Email</a>";
+                var body_message = $"<h1>Correo de Confirmación</h1>" +
+                 "Hola se le ha creado una cuenta de usuario en el Restaurante Isabella," +
+                 $"para completar el registro de esta cuenta haga click sobre el enlace:</br></br><a href = \"{tokenLink}\">Confirmar Registro</a>";
                 //Envia un correo al usuario con el código de verificación.
-                var send_mail = this._mailHelper.SendMail(user.Email, "Email confirmation", body_message);
+                var send_mail = this._mailHelper.SendMail(user.Email, "Correo de Confirmación", body_message);
                 if (!send_mail)
                 {
                     serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EmailNotSend;
@@ -205,6 +206,117 @@
                 serviceResponse.Data = false;
                 serviceResponse.Success = false;
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        /// Agrega un usuario admin al sistema.
+        /// </summary>
+        /// <param name="newuser"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<bool>> AddUserAdminAsync(AddUserViewModel newuser)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            try
+            {
+                //Verifica que los datos enviados por el usuario sean correctos.
+                if (newuser == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
+                    return serviceResponse;
+                }
+                //Verifica que el email dado no este en uso.
+                var email_existing = await this._userService.VerifyEmailAsync(newuser.Email).ConfigureAwait(false);
+                if (email_existing)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.BadEmail;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.BadEmail);
+                    return serviceResponse;
+                }
+                //Verifica que la cuenta de usuario dada no este disponible, que es lo mismo que el email.
+                var username_existing = await this._userService.VerifyUserNameAsync(newuser.Email).ConfigureAwait(false);
+                if (username_existing)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.BadEmail;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.BadEmail);
+                    return serviceResponse;
+                }
+                //Crea el nuevo usuario con los parametros especificados por el usuario(Mapea de RegisterUserDto a User)
+                var new_registeruser = new User
+                {
+                    Email = newuser.Email,
+                    UserName = newuser.Email,
+                    DateCreated = DateTime.UtcNow,
+                    DateUpdated = DateTime.UtcNow,
+                    LastDateConnected = DateTime.UtcNow,
+                    IdForClaim = Guid.NewGuid(),
+                    EmailConfirmed = false,
+                };
+                //Guarda el usuario con una contraseña definida.
+                var user = await this._userService.AddUserAsync(new_registeruser, newuser.Password).ConfigureAwait(false);
+                if(user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity);
+                    return serviceResponse;
+                }
+                //Asigna el role admin al nuevo usuario
+                var assign_role = await this._userService
+                .AddRoleForUserAsync(user, Constants.RolesOfSystem[0])
+                .ConfigureAwait(false);
+                if(!assign_role)
+                {
+                    //Borra el usuario acabado de crear al no poder asignarle el role admin
+                    await this._userService.DeleteUserAsync(user).ConfigureAwait(false);
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ErrorDataBaseUserIdentity);
+                    return serviceResponse;
+                }
+                //Obtiene el Token de confirmación de registro del usuario.
+                var token = await this._userService.GenerateTokenForConfirmRegisterAsync(user).ConfigureAwait(false);
+                //Crea un Link que contiene el Token de confirmación.
+                var tokenLink = this.Url.Action("ConfirmRegister", "User", new
+                {
+                    userid = user.Id,
+                    token = token,
+                }, protocol: HttpRequest.Scheme);
+                var body_message = $"<h1>Correo de Confirmación</h1>" +
+                 "Hola se le ha creado una cuenta de usuario administrador para la gestión del Restaurante Isabella," +
+                 $"para completar el registro de esta cuenta haga click sobre el enlace:</br></br><a href = \"{tokenLink}\">Confirmar Registro</a>";
+                //Envia un correo al usuario con el código de verificación.
+                var send_mail = this._mailHelper.SendMail(user.Email, "Correo de Confirmación", body_message);
+                if(send_mail)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EmailNotSend;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EmailNotSend);
+                    return serviceResponse;
+                }
+                serviceResponse.Data = true;
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EmailRegisterConfirmation;
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EmailRegisterConfirmation);
+                return serviceResponse;
+            }
+            catch(Exception ex)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = false;
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
                 return serviceResponse;
             }
         }
@@ -477,7 +589,7 @@
         }
 
         /// <summary>
-        /// Realiza el login del usuario y obtiene el token de acceso,el tiempo de expiración y otros datos del usuario.
+        /// Realiza el login Api del usuario y obtiene el token de acceso,el tiempo de expiración y otros datos del usuario.
         /// </summary>
         /// <param name="loginUser"></param>
         /// <returns></returns>
@@ -571,6 +683,103 @@
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
                 return serviceResponse;
             }
+        }
+
+        /// <summary>
+        /// Realiza el login Web solo de usuarios admins.
+        /// </summary>
+        /// <param name="loginViewModel"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<bool>> LoginUserWebOnlyAdminAsync(LoginViewModel loginViewModel)
+        {
+            ServiceResponse<bool> serviceResponse = new ServiceResponse<bool>();
+            try
+            {
+                //Verifica que los datos enviados por el usuario sean correctos.
+                if (loginViewModel == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.EntityIsNull;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.EntityIsNull);
+                    return serviceResponse;
+                }
+                if (string.IsNullOrEmpty(loginViewModel.Email))
+                {
+                    serviceResponse.Data = false;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.RequiredEmailOfUser;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.RequiredEmailOfUser);
+                    return serviceResponse;
+                }
+                //Verifica que el usuario este registrado.
+                var user = await this._userService.GetUserByEmailAsync(loginViewModel.Email).ConfigureAwait(false);
+                if (user == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.VerifyPasswordAndEmail;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.VerifyPasswordAndEmail);
+                    return serviceResponse;
+                }
+                //Verifica que el usuario haya confirmado el registro anteriormente.
+                var confirm_register = await this._userService.VerifyConfirmRegisterUserAsync(user).ConfigureAwait(false);
+                if (!confirm_register)
+                {
+                    serviceResponse.Data = false;
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.NotConfirmRegister;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.NotConfirmRegister);
+                    return serviceResponse;
+                }
+                //Verifica si el usuario es admin
+                var is_have_role = await this._userService
+                .VerifyRoleInUserAsync(user, Constants.RolesOfSystem[0])
+                .ConfigureAwait(false);
+                if(!is_have_role)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.UserNotAuthorizeLogin;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.UserNotAuthorizeLogin);
+                    return serviceResponse;
+                }
+                //Realiza el login
+                var result = await this._userService.SignInAsync(user, loginViewModel.Password, true).ConfigureAwait(false);
+                if(result.Succeeded)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.LoginUserSuccess;
+                    serviceResponse.Data = true;
+                    serviceResponse.Success = true;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.LoginUserSuccess);
+                    return serviceResponse;
+                }
+                else
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.VerifyPasswordAndEmail;
+                    serviceResponse.Data = false;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.VerifyPasswordAndEmail);
+                    return serviceResponse;
+                }
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = false;
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+                return serviceResponse;
+            }
+        }
+
+        /// <summary>
+        ///  Cerrar sesion Web.
+        /// </summary>
+        /// <returns></returns>
+        public async Task LogoutUserWebAsync()
+        {
+           await this._userService.SignOutAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -1863,5 +2072,6 @@
             }
         }
 
+        
     }
 }

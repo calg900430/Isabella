@@ -1,0 +1,201 @@
+﻿@model Isabella.Web.ViewModels.UsersViewModel.AddUserViewModel
+
+@{
+    ViewData["Email"] = "Correo";
+    ViewData["Password"] = "Contraseña";
+    ViewData["PasswordConfirm"] = "Confirmar Contraseña";
+}
+
+<hr />
+
+<div class="row">
+    <div class="col-md-12">
+
+        <form id="form_create_user" asp-action="Login" enctype="multipart/form-data" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="Email" class="form-label mt-4">@ViewData["Email"]</label>
+                <input id="emailuser" asp-for="Email" type="email" class="form-control" placeholder="Escriba el correo del usuario.">
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <hr />
+
+            <div class="form-group">
+                <label asp-for="Password" class="form-label mt-4">@ViewData["Password"]</label>
+                <input id="passworduser" asp-for="Password" type="password" class="form-control" placeholder="Escriba la contraseña del usuario.">
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <hr />
+
+            <div class="form-group">
+                <label asp-for="PasswordConfirm" class="form-label mt-4">@ViewData["PasswordConfirm"]</label>
+                <input id="confirmpassworduser" asp-for="Password" type="password" class="form-control" placeholder="Escriba la contraseña del usuario.">
+                <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
+            </div>
+
+            <hr />
+
+            <div class="form-group">
+                <button id="createuser" asp-action="Create" class="btn btn-primary"> Guardar</button>
+                <a asp-action="Index" class="btn btn-success"><i class="fa fa-chevron-left"></i> Atrás</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@*Ventana Modal para el login.*@
+<div id="responseCreateUser" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button id="btnCreateUser" type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body" style="text-align:center">
+                <p id="messageCreateUser">
+                </p>
+                <hr />
+                <div class="fa-2x">
+                    <i id="iconWaitCreateUser" class="fas fa-spinner fa-spin"></i>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnCloseCreateUser">Ok</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            //Obtiene la URI y crea la el endpoint para crear un nuevo producto
+            let url = getUriServer() + 'user/create';
+            let is_create_user = false;
+
+            //Evento Click del Botón Cerrar(Cierra la ventana Modal de respuesta del servidor)
+            $('#btnCreateUser').click(function (e) {
+                e.preventDefault();
+                if(is_create_user)
+                {
+                    is_create_user = false;
+                    window.location.href = '/User';
+                }
+                $("#responseCreateUser").modal('hide');
+                return false;
+            });
+
+            //Evento Click del Botón Cerrar(Cierra la ventana Modal de respuesta del servidor)
+            $('#btnCloseCreateUser').click(function(e) {
+                e.preventDefault();
+                if (is_create_user)
+                {
+                    is_create_user = false;
+                    window.location.href = '/User';
+                }
+                $('#responseCreateUser').modal('hide');
+                return false;
+            });
+
+            //Evento click del botón Login.
+            $("#createuser").click(async function (e) {
+                try {
+                    e.preventDefault();
+                    $('#form_create_user').validate();
+                    if ($('#form_create_user').valid() === false)
+                    {
+                      return false;
+                    }
+                    else
+                    {
+                       $('#iconWaitCreateUser').hide();
+                       $('#messageCreateUser').text("");
+                       //Muestra la modal de crear el producto.
+                       $('#responseCreateUser').modal({ backdrop: "static", keyboard: true }, 'show');
+                       $('#iconWaitCreateUser').show();
+                       $('#messageCreateUser').text("Creando Usuario...");
+                       //Deshabilita los botones Ok y Cerrar de la modal
+                       $('#btnCreateUser').prop("disabled", true);
+                       $('#btnCloseCreateUser').prop("disabled", true);
+                       //Obtiene los valores del formulario
+                       var email = $('#emailuser').val();
+                       var password = $('#passworduser').val();
+                       var confirm_password = $('#confirmpassworduser').val();
+                     
+                       //Crea el formulario de datos del usuario.
+                       var formData = new FormData();
+                       formData.append("Email", email);
+                       formData.append("Password", password);
+                       formData.append("PasswordConfirm", confirm_password);
+
+                       var responseService = await Create(formData);
+
+                       if (responseService.status == 200) {
+                          let response = await responseService.json();
+                          let message = response.message;
+                          is_create_user = true;
+                          $('#iconWaitCreateUser').hide();
+                          $('#messageCreateUser').text(message);
+                          $('#btnCreateUser').prop("disabled", false);
+                          $('#btnCloseCreateUser').prop("disabled", false);   
+                          return false;
+                       }
+                       else if (responseService.status == 404) {
+                          let response = await responseService.json();
+                          let message = response.message;
+                          $('#iconWaitCreateUser').hide();
+                          $('#messageCreateUser').text(message)
+                          $('#btnCreateUser').prop("disabled", false);
+                          $('#btnCloseCreateUser').prop("disabled", false);
+                          return false;
+                       }
+                       else if(responseService.status == 400)
+                       {
+                          $('#iconWaitCreateUser').hide();
+                          $('#messageCreateUser').text("Error en los datos del modelo enviados al servidor.");
+                          $('#btnCreateUser').prop("disabled", false);
+                          $('#btnCloseCreateUser').prop("disabled", false);
+                          return false;
+                       }
+                       else 
+                       {
+                          $('#iconWaitCreateUser').hide();
+                          $('#messageCreateUser').text("Se originó un error desconocido.")
+                          $('#btnCreateUser').prop("disabled", false);
+                          $('#btnCloseCreateUser').prop("disabled", false);
+                          return false;
+                       }
+                    }
+                }
+                catch(error)
+                {
+                   $('#iconWaitCreateUser').hide();
+                   $('#messageCreateUser').text(error.message)
+                   $('#btnCreateUser').prop("disabled", false);
+                   $('#btnCloseCreateUser').prop("disabled", false);
+                   return false;
+                }
+
+            })
+
+            //Crear usuario.
+            async function Create(new_user)
+            {
+                 let responseService = await fetch(url, {
+                        method: 'POST',
+                        body: new_user
+                 });
+                return responseService;
+            }
+
+        });
+    </script>
+}

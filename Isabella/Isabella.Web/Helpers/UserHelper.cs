@@ -56,7 +56,7 @@
         /// Login Web
         /// </summary>
         /// <returns></returns>
-        public async Task<SignInResult> LoginInAsync(User user, string password, bool remember)
+        public async Task<SignInResult> SignInAsync(User user, string password, bool remember)
         {
             return await _signInManager.
             PasswordSignInAsync(user.UserName, password, remember,false)
@@ -68,7 +68,7 @@
         /// Logout Web
         /// </summary>
         /// <returns></returns>
-        public async Task LoginOutAsync()
+        public async Task SignOutAsync()
         {
             await this._signInManager.SignOutAsync().ConfigureAwait(false);
         }
@@ -110,6 +110,26 @@
             return user;
         }
 
+        /// <summary>
+        /// Elimina un usuario.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        public async Task<bool> DeleteUserAsync(User user)
+        {
+            if (user == null)
+            throw new NullReferenceException();
+            //Elimina el usuario.
+            var user_identity = await this._userManager.DeleteAsync(user)
+            .ConfigureAwait(false);
+            //No se agregó el usuario
+            if (user_identity.Succeeded)
+            return true;
+            else
+            return false; 
+        }
+
+        
         /// <summary>
         /// Agrega un role determinado a un usuario.
         /// </summary>

@@ -15,7 +15,7 @@
         /// </summary>
         [JsonProperty("Name")]
         [Required(ErrorMessage = "Debe introducir el nombre del producto.")]
-        [MaxLength(100, ErrorMessage = "Ha superado el limite máximo de caracteres permitidos para el nombre del producto.")]
+        [MaxLength(30, ErrorMessage = "Ha superado el limite máximo de caracteres permitidos para el nombre del producto.")]
         public string Name { get; set; }
 
         /// <summary>
@@ -41,7 +41,7 @@
         /// <summary>
         /// Descripción de la publicacion
         /// </summary>
-        [MaxLength(1000, ErrorMessage = "Ha superado el limite máximo de caracteres permitidos para dar una descripción del producto.")]
+        [MaxLength(100, ErrorMessage = "Ha superado el limite máximo de caracteres permitidos para dar una descripción del producto.")]
         public string Description { get; set; }
     }
 }

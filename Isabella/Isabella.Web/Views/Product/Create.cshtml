@@ -212,26 +212,40 @@
 
                     var responseService = await AddProduct(formData);
 
-                    if (responseService.ok) 
-                    {
-                        $("#responseAddProduct").modal('hide');
-                        $('#iconWaitAddProduct').hide();
-                        $('#messageModalResponseAddProduct').text("");
-                        $('#btnCloseresponseAddProduct').prop("disabled", false);
-                        $('#btnCloseModalAddProduct').prop("disabled", false);
-                        window.location.href = '/Product';
-                        return false;
-                    }
-                    if (responseService.status == 404) 
-                    {
-                        let response = await responseService.json();
-                        let message = response.message;
-                        $('#iconWaitAddProduct').hide();
-                        $('#messageModalResponseAddProduct').text(message)
-                        $('#btnCloseresponseAddProduct').prop("disabled", false);
-                        $('#btnCloseModalAddProduct').prop("disabled", false);
-                        return false;
-                    }                    
+                      if (responseService.status == 200) {
+                          $("#responseAddProduct").modal('hide');
+                          $('#iconWaitAddProduct').hide();
+                          $('#messageModalResponseAddProduct').text("");
+                          $('#btnCloseresponseAddProduct').prop("disabled", false);
+                          $('#btnCloseModalAddProduct').prop("disabled", false);
+                          window.location.href = '/Product';
+                          return false;
+                      }
+                      else if (responseService.status == 404) {
+                          let response = await responseService.json();
+                          let message = response.message;
+                          $('#iconWaitAddProduct').hide();
+                          $('#messageModalResponseAddProduct').text(message)
+                          $('#btnCloseresponseAddProduct').prop("disabled", false);
+                          $('#btnCloseModalAddProduct').prop("disabled", false);
+                          return false;
+                      }
+                      else if(responseService.status == 400)
+                      {
+                          $('#iconWaitAddProduct').hide();
+                          $('#messageModalResponseAddProduct').text("Error en los datos del modelo enviados al servidor.");
+                          $('#btnCloseresponseAddProduct').prop("disabled", false);
+                          $('#btnCloseModalAddProduct').prop("disabled", false);
+                          return false;
+                      }
+                      else 
+                      {
+                          $('#iconWaitAddProduct').hide();
+                          $('#messageModalResponseAddProduct').text("Se originó un error desconocido.")
+                          $('#btnCloseresponseAddProduct').prop("disabled", false);
+                          $('#btnCloseModalAddProduct').prop("disabled", false);
+                          return false;
+                      }
                   }
                 }
                 catch(error)

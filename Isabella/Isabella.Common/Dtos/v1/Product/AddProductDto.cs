@@ -17,7 +17,7 @@
         /// Nombre 
         /// </summary>
         [Required(ErrorMessage = "Debe introducir el nombre del producto.")]
-        [MaxLength(20, ErrorMessage = "Ha superado el limite máximo de caracteres permitidos para el nombre del producto.")]
+        [MaxLength(30, ErrorMessage = "Ha superado el limite máximo de caracteres permitidos para el nombre del producto.")]
         public string Name { get; set; }
 
         /// <summary>

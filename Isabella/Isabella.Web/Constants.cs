@@ -45,5 +45,6 @@
         /// Capacidad máxima de las imagen de un agregado.
         /// </summary>
         public static int MAX_LENTHG_IMAGE_AGGREGATE = 100000; //100Kb
+
     }
 }

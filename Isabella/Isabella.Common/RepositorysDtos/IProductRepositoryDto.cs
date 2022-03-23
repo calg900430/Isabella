@@ -51,6 +51,12 @@
         Task<ServiceResponse<GetImageProductDto>> GetImageProductForIdAsync(int ProductId, int ImageId);
 
         /// <summary>
+        /// Obtiene la primera imagen de un producto.
+        /// </summary>
+        /// <returns></returns>
+        Task<ServiceResponse<GetImageProductDto>> GetFirstImageProductAsync(int ProductId);
+
+        /// <summary>
         /// Agrega una imagen a un producto.
         /// </summary>
         /// <param name="addImageProduct"></param>

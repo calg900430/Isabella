@@ -12,7 +12,7 @@
     ViewData["Image"] = "Imagen";
     ViewData["FirstName"] = "Nombre";
     ViewData["LastName"] = "Apellidos";
-    ViewData["Email"] = "Correo Electrónico?";
+    ViewData["Email"] = "Correo Electrónico";
 }
 <hr />
 @*Pone el Titulo que establecimos en la coleccion ViewData desde el controlador*@
@@ -28,13 +28,13 @@
                 @*Se crean las columnas y se le pone el nombre a cada una*@
                 <thead>
                     <tr>
-                        <th width:"4px">
+                        <th width="4px">
                             @ViewData["FirstName"]
                         </th>
-                        <th width:"4px">
+                        <th width="4px">
                             @ViewData["LastName"]
                         </th>
-                        <th width:"4px">
+                        <th width="4px">
                             @ViewData["Email"]
                         </th>
                         <th></th>
@@ -45,18 +45,34 @@
                 <tbody>
                     @foreach (var item in Model)
                     {
-                      <tr>
-                        <td>@Html.DisplayFor(model => item.FirstName)</td>
-                        <td>@Html.DisplayFor(model => item.LastName)</td>
+                    <tr>
+                        @if (!string.IsNullOrEmpty(item.FirstName))
+                        {
+                            <td>@Html.DisplayFor(model => item.FirstName)</td>
+                        }
+                        else
+                        {
+                            <td>Nombre No Disponible</td>
+                        }
+                        @if (!string.IsNullOrEmpty(item.LastName))
+                        {
+                            <td>@Html.DisplayFor(model => item.LastName)</td>
+                        }
+                        else
+                        {
+                            <td>Apellidos No Disponibles</td>
+                        }
                         <td>@Html.DisplayFor(model => item.Email)</td>
                         @*Se crean los botones Edit, Delete y Details para cada producto*@
                         <td id="@item.Id">
-                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa fa-edit" aria-hidden="true"></i></a>
-                         <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></a>
-                         <a id="buttomdelete" asp-route-id="@item.Id" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></a>
+                            <a id="buttomdelete" asp-route-id="@item.Id" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-secondary"><i class="fa fa-info" aria-hidden="true"></i></a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success"><i class="fa fa-info" aria-hidden="true"></i></a>
                         </td>
-                      </tr>
-                    }
+                    </tr>
+                     }
                 </tbody>
             </table>
         </div>

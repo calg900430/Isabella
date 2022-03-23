@@ -19,6 +19,7 @@
     /// </summary>
     [Route("[controller]")]
     [ApiExplorerSettings(IgnoreApi = true)] //Omite este controlador de la documentación API
+    [Authorize(Roles = "admin")]
     public class CategorieController : Controller
     {
         private readonly CategorieServiceController _categoryService;
@@ -90,7 +91,7 @@
         /// <param name="addCategory"></param>
         /// <returns></returns>
         [HttpPost("Create")]
-        public async Task<IActionResult> Create([FromBody] AddCategorieDto addCategory)
+        public async Task<IActionResult> Create([FromForm] AddCategorieDto addCategory)
         {
             try
             {
@@ -100,16 +101,17 @@
                     ._categoryService.AddCategoryAsync(addCategory)
                     .ConfigureAwait(false);
                     if (result.Success)
-                    return RedirectToAction(nameof(Index)); 
+                    return Ok(); 
                     else
-                    return BadRequest(result);
+                    return NotFound(result);
                 }
                 else
-                 return BadRequest(); //400
+                return BadRequest(addCategory); //400
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                //Vista de manejo de excepciones
+                return View(ex.Message);
             }
         }
 

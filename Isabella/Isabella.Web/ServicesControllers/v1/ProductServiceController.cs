@@ -740,7 +740,7 @@
             {
                 //Obtiene el producto.
                 var product = await this._serviceGenericProductHelper
-                .GetLoadAsync(c => c.Id == ProductId, c => c.Category, c => c.SubCategories)
+                .GetLoadAsync(c => c.Id == ProductId, c => c.Category, c => c.SubCategories, c=> c.Images)
                 .ConfigureAwait(false);
                 if (product == null)
                 {
@@ -926,6 +926,60 @@
                 return serviceResponse;
             }
         }
+
+
+        /// <summary>
+        /// Obtiene la primera imagen de un producto.
+        /// </summary>
+        /// <param name="ProductId"></param>
+        /// <returns></returns>
+        public async Task<ServiceResponse<GetImageProductDto>> GetFirstImageProductAsync(int ProductId)
+        {
+            ServiceResponse<GetImageProductDto> serviceResponse = new ServiceResponse<GetImageProductDto>();
+            try
+            {
+                //Obtiene el producto.
+                var product = await this._serviceGenericProductHelper
+                .GetLoadAsync(c => c.Id == ProductId, c => c.Images)
+                .ConfigureAwait(false);
+                if (product == null)
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ProductNotFound;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ProductNotFound);
+                    return serviceResponse;
+                }
+                //Verifica si el producto tiene imagenes.
+                if(!product.Images.Any())
+                {
+                    serviceResponse.Code = (int)GetValueResourceFile.KeyResource.ImageNotExist;
+                    serviceResponse.Data = null;
+                    serviceResponse.Success = false;
+                    serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.ImageNotExist);
+                    return serviceResponse;
+                }
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.SuccessOk;
+                serviceResponse.Data = new GetImageProductDto
+                {
+                    Image = product.Images.ToList()[0].Image,
+                    ProductId = product.Id,
+                    ImageId = product.Images.ToList()[0].Id,
+                };
+                serviceResponse.Success = true;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
+                return serviceResponse;
+            }
+            catch (Exception)
+            {
+                serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
+                serviceResponse.Data = null;
+                serviceResponse.Success = false;
+                serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.Exception);
+                return serviceResponse;
+            }
+        }
+
 
         /// <summary>
         /// Agrega una imagen de un producto(Usando IFormFile).

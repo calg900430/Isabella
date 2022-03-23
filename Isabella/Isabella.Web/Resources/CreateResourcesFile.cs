@@ -26,6 +26,7 @@
                 rw.AddResource("RestaurantError", "Error al obtener los datos del restaurante.");
                 rw.AddResource("RestaurantIsClose", "El restaurante en estos momentos se encuentra cerrado.");
                 rw.AddResource("RestaurantIsOpen", "El restaurante en estos momentos se encuentra abierto.");
+                rw.AddResource("UserNotAuthorizeLogin", "El usuario no está autorizado para iniciar sesión en el sistema.");
                 rw.AddResource("UserAdminExistForNotifications", "El usuario ya está definido como un usuario que puede recibir notificaciones.");
                 rw.AddResource("UserAdminNotExistForNotifications", "El usuario no está definido como un usuario que puede recibir notificaciones.");
                 rw.AddResource("NotUserAdminsNotifications", "No hay definidos usuarios admins para recibir las notificaciones..");

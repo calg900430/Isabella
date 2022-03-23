@@ -189,7 +189,8 @@
                     e.preventDefault();
                     await WaitResponseServer()
                     var responseService = await DeleteProduct(id);
-                    if (responseService.ok) {
+
+                    if (responseService.status == 200) {
                         $('#confirmDelete').modal('hide');
                         window.location.href = '/Product';
                         await HideWaitResponseServer();
@@ -203,12 +204,20 @@
                         $('#responseDelete').modal({ backdrop: 'static', keyboard: true }, 'show');
                         await HideWaitResponseServer();
                         return false;
-                    }                 
+                    }
+                    else
+                    {
+                        $('#messageModalResponseDelete').text("Se originó un error desconocido.");
+                        $('#confirmDelete').modal('hide');
+                        $('#responseDelete').modal({ backdrop: 'static', keyboard: true }, 'show');
+                        await HideWaitResponseServer();
+                        return false;
+                    }
                 }
                 catch (error) {
                     $('#confirmDelete').modal('hide');
                     $('#responseDelete').modal({ backdrop: 'static', keyboard: true }, 'show');
-                    $('#messageModal').text(error.message);
+                    $('#messageModalResponseDelete').text(error.message);
                     await HideWaitResponseServer();
                     return false;
                 }

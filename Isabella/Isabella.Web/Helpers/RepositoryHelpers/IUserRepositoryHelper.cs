@@ -16,13 +16,19 @@
         /// Login Web
         /// </summary>
         /// <returns></returns>
-        public Task<SignInResult> LoginInAsync(User user, string password, bool remember);
+        public Task<SignInResult> SignInAsync(User user, string password, bool remember);
 
         /// <summary>
         /// Logout Web
         /// </summary>
         /// <returns></returns>
-        public Task LoginOutAsync();
+        public Task SignOutAsync();
+
+        /// <summary>
+        /// Elimina un usuario
+        /// </summary>
+        /// <returns></returns>
+        public Task<bool> DeleteUserAsync(User user);
 
         /// <summary>
         /// Agrega un usuario con contraseña definida.

@@ -238,6 +238,40 @@
         }
 
         /// <summary>
+        /// Obtiene la primera imagen de un producto.
+        /// </summary>
+        /// <param name="ProductId"></param>
+        /// <returns></returns>
+        [HttpGet("getfirstimage/product")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> GetFirstImageProductAsync(int ProductId)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    var result = await this._productRepository
+                    .GetFirstImageProductAsync(ProductId)
+                    .ConfigureAwait(false);
+                    if (result.Success)
+                     return Ok(result);
+                    else
+                     return BadRequest(result);
+                }
+                else
+                    return BadRequest(); //400
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        /// <summary>
         /// Agrega una imagen de un producto(Usando IFormFile).
         /// </summary>
         /// <param name="formFile"></param>

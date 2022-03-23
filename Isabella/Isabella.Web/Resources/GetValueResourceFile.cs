@@ -358,7 +358,12 @@
             /// <summary>
             /// Borrar la entidad producto
             /// </summary>
-            DeleteEntityProduct = 79
+            DeleteEntityProduct = 79,
+
+            /// <summary>
+            /// El usuario no está autorizado a iniciar sesion en el sistema.
+            /// </summary>
+            UserNotAuthorizeLogin = 80,
         }
 
         /// <summary>

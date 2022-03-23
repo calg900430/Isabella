@@ -431,6 +431,13 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:Isabella.Web.Controllers.API.ProductController.GetFirstImageProductAsync(System.Int32)">
+            <summary>
+            Obtiene la primera imagen de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
         <member name="M:Isabella.Web.Controllers.API.ProductController.AddImageProductAsync(Microsoft.AspNetCore.Http.IFormFile,System.Int32)">
             <summary>
             Agrega una imagen de un producto(Usando IFormFile).
@@ -879,6 +886,19 @@
             <param name="CategoryId"></param>
             <returns></returns>
         </member>
+        <member name="T:Isabella.Web.Controllers.HomeController">
+            <summary>
+            Pagina de inicio.
+            </summary>
+        </member>
+        <member name="M:Isabella.Web.Controllers.HomeController.#ctor(Microsoft.Extensions.Logging.ILogger{Isabella.Web.Controllers.HomeController},Isabella.Web.ServicesControllers.ProductServiceController,Isabella.Web.ServicesControllers.AggregateServiceController)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="logger"></param>
+            <param name="productServiceController"></param>
+            <param name="aggregateServiceController"></param>
+        </member>
         <member name="T:Isabella.Web.Controllers.ProductController">
             <summary>
             Controlador de Productos 
@@ -970,6 +990,76 @@
             <summary>
             Obtiene todos los usuarios administradores.
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.UserController.Login">
+            <summary>
+            Muestra la View para el Login.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.UserController.Login(Isabella.Web.ViewModels.UsersViewModel.LoginViewModel)">
+            <summary>
+            Realiza la autenticación web.
+            </summary>
+            <param name="loginViewModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.UserController.Logout">
+            <summary>
+            Cierra la sesión web actual.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.UserController.Create">
+            <summary>
+            Muestra la vista para crear un nuevo usuario admin.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.UserController.Create(Isabella.Web.ViewModels.UsersViewModel.AddUserViewModel)">
+            <summary>
+            Agrega un nuevo usuario admin y le envia un correo con el código de confirmación del registro.
+            </summary>
+            <param name="newuser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.UserController.ConfirmRegister(System.String,System.String)">
+            <summary>
+            Confirma el registro de un usuario en la aplicación con los detalles enviados a su correo electrónico.
+            </summary>
+            <param name="Id"></param>
+            <param name="Token"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.UserController.ResetPassword(Isabella.Common.Dtos.Users.ResetPasswordDto)">
+            <summary>
+            Envia un correo al usuario con los detalles para la recuperación de la contraseña.
+            </summary>
+            <param name="resetPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.UserController.ConfirmRecoverPasswordUserAsync(System.String,System.String,System.String)">
+            <summary>
+            Recupera la contraseña del usuario con los detalles enviados a su correo electrónico.
+            </summary>
+            <param name="Id"></param>
+            <param name="Token"></param>
+            <param name="NewPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.UserController.NewEmailConfirmRegisterUserAsync(Isabella.Common.Dtos.Users.SendToNewCodeConfirmationRegisterDto)">
+            <summary>
+            Envia un nuevo correo al usuario con los detalles para la confirmación del registro.
+            </summary>
+            <param name="sendToNewCodeConfirmationRegister"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.UserController.Delete(System.Int32)">
+            <summary>
+            Borra un usuario del sistema.
+            </summary>
+            <param name="id"></param>
             <returns></returns>
         </member>
         <member name="T:Isabella.Web.Data.DataContext">
@@ -1111,15 +1201,21 @@
             Repositorio para los usuarios.
             </summary>
         </member>
-        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.LoginInAsync(Isabella.Web.Models.Entities.User,System.String,System.Boolean)">
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.SignInAsync(Isabella.Web.Models.Entities.User,System.String,System.Boolean)">
             <summary>
             Login Web
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.LoginOutAsync">
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.SignOutAsync">
             <summary>
             Logout Web
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.RepositoryHelpers.IUserRepositoryHelper.DeleteUserAsync(Isabella.Web.Models.Entities.User)">
+            <summary>
+            Elimina un usuario
             </summary>
             <returns></returns>
         </member>
@@ -1507,13 +1603,13 @@
             <param name="signInManager"></param>
             <param name="configuration"></param>
         </member>
-        <member name="M:Isabella.Web.Helpers.IUserHelper.LoginInAsync(Isabella.Web.Models.Entities.User,System.String,System.Boolean)">
+        <member name="M:Isabella.Web.Helpers.IUserHelper.SignInAsync(Isabella.Web.Models.Entities.User,System.String,System.Boolean)">
             <summary>
             Login Web
             </summary>
             <returns></returns>
         </member>
-        <member name="M:Isabella.Web.Helpers.IUserHelper.LoginOutAsync">
+        <member name="M:Isabella.Web.Helpers.IUserHelper.SignOutAsync">
             <summary>
             Logout Web
             </summary>
@@ -1530,6 +1626,13 @@
         <member name="M:Isabella.Web.Helpers.IUserHelper.AddUserAsync(Isabella.Web.Models.Entities.User)">
             <summary>
             Agrega un usuario sin contraseña definida(Esto es para login con proveedor externo).
+            </summary>
+            <param name="user"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Helpers.IUserHelper.DeleteUserAsync(Isabella.Web.Models.Entities.User)">
+            <summary>
+            Elimina un usuario.
             </summary>
             <param name="user"></param>
             <returns></returns>
@@ -2834,6 +2937,11 @@
             Borrar la entidad producto
             </summary>
         </member>
+        <member name="F:Isabella.Web.Resources.GetValueResourceFile.KeyResource.UserNotAuthorizeLogin">
+            <summary>
+            El usuario no está autorizado a iniciar sesion en el sistema.
+            </summary>
+        </member>
         <member name="T:Isabella.Web.Resources.GetValueResourceFile.KeyResourceImage">
             <summary>
             Recursos de Imagenes de la aplicación
@@ -3396,6 +3504,13 @@
             <param name="ImageId"></param>
             <returns></returns>
         </member>
+        <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.GetFirstImageProductAsync(System.Int32)">
+            <summary>
+            Obtiene la primera imagen de un producto.
+            </summary>
+            <param name="ProductId"></param>
+            <returns></returns>
+        </member>
         <member name="M:Isabella.Web.ServicesControllers.ProductServiceController.AddImageProductAsync(Microsoft.AspNetCore.Http.IFormFile,System.Int32)">
             <summary>
             Agrega una imagen de un producto(Usando IFormFile).
@@ -3655,7 +3770,14 @@
         </member>
         <member name="M:Isabella.Web.ServicesControllers.UserServiceController.AddUserAsync(Isabella.Common.Dtos.Users.RegisterUserDto)">
             <summary>
-            Agrega un usuario al sistema y le asigna un role
+            Agrega un usuario al sistema.
+            </summary>
+            <param name="newuser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.AddUserAdminAsync(Isabella.Web.ViewModels.UsersViewModel.AddUserViewModel)">
+            <summary>
+            Agrega un usuario admin al sistema.
             </summary>
             <param name="newuser"></param>
             <returns></returns>
@@ -3703,9 +3825,22 @@
         </member>
         <member name="M:Isabella.Web.ServicesControllers.UserServiceController.LoginUserAsync(Isabella.Common.Dtos.Users.LoginUserDto)">
             <summary>
-            Realiza el login del usuario y obtiene el token de acceso,el tiempo de expiración y otros datos del usuario.
+            Realiza el login Api del usuario y obtiene el token de acceso,el tiempo de expiración y otros datos del usuario.
             </summary>
             <param name="loginUser"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.LoginUserWebOnlyAdminAsync(Isabella.Web.ViewModels.UsersViewModel.LoginViewModel)">
+            <summary>
+            Realiza el login Web solo de usuarios admins.
+            </summary>
+            <param name="loginViewModel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.ServicesControllers.UserServiceController.LogoutUserWebAsync">
+            <summary>
+             Cerrar sesion Web.
+            </summary>
             <returns></returns>
         </member>
         <member name="M:Isabella.Web.ServicesControllers.UserServiceController.GetCantUserAsync(System.Int32,System.Int32)">
@@ -4009,9 +4144,39 @@
             UpdateProductViewModel
             </summary>
         </member>
+        <member name="T:Isabella.Web.ViewModels.UsersViewModel.AddUserViewModel">
+            <summary>
+            Login Web de usuario
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.ViewModels.UsersViewModel.ChangePasswordViewModel">
+            <summary>
+            Cambiar la contraseña del usuario.
+            </summary>
+        </member>
         <member name="T:Isabella.Web.ViewModels.UsersViewModel.GetUserAdminViewModel">
             <summary>
             Obtiene todos los datos de un usuario.
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.ViewModels.UsersViewModel.LoginViewModel">
+            <summary>
+            Login Web de usuario
+            </summary>
+        </member>
+        <member name="P:Isabella.Web.ViewModels.UsersViewModel.LoginViewModel.RememberMe">
+            <summary>
+            Recordar usuario
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.ViewModels.UsersViewModel.ResetPasswordViewModel">
+            <summary>
+            Reset Password
+            </summary>
+        </member>
+        <member name="T:Isabella.Web.ViewModels.UsersViewModel.UpdateUserViewModel">
+            <summary>
+            Actualizar Usuario
             </summary>
         </member>
     </members>

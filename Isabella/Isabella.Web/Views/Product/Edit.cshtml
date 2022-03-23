@@ -221,9 +221,8 @@
 
                    //Manda a actualizar el producto.
                    let serviceResponse = await UpdateProduct(formData);
-                    
-                   if (serviceResponse.ok) 
-                   {
+
+                    if (serviceResponse.status == 200) {
                         $('#responseUpdateProduct').modal("hide");
                         $('#iconWaitUpdateProduct').hide();
                         $('#messageModalResponseUpdateProduct').text("");
@@ -231,9 +230,8 @@
                         $('#btnCloseModalUpdateProduct').prop("disabled", false);
                         window.location.href = '/Product';
                         return false;
-                   }
-                   if (serviceResponse.status == 404) 
-                   {
+                    }
+                    else if (serviceResponse.status == 404) {
                         let response = await serviceResponse.json();
                         let message = response.message;
                         $('#iconWaitUpdateProduct').hide();
@@ -241,16 +239,29 @@
                         $('#btnCloseresponseUpdateProduct').prop("disabled", false);
                         $('#btnCloseModalUpdateProduct').prop("disabled", false);
                         return false;
-                   }                    
+                    }
+                    else if (serviceResponse.status == 400) {
+                        $('#iconWaitUpdateProduct').hide();
+                        $('#messageModalResponseUpdateProduct').text("Error en los datos del modelo enviados al servidor.");
+                        $('#btnCloseresponseUpdateProduct').prop("disabled", false);
+                        $('#btnCloseModalUpdateProduct').prop("disabled", false);
+                        return false;
+                    }
+                    else
+                    {
+                        $('#iconWaitUpdateProduct').hide();
+                        $('#messageModalResponseUpdateProduct').text("Se originó un error desconocido.");
+                        $('#btnCloseresponseUpdateProduct').prop("disabled", false);
+                        $('#btnCloseModalUpdateProduct').prop("disabled", false);
+                        return false;
+                    }
                 }
-                catch
+                catch(error)
                 {
-                     let response = await responseService.json();
-                     let message = response.message;
-                     $('#iconWaitAddProduct').hide();
-                     $('#messageModalResponseAddProduct').text(message)
-                     $('#btnCloseresponseAddProduct').prop("disabled", false);
-                     $('#btnCloseModalAddProduct').prop("disabled", false);
+                     $('#iconWaitUpdateProduct').hide();
+                     $('#messageModalResponseUpdateProduct').text(error.message)
+                     $('#btnCloseresponseUpdateProduct').prop("disabled", false);
+                     $('#btnCloseModalUpdateProduct').prop("disabled", false);
                      return false;
                 }             
             });

@@ -13,11 +13,13 @@
     using Isabella.Web.ViewModels.CategorieViewModel;
     using Microsoft.AspNetCore.Http;
     using Isabella.Common.Dtos.Product;
+    using Microsoft.AspNetCore.Authorization;
 
     /// <summary>
     /// Controlador de Productos 
     /// </summary>
     [Route("[controller]")]
+    [Authorize(Roles ="admin")]
     [ApiExplorerSettings(IgnoreApi = true)] //Omite este controlador de la documentación API
     public class ProductController : Controller
     {
@@ -231,7 +233,7 @@
         {
             try
             {
-                if (ModelState.IsValid)
+                if(ModelState.IsValid)
                 {
                     var updateproduct = await this._productServiceController
                     .UpdateProductViewModelAsync(updateProductViewModel)

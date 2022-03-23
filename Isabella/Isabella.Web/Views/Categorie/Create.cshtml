@@ -6,18 +6,24 @@
     ViewData["Name"] = "Nombre";
 }
 
-<h2>@ViewData["Title"]</h2>
 <hr />
+
+<h2>@ViewData["Title"]</h2>
+
 @*Formulario para crear una nueva categoria*@
 <div class="row">
     <div class="col-lg-auto">
-        <form asp-action="Create" enctype="multipart/form-data">
+        <form id="form_create_categorie" asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
                 <label asp-for="Name" class="control-label">@ViewData["Name"]</label>
-                <input id="nameCategorie" asp-for="Name" class="form-control" />
+                <input id="nameCategorie" asp-for="Name" class="form-control" placeholder="Escriba el nombre de la categoria" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+
+            <hr />
+
             <div class="form-group">
                 <button type="submit" value="Create" id="createCategorie"
                         class="btn btn-primary">
@@ -29,14 +35,31 @@
     </div>
 </div>
 <hr />
-@*Alertas*@
-<div id="alertSuccess" class="alert alert-dismissible alert-success collapse" style="display:none;">
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    <strong>Well done!</strong> You successfully read <a href="#" class="alert-link">this important alert message</a>.
-</div>
-<div id="alertErrror" class="alert alert-dismissible alert-danger collapse" style="display:none;">
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    <strong>Oh snap!</strong> <a href="#" class="alert-link">Change a few things up</a> and try submitting again.
+
+@*Ventana Modal para crear la categoria.*@
+<div id="responseCreateCategorie" class="modal fade">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button id="btnCreateCategorie" type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="modal-body" style="text-align:center">
+                <p id="messageCreateCategorie">
+                </p>
+                <hr />
+                <div class="fa-2x">
+                    <i id="iconWaitCreateCategorie" class="fas fa-spinner fa-spin"></i>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnCloseCreateCategorie">Ok</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts
@@ -48,67 +71,101 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
-            let url = getUriServer() + 'product/create';
-
-            //Evento click del botón q manda a crear la nueva categoria
-            $('#createCategorie').click(async function (e) {
+            //Obtiene la URI y crea la el endpoint para crear un nuevo producto
+            let url = getUriServer() + 'categorie/create';
+            
+            //Evento Click del Botón Cerrar(Cierra la ventana Modal de respuesta del servidor)
+            $('#btnCreateCategorie').click(function (e) {
                 e.preventDefault();
-                //Obtiene la URI y crea la el endpoint para crear un nuevo producto
-               
-                //Obtiene los datos de la categoria
-                var name = $('#nameCategorie').val();
-                let AddProductViewModel = {
-                    Name: name,
-                    CategorieId: 1,
-                    Price: 23,
-                    IsAvailabe: true,
-                    SupportAggregate: true,
-                    Stock: 10,
-                    Description: "sdfsdfsdfsdfsdfsdfsdf"
-                };
-
-                 let responseService = await fetch(url, {
-                        method: 'POST',
-                        headers:
-                        {
-                           'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(AddProductViewModel)
-                 });
-
-                if (responseService.ok) {
-                       
-                        return false;
-                }
-
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(AddCategorieDto)
-                }).then(function (response) {
-                    if (response.ok)
-                    {
-                        $('#alertSuccess').show();
-                        //window.location.href = '/Categorie';
-                    }
-                    else if (response.status === 400)
-                    {
-                        $('#alertError').show();
-                    }
-                })
-                    .then(function (data) {
-                        console.log(data);
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                    })
+                $("#responseCreateCategorie").modal('hide');
+                return false;
             });
 
-            //Evento
+            //Evento Click del Botón Cerrar(Cierra la ventana Modal de respuesta del servidor)
+            $('#btnCloseCreateCategorie').click(function (e) {
+                e.preventDefault();
+                $('#responseCreateCategorie').modal('hide');
+                return false;
+            });
 
-            //Agregar nuevo producto
+            //Evento click del botón Login.
+            $("#createCategorie").click(async function (e) {
+                try {
+                    e.preventDefault();
+                    $('#form_create_categorie').validate();
+                    if ($('#form_create_categorie').valid() === false) {
+                        return false;
+                    }
+                    else {
+                        $('#iconWaitCreateCategorie').hide();
+                        $('#messageCreateCategorie').text("");
+                        //Muestra la modal de crear el producto.
+                        $('#responseCreateCategorie').modal({ backdrop: "static", keyboard: true }, 'show');
+                        $('#iconWaitCreateCategorie').show();
+                        $('#messageCreateCategorie').text("Creando Categoria...");
+                        //Deshabilita los botones Ok y Cerrar de la modal
+                        $('#btnCreateCategorie').prop("disabled", true);
+                        $('#btnCloseCreateCategorie').prop("disabled", true);
+                        //Obtiene los valores del formulario
+                        var name = $('#nameCategorie').val();
+                        //Crea el formulario de datos de la categoria.
+                        var formData = new FormData();
+                        formData.append("Name", name);
+                        var responseService = await Create(formData);
+
+                        if (responseService.status == 200) {
+                          $("#responseCreateCategorie").modal('hide');
+                          $('#iconWaitCreateCategorie').hide();
+                          $('#messageCreateCategorie').text("");
+                          $('#btnCloseCreateCategorie').prop("disabled", false);
+                          $('#btnCreateCategorie').prop("disabled", false);
+                          window.location.href = '/Categorie';
+                          return false;
+                        }
+                        else if (responseService.status == 404) {
+                            let response = await responseService.json();
+                            let message = response.message;
+                            $('#iconWaitCreateCategorie').hide();
+                            $('#messageCreateCategorie').text(message)
+                            $('#btnCreateCategorie').prop("disabled", false);
+                            $('#btnCloseCreateCategorie').prop("disabled", false);
+                            return false;
+                        }
+                        else if (responseService.status == 400) {
+                            $('#iconWaitCreateCategorie').hide();
+                            $('#messageCreateCategorie').text("Error en los datos del modelo enviados al servidor.");
+                            $('#btnCreateCategorie').prop("disabled", false);
+                            $('#btnCloseCreateCategorie').prop("disabled", false);
+                            return false;
+                        }
+                        else {
+                            $('#iconWaitCreateCategorie').hide();
+                            $('#messageCreateCategorie').text("Se originó un error desconocido.")
+                            $('#btnCreateCategorie').prop("disabled", false);
+                            $('#btnCloseCreateCategorie').prop("disabled", false);
+                            return false;
+                        }
+                    }
+                }
+                catch (error) {
+                    $('#iconWaitCreateCategorie').hide();
+                    $('#messageCreateCategorie').text(error.message)
+                    $('#btnCreateCategorie').prop("disabled", false);
+                    $('#btnCloseCreateCategorie').prop("disabled", false);
+                    return false;
+                }
+
+            })
+
+            //Crear Categoria.
+            async function Create(categorie) {
+                let responseService = await fetch(url, {
+                    method: 'POST',
+                    body: categorie
+                });
+                return responseService;
+            }
+
         });
     </script>
 }
