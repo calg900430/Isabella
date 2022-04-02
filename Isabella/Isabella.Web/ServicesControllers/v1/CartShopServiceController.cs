@@ -120,7 +120,7 @@
                 }
                 //Verifica si el producto está en la base de datos y está disponible.
                 var product = await this._serviceGenericProductHelper
-                .WhereFirstEntityAsync(c => c.Id == addProductsToCarShop.ProductId && c.IsAvailabe == true, c => c.Category, c => c.SubCategories)
+                .WhereFirstEntityAsync(c => c.Id == addProductsToCarShop.ProductId && c.IsAvailabe == true, c => c.Categorie, c => c.SubCategories)
                 .ConfigureAwait(false);
                 if (product == null)
                 {
@@ -224,9 +224,9 @@
                 IQueryable<CartShop> entity_carshop = context_cart_shop.AsQueryable();
                 //Agrega los Include y ThenInclude necesarios
                 entity_carshop = entity_carshop.Include(c => c.User)
-                .Include(c => c.ProductCombined.Product.Category)
+                .Include(c => c.ProductCombined.Product.Categorie)
                 .Include(c => c.ProductCombined.Product.SubCategories)
-                .Include(c => c.ProductCombined.SubCategory.Product.Category)
+                .Include(c => c.ProductCombined.SubCategory.Product.Categorie)
                 .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate);
                 //Verifica si hay agregados para agregar el filtro para los agregados.
                 if (cantAggregates.Any())
@@ -329,8 +329,8 @@
                    ProductCombinedId = product_is_cartshop.ProductCombined.Id,
                    Category = new Common.Dtos.Categorie.GetCategorieDto
                    { 
-                       Name = product_is_cartshop.ProductCombined.Product.Category.Name,
-                       Id = product_is_cartshop.ProductCombined.Product.Category.Id,
+                       Name = product_is_cartshop.ProductCombined.Product.Categorie.Name,
+                       Id = product_is_cartshop.ProductCombined.Product.Categorie.Id,
                    },
                    SubCategory = new GetSubCategorieDto
                    {
@@ -364,8 +364,8 @@
                      ProductCombinedId = product_is_cartshop.ProductCombined.Id,
                      Category = new Common.Dtos.Categorie.GetCategorieDto
                      {
-                         Name = product_is_cartshop.ProductCombined.Product.Category.Name,
-                         Id = product_is_cartshop.ProductCombined.Product.Category.Id,
+                         Name = product_is_cartshop.ProductCombined.Product.Categorie.Name,
+                         Id = product_is_cartshop.ProductCombined.Product.Categorie.Id,
                      },
                      SubCategory = new GetSubCategorieDto
                      {
@@ -393,8 +393,8 @@
                         ProductCombinedId = product_is_cartshop.ProductCombined.Id,
                         Category = new Common.Dtos.Categorie.GetCategorieDto
                         {
-                            Name = product_is_cartshop.ProductCombined.Product.Category.Name,
-                            Id = product_is_cartshop.ProductCombined.Product.Category.Id,
+                            Name = product_is_cartshop.ProductCombined.Product.Categorie.Name,
+                            Id = product_is_cartshop.ProductCombined.Product.Categorie.Id,
                         },
                         SubCategory = null,
                         CantAggregates = product_is_cartshop.ProductCombined.CantAggregates.Select(c => new GetCantAggregateDto
@@ -420,8 +420,8 @@
                         ProductCombinedId = product_is_cartshop.ProductCombined.Id,
                         Category = new Common.Dtos.Categorie.GetCategorieDto
                         {
-                            Name = product_is_cartshop.ProductCombined.Product.Category.Name,
-                            Id = product_is_cartshop.ProductCombined.Product.Category.Id,
+                            Name = product_is_cartshop.ProductCombined.Product.Categorie.Name,
+                            Id = product_is_cartshop.ProductCombined.Product.Categorie.Id,
                         },
                         SubCategory = null,
                         CantAggregates = null,
@@ -476,9 +476,9 @@
                 //Verifica si hay productos en el carrito
                 var all_products_in_carshop = await this._serviceGenericCartShopHelper._context
                 .Include(c => c.User)
-                .Include(c => c.ProductCombined.Product.Category)
+                .Include(c => c.ProductCombined.Product.Categorie)
                 .Include(c => c.ProductCombined.Product.SubCategories)
-                .Include(c => c.ProductCombined.SubCategory.Product.Category)
+                .Include(c => c.ProductCombined.SubCategory.Product.Categorie)
                 .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate)
                 .Include(c => c.ProductCombined.CantAggregates)
                 .Where(c => c.User == user)
@@ -520,8 +520,8 @@
                       SubCategory = this._mapper.Map<GetSubCategorieDto>(c.ProductCombined.SubCategory),
                       Category = new Common.Dtos.Categorie.GetCategorieDto
                       {
-                          Id = c.ProductCombined.Product.Category.Id,
-                          Name = c.ProductCombined.Product.Category.Name,
+                          Id = c.ProductCombined.Product.Categorie.Id,
+                          Name = c.ProductCombined.Product.Categorie.Name,
                       },
                       CantAggregates = c.ProductCombined.CantAggregates.Select(x => new GetCantAggregateDto 
                       { 
@@ -695,8 +695,8 @@
                 IQueryable<CartShop> entity_carshop = context_cart_shop.AsQueryable();
                 //Agrega los Include y ThenInclude necesarios
                 entity_carshop = entity_carshop.Include(c => c.User)
-                .Include(c => c.ProductCombined.Product.SubCategories).ThenInclude(c => c.Product.Category)
-                .Include(c => c.ProductCombined.Product.Category)
+                .Include(c => c.ProductCombined.Product.SubCategories).ThenInclude(c => c.Product.Categorie)
+                .Include(c => c.ProductCombined.Product.Categorie)
                 .Include(c => c.ProductCombined.SubCategory)
                 .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate);
                 //Agrega los filtros restantes
@@ -855,8 +855,8 @@
                 IQueryable<CartShop> entity_carshop = context_cart_shop.AsQueryable();
                 //Agrega los Include y ThenInclude necesarios
                 entity_carshop = entity_carshop.Include(c => c.User)
-                .Include(c => c.ProductCombined.Product.SubCategories).ThenInclude(c => c.Product.Category)
-                .Include(c => c.ProductCombined.Product.Category)
+                .Include(c => c.ProductCombined.Product.SubCategories).ThenInclude(c => c.Product.Categorie)
+                .Include(c => c.ProductCombined.Product.Categorie)
                 .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate)
                 .Include(c => c.ProductCombined.SubCategory);
                 //Agrega los filtros
@@ -1208,7 +1208,7 @@
                 //Agrega los Include y ThenInclude necesarios
                 entity_carshop = entity_carshop.Include(c => c.User)
                 .Include(c => c.ProductCombined.SubCategory)
-                .Include(c => c.ProductCombined.Product.Category)
+                .Include(c => c.ProductCombined.Product.Categorie)
                 .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate);
                 //Agrega los filtros restantes
                 entity_carshop = entity_carshop
@@ -1417,7 +1417,7 @@
                 .Include(c => c.ProductCombined.Product.SubCategories).ThenInclude(c => c.Product)
                 .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate)
                 .Include(c => c.ProductCombined.SubCategory)
-                .Include(c => c.ProductCombined.Product.Category);
+                .Include(c => c.ProductCombined.Product.Categorie);
                 //Agrega los filtros restantes
                 entity_carshop = entity_carshop
                 .Where(c => c.User == user)
@@ -1609,7 +1609,7 @@
                 .Include(c => c.ProductCombined.Product.SubCategories).ThenInclude(c => c.Product)
                 .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate)
                 .Include(c => c.ProductCombined.SubCategory)
-                .Include(c => c.ProductCombined.Product.Category);
+                .Include(c => c.ProductCombined.Product.Categorie);
                 //Agrega los filtros restantes
                 entity_carshop = entity_carshop
                 .Where(c => c.User == user)
@@ -1872,9 +1872,9 @@
                 IQueryable<CartShop> entity_carshop = context_cart_shop.AsQueryable();
                 //Agrega los Include y ThenInclude necesarios
                 entity_carshop = entity_carshop.Include(c => c.User)
-                .Include(c => c.ProductCombined.Product.Category)
+                .Include(c => c.ProductCombined.Product.Categorie)
                 .Include(c => c.ProductCombined.Product.SubCategories)
-                .Include(c => c.ProductCombined.SubCategory.Product.Category)
+                .Include(c => c.ProductCombined.SubCategory.Product.Categorie)
                 .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate);
                 //Agrega los filtros restantes
                 entity_carshop = entity_carshop
@@ -2005,9 +2005,9 @@
                 entity_carshop = context_cart_shop.AsQueryable();
                 //Agrega los Include y ThenInclude necesarios
                 entity_carshop = entity_carshop.Include(c => c.User)
-                .Include(c => c.ProductCombined.Product.Category)
+                .Include(c => c.ProductCombined.Product.Categorie)
                 .Include(c => c.ProductCombined.Product.SubCategories)
-                .Include(c => c.ProductCombined.SubCategory.Product.Category)
+                .Include(c => c.ProductCombined.SubCategory.Product.Categorie)
                 .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate);
                 //Verifica si hay agregados para agregar el filtro para los agregados.
                 if (product_in_carshop.ProductCombined.CantAggregates.Any())

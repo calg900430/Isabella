@@ -1,5 +1,5 @@
 ﻿//Datos del servidor.
-let hosting = false;
+let hosting = true;
 let URI_SERVER;
 
 function getUriServer()

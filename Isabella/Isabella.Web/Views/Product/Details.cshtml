@@ -19,100 +19,173 @@
     ViewData["IsAvailable"] = "Disponible?";
     ViewData["IsSupportAggregate"] = "Agregados?";
     ViewData["Description"] = "Descripción";
+    Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
 }
-<hr />
 
-<h2>@ViewData["Title"]</h2>
-<div class="row">
-    <div class="col-md-12">
-        <div style="text-align:center">
-            @if (Model.GetAllImagesProducts != null)
-            {
-                if (Model.GetAllImagesProducts.Count > 0)
-                {
-                    @*Convierte el array byte en una imagen*@
-                    <img src="data:imge;base64,@System.Convert.ToBase64String(Model.GetAllImagesProducts[0].Image)" ,
-                         style="width:300px;height:450px;max-width: 100%; height: auto; text-align:center" />
-                }
-                else
-                {
-                    <b>Imagen No Disponible</b>
-                }
-            }
-            else
-            {
-                <b>Imagen No Disponible</b>
-            }
-        </div>
+<!-- Single pro tab start-->
+<div class="single-product-tab-area mg-t-0 mg-b-30" style="padding-top:75px">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="single-product-pr">
+                    <div class="row">
+                        <!--Imagen del producto. -->
+                        <div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
+                            <div id="myTabContent1" class="tab-content">
+                                <div class="product-tab-list tab-pane fade active in" id="single-tab1">
+                                    @if (Model.GetAllImagesProducts.Count > 0)
+                                    {
+                                      @*Convierte el array byte en una imagen*@
+                                       <img class="ImageProducts" src="data:imge;base64,@System.Convert.ToBase64String(Model.GetAllImagesProducts[0].Image)" ,
+                                      style="width:570px;height:550px;max-width: 100%; height: auto; text-align:center" />
+                                    }
+                                    else
+                                    {
+                                       <!--Poner Imagen de Producto No disponible-->
+                                       <b>Imagen No Disponible</b>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-7 col-md-7 col-sm-7 col-xs-12">
+                            <div class="single-product-details res-pro-tb">
+                                <!--Nombre del producto. -->
+                                <h1>@Html.DisplayFor(model => model.Name)</h1>
+                                <!--Poner Criterio de la cantidad de estrellas del producto. -->
+                                <span class="single-pro-star">
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                </span>
+                                <!--Precio-->
+                                <div class="single-pro-price">
+                                    <span class="single-regular">@Html.DisplayFor(model => model.Price)</span><span class="single-old"><del>$20.00</del></span>
+                                </div>
+                                <!--Categoria-->
+                                <div class="single-pro-cn">
+                                    <h3>Categoria</h3>
+                                    <p>
+                                        @Html.DisplayFor(model => model.Categorie.Name)
+                                    </p>
+                                </div>
+                                <!--Stock-->
+                                <div class="single-pro-cn">
+                                    <h3>Stock</h3>
+                                    <p>
+                                        @Html.DisplayFor(model => model.Stock)
+                                    </p>
+                                </div>
+                                <!--Disponible-->
+                                <div class="single-pro-cn">
+                                    <h3>Disponible</h3>
+                                    @if (Model.IsAvailabe)
+                                    {
+                                        <p>
+                                            Sí
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p>
+                                            No
+                                        </p>
+                                    }
 
-        <hr />
-        <div>
-            <label>@ViewData["Name"]</label>
-            <p class="text-success">@Html.DisplayFor(model => model.Name)</p>
-        </div>
-        <hr />
-        <div>
-            <label>@ViewData["Description"]</label>
-            <p class="text-success" rows="3">@Html.DisplayFor(model => model.Description)</p>
-        </div>
-        <hr />
-        <div>
-            <label>@ViewData["Categorie"]</label>
-            <p class="text-success">@Html.DisplayFor(model => model.Categorie.Name)</p>
-        </div>
-        <hr />
-        <div>
-            <label>@ViewData["SubCategorie"]</label>
-            <select class="form-select text-success" id="SelectSubCategories">
-                @if (Model.GetSubCategories.Count <= 0 || Model.GetSubCategories == null)
-                {
-                    <option>@ViewData["NotSubCategorie"]</option>
-                }
-                else
-                {
-                    @foreach (var subcategorie in Model.GetSubCategories)
-                    {
-                        <option>@subcategorie.Name</option>
-                    }
-                }
-            </select>
-            <hr />
-            <div>
-                <label>@ViewData["Price"]</label>
-                <p class="text-success">@Html.DisplayFor(model => model.Price)</p>
+                                </div>
+                                <!--Soporta Agregados-->
+                                <div class="single-pro-cn">
+                                    <h3>Agregados</h3>
+                                    @if (Model.SupportAggregate)
+                                    {
+                                        <p>
+                                            Sí
+                                        </p>
+                                    }
+                                    else
+                                    {
+                                        <p>
+                                            No
+                                        </p>
+                                    }
+                                </div>
+                                <!--SubCategorias-->
+                                <div class="single-pro-cn">
+                                    <h3>SubCategorias</h3>
+                                    <select name="select" class="form-control pro-edt-select form-control-primary">
+                                        @if (Model.GetSubCategories.Count <= 0 || Model.GetSubCategories == null)
+                                        {
+                                            <option>@ViewData["NotSubCategorie"]</option>
+                                        }
+                                        else
+                                        {
+                                            @foreach (var subcategorie in Model.GetSubCategories)
+                                            {
+                                                <option>@subcategorie.Name</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>                  
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <hr />
-            <div>
-                <label>@ViewData["IsSupportAggregate"]</label>
-                @if (Model.SupportAggregate)
-                {
-                    <p class="text-success">Sí </p>
-                }
-                else
-                {
-                    <p class="text-success">No</p>
-                }
-            </div>
-            <hr />
-            <div>
-                <label>@ViewData["IsAvailable"]</label>
-                @if (Model.IsAvailabe)
-                {
-                    <p class="text-success">Sí </p>
-                }
-                else
-                {
-                    <p class="text-success">No</p>
-                }
-            </div>
-            <hr />
-            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Actualizar</a>
-            <a asp-action="Index" class="btn btn-success"><i class="fa fa-chevron-left"></i> Atrás</a>
         </div>
+    </div>
 </div>
-
-
-
-
-
-
+<!-- Single pro tab End-->
+<!-- Single pro tab review Start-->
+<div class="single-pro-review-area mt-t-30 mg-b-30">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="single-tb-pr">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <ul id="myTab" class="tab-review-design">
+                                <li class="active"><a href="#description">Descripción</a></li>
+                                <li>
+                                   <a href="#reviews">
+                                    <span>
+                                      <i class="fa fa-star"></i>
+                                      <i class="fa fa-star"></i>
+                                    </span> 
+                                   </a>
+                                </li>
+                                <li>
+                                 <a href="#INFORMATION">Información</a>
+                                </li>
+                            </ul>
+                            <div id="myTabContent" class="tab-content">
+                                <div class="product-tab-list product-details-ect tab-pane fade active in" id="description">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="review-content-section">
+                                                <p>
+                                                    @Html.DisplayFor(model => model.Description)
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="product-tab-list tab-pane fade" id="INFORMATION">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="review-content-section">
+                                                <p>
+                                                    @Html.DisplayFor(model => model.Description)
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

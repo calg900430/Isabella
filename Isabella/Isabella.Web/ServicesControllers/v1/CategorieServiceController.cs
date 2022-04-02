@@ -106,9 +106,9 @@
                 IQueryable<Product> query = _context.AsQueryable();
                 //Obtiene todas las categorias disponibles 
                 var all_categories_availables = query
-                .Include(c => c.Category)
+                .Include(c => c.Categorie)
                 .Where(c => c.IsAvailabe == true)
-                .Select(c => c.Category)
+                .Select(c => c.Categorie)
                 .ToHashSet();
                 if (!all_categories_availables.Any())
                 {

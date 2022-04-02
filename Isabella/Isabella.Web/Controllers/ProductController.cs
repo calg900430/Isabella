@@ -19,7 +19,7 @@
     /// Controlador de Productos 
     /// </summary>
     [Route("[controller]")]
-    [Authorize(Roles ="admin")]
+    //[Authorize(Roles ="admin")]
     [ApiExplorerSettings(IgnoreApi = true)] //Omite este controlador de la documentación API
     public class ProductController : Controller
     {

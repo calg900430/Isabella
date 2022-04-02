@@ -1,0 +1,76 @@
+﻿@*
+    Login
+*@
+
+@model Isabella.Web.ViewModels.UsersViewModel.LoginViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/Login/_Layout.cshtml";
+}
+
+<div class="login-page" style="min-height: 498.391px;">
+        <hr />
+        <div class="login-box ">
+            <div class="login-logo">
+                <b>Isabella</b>
+            </div>
+            <div class="card">
+                <div class="card-body login-card-body">
+                    <p class="login-box-msg">Autenticarse para iniciar su sesión</p>
+                    <form asp-action="Login" enctype="multipart/form-data" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="input-group mb-3">
+                            <input asp-for="Email" type="email" class="form-control" placeholder="Correo Electrónico">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-envelope"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input asp-for="Password" type="password" class="form-control" placeholder="Contraseña">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-lock"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="" input-group mb-3" style="text-align:center">
+                            <div class="icheck-primary">
+                                <input asp-for="RememberMe" type="checkbox" id="remember">
+                                <label for="remember">
+                                    Recordarme
+                                </label>
+                            </div>
+                        </div>
+                        <div class="social-auth-links text-center mb-3">
+                            <button type="submit" class="btn btn-primary btn-block">
+                                Autenticar
+                            </button>
+                            <p>- O -</p>
+                            <a href="https://adminlte.io/themes/v3/pages/examples/login.html#" class="btn btn-block btn-success">
+                                <i class="fab fa-facebook mr-2"></i> Autenticar con Facebook
+                            </a>
+                            <a href="https://adminlte.io/themes/v3/pages/examples/login.html#" class="btn btn-block btn-danger">
+                                <i class="fab fa-google-plus mr-2"></i> Autenticar con Google+
+                            </a>
+                        </div>
+                        <p class="mb-1">
+                            <a href="https://adminlte.io/themes/v3/pages/examples/forgot-password.html">Olvidé mi contraseña</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

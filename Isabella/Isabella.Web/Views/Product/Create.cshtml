@@ -10,104 +10,182 @@
     ViewData["Name"] = "Nombre";
     ViewData["Price"] = "Precio";
     ViewData["Cant"] = "Cantidad";
-    ViewData["IsAvailable"] = "Disponible?";
-    ViewData["IsSupportAggregate"] = "Agregados?";
+    ViewData["IsAvailable"] = "Disponible";
+    ViewData["IsSupportAggregate"] = "Agregados";
     ViewData["Categorie"] = "Categoria";
     ViewData["Description"] = "Descripción";
+    Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
 }
 
-<hr />
-<h2>@ViewData["Title"]</h2>
-@*Formulario para crear productos*@
-<div class="row">
-    <div class="col-md-12">
-        <form id="form_create_validate" asp-action="Create" enctype="multipart/form-data" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="Name" class="form-label mt-4">@ViewData["Name"]</label>
-                <input id="nameproduct" asp-for="Name" class="form-control" placeholder="Escriba el nombre del producto">
-                <span asp-validation-for="Name" class="text-danger"></span>
+<!-- Single pro tab start-->
+<div class="single-product-tab-area mg-b-30" style="padding-top:75px">
+    <!-- Single pro tab review Start-->
+    <div class="single-pro-review-area">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="review-tab-pro-inner">
+                        <ul id="myTab3" class="tab-review-design">
+                            <li class="active"><a href="#description"><i class="icon nalika-edit" aria-hidden="true"></i> Datos</a></li>
+                            <li><a href="#reviews"><i class="icon nalika-picture" aria-hidden="true"></i>Imagen</a></li>
+                        </ul>
+                        <div id="myTabContent" class="tab-content custom-product-edit">
+                            <div class="product-tab-list tab-pane fade active in" id="description">
+                                <form id="form_create_validate" asp-action="Create" enctype="multipart/form-data" method="post">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="review-content-section">
+                                            <div class="input-group mg-b-pro-edt">
+                                                <span class="input-group-addon"><i class="icon nalika-edit" aria-hidden="true"></i></span>
+                                                <input id="nameproduct" asp-for="Name" type="text" class="form-control" placeholder="Nombre">
+                                                
+                                            </div>
+                                            <div>
+                                                <span asp-validation-for="Name" class="text-danger"></span>
+                                            </div>
+                                            <div class="input-group mg-b-pro-edt">
+                                                <span class="input-group-addon"><i class="fa fa-usd" aria-hidden="true"></i></span>
+                                                <input id="priceproduct" asp-for="Price" type="number" class="form-control" placeholder="Precio">
+                                                
+                                            </div>
+                                            <div>
+                                                <span asp-validation-for="Price" class="text-danger"></span>
+                                            </div>
+                                            <div class="input-group mg-b-pro-edt">
+                                                <span class="input-group-addon"><i class="icon nalika-favorites" aria-hidden="true"></i></span>
+                                                <input id="stockproduct" asp-for="Stock" type="text" class="form-control" placeholder="Cantidad">
+                                               
+                                            </div>
+                                            <div>
+                                                <span asp-validation-for="Stock" class="text-danger"></span>
+                                            </div>
+                                            <div class="input-group mg-b-pro-edt">
+                                                <span class="input-group-addon"><i class="icon nalika-favorites-button" aria-hidden="true"></i></span>
+                                                <input id="descriptionproduct" asp-for="Description" type="text" class="form-control" placeholder="Descripción">
+                                                
+                                            </div>
+                                            <div>
+                                                <span asp-validation-for="Description" class="text-danger"></span>
+                                            </div>
+                                            <div class="input-group mg-b-pro-edt">
+                                                <span class="input-group-addon"><i class="icon nalika-favorites-button" aria-hidden="true"></i></span>
+                                                <input id="imageproduct" name="ImageFile" asp-for="ImageFile" accept="image/png,image/jpeg" class="form-control" type="file" placeholder="Imagen">
+                                                
+                                            </div>
+                                            <div>
+                                                <span asp-validation-for="ImageFile" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <div class="review-content-section">
+                                                <div class="m-t-10">
+                                                    <div class="txt-primary f-18 f-w-600">
+                                                        <p class="single-pro-cn">Calificación</p>
+                                                        <div class="stars stars-example-css detail-stars">
+                                                            <div class="review-rating">
+                                                                <fieldset class="rating">
+                                                                    <input type="radio" id="star5" name="rating" value="5">
+                                                                    <label class="full" for="star5"></label>
+                                                                    <input type="radio" id="star4half" name="rating" value="4 and a half">
+                                                                    <label class="half" for="star4half"></label>
+                                                                    <input type="radio" id="star4" name="rating" value="4">
+                                                                    <label class="full" for="star4"></label>
+                                                                    <input type="radio" id="star3half" name="rating" value="3 and a half">
+                                                                    <label class="half" for="star3half"></label>
+                                                                    <input type="radio" id="star3" name="rating" value="3">
+                                                                    <label class="full" for="star3"></label>
+                                                                    <input type="radio" id="star2half" name="rating" value="2 and a half">
+                                                                    <label class="half" for="star2half"></label>
+                                                                    <input type="radio" id="star2" name="rating" value="2">
+                                                                    <label class="full" for="star2"></label>
+                                                                    <input type="radio" id="star1half" name="rating" value="1 and a half">
+                                                                    <label class="half" for="star1half"></label>
+                                                                    <input type="radio" id="star1" name="rating" value="1">
+                                                                    <label class="full" for="star1"></label>
+                                                                    <input type="radio" id="starhalf" name="rating" value="half">
+                                                                    <label class="half" for="starhalf"></label>
+                                                                </fieldset>
+                                                            </div>
+                                                            <div class="clear"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="single-pro-cn">
+                                                    <p asp-for="SupportAggregate" class="form-check-label text-white" for="flexCheckDefault">
+                                                        @ViewData["IsSupportAggregate"]
+                                                        <input id="issupportaggregate" asp-for="SupportAggregate" class="form-check-input" type="checkbox">
+                                                    </p>
+                                                </div>
+                                                <div class="single-pro-cn">
+                                                    <p asp-for="IsAvailable" class="form-check-label text-white" for="flexCheckDefault">
+                                                        @ViewData["IsAvailable"]
+                                                        <input id="isavailableproduct" asp-for="IsAvailable" class="form-check-input" type="checkbox">
+                                                    </p>
+                                                </div>
+                                                <select asp-for="CategorieId" name="select" class="form-control pro-edt-select form-control-primary" id="SelectCategorie">
+                                                    <option value="opt1">Seleccione una Categoria</option>
+                                                    @foreach (var categorie in ViewBag.Categories)
+                                                    {
+                                                        <option value="@categorie.Id">@categorie.Name</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="text-center custom-pro-edt-ds">
+                                                <button id="buttomcreateproduct" type="button" class="btn btn-ctl-bt waves-effect waves-light m-r-10">
+                                                    <i class="fa fa-save" aria-hidden="true"></i> Guardar
+                                                </button>
+                                                <button type="button" class="btn btn-ctl-bt waves-effect waves-light">
+                                                    <i class="fa fa-chevron-left"></i> Atrás
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <!--Imagen del Producto que selecciona el usuario-->
+                            <div class="product-tab-list tab-pane fade" id="reviews" style="text-align:center">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="review-content-section">
+                                            <div class="row">
+                                                <div class="col-lg-4">
+                                                    <div class="pro-edt-img">
+                                                        <img src="~/img/new-product/5-small.jpg" alt="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div class="form-group">
-                <label asp-for="Description" class="form-label mt-4">@ViewData["Description"]</label>
-                <textarea id="descriptionproduct" asp-for="Description" class="form-control" placeholder="Escriba una descripción del producto" rows="3"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Price" class="form-label mt-4">@ViewData["Price"]</label>
-                <input id="priceproduct" asp-for="Price" type="number" class="form-control" placeholder="Escriba el precio del producto">
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="CategorieId" class="form-label mt-4">@ViewData["Categorie"]</label>
-                <select asp-for="CategorieId" class="form-select" id="SelectCategorie">
-                    @foreach (var categorie in ViewBag.Categories)
-                    {
-                        <option value="@categorie.Id">@categorie.Name</option>
-                    }
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ImageFile" for="formFile" class="form-label mt-4">Seleccione una imagen</label>
-                <input id="imageproduct" name="ImageFile" asp-for="ImageFile" accept="image/png,image/jpeg" class="form-control" type="file">
-                <span asp-validation-for="ImageFile" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Stock" class="form-label mt-4">@ViewData["Cant"]</label>
-                <input id="stockproduct" asp-for="Stock" type="number" class="form-control">
-                <span asp-validation-for="Stock" class="text-danger"></span>
-            </div>
-
-            <hr />
-
-            <div class="form-check">
-                <label asp-for="IsAvailable" class="form-check-label" for="flexCheckDefault">
-                    @ViewData["IsAvailable"]
-                    <input id="isavailableproduct" asp-for="IsAvailable" class="form-check-input" type="checkbox">
-                </label>
-            </div>
-
-            <hr />
-
-            <div class="form-check">
-                <label asp-for="SupportAggregate" class="form-check-label" for="flexCheckDefault">
-                    @ViewData["IsSupportAggregate"]
-                    <input id="issupportaggregate" asp-for="SupportAggregate" class="form-check-input" type="checkbox">
-                </label>
-            </div>
-
-            <hr />
-
-            <div class="form-group">
-                <button id="buttomcreateproduct" class="btn btn-primary">
-                    <i class="fa fa-save"></i> Guardar
-                </button>
-                <a asp-action="Index" class="btn btn-success"><i class="fa fa-chevron-left"></i> Atrás</a>
-            </div>
-
-        </form>
+        </div>
     </div>
 </div>
 
 @*Ventana Modal para la espera a que se agregue el producto.*@
 <div id="responseAddProduct" class="modal fade">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog sidebar-dark-primary" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"></h5>
+                <h5 class="modal-title">Crear</h5>
                 <button id="btnCloseModalAddProduct" type="button" class="btn-close" data-bs-dismiss="modal"
                         aria-label="Close">
                     <span aria-hidden="true"></span>
                 </button>
             </div>
             <div class="modal-body" style="text-align:center">
-                <p id="messageModalResponseAddProduct">               
+                <p id="messageModalResponseAddProduct">
                 </p>
                 <hr />
                 <div class="fa-2x">
@@ -132,11 +210,10 @@
             let url = getUriServer() + 'product/create';
             //Id de Categoria
             let categorieId = 1;
-          
+
             //Evento Change del ComboBox de las categorias.
-            $("#SelectCategorie").change(function ()
-            {
-                categorieId = parseInt($("#SelectCategorie").val());            
+            $("#SelectCategorie").change(function () {
+                categorieId = parseInt($("#SelectCategorie").val());
             });
 
             //Evento Click del Botón Cerrar(Cierra la ventana Modal de respuesta del servidor)
@@ -147,123 +224,115 @@
             });
 
             //Evento Click del Botón Cerrar(Cierra la ventana Modal de respuesta del servidor)
-            $('#btnCloseresponseAddProduct').click(function(e) {
+            $('#btnCloseresponseAddProduct').click(function (e) {
                 e.preventDefault();
                 $('#responseAddProduct').modal('hide');
                 return false;
             });
 
             //Evento click del botón de guardar producto
-            $('#buttomcreateproduct').click(async function (e)
-            {
-                try
-                {
-                  e.preventDefault();
-                  $('#form_create_validate').validate();
-                  if ($('#form_create_validate').valid() === false)
-                  {
-                    return false;
-                  }
-                  else
-                  {
-                    $('#iconWaitAddProduct').hide();
-                    $('#messageModalResponseAddProduct').text("");
-                    //Muestra la modal de crear el producto.
-                    $('#responseAddProduct').modal({ backdrop: "static", keyboard: true }, 'show');
-                    $('#iconWaitAddProduct').show();
-                    $('#messageModalResponseAddProduct').text("Creando producto...");
-                    //Deshabilita los botones Ok y Cerrar de la modal
-                    $('#btnCloseresponseAddProduct').prop("disabled", true);
-                    $('#btnCloseModalAddProduct').prop("disabled", true);
+            $('#buttomcreateproduct').click(async function (e) {
+                try {
+                    e.preventDefault();
+                    $('#form_create_validate').validate();
+                    if ($('#form_create_validate').valid() === false) {
+                        return false;
+                    }
+                    else {
+                        $('#iconWaitAddProduct').hide();
+                        $('#messageModalResponseAddProduct').text("");
+                        //Muestra la modal de crear el producto.
+                        $('#responseAddProduct').modal({ backdrop: "static", keyboard: true }, 'show');
+                        $('#iconWaitAddProduct').show();
+                        $('#messageModalResponseAddProduct').text("Creando producto...");
+                        //Deshabilita los botones Ok y Cerrar de la modal
+                        $('#btnCloseresponseAddProduct').prop("disabled", true);
+                        $('#btnCloseModalAddProduct').prop("disabled", true);
 
-                    //Obtiene los valores del producto.
-                    var name = $('#nameproduct').val();
-                    var description = $('#descriptionproduct').val();
-                    var price = parseFloat($('#priceproduct').val());
-                    var stock = parseInt($('#stockproduct').val());
-                    var isavailableproduct = false;
-                    var issupportaggregate = false;
-                    if($('#isavailableproduct').val() == "true")
-                     isavailableproduct = true;
-                    else if($('#isavailableproduct').val() == "false")
-                     isavailableproduct = false;
-                    else
-                     isavailableproduct = false;
-                    if($('#issupportaggregate').val() == "true")
-                     issupportaggregate = true;
-                    else if($('#issupportaggregate').val() == "false")
-                     issupportaggregate = false;
-                    else
-                     issupportaggregate = false;
-                    var image = document.getElementById("imageproduct").files;
-                    //Crea el formulario de datos del producto.
-                    var formData = new FormData();
-                    if(image[0] == null)
-                    formData.append("ImageFile", null);
-                    else
-                    formData.append("ImageFile", image[0]);
-                    formData.append("Name", name);
-                    formData.append("Description", description);
-                    formData.append("Price", price);
-                    formData.append("Stock", stock);
-                    formData.append("CategorieId", categorieId);
-                    formData.append("IsAvailable", isavailableproduct);
-                    formData.append("SupportAggregate", issupportaggregate);
+                        //Obtiene los valores del producto.
+                        var name = $('#nameproduct').val();
+                        var description = $('#descriptionproduct').val();
+                        var price = parseFloat($('#priceproduct').val());
+                        var stock = parseInt($('#stockproduct').val());
+                        var isavailableproduct = false;
+                        var issupportaggregate = false;
+                        if ($('#isavailableproduct').val() == "true")
+                            isavailableproduct = true;
+                        else if ($('#isavailableproduct').val() == "false")
+                            isavailableproduct = false;
+                        else
+                            isavailableproduct = false;
+                        if ($('#issupportaggregate').val() == "true")
+                            issupportaggregate = true;
+                        else if ($('#issupportaggregate').val() == "false")
+                            issupportaggregate = false;
+                        else
+                            issupportaggregate = false;
+                        var image = document.getElementById("imageproduct").files;
+                        //Crea el formulario de datos del producto.
+                        var formData = new FormData();
+                        if (image[0] == null)
+                            formData.append("ImageFile", null);
+                        else
+                            formData.append("ImageFile", image[0]);
+                        formData.append("Name", name);
+                        formData.append("Description", description);
+                        formData.append("Price", price);
+                        formData.append("Stock", stock);
+                        formData.append("CategorieId", categorieId);
+                        formData.append("IsAvailable", isavailableproduct);
+                        formData.append("SupportAggregate", issupportaggregate);
 
-                    var responseService = await AddProduct(formData);
+                        var responseService = await AddProduct(formData);
 
-                      if (responseService.status == 200) {
-                          $("#responseAddProduct").modal('hide');
-                          $('#iconWaitAddProduct').hide();
-                          $('#messageModalResponseAddProduct').text("");
-                          $('#btnCloseresponseAddProduct').prop("disabled", false);
-                          $('#btnCloseModalAddProduct').prop("disabled", false);
-                          window.location.href = '/Product';
-                          return false;
-                      }
-                      else if (responseService.status == 404) {
-                          let response = await responseService.json();
-                          let message = response.message;
-                          $('#iconWaitAddProduct').hide();
-                          $('#messageModalResponseAddProduct').text(message)
-                          $('#btnCloseresponseAddProduct').prop("disabled", false);
-                          $('#btnCloseModalAddProduct').prop("disabled", false);
-                          return false;
-                      }
-                      else if(responseService.status == 400)
-                      {
-                          $('#iconWaitAddProduct').hide();
-                          $('#messageModalResponseAddProduct').text("Error en los datos del modelo enviados al servidor.");
-                          $('#btnCloseresponseAddProduct').prop("disabled", false);
-                          $('#btnCloseModalAddProduct').prop("disabled", false);
-                          return false;
-                      }
-                      else 
-                      {
-                          $('#iconWaitAddProduct').hide();
-                          $('#messageModalResponseAddProduct').text("Se originó un error desconocido.")
-                          $('#btnCloseresponseAddProduct').prop("disabled", false);
-                          $('#btnCloseModalAddProduct').prop("disabled", false);
-                          return false;
-                      }
-                  }
+                        if (responseService.status == 200) {
+                            $("#responseAddProduct").modal('hide');
+                            $('#iconWaitAddProduct').hide();
+                            $('#messageModalResponseAddProduct').text("");
+                            $('#btnCloseresponseAddProduct').prop("disabled", false);
+                            $('#btnCloseModalAddProduct').prop("disabled", false);
+                            window.location.href = '/Product';
+                            return false;
+                        }
+                        else if (responseService.status == 404) {
+                            let response = await responseService.json();
+                            let message = response.message;
+                            $('#iconWaitAddProduct').hide();
+                            $('#messageModalResponseAddProduct').text(message)
+                            $('#btnCloseresponseAddProduct').prop("disabled", false);
+                            $('#btnCloseModalAddProduct').prop("disabled", false);
+                            return false;
+                        }
+                        else if (responseService.status == 400) {
+                            $('#iconWaitAddProduct').hide();
+                            $('#messageModalResponseAddProduct').text("Error en los datos del modelo enviados al servidor.");
+                            $('#btnCloseresponseAddProduct').prop("disabled", false);
+                            $('#btnCloseModalAddProduct').prop("disabled", false);
+                            return false;
+                        }
+                        else {
+                            $('#iconWaitAddProduct').hide();
+                            $('#messageModalResponseAddProduct').text("Se originó un error desconocido.")
+                            $('#btnCloseresponseAddProduct').prop("disabled", false);
+                            $('#btnCloseModalAddProduct').prop("disabled", false);
+                            return false;
+                        }
+                    }
                 }
-                catch(error)
-                {
-                   $('#messageModalResponseAddProduct').text(error.message)
-                   $('#btnCloseresponseAddProduct').prop("disabled", false);
-                   $('#btnCloseModalAddProduct').prop("disabled", false);
-                   return false;
-                }              
+                catch (error) {
+                    $('#messageModalResponseAddProduct').text(error.message)
+                    $('#btnCloseresponseAddProduct').prop("disabled", false);
+                    $('#btnCloseModalAddProduct').prop("disabled", false);
+                    return false;
+                }
             });
 
             //Crear Producto
-            async function AddProduct(product_form)
-            {
-                 let responseService = await fetch(url, {
-                        method: 'POST',
-                        body: product_form
-                 });
+            async function AddProduct(product_form) {
+                let responseService = await fetch(url, {
+                    method: 'POST',
+                    body: product_form
+                });
                 return responseService;
             }
         });

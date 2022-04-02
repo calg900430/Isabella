@@ -392,7 +392,7 @@
                         new Product
                         {
                            Name = "Ensalda Fría",
-                           Category = categorys[0],
+                           Categorie = categorys[0],
                            Description = "Ensalada Fría con queso, jamón y aceitunas.",
                            Stock = 100,
                            IsAvailabe = true,
@@ -406,7 +406,7 @@
                         new Product
                         {
                            Name = "Coco Glasé",
-                           Category = categorys[3],
+                           Categorie = categorys[3],
                            Description = "Excelente postre de coco.",
                            Stock = 65,
                            IsAvailabe = true,
@@ -430,7 +430,7 @@
                         new Product
                         {
                            Name = "Bistec de Cerdo",
-                           Category = categorys[1],
+                           Categorie = categorys[1],
                            Description = "Bistec de Cerdo, un plato recomendado por la casa.",
                            Stock = 150,
                            IsAvailabe = true,
@@ -454,7 +454,7 @@
                         new Product
                         {
                            Name = "Camarón Grillé",
-                           Category = categorys[1],
+                           Categorie = categorys[1],
                            Description = "Excelente variante de camarones, recomendado por la casa.",
                            Stock = 180,
                            IsAvailabe = true,
@@ -468,7 +468,7 @@
                         new Product
                         {
                            Name = "Malta Holland",
-                           Category = categorys[4],
+                           Categorie = categorys[4],
                            Description = "Malta de excelente calidad",
                            Stock = 240,
                            IsAvailabe = true,
@@ -482,7 +482,7 @@
                         new Product
                         {
                            Name = "Vino Blanco Constelación",
-                           Category = categorys[4],
+                           Categorie = categorys[4],
                            Description = "Vino recomendado para cenas especiales.",
                            Stock = 240,
                            IsAvailabe = true,
@@ -496,7 +496,7 @@
                         new Product
                         {
                            Name = "Espaguetti con Jamon",
-                           Category = categorys[2],
+                           Categorie = categorys[2],
                            Description = "Espagueti con jamón, queso y aceitunas.",
                            Stock = 80,
                            IsAvailabe = true,
@@ -520,7 +520,7 @@
                         new Product
                         {
                            Name = "Pizza con Camarones",
-                           Category = categorys[2],
+                           Categorie = categorys[2],
                            Description = "Esta es la mejor pizza de la casa.",
                            Stock = 140,
                            IsAvailabe = true,

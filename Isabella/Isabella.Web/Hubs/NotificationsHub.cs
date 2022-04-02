@@ -54,8 +54,8 @@
             _dicctionaryConnectedHubService.AddNewDevice(userName, Context.ConnectionId);
             //Verifica si el usuario tiene notificaciones pendiente.
             var notifications_pendients = await this._dataContext.NotificationPendients
-            .Include(c => c.Order).ThenInclude(c => c.OrderDetails).ThenInclude(c => c.ProductCombined.Product.Category)
-            .Include(c => c.Order).ThenInclude(c => c.OrderDetails).ThenInclude(c => c.ProductCombined.Product.SubCategories).ThenInclude(c => c.Product.Category)
+            .Include(c => c.Order).ThenInclude(c => c.OrderDetails).ThenInclude(c => c.ProductCombined.Product.Categorie)
+            .Include(c => c.Order).ThenInclude(c => c.OrderDetails).ThenInclude(c => c.ProductCombined.Product.SubCategories).ThenInclude(c => c.Product.Categorie)
             .Include(c => c.Order).ThenInclude(c => c.OrderDetails).ThenInclude(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate)
             .Include(c => c.Order).ThenInclude(c => c.User)
             .Include(c => c.UserAdmin)
@@ -102,8 +102,8 @@
                                    SubCategory = this._mapper.Map<GetSubCategorieDto>(x.ProductCombined.SubCategory),
                                    Category = new Common.Dtos.Categorie.GetCategorieDto
                                    {
-                                      Id = x.ProductCombined.Product.Category.Id,
-                                      Name = x.ProductCombined.Product.Category.Name,
+                                      Id = x.ProductCombined.Product.Categorie.Id,
+                                      Name = x.ProductCombined.Product.Categorie.Name,
                                    },
                                    CantAggregates = x.ProductCombined.CantAggregates.Select(z => new GetCantAggregateDto
                                    {

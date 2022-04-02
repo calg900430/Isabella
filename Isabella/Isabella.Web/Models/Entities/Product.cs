@@ -20,7 +20,7 @@
         /// <summary>
         /// Categoria del producto.
         /// </summary>
-        public Categorie Category { get; set; }
+        public Categorie Categorie { get; set; }
 
         /// <summary>
         /// Imagenes para los productos. 

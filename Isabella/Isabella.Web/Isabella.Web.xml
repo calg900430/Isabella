@@ -899,6 +899,42 @@
             <param name="productServiceController"></param>
             <param name="aggregateServiceController"></param>
         </member>
+        <member name="M:Isabella.Web.Controllers.HomeController.Privacy">
+            <summary>
+            Privacy
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.HomeController.Dashboard">
+            <summary>
+            Muestra la View del Dashboard
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.HomeController._NotFound">
+            <summary>
+            NotFound
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.HomeController._ServerError">
+            <summary>
+            Excepción
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.HomeController._NotAuthorized">
+            <summary>
+            No autorizado.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Isabella.Web.Controllers.HomeController.Error">
+            <summary>
+            Muestra la View para el manejo de errores.
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:Isabella.Web.Controllers.ProductController">
             <summary>
             Controlador de Productos 
@@ -2326,7 +2362,7 @@
             Key
             </summary>
         </member>
-        <member name="P:Isabella.Web.Models.Entities.Product.Category">
+        <member name="P:Isabella.Web.Models.Entities.Product.Categorie">
             <summary>
             Categoria del producto.
             </summary>

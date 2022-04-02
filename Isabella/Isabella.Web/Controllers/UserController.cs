@@ -71,9 +71,9 @@
         [HttpGet("login")]
         public IActionResult Login()
         {
-            if (this.User.Identity.IsAuthenticated)
+            if (this.User.Identity.IsAuthenticated && this.User.IsInRole("admin"))
             {
-                return this.RedirectToAction("Index", "Home");
+                return this.RedirectToAction("Dashboard", "Home");
             }
             return this.View();
         }
@@ -84,7 +84,7 @@
         /// <param name="loginViewModel"></param>
         /// <returns></returns>
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromForm] LoginViewModel loginViewModel)
+        public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
             try
             {
@@ -99,11 +99,12 @@
                         {
                             return this.Redirect(this.Request.Query["ReturnUrl"].First());
                         }
-                        return this.RedirectToAction("Index", "Home");
+                        return this.RedirectToAction("Dashboard", "Home");
                     }
                     else
                     {
-                      return NotFound(result);
+                       //Retornar Vista de que no está autorizado
+                       return this.RedirectToAction("_NotAuthorized", "Home");
                     }
                 }
                 else
@@ -114,7 +115,7 @@
             catch
             {
                //Mostrar pagina de control de excepciones.
-               return this.View();
+               return this.RedirectToAction("_ServerError", "Home");
             }
             
         }

@@ -35,22 +35,55 @@
             _logger = logger;
         }
 
-        
-        public async Task<IActionResult> Index()
-        {
-           return View();
-        }
-
+        /// <summary>
+        /// Privacy
+        /// </summary>
+        /// <returns></returns>
         public IActionResult Privacy()
         {
             return View();
         }
 
-        public IActionResult Test()
+        /// <summary>
+        /// Muestra la View del Dashboard
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Dashboard()
         {
             return View();
         }
 
+        /// <summary>
+        /// NotFound
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult _NotFound()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// Excepción
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult _ServerError()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// No autorizado.
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult _NotAuthorized()
+        {
+            return View();
+        }
+        
+        /// <summary>
+        /// Muestra la View para el manejo de errores.
+        /// </summary>
+        /// <returns></returns>
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

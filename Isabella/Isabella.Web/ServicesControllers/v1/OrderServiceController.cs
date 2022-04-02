@@ -115,9 +115,9 @@
                 //Obtiene todos los productos del carrito del usuario
                 var all_products_in_carshop = await this._serviceGenericCartShopHelper._context
                 .Include(c => c.User)
-                .Include(c => c.ProductCombined.Product.Category)
+                .Include(c => c.ProductCombined.Product.Categorie)
                 .Include(c => c.ProductCombined.Product.SubCategories)
-                .Include(c => c.ProductCombined.SubCategory.Product.Category)
+                .Include(c => c.ProductCombined.SubCategory.Product.Categorie)
                 .Include(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate)
                 .Include(c => c.ProductCombined.CantAggregates)
                 .Where(c => c.User == user)
@@ -218,7 +218,7 @@
                 var all_order = await this._serviceGenericOrderHelper._context
                 .Include(c => c.User)
                 .Include(c => c.Gps)
-                .Include(c => c.OrderDetails).ThenInclude(c => c.ProductCombined.Product.Category)
+                .Include(c => c.OrderDetails).ThenInclude(c => c.ProductCombined.Product.Categorie)
                 .Include(c => c.OrderDetails).ThenInclude(c => c.ProductCombined.Product.SubCategories).ThenInclude(c => c.Product)
                 .Include(c => c.OrderDetails).ThenInclude(c => c.ProductCombined.CantAggregates).ThenInclude(c => c.Aggregate)
                 .Where(c => c.User == user)
@@ -263,8 +263,8 @@
                         SubCategory = this._mapper.Map<GetSubCategorieDto>(x.ProductCombined.SubCategory),
                         Category = new Common.Dtos.Categorie.GetCategorieDto
                         {
-                           Id = x.ProductCombined.Product.Category.Id,
-                           Name = x.ProductCombined.Product.Category.Name,
+                           Id = x.ProductCombined.Product.Categorie.Id,
+                           Name = x.ProductCombined.Product.Categorie.Name,
                         },
                         CantAggregates = x.ProductCombined.CantAggregates.Select(z => new GetCantAggregateDto
                         {
@@ -361,8 +361,8 @@
                                    SubCategory = this._mapper.Map<GetSubCategorieDto>(x.ProductCombined.SubCategory),
                                    Category = new Common.Dtos.Categorie.GetCategorieDto
                                    {
-                                      Id = x.ProductCombined.Product.Category.Id,
-                                      Name = x.ProductCombined.Product.Category.Name,
+                                      Id = x.ProductCombined.Product.Categorie.Id,
+                                      Name = x.ProductCombined.Product.Categorie.Name,
                                    },
                                    CantAggregates = x.ProductCombined.CantAggregates.Select(z => new GetCantAggregateDto
                                    {

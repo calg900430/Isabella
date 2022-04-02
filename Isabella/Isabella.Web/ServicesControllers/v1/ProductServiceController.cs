@@ -121,7 +121,7 @@
                 //Mapea de AddProductStandardDto a ProductStandard
                 var new_product = new Product
                 {
-                    Category = category,
+                    Categorie = category,
                     DateCreated = DateTime.UtcNow,
                     DateUpdate = DateTime.UtcNow,
                     Description = addProduct.Description,
@@ -237,7 +237,7 @@
                 //Mapea de AddProductStandardDto a ProductStandard
                 var new_product = new Product
                 {
-                    Category = category,
+                    Categorie = category,
                     DateCreated = DateTime.UtcNow,
                     DateUpdate = DateTime.UtcNow,
                     Description = addProductViewModel.Description,
@@ -373,7 +373,7 @@
                         serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CategoryNotFound);
                         return serviceResponse;
                     }
-                    product.Category = category;
+                    product.Categorie = category;
                 }
                 if (updateProductViewModel.Description != null)
                 product.Description = updateProductViewModel.Description;
@@ -462,8 +462,8 @@
                     Description = product.Description,
                     Categorie = new Common.Dtos.Categorie.GetCategorieDto
                     {
-                        Id = product.Category.Id,
-                        Name = product.Category.Name,
+                        Id = product.Categorie.Id,
+                        Name = product.Categorie.Name,
                     },
                     Id = product.Id,
                     Name = product.Name,
@@ -534,7 +534,7 @@
                         serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.CategoryNotFound);
                         return serviceResponse;
                     }
-                    product.Category = category;
+                    product.Categorie = category;
                 }
                 if (updateProduct.Description != null)
                 product.Description = updateProduct.Description;
@@ -581,8 +581,8 @@
                    Description = product.Description,
                    Categorie = new Common.Dtos.Categorie.GetCategorieDto
                    {
-                       Id = product.Category.Id,
-                       Name = product.Category.Name,
+                       Id = product.Categorie.Id,
+                       Name = product.Categorie.Name,
                    },
                    Id = product.Id,
                    Name = product.Name,
@@ -614,7 +614,7 @@
             {
                 //Obtiene el producto.
                 var product = await this._serviceGenericProductHelper
-                .GetLoadAsync(c => c.Id == ProductId, c => c.Category, c => c.SubCategories)
+                .GetLoadAsync(c => c.Id == ProductId, c => c.Categorie, c => c.SubCategories)
                 .ConfigureAwait(false);
                 if (product == null)
                 {
@@ -630,8 +630,8 @@
                     Id = product.Id,
                     Categorie = new Common.Dtos.Categorie.GetCategorieDto
                     {
-                        Id = product.Category.Id,
-                        Name = product.Category.Name,
+                        Id = product.Categorie.Id,
+                        Name = product.Categorie.Name,
                     },
                     Description = product.Description,
                     Name = product.Name,
@@ -674,7 +674,7 @@
             {
                 //Obtiene los productos disponibles
                 var all_product = await this._serviceGenericProductHelper
-                .GetLoadAsync(c => c.Category, x => x.SubCategories, x => x.Images)
+                .GetLoadAsync(c => c.Categorie, x => x.SubCategories, x => x.Images)
                 .ConfigureAwait(false);
                 if (all_product == null || all_product.Count <= 0)
                 {
@@ -691,8 +691,8 @@
                     Id = c.Id,
                     Categorie = new Common.Dtos.Categorie.GetCategorieDto
                     {
-                        Id = c.Category.Id,
-                        Name = c.Category.Name,
+                        Id = c.Categorie.Id,
+                        Name = c.Categorie.Name,
                     },
                     Description = c.Description,
                     Name = c.Name,
@@ -718,7 +718,7 @@
                 serviceResponse.Message = GetValueResourceFile.GetValueResourceString(GetValueResourceFile.KeyResource.SuccessOk);
                 return serviceResponse;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 serviceResponse.Code = (int)GetValueResourceFile.KeyResource.Exception;
                 serviceResponse.Data = null;
@@ -740,7 +740,7 @@
             {
                 //Obtiene el producto.
                 var product = await this._serviceGenericProductHelper
-                .GetLoadAsync(c => c.Id == ProductId, c => c.Category, c => c.SubCategories, c=> c.Images)
+                .GetLoadAsync(c => c.Id == ProductId, c => c.Categorie, c => c.SubCategories, c=> c.Images)
                 .ConfigureAwait(false);
                 if (product == null)
                 {
@@ -756,8 +756,8 @@
                     Id = product.Id,
                     Categorie = new Common.Dtos.Categorie.GetCategorieDto
                     {
-                        Id = product.Category.Id,
-                        Name = product.Category.Name,
+                        Id = product.Categorie.Id,
+                        Name = product.Categorie.Name,
                     },
                     GetAllImagesProduct = product.Images.Select(x => new GetImageProductDto
                     {
@@ -805,7 +805,7 @@
             {
                 //Obtiene los productos disponibles
                 var all_product = await this._serviceGenericProductHelper
-                .GetLoadAsync(c => c.Category, x => x.SubCategories)
+                .GetLoadAsync(c => c.Categorie, x => x.SubCategories)
                 .ConfigureAwait(false);
                 if (all_product == null || all_product.Count <= 0)
                 {
@@ -822,8 +822,8 @@
                     Id = c.Id,
                     Categorie = new Common.Dtos.Categorie.GetCategorieDto
                     {
-                        Id = c.Category.Id,
-                        Name = c.Category.Name,
+                        Id = c.Categorie.Id,
+                        Name = c.Categorie.Name,
                     },
                     Description = c.Description,
                     Name = c.Name,
@@ -1284,7 +1284,7 @@
                     return serviceResponse;
                 }
                 var all_cant_product = await this._serviceGenericProductHelper
-                .GetLoadAsync(product, cantProduct, c => c.Category, c => c.SubCategories)
+                .GetLoadAsync(product, cantProduct, c => c.Categorie, c => c.SubCategories)
                 .ConfigureAwait(false);
                 if (all_cant_product == null || all_cant_product.Count <= 0)
                 {
@@ -1300,8 +1300,8 @@
                     Id = c.Id,
                     Categorie = new Common.Dtos.Categorie.GetCategorieDto
                     {
-                        Id = c.Category.Id,
-                        Name = c.Category.Name,
+                        Id = c.Categorie.Id,
+                        Name = c.Categorie.Name,
                     },
                     Description = c.Description,
                     Name = c.Name,
@@ -1528,7 +1528,7 @@
                 //Obtiene el producto.
                 var product = await this._serviceGenericProductHelper
                 .WhereFirstEntityAsync(c => c.Id == ProductId && c.IsAvailabe == true,
-                c => c.Category, c => c.SubCategories)
+                c => c.Categorie, c => c.SubCategories)
                 .ConfigureAwait(false);
                 //Verifica si el producto está disponible
                 if (product == null)
@@ -1549,8 +1549,8 @@
                     Id = product.Id,
                     Categorie = new Common.Dtos.Categorie.GetCategorieDto
                     {
-                        Id = product.Category.Id,
-                        Name = product.Category.Name,
+                        Id = product.Categorie.Id,
+                        Name = product.Categorie.Name,
                     },
                     Description = product.Description,
                     Name = product.Name,
@@ -1592,7 +1592,7 @@
             {
                 //Obtiene los productos disponibles
                 var all_product = await this._serviceGenericProductHelper
-                .WhereListEntityAsync(c => c.IsAvailabe == true , c => c.Category, x => x.SubCategories)
+                .WhereListEntityAsync(c => c.IsAvailabe == true , c => c.Categorie, x => x.SubCategories)
                 .ConfigureAwait(false);
                 if (all_product == null || all_product.Count <= 0)
                 {
@@ -1615,8 +1615,8 @@
                     Id = c.Id,
                     Categorie = new Common.Dtos.Categorie.GetCategorieDto
                     {
-                        Id = c.Category.Id,
-                        Name = c.Category.Name,
+                        Id = c.Categorie.Id,
+                        Name = c.Categorie.Name,
                     },
                     Description = c.Description,
                     Name = c.Name,
@@ -1681,7 +1681,7 @@
                     return serviceResponse;
                 }
                 var all_cant_product = await this._serviceGenericProductHelper
-                .GetLoadAsync(product_referenc, cantProduct, c => c.IsAvailabe == true, c => c.Category, c => c.SubCategories)
+                .GetLoadAsync(product_referenc, cantProduct, c => c.IsAvailabe == true, c => c.Categorie, c => c.SubCategories)
                 .ConfigureAwait(false);
                 if (all_cant_product == null || all_cant_product.Count <= 0)
                 {
@@ -1703,8 +1703,8 @@
                     Id = c.Id,
                     Categorie = new Common.Dtos.Categorie.GetCategorieDto
                     {
-                        Id = c.Category.Id,
-                        Name = c.Category.Name,
+                        Id = c.Categorie.Id,
+                        Name = c.Categorie.Name,
                     },
                     Description = c.Description,
                     Name = c.Name,
@@ -1762,7 +1762,7 @@
                 }
                 //Obtiene los productos
                 var all_product = await this._serviceGenericProductHelper
-                .WhereListEntityAsync(c => c.Category == category, c => c.Category, x => x.SubCategories)
+                .WhereListEntityAsync(c => c.Categorie == category, c => c.Categorie, x => x.SubCategories)
                 .ConfigureAwait(false);
                 if (all_product == null || all_product.Count <= 0)
                 {
@@ -1779,8 +1779,8 @@
                     Id = c.Id,
                     Categorie = new Common.Dtos.Categorie.GetCategorieDto
                     {
-                        Id = c.Category.Id,
-                        Name = c.Category.Name,
+                        Id = c.Categorie.Id,
+                        Name = c.Categorie.Name,
                     },
                     Description = c.Description,
                     Name = c.Name,
@@ -1837,7 +1837,7 @@
                 }
                 //Obtiene los productos
                 var all_product = await this._serviceGenericProductHelper
-                .WhereListEntityAsync(c => c.Category == category && c.IsAvailabe == true, c => c.Category, x => x.SubCategories)
+                .WhereListEntityAsync(c => c.Categorie == category && c.IsAvailabe == true, c => c.Categorie, x => x.SubCategories)
                 .ConfigureAwait(false);
                 if (all_product == null || all_product.Count <= 0)
                 {
@@ -1860,8 +1860,8 @@
                     Id = c.Id,
                     Categorie = new Common.Dtos.Categorie.GetCategorieDto
                     {
-                        Id = c.Category.Id,
-                        Name = c.Category.Name,
+                        Id = c.Categorie.Id,
+                        Name = c.Categorie.Name,
                     },
                     Description = c.Description,
                     Name = c.Name,

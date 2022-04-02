@@ -13,95 +13,88 @@
     ViewData["Name"] = "Nombre";
     ViewData["Price"] = "Precio";
     ViewData["Available"] = "Disponible?";
+    Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
 }
-<hr />
-@*Pone el Titulo que establecimos en la coleccion ViewData desde el controlador*@
-<h2>@ViewData["Title"]</h2>
-@*Se crea un enlace del tipo botón usando las clases de Boostrap*@
-<p>
-    <a asp-action="Create" class="btn btn-primary">Crear Producto</a>
-</p>
-<div class="row">
-    <div class="col-md-12">
-        @*Se crea una tabla para mostrar los productos*@
-        <table class="table">
-            @*Se crean las columnas y se le pone el nombre a cada una*@
-            <thead>
-                <tr>
-                    <th width="4px">
-                        @ViewData["Name"]
-                    </th>
-                    <th>
-                        @ViewData["Image"]
-                    </th>
-                    <th>
-                        @ViewData["Price"]
-                    </th>
-                    <th>
-                        @ViewData["Available"]
-                    </th>
-                    <th></th>
-                </tr>
-            </thead>
-            @*Se crean las filas que contienen los elementos de cada columna que
-                en este caso son los datos de los productos*@
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@Html.DisplayFor(model => item.Name)</td>
-                        <td>
-                            @if (item.GetAllImagesProducts != null)
-                            {
-                                if (item.GetAllImagesProducts.Count > 0)
-                                {
-                                    @*Convierte el array byte en una imagen*@
-                                    <img class="ImageProducts" src="data:imge;base64,
-                                    @System.Convert.ToBase64String(item.GetAllImagesProducts[0].Image)" />
-                                }
-                                else
-                                {
-                                    <b>No Disponible</b>
-                                }
-                            }
-                            else
-                            {
-                                <b>No Disponible</b>
-                            }
-                        </td>
-                        <td>@Html.DisplayFor(model => item.Price)</td>
-                        @if (item.IsAvailabe)
-                        {
-                            <td>Sí</td>
-                        }
-                        else
-                        {
-                            <td>No</td>
-                        }
-                        @*Se crean los botones Edit, Delete y Details para cada producto*@
-                        <td id="@item.Id">
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa fa-edit" aria-hidden="true"></i></a>
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></a>
-                            <a id="buttomdelete" asp-route-id="@item.Id" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+
+<div class="product-status mg-b-30" style="padding-top:75px">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="product-status-wrap">
+                    <h4>Productos</h4>
+                    <div class="add-product">
+                        <a asp-action="Create" class="btn btn-primary">Crear Producto</a>
+                    </div>
+                    <table>
+                        <tr>
+                            <th>Imagen</th>
+                            <th>Nombre</th>
+                            <th>Disponible?</th>
+                            <th>Stock</th>
+                            <th>Precio</th>
+                            <th>Opciones</th>
+                        </tr>
+                        @foreach (var item in Model)
+                         {
+                              <tr>
+                                  <td>
+                                      @*Convierte el array byte en una imagen*@
+                                      @if(item.GetAllImagesProducts.Any() == true)
+                                       {
+                                          <img class="ImageProducts" src="data:imge;base64,@System.Convert.ToBase64String(item.GetAllImagesProducts[0].Image)" ,
+                                          style="width:150px;height:150px;max-width: 100%; height: auto;" />
+                                       }
+                                       else
+                                       {
+                                          <!--Poner Imagen de Producto No disponible-->
+                                          <b>Imagen No Disponible</b>
+                                       }
+                                  </td>
+                                 <td>@Html.DisplayFor(model => item.Name)</td>
+
+                                 @if (item.IsAvailabe)
+                                  {
+                                    <td>
+                                        Sí
+                                    </td>
+                                  }
+                                  else
+                                  {
+                                    <td>
+                                        No
+                                    </td>
+                                  }
+                                  <td>@Html.DisplayFor(model => item.Stock)</td>
+                                  <td>@Html.DisplayFor(model => item.Price)</td>
+                                  <td id="@item.Id">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning"><i class="fa fa-edit" aria-hidden="true"></i></a>
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info"><i class="fa fa-info" aria-hidden="true"></i></a>
+                                    <a id="buttomdelete" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                  </td>
+                            </tr>
+                         }                       
+                    </table>
+                    <div class="custom-pagination">
+                        <ul class="pagination">
+                            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<hr />
 
 @*Ventanas Modal de confirmación de borrar producto*@
 <div id="confirmDelete" class="modal fade">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog sidebar-dark-primary" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Borrar</h5>
-                <button id="btnCloseModalConfirmDelete" type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close">
-                    <span aria-hidden="true"></span>
-                </button>
             </div>
             <div class="modal-body" style="text-align:center">
                 <p>¿Desea eliminar el producto?</p>
@@ -111,8 +104,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" id="btnYesDelete">Sí</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="btnNoDelete">No</button>
+                <button type="button" class="btn btn-primary" id="btnYesDelete">Sí</button>
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="btnNoDelete">No</button>
             </div>
         </div>
     </div>
@@ -120,14 +113,10 @@
 
 @*Ventanas Modal de respuesta del servidor al borrar el producto*@
 <div id="responseDelete" class="modal fade">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog sidebar-dark-primary" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Error</h5>
-                <button id="btnCloseModalResponseDelete" type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close">
-                    <span aria-hidden="true"></span>
-                </button>
             </div>
             <div class="modal-body">
                 <p id="messageModalResponseDelete"></p>
@@ -205,8 +194,7 @@
                         await HideWaitResponseServer();
                         return false;
                     }
-                    else
-                    {
+                    else {
                         $('#messageModalResponseDelete').text("Se originó un error desconocido.");
                         $('#confirmDelete').modal('hide');
                         $('#responseDelete').modal({ backdrop: 'static', keyboard: true }, 'show');
@@ -241,17 +229,16 @@
             }
 
             //Función para eliminar el producto
-            async function DeleteProduct(id)
-            {
-               //Manda a eliminar el producto
-               let responseService = await fetch(url + "?id=" + id, {
-                method: 'DELETE',
-                headers:
-                {
-                  'Content-Type': 'application/json'
-                },
-               });
-               return responseService
+            async function DeleteProduct(id) {
+                //Manda a eliminar el producto
+                let responseService = await fetch(url + "?id=" + id, {
+                    method: 'DELETE',
+                    headers:
+                    {
+                        'Content-Type': 'application/json'
+                    },
+                });
+                return responseService
             }
         });
     </script>
