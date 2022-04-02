@@ -40,8 +40,8 @@ namespace Isabella.Web
             services.AddControllersWithViews();
 
             //Agrega y configura el servicio para conectarnos a SQL Server
-            var connectionstring = Constants.GetStringConnectionSQLServer(Configuration.GetSection("SQLServerLocal"));
-            ///var connectionstring = Constants.GetStringConnectionSQLServer(Configuration.GetSection("SQLServer"));
+            //var connectionstring = Constants.GetStringConnectionSQLServer(Configuration.GetSection("SQLServerLocal"));
+            var connectionstring = Constants.GetStringConnectionSQLServer(Configuration.GetSection("SQLServer"));
             services.AddDbContext<DataContext>(cfg =>
             {
                 //c.UseLazyLoadingProxies() //Para poder usar carga diferida
